@@ -1,0 +1,141 @@
+# Local development only. These public, local-only passwords are not production secrets.
+# PostgreSQL initialization runs once per empty volume; changing a password here does
+# not rotate credentials in an existing volume.
+name: ukda
+
+services:
+  app-db:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_DB: ukda_app
+      POSTGRES_USER: ukda_app_admin
+      POSTGRES_PASSWORD: ukda_app_admin_local_only
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      RUNTIME_DB_USER: ukda_app_dev
+      RUNTIME_DB_PASSWORD: ukda_app_local_only
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - app-data:/var/lib/postgresql
+    configs:
+      - source: init-runtime-role
+        target: /docker-entrypoint-initdb.d/10-runtime-role.sh
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - PGPASSWORD="$${RUNTIME_DB_PASSWORD}" psql --host=127.0.0.1 --username="$${RUNTIME_DB_USER}" --dbname="$${POSTGRES_DB}" --no-password --tuples-only --command='SELECT 1' >/dev/null
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  control-db:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_DB: ukda_control
+      POSTGRES_USER: ukda_control_admin
+      POSTGRES_PASSWORD: ukda_control_admin_local_only
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      RUNTIME_DB_USER: ukda_control_dev
+      RUNTIME_DB_PASSWORD: ukda_control_local_only
+    ports:
+      - "127.0.0.1:55433:5432"
+    volumes:
+      - control-data:/var/lib/postgresql
+    configs:
+      - source: init-runtime-role
+        target: /docker-entrypoint-initdb.d/10-runtime-role.sh
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - PGPASSWORD="$${RUNTIME_DB_PASSWORD}" psql --host=127.0.0.1 --username="$${RUNTIME_DB_USER}" --dbname="$${POSTGRES_DB}" --no-password --tuples-only --command='SELECT 1' >/dev/null
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  api:
+    profiles: [app]
+    build:
+      context: .
+      target: runtime
+    init: true
+    env_file:
+      - path: .env.identity
+        required: false
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: "3400"
+      APP_ORIGIN: http://localhost:3400
+      DATABASE_URL: postgres://ukda_app_dev:ukda_app_local_only@app-db:5432/ukda_app
+      CONTROL_DATABASE_URL: postgres://ukda_control_dev:ukda_control_local_only@control-db:5432/ukda_control
+    ports:
+      - "127.0.0.1:3400:3400"
+    depends_on:
+      app-db:
+        condition: service_healthy
+      control-db:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+  # Bootstrap once before startup: npm run worker:migrate (loads .env.admin).
+  worker:
+    profiles: [app]
+    build:
+      context: .
+      target: runtime
+    command: ["node", "dist/src/worker.js"]
+    init: true
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: "3401"
+      APP_ORIGIN: http://localhost:3400
+      DATABASE_URL: postgres://ukda_app_dev:ukda_app_local_only@app-db:5432/ukda_app
+      CONTROL_DATABASE_URL: postgres://ukda_control_dev:ukda_control_local_only@control-db:5432/ukda_control
+    # Health is reachable inside the Compose network only, with no host port.
+    expose: ["3401"]
+    depends_on:
+      app-db:
+        condition: service_healthy
+      control-db:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  app-data:
+  control-data:
+
+configs:
+  init-runtime-role:
+    content: |
+      #!/usr/bin/env bash
+      set -eu
+      psql --username="$${POSTGRES_USER}" --dbname="$${POSTGRES_DB}" \
+        --set=ON_ERROR_STOP=1 \
+        --set=admin_user="$${POSTGRES_USER}" \
+        --set=database_name="$${POSTGRES_DB}" \
+        --set=runtime_user="$${RUNTIME_DB_USER}" \
+        --set=runtime_password="$${RUNTIME_DB_PASSWORD}" <<'SQL'
+      CREATE ROLE :"runtime_user" WITH LOGIN PASSWORD :'runtime_password'
+        NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS;
+      REVOKE ALL ON DATABASE :"database_name" FROM PUBLIC;
+      GRANT CONNECT ON DATABASE :"database_name" TO :"runtime_user";
+      REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+      GRANT USAGE ON SCHEMA public TO :"runtime_user";
+      ALTER DEFAULT PRIVILEGES FOR ROLE :"admin_user" IN SCHEMA public
+        GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO :"runtime_user";
+      ALTER DEFAULT PRIVILEGES FOR ROLE :"admin_user" IN SCHEMA public
+        GRANT USAGE, SELECT ON SEQUENCES TO :"runtime_user";
+      SQL

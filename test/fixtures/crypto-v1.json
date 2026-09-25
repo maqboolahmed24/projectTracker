@@ -1,0 +1,102 @@
+{
+  "format": "ukda.crypto-vector.v1",
+  "warning": "All key material in this fixture is public test data. Never use these keys or nonces for real records.",
+  "signingSeed": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+  "signingPublicKey": "A6EHv_POEL4dcN0Y50vAmWfk1jCbpQ1fHdyGZBJVMbg",
+  "contentKey": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8",
+  "content": {
+    "headerCanonical": "{\"accountId\":\"22222222-2222-4222-8222-222222222222\",\"action\":\"task.edit\",\"algorithm\":\"XChaCha20-Poly1305\",\"approvalPolicyId\":null,\"approvalPolicyRevision\":null,\"dataGeneration\":\"1\",\"deviceId\":\"33333333-3333-4333-8333-333333333333\",\"keyEpoch\":\"7\",\"keyGeneration\":\"2\",\"operationId\":\"66666666-6666-4666-8666-666666666666\",\"permissionVersion\":\"3\",\"purpose\":\"ukda.content.v1\",\"recordId\":\"55555555-5555-4555-8555-555555555555\",\"recordType\":\"task\",\"revision\":\"9007199254740993\",\"schema\":1,\"scope\":\"project\",\"scopeId\":\"44444444-4444-4444-8444-444444444444\",\"securityHead\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"securityVersion\":\"9\",\"version\":1,\"workspaceId\":\"11111111-1111-4111-8111-111111111111\"}",
+    "plaintext": {
+      "title": "Quarter 1 – review 🎉",
+      "notes": "é and é stay distinct",
+      "assignees": [
+        "22222222-2222-4222-8222-222222222222"
+      ],
+      "estimate": 3.5
+    },
+    "plaintextCanonical": "{\"assignees\":[\"22222222-2222-4222-8222-222222222222\"],\"estimate\":3.5,\"notes\":\"é and é stay distinct\",\"title\":\"Quarter 1 – review 🎉\"}",
+    "unsignedDigest": "b81d0347dd04ddad2e3b8e39de5ad8681391c8cb39faa51799e8bbe8483a3471",
+    "envelopeDigest": "f22622856d811ce55102dc92e9541dbf7b96f724635c864dd1694262a30bfeac",
+    "envelope": {
+      "header": {
+        "version": 1,
+        "purpose": "ukda.content.v1",
+        "algorithm": "XChaCha20-Poly1305",
+        "workspaceId": "11111111-1111-4111-8111-111111111111",
+        "scope": "project",
+        "scopeId": "44444444-4444-4444-8444-444444444444",
+        "recordId": "55555555-5555-4555-8555-555555555555",
+        "recordType": "task",
+        "schema": 1,
+        "keyEpoch": "7",
+        "revision": "9007199254740993",
+        "operationId": "66666666-6666-4666-8666-666666666666",
+        "accountId": "22222222-2222-4222-8222-222222222222",
+        "deviceId": "33333333-3333-4333-8333-333333333333",
+        "keyGeneration": "2",
+        "permissionVersion": "3",
+        "securityVersion": "9",
+        "securityHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "dataGeneration": "1",
+        "action": "task.edit",
+        "approvalPolicyId": null,
+        "approvalPolicyRevision": null
+      },
+      "nonce": "YGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3",
+      "ciphertext": "kwUhVfYY_K_PZOYtKPoNq0Xenidb1-tLUhALyBehsLURvEUjE4IJEHSKFVz1hjRg5Nw7DQD-T5ZtNIHICqrlsjGRF7ogJKx1WDl4QRJrZyL0UPfBl62cTI7hK9u-HaNWmfmX05Cr8LDQCTwt7nY3b4mQdxoAH8gReasIpboNqGroghDCRBZ2u-i5tPgCFT1E6EspmPQSmuiaPGRk",
+      "signature": "ORNzVtnxx4rxE6xV4DxjMqSEbEvVmo2pfqP1tTtsZV-gYH3vnZQQgLwlZMLfUS93jBQxBg3QmH3gpAxcZ2UJDA"
+    }
+  },
+  "recipient": {
+    "seed": "QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl8",
+    "privateKey": "ZCjUJ20DbXh7pN9YA-fRWukWXkhkF6065eSLSSkM1pY",
+    "payload": {
+      "key": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8",
+      "keyEpoch": "7"
+    },
+    "envelope": {
+      "header": {
+        "version": 1,
+        "purpose": "ukda.recipient.v1",
+        "algorithm": "X25519-SealedBox",
+        "workspaceId": "11111111-1111-4111-8111-111111111111",
+        "scope": "project",
+        "scopeId": "44444444-4444-4444-8444-444444444444",
+        "keyEpoch": "7",
+        "recipientAccountId": "22222222-2222-4222-8222-222222222222",
+        "recipientId": "77777777-7777-4777-8777-777777777777",
+        "recipientKind": "device",
+        "recipientKeyGeneration": "1",
+        "recipientPublicKey": "8UtRcxMKG4Bofyc9Sej0dAp5OpSbg7EFg38qYej-4U8",
+        "senderAccountId": "22222222-2222-4222-8222-222222222222",
+        "senderDeviceId": "33333333-3333-4333-8333-333333333333",
+        "senderKeyGeneration": "2",
+        "securityVersion": "9",
+        "securityHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "ceremonyId": "88888888-8888-4888-8888-888888888888",
+        "transcriptDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "ciphertext": "zT9YFfKj8nLpwGtFFDp9ZRbXeMiK2Kg8vxKblajGiUn9b-Jr2-0GHooffEpjMtG0OC4lmu4B2VyIHMCPUe8U70BemjSxkOG4mvUJFn7JkwHRFw8cqXVWtJbuJ-YSp8vwSLrb81D86fGPNz1ug9i4J9jEBkNUJ27-q-CRdEcUnig_Xz0U2LcLlNdrpmJ5_tWfrU661meKVduuBGqMhiF6s0hs9cq15_hPVL8Chg-orUSSWPd9LtqZ8Gl7Dty5oGDAtMdJipE-KnlfgBoCXsLzTO17x15nhdCT8VwyCWZTtDzaZo0DwUSFJD79bjjer1dwPMzyXEu1uPMqCJxrXvTCiuikwDRgGjCA44ahfUluKVxv5j2wTSiqG1y_5XojQQ9bwUCkq5jYBu8R8G44ZG9C-Y4fiKvSHP5TGWB55jcq7-g6Bq8U6fxyIcH_nfdVWZNMzxmjwfK2OuJd9RJ-byvjz--JEzhkBPOyuSQ7LjBsM--9O0p28hpag03DYLOof98FYybr5sdLu82bVqIZ6iaGpqRcWvsuz94eIzRD5h-aV0a986SIku92xaTa3oOQE9ETtyGuJ6HmDHlkYpHcl5KtFws2bw6v2tv4zrdMB7RkbYYmtjnexGn-ve8rv2to9bWGpkt9wfr8ItWupuOXi9hdNpYumV17bEOF1CwWh-1nNo5-SL449hAY-o2o7YiatcuCU7tfvWaRrvbT5Hh_xfvqsx2dZd7_TFUk3L3bO4WzEw4F9aoX4VI8LXwWq7yxfIOzzUMrolHh1nIdxhloiL8shBhwBZRybZmJk5x5Jtg-ZSZq62w700IwDeDlGScshRGeoIi8mrulpG-8AVl5cRzSqvUUxtfvdqN2OPx_m1o_2xyFgvZN0qbSyJTvWhsM8gA1MWrc7P7gzqszcZKhYOGORsx6lCjGBDEpYemzP_X7Uhk8Bg_TUqKIwdA_9_pmrBU7eoOTkR6EyA_SEXdtgb6mwhPPDCI1-EJUYQiDS20cMVMs8Pm_6KLhgMIesf6UNOPw9Jjbuu2I7y2WFV3WYuptwHcI3beNPlV4bEDOy6aEYk7PQ3UW1ar2hU8obXT2vnE_OLUCiuzBryRo1dY4E0jAULObVt0_DsbZV8imC2R5NEDjfmC-iry1FD2ef5HK-Zve9dIYz_61vDRX0Au0Hzl5oCu8cRTu9E6FV7MlXxbpqo0Cs_49rzRAFT9pZCqCMmCQMuccjIYpR_8FkuOvR1jifWPZcGmUOQJD-F6STy7HEsBexsH1VwLoNhn8ZEvetJ0G4Ds",
+      "signature": "MzyK5jTxZwDdiQ_zjWjWBGR66oVxb--fnHVnFic9_6a0DFOJDRybSErAkyPRwvHoyXLrhHfRR9YRAhWnF3bADg"
+    }
+  },
+  "derivation": {
+    "input": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+    "context": {
+      "version": 1,
+      "purpose": "ukda.recovery-proof.v1",
+      "workspaceId": "11111111-1111-4111-8111-111111111111",
+      "accountId": "22222222-2222-4222-8222-222222222222"
+    },
+    "expected": "dg_ahHAXsCGxGIADuQCja2bkbfqktzhm00_oj_pwRWY"
+  },
+  "recovery": {
+    "phrase": "abandon amount liar amount expire adjust cage candy arch gather drum bullet absurd math era live bid rhythm alien crouch range attend journey unaware",
+    "context": {
+      "workspaceId": "11111111-1111-4111-8111-111111111111",
+      "accountId": "22222222-2222-4222-8222-222222222222"
+    },
+    "signingPublicKey": "-Pv6dIXfjrMWthGVO-tcyXsvNgRmL-C7HQVBHR5royI",
+    "recipientPublicKey": "GdU-iB_2qDkus_OSLMrLdzUcHqr2fqgEImJ17Qq4owA"
+  }
+}

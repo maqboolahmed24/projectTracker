@@ -1,0 +1,41 @@
+{
+  "name": "ukda",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.19.0 <25"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "build:browser": "node scripts/build-browser.mjs",
+    "test:browser": "npm run build:browser && playwright test",
+    "browser:install": "playwright install chromium firefox webkit",
+    "test": "npm run build && node --env-file-if-exists=.env --test --test-concurrency=1 dist/test/*.test.js",
+    "start": "node --env-file-if-exists=.env --env-file-if-exists=.env.identity dist/src/server.js",
+    "dev": "npm run build && node --env-file-if-exists=.env --env-file-if-exists=.env.identity --watch dist/src/server.js",
+    "identity:setup": "node --env-file-if-exists=.env dist/scripts/setup-identity.js",
+    "licence": "node --env-file-if-exists=.env --env-file-if-exists=.env.identity dist/scripts/licence.js",
+    "worker:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.admin dist/scripts/worker-migrate.js",
+    "worker": "node --env-file-if-exists=.env dist/src/worker.js",
+    "migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.admin dist/scripts/migrate.js"
+  },
+  "dependencies": {
+    "@scure/bip39": "2.4.0",
+    "@serenity-kit/opaque": "1.1.0",
+    "fastify": "5.12.5",
+    "graphile-worker": "0.18.0",
+    "libsodium-wrappers": "0.8.4",
+    "pg": "8.23.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.13.6",
+    "@types/pg": "8.23.1",
+    "esbuild": "0.28.2",
+    "fake-indexeddb": "6.2.5",
+    "typescript": "7.0.2"
+  }
+}
