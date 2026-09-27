@@ -1,0 +1,24 @@
+[Unit]
+Description=Maqbool recovery and retention operator
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+RequiresMountsFor=/opt/maqbool/recovery-records
+
+[Service]
+Type=simple
+EnvironmentFile=/opt/maqbool/secrets/cloud.env
+ExecStartPre=/usr/bin/test -S /var/run/docker.sock
+ExecStartPre=/usr/bin/test -r /opt/maqbool/secrets/operator.env
+ExecStartPre=/usr/bin/test -r /opt/maqbool/release/ops/cloud/compose.primary.yaml
+ExecStartPre=/usr/bin/mountpoint -q /opt/maqbool/recovery-records
+ExecStartPre=/usr/bin/docker image inspect --format={{.Id}} ${UKDA_OPERATOR_IMAGE}
+ExecStart=/usr/bin/docker run --rm --init --pull never --name maqbool-recovery-operator --network host --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m --cap-drop ALL --security-opt no-new-privileges:true --pids-limit 256 --log-driver local --log-opt max-size=10m --log-opt max-file=3 --env-file /opt/maqbool/secrets/cloud.env --env-file /opt/maqbool/secrets/operator.env --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock --mount type=bind,src=/opt/maqbool/secrets,dst=/opt/maqbool/secrets,readonly --mount type=bind,src=/opt/maqbool/release/ops/cloud,dst=/opt/maqbool/release/ops/cloud,readonly --mount type=bind,src=/opt/maqbool/recovery-records,dst=/opt/maqbool/recovery-records ${UKDA_OPERATOR_IMAGE}
+ExecStop=/usr/bin/docker stop --time 45 maqbool-recovery-operator
+Restart=on-failure
+RestartSec=30
+TimeoutStopSec=60
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

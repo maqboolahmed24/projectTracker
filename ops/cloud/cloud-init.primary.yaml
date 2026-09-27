@@ -1,0 +1,128 @@
+#cloud-config
+# Fresh Azure Ubuntu 24.04 amd64 primary only; Azure supplies the SSH key/user.
+# Primary 10.42.0.4, standby 10.42.0.5. Never apply to an existing database host.
+ssh_pwauth: false
+disable_root: true
+package_update: true
+package_upgrade: false
+apt:
+  preserve_sources_list: true
+  sources:
+    maqbool-ubuntu-updates.list:
+      source: deb [arch=amd64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://archive.ubuntu.com/ubuntu noble-updates main universe
+packages:
+  - docker.io
+  - docker-compose-v2
+  - docker-buildx
+  - nfs-common
+write_files:
+  - path: /etc/ssh/sshd_config.d/00-maqbool-key-only.conf
+    owner: root:root
+    permissions: '0644'
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+      PubkeyAuthentication yes
+      AuthenticationMethods publickey
+  - path: /etc/docker/daemon.json
+    owner: root:root
+    permissions: '0644'
+    content: |
+      {"log-driver":"local","log-opts":{"max-size":"10m","max-file":"3"}}
+  - path: /etc/maqbool/recovery-records.fstab
+    owner: root:root
+    permissions: '0644'
+    content: |
+      10.42.0.5:/srv/maqbool-backups/records /opt/maqbool/recovery-records nfs4 rw,hard,_netdev,noauto,nofail,nosuid,nodev,noexec,proto=tcp,vers=4.2,retry=0,x-systemd.mount-timeout=30s 0 0
+  - path: /usr/local/sbin/maqbool-mount-recovery-records
+    owner: root:root
+    permissions: '0750'
+    content: |
+      #!/bin/bash
+      # Run explicitly AFTER the standby's exports and private routing are ready.
+      set -euo pipefail
+      test "$(id -u)" = 0
+      target=/opt/maqbool/recovery-records
+      source=10.42.0.5:/srv/maqbool-backups/records
+      expected=$(cat /etc/maqbool/recovery-records.fstab)
+      if mountpoint -q "$target"; then
+        test "$(findmnt -n -o SOURCE --target "$target")" = "$source"
+        test "$(findmnt -n -o FSTYPE --target "$target")" = nfs4
+        test "$(stat -c '%u:%g:%a' "$target")" = 0:0:700
+        exit 0
+      fi
+      if [ -n "$(find "$target" -mindepth 1 -maxdepth 1 -print -quit)" ]; then
+        echo 'Recovery mount directory is not empty; refusing to hide local files.' >&2
+        exit 1
+      fi
+      # Refuse a conflicting entry; never replace or unmount existing storage.
+      existing=$(awk -v target="$target" '$1 !~ /^#/ && $2 == target {print}' /etc/fstab)
+      if [ -n "$existing" ] && [ "$existing" != "$expected" ]; then
+        echo 'Conflicting recovery-records fstab entry; review it before mounting.' >&2
+        exit 1
+      fi
+      if [ -z "$existing" ]; then printf '\n%s\n' "$expected" >> /etc/fstab; fi
+      systemctl daemon-reload
+      unit=$(systemd-escape --path --suffix=mount "$target")
+      systemctl start "$unit"
+      mountpoint -q "$target"
+      test "$(findmnt -n -o SOURCE --target "$target")" = "$source"
+      test "$(findmnt -n -o FSTYPE --target "$target")" = nfs4
+      test "$(stat -c '%u:%g:%a' "$target")" = 0:0:700
+  - path: /usr/local/sbin/maqbool-create-build-swap
+    owner: root:root
+    permissions: '0750'
+    content: |
+      #!/bin/bash
+      # Only a NEW root-disk file; no device, existing swap or database is changed.
+      set -euo pipefail
+      umask 077
+      swap=/swapfile.maqbool-build
+      if [ -e "$swap" ] || [ -L "$swap" ]; then
+        echo 'Build swap path already exists; leaving it untouched.'
+        exit 0
+      fi
+      filesystem=$(findmnt -n -o FSTYPE --target /)
+      available=$(df -B1 --output=avail / | tail -n 1 | tr -d ' ')
+      if [[ "$filesystem" != ext4 && "$filesystem" != xfs ]] || [ "$available" -lt 4294967296 ]; then
+        echo 'Skipping optional 2 GiB build swap: unsuitable filesystem or less than 4 GiB free.'
+        exit 0
+      fi
+      temporary=$(mktemp /swapfile.maqbool-build.XXXXXX)
+      trap 'rm -f -- "$temporary"' EXIT
+      chmod 0600 "$temporary"
+      dd if=/dev/zero of="$temporary" bs=1M count=2048 status=none
+      mkswap --label maqbool-build "$temporary"
+      # Atomic, no-clobber publication: fail if any other file appeared meanwhile.
+      ln "$temporary" "$swap"
+      rm -f -- "$temporary"
+      trap - EXIT
+      swapon "$swap"
+      if ! awk -v swap="$swap" '$1 == swap {found=1} END {exit !found}' /etc/fstab; then
+        printf '\n%s none swap sw 0 0\n' "$swap" >> /etc/fstab
+      fi
+      systemctl daemon-reload
+  - path: /usr/local/sbin/maqbool-primary-bootstrap
+    owner: root:root
+    permissions: '0750'
+    content: |
+      #!/bin/bash
+      set -euo pipefail
+      . /etc/os-release
+      test "$ID" = ubuntu && test "$VERSION_ID" = 24.04
+      test "$(dpkg --print-architecture)" = amd64
+      compose=$(docker compose version --short)
+      dpkg --compare-versions "${compose#v}" ge 2.30.0
+      docker compose config --help | grep -q -- '--no-env-resolution'
+      install -d -o root -g root -m 0755 /opt/maqbool
+      install -d -o root -g root -m 0700 /opt/maqbool/secrets /opt/maqbool/recovery-records
+      /usr/sbin/sshd -t
+      systemctl reload-or-restart ssh.service
+      systemctl enable docker.service
+      systemctl restart docker.service
+      /usr/local/sbin/maqbool-create-build-swap
+      # Deliberately do NOT mount NFS, enable the operator, or start databases here.
+runcmd:
+  - [/usr/local/sbin/maqbool-primary-bootstrap]
+final_message: Primary host prepared. Verify cloud-init status, then configure the standby and explicitly mount recovery records before starting the operator.

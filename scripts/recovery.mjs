@@ -1,13 +1,13 @@
 import pg from 'pg';
 import { randomUUID } from 'node:crypto';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import { setTimeout as delay } from 'node:timers/promises';
 import { physicalFullBackups, assertNoPartialPurge, withPhysicalLock, repositoryInfo, backrest, isolatedRestore, execute, metrics as physicalMetrics } from './physical-backups.mjs';
 import { BACKUP_MAX_AGE_MS, storeInfo, checkpointDue, checkpointHealth } from '../ops/recovery-policy.mjs';
 import { RecoveryRecords, opaqueId, repositorySecret, CHECKPOINT_BYTES } from '../ops/recovery-records.mjs';
 import { enforceBackupExpiry, retentionWindow } from '../ops/recovery-expiry.mjs';
+import { recoveryDeployment } from '../ops/recovery-deployment.mjs';
 
-const base=fileURLToPath(new URL('../',import.meta.url));
 const MAX_WORKSPACES=100,MAX_TICK_PURGES=20;
 const DISPOSABLE=['notifications','notification_receipts','notification_preferences','inbox_operations','operation_receipts','outbox','summaries','reporting_preparations','reporting_summaries','export_sessions'];
 export const RECOVERY_ARTIFACT_MAX_AGE_MS=24*60*60*1000;
@@ -33,7 +33,8 @@ export async function recoveryRuntime(env=process.env){
   for(const pool of [application,control])pool.on('error',()=>{});
   try{
     const sessions=new SessionService({databases,secrets,origin:config.APP_ORIGIN}),common={databases,secrets,sessions,origin:config.APP_ORIGIN};
-    const records=new RecoveryRecords(`${base}.local/recovery-records`,await repositorySecret(`${base}.local/recovery/app.conf`));
+    const deployment=recoveryDeployment(env);
+    const records=new RecoveryRecords(deployment.recordsDirectory,await repositorySecret(`${deployment.directory}/app.conf`));
     const trusted={[secrets.keyId]:await new EntitlementOperations(databases,secrets).publicSigningKey()};
     return {databases,secrets,application,control,actor,records,transaction,...restoration,...manifest,...purge,...crypto,
       service:hooks=>new RestorationService({...common,...(hooks?{hooks}:{})}),finalize:id=>finalizeDeletionIfDue({databases,secrets,workspaceId:opaqueId(id)}),trusted,

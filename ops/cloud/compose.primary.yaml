@@ -1,0 +1,235 @@
+# Dedicated cloud host. Do not combine with compose.yaml or compose.recovery.yaml.
+name: ukda-cloud-primary
+
+x-node: &node
+  pull_policy: never
+  init: true
+  restart: unless-stopped
+  read_only: true
+  tmpfs: [/tmp:rw,noexec,nosuid,size=64m]
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 256
+  stop_grace_period: 45s
+  logging: &logging
+    driver: local
+    options: {max-size: 10m, max-file: "3"}
+
+x-postgres: &postgres
+  image: ${UKDA_RECOVERY_IMAGE:?Set the immutable PostgreSQL18/pgBackRest image digest or ID}
+  pull_policy: never
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp:rw,noexec,nosuid,size=128m
+    - /var/run/postgresql:rw,nosuid,size=16m
+    - /etc/pgbackrest:rw,noexec,nosuid,size=1m
+  cap_drop: [ALL]
+  cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+  security_opt: [no-new-privileges:true]
+  shm_size: 256m
+  pids_limit: 256
+  stop_grace_period: 2m
+  logging: *logging
+  networks: [database]
+  healthcheck:
+    test: [CMD-SHELL, 'gosu postgres psql -X -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}" -Atqc "SELECT 1" >/dev/null']
+    interval: 10s
+    timeout: 5s
+    retries: 12
+    start_period: 30s
+
+services:
+  app-db:
+    <<: *postgres
+    environment:
+      POSTGRES_DB: ukda_app
+      POSTGRES_USER: ukda_app_admin
+      POSTGRES_PASSWORD_FILE: /run/secrets/admin-password
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      RUNTIME_DB_USER: ukda_app_runtime
+      RUNTIME_DB_PASSWORD_FILE: /run/secrets/runtime-password
+      UKDA_POSTGRES_TLS: "true"
+    command: [postgres, -c, wal_level=replica, -c, archive_mode=on,
+      -c, "archive_command=pgbackrest --stanza=app archive-push %p", -c, archive_timeout=60s,
+      -c, ssl=on, -c, ssl_min_protocol_version=TLSv1.2,
+      -c, ssl_cert_file=/var/lib/postgresql/tls/server.crt,
+      -c, ssl_key_file=/var/lib/postgresql/tls/server.key]
+    ports: ["127.0.0.1:55432:5432"]
+    volumes:
+      - app-data:/var/lib/postgresql
+      - app-backups:/backrest
+    configs:
+      - source: init-runtime-role
+        target: /docker-entrypoint-initdb.d/10-runtime-role.sh
+    secrets:
+      - {source: app-admin-password, target: admin-password}
+      - {source: app-runtime-password, target: runtime-password}
+      - {source: app-backrest, target: pgbackrest.conf}
+      - {source: app-tls-cert, target: server.crt}
+      - {source: app-tls-key, target: server.key}
+
+  control-db:
+    <<: *postgres
+    environment:
+      POSTGRES_DB: ukda_control
+      POSTGRES_USER: ukda_control_admin
+      POSTGRES_PASSWORD_FILE: /run/secrets/admin-password
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      RUNTIME_DB_USER: ukda_control_runtime
+      RUNTIME_DB_PASSWORD_FILE: /run/secrets/runtime-password
+      UKDA_POSTGRES_TLS: "true"
+    # setup persists synchronous_standby_names only after the remote replica streams.
+    # Never override that persisted setting here, including during disaster recovery.
+    command: [postgres, -c, wal_level=replica, -c, archive_mode=on,
+      -c, "archive_command=pgbackrest --stanza=control archive-push %p", -c, archive_timeout=60s,
+      -c, synchronous_commit=on, -c, ssl=on, -c, ssl_min_protocol_version=TLSv1.2,
+      -c, ssl_cert_file=/var/lib/postgresql/tls/server.crt,
+      -c, ssl_key_file=/var/lib/postgresql/tls/server.key]
+    ports:
+      - "127.0.0.1:55433:5432"
+      - "${UKDA_PRIMARY_PRIVATE_IP:?Set the primary private IPv4 address}:5432:5432"
+    volumes:
+      - control-data:/var/lib/postgresql
+      - control-backups:/backrest
+    configs:
+      - source: init-runtime-role
+        target: /docker-entrypoint-initdb.d/10-runtime-role.sh
+    secrets:
+      - {source: control-admin-password, target: admin-password}
+      - {source: control-runtime-password, target: runtime-password}
+      - {source: control-backrest, target: pgbackrest.conf}
+      - {source: control-tls-cert, target: server.crt}
+      - {source: control-tls-key, target: server.key}
+
+  api:
+    <<: *node
+    profiles: [application]
+    image: ${UKDA_API_IMAGE:?Set the immutable API image digest or ID}
+    env_file:
+      - path: ${UKDA_RUNTIME_ENV_FILE:?Set an absolute external runtime secret env file}
+        required: true
+        format: raw
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "3400"
+      APP_ORIGIN: ${UKDA_APP_ORIGIN:?Set the permanent HTTPS origin}
+      LOG_LEVEL: info
+      NODE_EXTRA_CA_CERTS: /run/secrets/database-ca.crt
+    secrets:
+      - {source: database-ca, target: database-ca.crt}
+    depends_on:
+      app-db: {condition: service_healthy}
+      control-db: {condition: service_healthy}
+    expose: ["3400"]
+    networks: [application, database]
+
+  worker:
+    <<: *node
+    profiles: [application]
+    image: ${UKDA_API_IMAGE:?Set the immutable API image digest or ID}
+    command: [node, dist/src/worker.js]
+    env_file:
+      - path: ${UKDA_WORKER_ENV_FILE:?Set an absolute external worker database-only env file}
+        required: true
+        format: raw
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "3401"
+      APP_ORIGIN: ${UKDA_APP_ORIGIN:?Set the permanent HTTPS origin}
+      LOG_LEVEL: info
+      NODE_EXTRA_CA_CERTS: /run/secrets/database-ca.crt
+    secrets:
+      - {source: database-ca, target: database-ca.crt}
+    depends_on:
+      app-db: {condition: service_healthy}
+      control-db: {condition: service_healthy}
+    # Operator-only recovery health; never routed through the public gateway.
+    ports: ["127.0.0.1:3401:3401"]
+    networks: [database]
+
+  frontend:
+    <<: *node
+    profiles: [application]
+    image: ${UKDA_FRONTEND_IMAGE:?Set the immutable frontend image digest or ID}
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+      NEXT_TELEMETRY_DISABLED: "1"
+      UKDA_API_ORIGIN: http://api:3400
+      APP_ORIGIN: ${UKDA_APP_ORIGIN:?Set the permanent HTTPS origin}
+    depends_on:
+      api: {condition: service_healthy}
+    expose: ["3000"]
+    networks: [application, gateway]
+
+  gateway:
+    profiles: [application]
+    image: ${UKDA_CADDY_IMAGE:?Set the Caddy repository@sha256 digest}
+    pull_policy: never
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp:rw,noexec,nosuid,size=16m]
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    stop_grace_period: 30s
+    logging: *logging
+    environment:
+      UKDA_APP_ORIGIN: ${UKDA_APP_ORIGIN:?Set the permanent HTTPS origin}
+    command: [caddy, run, --config, /etc/caddy/Caddyfile, --adapter, caddyfile]
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    configs:
+      - {source: caddy, target: /etc/caddy/Caddyfile}
+    depends_on:
+      frontend: {condition: service_healthy}
+    networks: [gateway]
+
+networks:
+  gateway: {}
+  application: {internal: true}
+  database: {}
+
+volumes:
+  app-data: {}
+  control-data: {}
+  caddy-data: {}
+  caddy-config: {}
+  # Host-mounted NFS remains a Docker named volume. isolatedRestore discovers
+  # this mount and reuses it read-only even with the restore container offline.
+  app-backups:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${UKDA_BACKUP_PRIVATE_IP:?Set the secondary private IPv4 address},nfsvers=4,proto=tcp,hard,rw,nosuid,nodev,noexec
+      device: :${UKDA_APP_BACKUP_EXPORT:?Set the absolute application repository NFS export}
+  control-backups:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${UKDA_BACKUP_PRIVATE_IP:?Set the secondary private IPv4 address},nfsvers=4,proto=tcp,hard,rw,nosuid,nodev,noexec
+      device: :${UKDA_CONTROL_BACKUP_EXPORT:?Set the absolute control repository NFS export}
+
+configs:
+  init-runtime-role: {file: ./init-runtime-role.sh}
+  caddy: {file: ./Caddyfile}
+
+secrets:
+  app-admin-password: {file: "${UKDA_APP_ADMIN_PASSWORD_FILE:?Set an external admin password file}"}
+  app-runtime-password: {file: "${UKDA_APP_RUNTIME_PASSWORD_FILE:?Set an external runtime password file}"}
+  control-admin-password: {file: "${UKDA_CONTROL_ADMIN_PASSWORD_FILE:?Set an external admin password file}"}
+  control-runtime-password: {file: "${UKDA_CONTROL_RUNTIME_PASSWORD_FILE:?Set an external runtime password file}"}
+  app-backrest: {file: "${UKDA_RECOVERY_DIRECTORY:?Set the external recovery secret directory}/app.conf"}
+  control-backrest: {file: "${UKDA_RECOVERY_DIRECTORY:?Set the external recovery secret directory}/control.conf"}
+  database-ca: {file: "${UKDA_DATABASE_CA_FILE:?Set the database CA certificate file}"}
+  app-tls-cert: {file: "${UKDA_APP_TLS_CERT_FILE:?Set the application database server certificate file}"}
+  app-tls-key: {file: "${UKDA_APP_TLS_KEY_FILE:?Set the application database server private key file}"}
+  control-tls-cert: {file: "${UKDA_CONTROL_TLS_CERT_FILE:?Set the control database server certificate file}"}
+  control-tls-key: {file: "${UKDA_CONTROL_TLS_KEY_FILE:?Set the control database server private key file}"}

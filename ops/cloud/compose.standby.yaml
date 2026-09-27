@@ -1,0 +1,49 @@
+# Run on the independent secondary VM, never on the primary host.
+name: ukda-cloud-standby
+
+services:
+  control-replica:
+    image: ${UKDA_RECOVERY_IMAGE:?Set the same immutable PostgreSQL18/pgBackRest image digest or ID as primary}
+    pull_policy: never
+    entrypoint: [ukda-standby]
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=128m
+      - /var/run/postgresql:rw,nosuid,size=16m
+    cap_drop: [ALL]
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    security_opt: [no-new-privileges:true]
+    shm_size: 256m
+    pids_limit: 256
+    stop_grace_period: 2m
+    logging:
+      driver: local
+      options: {max-size: 10m, max-file: "3"}
+    environment:
+      PGDATA: /var/lib/postgresql/18/docker
+      UKDA_REPLICATION_PRIMARY_HOST: ${UKDA_REPLICATION_PRIMARY_HOST:?Set the primary private certificate hostname or IP}
+      UKDA_REPLICATION_SSLMODE: verify-full
+      UKDA_REPLICATION_REQUIRE_TLS: "true"
+      UKDA_RECOVERY_REPLICA_MODE: external
+    volumes:
+      - control-replica-data:/var/lib/postgresql
+    secrets:
+      - {source: replication-password, target: replication.pgpass}
+      - {source: replication-ca, target: replication-ca.crt}
+    # No published ports; this server only makes an outbound TLS replication connection.
+    healthcheck:
+      test: [CMD-SHELL, 'gosu postgres psql -X -U ukda_control_admin -d ukda_control -Atqc "SELECT pg_is_in_recovery()" | grep -qx t']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+
+volumes:
+  control-replica-data: {}
+
+secrets:
+  replication-password:
+    file: ${UKDA_RECOVERY_DIRECTORY:?Set the external recovery secret directory}/replication.pgpass
+  replication-ca:
+    file: ${UKDA_REPLICATION_CA_FILE:?Set the primary database CA certificate file}

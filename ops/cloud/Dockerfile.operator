@@ -1,0 +1,21 @@
+# syntax=docker/dockerfile:1
+# Supply the locally built application release; no production secrets enter layers.
+ARG API_IMAGE
+FROM docker:29.8.1-cli@sha256:018edbc908e08fcc9dbf029c812c34251e9b4719e6f71ca0e5eae2a987d014ca AS docker-cli
+FROM ${API_IMAGE}
+USER root
+RUN mkdir -p /opt/maqbool && mv /app /opt/maqbool/release
+WORKDIR /opt/maqbool/release
+COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/docker
+COPY --from=docker-cli /usr/local/libexec/docker/cli-plugins/docker-compose /usr/local/libexec/docker/cli-plugins/docker-compose
+COPY scripts/physical-backups.mjs scripts/recovery.mjs ./scripts/
+COPY ops ./ops/
+# Verify the copied CLI binaries work in the Debian application image, and fail
+# the build if the supplied application image omitted the compiled release.
+RUN docker --version && docker compose version \
+    && node --check scripts/physical-backups.mjs && node --check scripts/recovery.mjs \
+    && node -e "Promise.all([import('./dist/src/config.js'), import('./dist/src/modules/restoration/service.js'), import('./scripts/recovery.mjs')]).catch(() => process.exit(1))"
+HEALTHCHECK NONE
+# This is a privileged maintenance identity, run only by the host supervisor.
+# Its Docker socket grants host authority and must never be mounted in API/web.
+CMD ["node", "scripts/recovery.mjs", "daemon"]

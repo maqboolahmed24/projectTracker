@@ -4,11 +4,13 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import pg from 'pg';
 import { backupConfiguration, backupHealth, storeInfo } from '../ops/recovery-policy.mjs';
+import { recoveryDeployment, recoveryImage, replicationPassword, replicationHbaRules, replicationReadinessSql } from '../ops/recovery-deployment.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const directory = fileURLToPath(new URL('../.local/recovery/', import.meta.url));
+const deployment = recoveryDeployment();
+const directory = deployment.directory;
 const docker = process.env.UKDA_DOCKER ?? 'docker';
-const composeArgs = ['compose', '-f', 'compose.yaml', '-f', 'compose.recovery.yaml'];
+const composeArgs = deployment.composeArgs;
 export const PHYSICAL_LOCK = 'ukda.recovery:physical';
 
 /** Never surface child stdout/stderr on failure: operational tools can otherwise
@@ -58,7 +60,8 @@ async function waitFor(check, label) {
   throw new Error(`Timed out waiting for ${label}; the existing operation must be inspected before retrying`);
 }
 
-export async function setup() {
+export async function setup({configuration = deployment, runCompose = compose, runSql = sql, runBackrest = backrest, wait = waitFor} = {}) {
+  const directory = configuration.directory;
   await mkdir(directory, {recursive: true, mode: 0o700}); await chmod(directory, 0o700);
   for (const store of ['app', 'control']) {
     const path = `${directory}/${store}.conf`;
@@ -67,23 +70,35 @@ export async function setup() {
     await chmod(path, 0o600);
   }
   const passfile = `${directory}/replication.pgpass`;
-  try { await writeFile(passfile, `control-db:5432:*:ukda_replica:${randomBytes(32).toString('hex')}\n`, {flag: 'wx', mode: 0o600}); }
+  try { await writeFile(passfile, `${configuration.primaryHost}:5432:*:ukda_replica:${randomBytes(32).toString('hex')}\n`, {flag: 'wx', mode: 0o600}); }
   catch (error) { if (error.code !== 'EEXIST') throw error; }
   await chmod(passfile, 0o600);
-  const password = (await readFile(passfile, 'utf8')).trim().split(':').at(-1);
-  if (!/^[a-f0-9]{64}$/.test(password)) throw new Error('Invalid replication secret file');
-  await compose(['up', '-d', '--no-build', '--wait', 'app-db', 'control-db']);
+  const password = replicationPassword(await readFile(passfile, 'utf8'), configuration);
+  await runCompose(['up', '-d', '--no-build', '--wait', 'app-db', 'control-db']);
+  if (configuration.requireTls && await runSql('control', 'SHOW ssl;') !== 'on') throw new Error('Primary database TLS must be enabled before replication setup');
   // Never disable synchronous commits on an existing installation. An existing
   // replica may start before these read-only idempotency checks on a resumed setup.
-  const exists = await sql('control', "SELECT count(*) FROM pg_roles WHERE rolname='ukda_replica';");
-  if (exists === '0') await sql('control', `CREATE ROLE ukda_replica WITH LOGIN REPLICATION PASSWORD '${password}';`);
-  await compose(['exec', '-T', 'control-db', 'sh', '-c', 'line="host replication ukda_replica all scram-sha-256"; grep -qxF "$line" "$PGDATA/pg_hba.conf" || printf "%s\\n" "$line" >> "$PGDATA/pg_hba.conf"']);
-  await sql('control', 'SELECT pg_reload_conf();');
-  await compose(['up', '-d', '--no-build', '--wait', 'control-replica']);
-  await waitFor(async () => (await sql('control', "SELECT count(*) FROM pg_stat_replication WHERE application_name='ukda_control_replica' AND state='streaming';")) === '1', 'streaming replica');
-  await sql('control', "ALTER SYSTEM SET synchronous_standby_names='FIRST 1 (ukda_control_replica)';\nSELECT pg_reload_conf();");
-  await waitFor(async () => (await sql('control', "SELECT count(*) FROM pg_stat_replication WHERE application_name='ukda_control_replica' AND sync_state='sync';")) === '1', 'durable synchronous replica');
-  for (const store of ['app', 'control']) { await backrest(store, ['stanza-create']); await backrest(store, ['check']); }
+  const exists = await runSql('control', "SELECT count(*) FROM pg_roles WHERE rolname='ukda_replica';");
+  if (exists === '0') await runSql('control', `CREATE ROLE ukda_replica WITH LOGIN REPLICATION PASSWORD '${password}';`);
+  // Prepend the managed grant and rejection before legacy/broader rules. A
+  // resumed cloud setup must not leave the old local 'all' grant effective.
+  await runCompose(['exec', '-T', 'control-db', 'sh', '-c', `set -eu
+temporary=$(mktemp "$PGDATA/pg_hba.conf.ukda.XXXXXX")
+trap 'rm -f "$temporary"' EXIT
+{
+  printf '%s\\n' '# BEGIN UKDA REPLICATION' "$1" "$2" '# END UKDA REPLICATION'
+  awk '/^# BEGIN UKDA REPLICATION$/ {if (skip) exit 1; skip=1; next} /^# END UKDA REPLICATION$/ {if (!skip) exit 1; skip=0; next} !skip {print} END {if (skip) exit 1}' "$PGDATA/pg_hba.conf"
+} > "$temporary"
+chown postgres:postgres "$temporary"
+chmod 600 "$temporary"
+mv "$temporary" "$PGDATA/pg_hba.conf"`, 'ukda-replication-hba', ...replicationHbaRules(configuration)]);
+  if (await runSql('control', 'SELECT count(*) FROM pg_hba_file_rules WHERE error IS NOT NULL;') !== '0') throw new Error('Replication access rules are invalid');
+  await runSql('control', 'SELECT pg_reload_conf();');
+  if (configuration.replicaMode !== 'external') await runCompose(['up', '-d', '--no-build', '--wait', 'control-replica']);
+  await wait(async () => (await runSql('control', replicationReadinessSql(configuration))) === '1', 'streaming replica');
+  await runSql('control', "ALTER SYSTEM SET synchronous_standby_names='FIRST 1 (ukda_control_replica)';\nSELECT pg_reload_conf();");
+  await wait(async () => (await runSql('control', replicationReadinessSql(configuration, true))) === '1', 'durable synchronous replica');
+  for (const store of ['app', 'control']) { await runBackrest(store, ['stanza-create']); await runBackrest(store, ['check']); }
   return {configured: true, replica: 'synchronous', repositoryEncryption: 'aes-256-cbc', retentionDays: 30, archiveTimeoutSeconds: 60};
 }
 export async function assertNoPartialPurge(control) {
@@ -128,6 +143,7 @@ export async function isolatedRestore(store, label, target) {
   if (!info.backup.some(b => b.label === label)) throw new Error('Backup label is not present');
   const id = await compose(['ps', '-q', storeInfo(store).service]);
   const inspection = JSON.parse(await execute(['inspect', id]))[0];
+  const image = recoveryImage(deployment, inspection);
   const repo = inspection.Mounts.find(m => m.Destination === '/backrest' && m.Type === 'volume')?.Name;
   if (!repo) throw new Error('Encrypted repository mount not found');
   const name = `ukda-recovery-${store}-${randomUUID()}`;
@@ -136,12 +152,12 @@ export async function isolatedRestore(store, label, target) {
   await execute(['run', '-d', '--name', name, '--label', 'ukda.recovery.drill=true', '--network', 'none',
     '-v', `${volume}:/var/lib/postgresql`, '-v', `${repo}:/backrest:ro`,
     '-v', `${directory}/${store}.conf:/run/secrets/pgbackrest.conf:ro`, '--entrypoint', 'sh',
-    'ukda-postgres-recovery:18-2.59.1', '-c', 'sleep infinity']);
+    image, '-c', 'sleep infinity']);
   try {
     await execute(['exec', name, 'sh', '-c', 'install -d -o postgres -g postgres -m 700 /etc/pgbackrest /var/lib/postgresql/18/docker; install -o postgres -g postgres -m 600 /run/secrets/pgbackrest.conf /etc/pgbackrest/pgbackrest.conf']);
     await execute(['exec', '--user', 'postgres', name, 'pgbackrest', `--stanza=${store}`, `--set=${label}`, '--type=name', `--target=${target}`, '--target-action=pause', 'restore']);
     await execute(['exec', '--user', 'postgres', name, 'pg_ctl', '-D', '/var/lib/postgresql/18/docker', '-l', '/var/lib/postgresql/restore.log',
-      '-o', '-c listen_addresses= -c archive_mode=off -c synchronous_standby_names=', '-w', 'start']);
+      '-o', '-c listen_addresses= -c ssl=off -c archive_mode=off -c synchronous_standby_names=', '-w', 'start']);
     await waitFor(async () => (await execute(['exec', '--user', 'postgres', name, 'psql', '-X', '-U', storeInfo(store).user, '-d', storeInfo(store).database, '-Atc', "SELECT pg_get_wal_replay_pause_state()='paused'"])) === 't', 'isolated recovery target');
     return {name, volume, store, label, target, status: 'paused_at_target', network: 'none'};
   } catch { throw new Error(`Isolated restore failed; inspect retained container ${name} and volume ${volume}`); }
