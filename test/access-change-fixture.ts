@@ -9,6 +9,7 @@ import { newOwnerPhrase, recoveryKeys } from '../src/client/recovery.js';
 import { unwrapDeviceBundle, wrapDeviceBundle, type DeviceBundle } from '../src/client/device-store.js';
 import { prepareJoinEnrolment, preparePromotionEnrolment, rebindJoinEnrolment, confirmEnrolmentRecipient, confirmEnrolmentAuthorizer,
   encryptEnrolmentProfile, enrolmentDeviceContext, type PreparedEnrolment, type NewEnrolmentOwnerKit } from '../src/client/enrolment-crypto.js';
+import { prepareEnrolmentApproval } from '../src/client/enrolment-controller.js';
 import { base64urlDecode, base64urlEncode, digestObject, decryptContent, encryptContent, generateRecipientKeyPair, generateSigningKeyPair, openRecipient, sealRecipient, signObject } from '../src/shared/crypto.js';
 import { enrolmentRecipientHeader, enrolmentRecipientDevices, type EnrolmentApproval, type EnrolmentBinding, type EnrolmentReference } from '../src/shared/enrolment.js';
 import type { EnrolmentAuth } from '../src/shared/enrolment-api.js';
@@ -26,6 +27,12 @@ import { provisionProjectScope } from './project-scope-fixture.js';
 const code = (expected: string) => (e: unknown) => e instanceof AppError && e.code === expected;
 const password = newPassword;
 async function kit(): Promise<NewEnrolmentOwnerKit> { const phrase = await newOwnerPhrase(), positions = [2, 8, 20]; return { phrase, positions, answers: positions.map((n) => phrase.split(' ')[n]!) }; }
+async function currentHistory(f: Pick<Awaited<ReturnType<typeof passwordFixture>>, 'admin' | 'workspaceId' | 'prepared' | 'secrets' | 'databases'>): Promise<SecurityHistoryInput> {
+  const w = (await f.admin.control.query('SELECT security_head,security_version FROM security.workspaces WHERE workspace_id=$1', [f.workspaceId])).rows[0];
+  return { workspaceId: f.workspaceId, origin, genesisFingerprint: await digestObject(f.prepared.payload.genesis), genesis: f.prepared.payload.genesis,
+    transitions: (await f.admin.control.query('SELECT signed_transition FROM security.security_transitions WHERE workspace_id=$1 AND sequence>1 ORDER BY sequence', [f.workspaceId])).rows.map((r) => r.signed_transition),
+    expected: { securityHead: w.security_head, securityVersion: w.security_version }, trustedServiceKeys: { [f.secrets.keyId]: await new EntitlementOperations(f.databases, f.secrets).publicSigningKey() } };
+}
 async function enrolmentFixture(t: TestContext) {
   let f: Awaited<ReturnType<typeof passwordFixture>>;
   t.after(async () => { if (f) await f.admin.control.query('DELETE FROM security.ceremonies WHERE workspace_id=$1', [f.workspaceId]); });
@@ -62,25 +69,16 @@ async function enrolmentFixture(t: TestContext) {
     const proven = await prove(ref, prepared, registered.exportKey); return { prepared, registered, newOwnerKit, proven };
   }
   async function approve(ref: EnrolmentReference, prepared: PreparedEnrolment, exportKey: string, auth: EnrolmentAuth = f.auth(), bundle: DeviceBundle = f.originalBundle) {
-    const transcript = prepared.draft.transcript, binding = transcript.binding, transcriptDigest = await digestObject(transcript), key = base64urlDecode(bundle.signingPrivateKey);
+    const transcript = prepared.draft.transcript, binding = transcript.binding, transcriptDigest = await digestObject(transcript);
     prepared.draft.recipientConfirmation = await confirmEnrolmentRecipient({ prepared, exportKey, fingerprint: transcriptDigest }, binding);
     await service.confirm(ref, prepared.draft.recipientConfirmation);
     const { registrationRecord: _record, ...draft } = prepared.draft;
-    const authorizerConfirmation = await confirmEnrolmentAuthorizer({ draft, fingerprint: transcriptDigest }, bundle, binding);
-    const publicRef = { workspaceId: ref.workspaceId, operationId: ref.operationId }; await service.confirm(publicRef, authorizerConfirmation, auth);
-    const deliveries: EnrolmentApproval['deliveries'] = [];
-    for (const scope of binding.scopes) {
-      const value = scope.mode === 'custody' ? { version: 1, mode: 'custody', custodyEpoch: binding.custodyEpoch, custodyKey: custody.custodyKey,
-        manifest: { id: f.prepared.payload.genesis.body.custodyId, digest: await digestObject(f.prepared.payload.objects.custody) } } :
-        { version: 1, mode: 'content', scope: scope.scope, scopeId: scope.scopeId, keyEpoch: scope.keyEpoch, keys: manifest.workspaceKeys };
-      for (const device of enrolmentRecipientDevices(transcript)) deliveries.push({ id: randomUUID(), envelope: await sealRecipient(enrolmentRecipientHeader(transcript, transcriptDigest, scope, 'device', device.id), value, key) });
-      if (scope.mode === 'custody') deliveries.push({ id: randomUUID(), envelope: await sealRecipient(enrolmentRecipientHeader(transcript, transcriptDigest, scope, 'recovery'), value, key) });
-    }
-    const profile = binding.kind === 'promote_owner' ? null : await encryptEnrolmentProfile({ draft, fingerprint: transcriptDigest }, bundle, workspaceKey, binding);
-    const approval: EnrolmentApproval = { profile, deliveries, transition: await signObject({ version: 1 as const, purpose: binding.kind === 'promote_owner' ? 'ukda.owner-promotion.v1' as const : 'ukda.profile-enrolment.v1' as const,
-      transcript, transcriptDigest, recipientConfirmation: prepared.draft.recipientConfirmation, authorizerConfirmation, newRecoveryConfirmation: prepared.draft.newRecoveryConfirmation,
-      profile: profile ? { id: profile.id, profileId: binding.accountId, revision: binding.nextProfileRevision, digest: await digestObject(profile.envelope) } : null,
-      deliveries: await Promise.all(deliveries.map(async (d) => ({ id: d.id, scope: d.envelope.header.scope, scopeId: d.envelope.header.scopeId, keyEpoch: d.envelope.header.keyEpoch, recipientKind: d.envelope.header.recipientKind, recipientId: d.envelope.header.recipientId, digest: await digestObject(d.envelope) }))) }, key) };
+    const publicRef = { workspaceId: ref.workspaceId, operationId: ref.operationId };
+    // Project creation and access changes can rotate custody after fixture setup.
+    // Exercise the production approval path against its current signed sources.
+    const approval = await prepareEnrolmentApproval({ draft, fingerprint: transcriptDigest,
+      history: await currentHistory(f), materials: await service.materials(publicRef, auth) }, bundle);
+    await service.confirm(publicRef, approval.transition.body.authorizerConfirmation, auth);
     const staged = await service.stage(publicRef, approval, auth); assert.equal(staged.approvalHash, await digestObject(approval)); return { approval, requestHash: staged.requestHash!, publicRef };
   }
   async function login(prepared: PreparedEnrolment, expectedExport: string) {
@@ -110,12 +108,7 @@ export async function accessChangeFixture(t: TestContext) {
   } });
   f = await enrolmentFixture(t); let hooks: NonNullable<ConstructorParameters<typeof AccessChangeService>[0]['hooks']> = {}, offset = 0;
   const make = () => new AccessChangeService({ ...f, origin, now: () => new Date(Date.now() + offset), hooks }); let service = make();
-  async function history(): Promise<SecurityHistoryInput> {
-    const w = (await f.admin.control.query('SELECT security_head,security_version FROM security.workspaces WHERE workspace_id=$1', [f.workspaceId])).rows[0];
-    return { workspaceId: f.workspaceId, origin, genesisFingerprint: await digestObject(f.prepared.payload.genesis), genesis: f.prepared.payload.genesis,
-      transitions: (await f.admin.control.query('SELECT signed_transition FROM security.security_transitions WHERE workspace_id=$1 AND sequence>1 ORDER BY sequence', [f.workspaceId])).rows.map((r) => r.signed_transition),
-      expected: { securityHead: w.security_head, securityVersion: w.security_version }, trustedServiceKeys: { [f.secrets.keyId]: await new EntitlementOperations(f.databases, f.secrets).publicSigningKey() } };
-  }
+  const history = () => currentHistory(f);
   async function draft(action: AccessRequest['action'], targetAccountId: string, desired: AccessRequest['desired'] = null,
     auth = f.auth(), bundle: DeviceBundle = f.originalBundle) {
     const reference = { workspaceId: f.workspaceId, operationId: randomUUID() }, receiptToken = f.secrets.token();

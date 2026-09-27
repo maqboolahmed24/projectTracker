@@ -6,14 +6,14 @@ import { projectAuthoritativeWorkspace } from '../src/modules/identity/projectio
 import { readOwnershipNotices } from '../src/modules/identity/ownership-notices.js';
 import { accessChangeFixture } from './access-change-fixture.js';
 
-test('CP06: ownership changes notify other Owners once, and failed notice projection preserves the old version', async (t) => {
+test('CP09: ownership changes notify active Owners and affected people once, and failed notice projection preserves the old version', async (t) => {
   const f = await accessChangeFixture(t), second = await f.joined('join_owner');
-  assert.equal((await f.admin.application.query('SELECT id FROM app.notifications WHERE workspace_id=$1', [f.workspaceId])).rowCount, 0);
+  assert.equal((await f.admin.application.query('SELECT id FROM app.notifications WHERE workspace_id=$1', [f.workspaceId])).rowCount, 2);
   const third = await f.joined('join_owner');
-  const added = (await f.admin.application.query('SELECT * FROM app.notifications WHERE workspace_id=$1', [f.workspaceId])).rows;
-  assert.equal(added.length, 1); assert.equal(added[0].event_type, 'security.owner_added');
+  const added = (await f.admin.application.query('SELECT * FROM app.notifications WHERE workspace_id=$1 AND event_id=$2', [f.workspaceId,third.binding.operationId])).rows;
+  assert.equal(added.length, 3); assert.ok(added.every(row=>row.event_type==='security.owner_added'));
   assert.equal(added[0].event_id, third.binding.operationId); assert.equal(added[0].record_id, third.binding.accountId);
-  assert.equal(added[0].recipient_profile_id, second.binding.accountId); assert.equal(added[0].project_id, null);
+  assert.deepEqual(added.map(row=>row.recipient_profile_id).sort(),[f.accountId,second.binding.accountId,third.binding.accountId].sort()); assert.equal(added[0].project_id, null);
   assert.deepEqual(added[0].encrypted_envelope, {});
 
   const oldVersion = (await f.admin.application.query('SELECT security_version FROM app.workspaces WHERE workspace_id=$1', [f.workspaceId])).rows[0].security_version;
@@ -47,10 +47,10 @@ test('CP06: ownership changes notify other Owners once, and failed notice projec
   const completed = await f.status(change); assert.equal(completed.state, 'completed'); assert.deepEqual(completed.receipt, finishing.receipt);
   assert.equal((await projectAuthoritativeWorkspace(f.databases, f.workspaceId)).state, 'ready');
   const notices = (await f.admin.application.query('SELECT * FROM app.notifications WHERE workspace_id=$1 AND event_id=$2', [f.workspaceId, change.reference.operationId])).rows;
-  assert.equal(notices.length, 1); assert.equal(notices[0].event_type, 'security.owner_demoted');
-  assert.equal(notices[0].recipient_profile_id, third.binding.accountId); assert.equal(notices[0].record_id, second.binding.accountId);
+  assert.equal(notices.length, 3); assert.ok(notices.every(row=>row.event_type==='security.owner_demoted'));
+  assert.deepEqual(notices.map(row=>row.recipient_profile_id).sort(),[f.accountId,second.binding.accountId,third.binding.accountId].sort()); assert.equal(notices[0].record_id, second.binding.accountId);
   assert.equal(notices[0].project_id, null); assert.deepEqual(notices[0].encrypted_envelope, {});
-  for (const [accountId, expected] of [[f.accountId, 0], [second.binding.accountId, 0], [third.binding.accountId, 1]] as const) {
+  for (const [accountId, expected] of [[f.accountId, 1], [second.binding.accountId, 1], [third.binding.accountId, 1]] as const) {
     await tenantTransaction(f.databases.application, f.workspaceId, accountId, async (application) => {
       assert.equal((await application.query('SELECT id FROM app.notifications WHERE workspace_id=$1 AND event_id=$2', [f.workspaceId, change.reference.operationId])).rowCount, expected);
     });

@@ -2,6 +2,18 @@ import type * as recoveryHelpers from './recovery-controller.js';
 import type * as enrolmentHelpers from './enrolment-controller.js';
 import type * as rolesHelpers from './roles-controller.js';
 import type * as accessHelpers from './access-change-crypto.js';
+import type * as projectCreateHelpers from './project-create-crypto.js';
+import type * as teamsHelpers from './teams-crypto.js';
+import type * as planningHelpers from './planning-crypto.js';
+import type * as collaborationHelpers from './collaboration-crypto.js';
+import type * as inboxHelpers from './inbox-crypto.js';
+import type * as reportingHelpers from './reporting-crypto.js';
+import type * as upgradeHelpers from './encrypted-upgrades-crypto.js';
+import type * as exportHelpers from './export-crypto.js';
+import type * as profileHelpers from './profile-crypto.js';
+import type * as directoryHelpers from './directory-crypto.js';
+import type * as restorationHelpers from './restoration-crypto.js';
+import type * as lifecycleHelpers from './lifecycle-crypto.js';
 import { z } from 'zod';
 import { AuthWorkerError, workerResponse, type AuthWorkerMethods, type AuthWorkerMethod,
   type AuthWorkerErrorCode, type UnlockDeviceInput } from './auth-worker.js';
@@ -132,8 +144,33 @@ export class AuthWorkerClient {
       return result;
     } finally { options.signal?.removeEventListener('abort', abort); }
   }
+  prepareLifecycle(input: lifecycleHelpers.PrepareLifecycleInput, options?: WorkerCallOptions) { return this.call('prepareLifecycle', input, options); }
+  readWorkspaceDirectory(input: directoryHelpers.ReadWorkspaceDirectoryInput, options?: WorkerCallOptions) { return this.call('readWorkspaceDirectory', input, options); }
+  readCurrentProfile(input: profileHelpers.ReadCurrentProfileInput, options?: WorkerCallOptions) { return this.call('readCurrentProfile', input, options); }
+  prepareExport(input: exportHelpers.PrepareExportInput, options?: WorkerCallOptions) { return this.call('prepareExport', input, options); }
+  readRestoration(input: restorationHelpers.VerifyRestorationInput, options?: WorkerCallOptions) { return this.call('readRestoration', input, options); }
+  prepareRestorationVerification(input: restorationHelpers.VerifyRestorationInput, options?: WorkerCallOptions) { return this.call('prepareRestorationVerification', input, options); }
+  prepareUpgradeStart(input: upgradeHelpers.PrepareUpgradeStartInput, options?: WorkerCallOptions) { return this.call('prepareUpgradeStart', input, options); }
+  prepareIdentityUpgrade(input: upgradeHelpers.PrepareIdentityUpgradeInput, options?: WorkerCallOptions) { return this.call('prepareIdentityUpgrade', input, options); }
+  prepareUpgradeFinish(input: upgradeHelpers.PrepareUpgradeFinishInput, options?: WorkerCallOptions) { return this.call('prepareUpgradeFinish', input, options); }
+  prepareTeamUpgrade(input: teamsHelpers.PrepareTeamUpgradeInput, options?: WorkerCallOptions) { return this.call('prepareTeamUpgrade', input, options); }
+  prepareCollaborationUpgrade(input: collaborationHelpers.PrepareCollaborationUpgradeInput, options?: WorkerCallOptions) { return this.call('prepareCollaborationUpgrade', input, options); }
   prepareRoleChange(input: rolesHelpers.PrepareRoleChangeInput, options?: WorkerCallOptions) { return this.call('prepareRoleChange', input, options); }
   readRoleLabels(input: rolesHelpers.ReadRolesInput, options?: WorkerCallOptions) { return this.call('readRoleLabels', input, options); }
+  preparePlanning(input: planningHelpers.PreparePlanningInput, options?: WorkerCallOptions) { return this.call('preparePlanning', input, options); }
+  readPlanning(input: planningHelpers.ReadPlanningInput, options?: WorkerCallOptions) { return this.call('readPlanning', input, options); }
+  prepareCollaboration(input: collaborationHelpers.PrepareCollaborationInput, options?: WorkerCallOptions) { return this.call('prepareCollaboration', input, options); }
+  readCollaboration(input: collaborationHelpers.ReadCollaborationInput, options?: WorkerCallOptions) { return this.call('readCollaboration', input, options); }
+  prepareInbox(input: inboxHelpers.PrepareInboxInput, options?: WorkerCallOptions) { return this.call('prepareInbox', input, options); }
+  readReportingSettings(input: reportingHelpers.ReadReportingSettingsInput, options?: WorkerCallOptions) { return this.call('readReportingSettings', input, options); }
+  prepareReportingSettings(input: reportingHelpers.PrepareReportingSettingsInput, options?: WorkerCallOptions) { return this.call('prepareReportingSettings', input, options); }
+  calculateReporting(input: reportingHelpers.CalculateReportingInput, options?: WorkerCallOptions) { return this.call('calculateReporting', input, options); }
+  prepareReporting(input: reportingHelpers.CalculateReportingInput, options?: WorkerCallOptions) { return this.call('prepareReporting', input, options); }
+  readReporting(input: reportingHelpers.ReadReportingInput, options?: WorkerCallOptions) { return this.call('readReporting', input, options); }
+  prepareTeamChange(input: teamsHelpers.PrepareTeamChangeInput, options?: WorkerCallOptions) { return this.call('prepareTeamChange', input, options); }
+  readTeams(input: teamsHelpers.ReadTeamsInput, options?: WorkerCallOptions) { return this.call('readTeams', input, options); }
+  readTeamHistory(input: teamsHelpers.ReadTeamHistoryInput, options?: WorkerCallOptions) { return this.call('readTeamHistory', input, options); }
+  prepareProjectCreate(input: projectCreateHelpers.PrepareProjectCreateInput, options?: WorkerCallOptions) { return this.call('prepareProjectCreate', input, options); }
   prepareAccessChange(input: accessHelpers.PrepareAccessChangeInput, options?: WorkerCallOptions) { return this.call('prepareAccessChange', input, options); }
   refreshAccessKeys(input: accessHelpers.RefreshAccessKeysInput, options?: WorkerCallOptions) { return this.call('refreshAccessKeys', input, options); }
   async ready(options: WorkerCallOptions = {}): Promise<void> { await this.call('capabilities', { origin: this.origin }, options); }

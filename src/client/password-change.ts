@@ -209,16 +209,40 @@ async function checkReceipt(pending: PendingChange, value: unknown): Promise<Pas
 
 export class PasswordChangeController {
   readonly #active = new Set<AbortController>();
-  #auth: { logout(): Promise<void> } | undefined;
+  readonly #running = new Set<Promise<unknown>>();
+  #auth: { invalidateSession(): Promise<void> } | undefined;
   constructor(private readonly input: { transport: PasswordChangeTransport; changes: IndexedPasswordChangeStore;
     devices: IndexedDeviceStore; worker: AuthWorkerClient }) {
     if (input.transport.origin !== input.worker.origin) throw new PasswordChangeClientError('INVALID_STATE');
   }
-  async #run<T>(action: (signal: AbortSignal) => Promise<T>): Promise<T> {
+  #run<T>(action: (signal: AbortSignal) => Promise<T>): Promise<T> {
     const controller = new AbortController(); this.#active.add(controller);
-    try { return await action(controller.signal); } finally { this.#active.delete(controller); }
+    const promise=(async()=>{try { return await action(controller.signal); } finally { this.#active.delete(controller); }})();
+    this.#running.add(promise);void promise.finally(()=>this.#running.delete(promise)).catch(()=>{});return promise;
   }
   #check(signal: AbortSignal) { if (signal.aborted) throw new PasswordChangeClientError('CANCELLED'); }
+  /** Stop the local continuation even when an accepted transport response ignores cancellation. */
+  #exchange<T>(signal: AbortSignal, send: () => Promise<T>): Promise<T> {
+    if (signal.aborted) return Promise.reject(new PasswordChangeClientError('CANCELLED'));
+    return new Promise<T>((resolve, reject) => {
+      const cancelled = () => {
+        signal.removeEventListener('abort', cancelled);
+        reject(new PasswordChangeClientError('CANCELLED'));
+      };
+      signal.addEventListener('abort', cancelled, { once: true });
+      void Promise.resolve().then(() => {
+        if (signal.aborted) throw new PasswordChangeClientError('CANCELLED');
+        return send();
+      }).then((value) => {
+        signal.removeEventListener('abort', cancelled);
+        if (signal.aborted) reject(new PasswordChangeClientError('CANCELLED'));
+        else resolve(value);
+      }, (error) => {
+        signal.removeEventListener('abort', cancelled);
+        reject(signal.aborted ? new PasswordChangeClientError('CANCELLED') : error);
+      });
+    });
+  }
   async #pending(operationId: string) {
     const pending = await this.input.changes.get(operationId);
     if (!pending || pending.origin !== this.input.transport.origin) throw new PasswordChangeClientError('INVALID_STATE');
@@ -234,7 +258,7 @@ export class PasswordChangeController {
         token.fill(0); await this.input.changes.save(undefined, pending);
       }
       if (pending.reference.workspaceId !== workspaceId || pending.origin !== this.input.transport.origin) throw new PasswordChangeClientError('CONFLICT');
-      const status = snapshot(passwordChangeStatus, await this.input.transport.begin(pending.reference, signal)); this.#check(signal);
+      const status = snapshot(passwordChangeStatus, await this.#exchange(signal, () => this.input.transport.begin(pending!.reference, signal))); this.#check(signal);
       await this.input.changes.save(pending, { ...pending, status }); return status;
     });
   }
@@ -244,7 +268,7 @@ export class PasswordChangeController {
       const pending = await this.#pending(operationId);
       if (!pending.status || pending.status.state !== 'issued' || pending.draft) throw new PasswordChangeClientError('INVALID_STATE');
       const client = await this.input.worker.startRegistration(newPassword, { signal });
-      const server = await this.input.transport.registration({ ...pending.reference, registrationRequest: client.registrationRequest }, signal);
+      const server = await this.#exchange(signal, () => this.input.transport.registration({ ...pending.reference, registrationRequest: client.registrationRequest }, signal));
       const registration = await this.input.worker.finishRegistration({ password: newPassword, clientRegistrationState: client.clientRegistrationState,
         registrationResponse: server.registrationResponse, configuration: server.configuration }, { signal });
       const draft = await this.input.worker.preparePasswordChange({ binding: pending.status.binding, registrationRecord: registration.registrationRecord,
@@ -263,7 +287,7 @@ export class PasswordChangeController {
     return this.#run(async (signal) => {
       const pending = await this.#pending(operationId), draft = pending.draft, binding = pending.status?.binding;
       if (!draft || !binding) throw new PasswordChangeClientError('INVALID_STATE');
-      const current = snapshot(passwordChangeStatus, await this.input.transport.status(pending.reference, signal)); this.#check(signal);
+      const current = snapshot(passwordChangeStatus, await this.#exchange(signal, () => this.input.transport.status(pending.reference, signal))); this.#check(signal);
       if (current.receipt && ['completed', 'finishing'].includes(current.state)) {
         // No speculative promotion after restart: normal matching-generation login must unlock first.
         const receipt = await checkReceipt(pending, current.receipt);
@@ -275,29 +299,29 @@ export class PasswordChangeController {
       const stored = await this.input.devices.getStaged(operationId);
       if (!stored || await digestObject(stored) !== draft.payload.transition.body.wrapperHash) throw new PasswordChangeClientError('LOCAL_VERIFICATION');
       const client = await this.input.worker.startLogin(newPassword, { signal });
-      const proof = await this.input.transport.startProof({ ...pending.reference, payload: draft.payload, startLoginRequest: client.startLoginRequest }, signal);
+      const proof = await this.#exchange(signal, () => this.input.transport.startProof({ ...pending.reference, payload: draft.payload, startLoginRequest: client.startLoginRequest }, signal));
       if (proof.requestHash !== await digestObject(draft.payload)) throw new PasswordChangeClientError('CONFLICT');
       const finished = await this.input.worker.finishLogin({ password: newPassword, clientLoginState: client.clientLoginState,
         loginResponse: proof.loginResponse, configuration: proof.configuration }, { signal });
       await this.input.worker.verifyPasswordChangeWrapper({ binding, wrapper: stored, exportKey: finished.exportKey }, { signal });
-      await this.input.transport.finishProof({ ...pending.reference, proofId: proof.proofId, finishLoginRequest: finished.finishLoginRequest }, signal);
+      await this.#exchange(signal, () => this.input.transport.finishProof({ ...pending.reference, proofId: proof.proofId, finishLoginRequest: finished.finishLoginRequest }, signal));
       this.#check(signal);
       try {
-        const result = await this.input.transport.finalize({ ...pending.reference, requestHash: proof.requestHash }, signal);
+        const result = await this.#exchange(signal, () => this.input.transport.finalize({ ...pending.reference, requestHash: proof.requestHash }, signal));
         const receipt = await checkReceipt(pending, result.receipt); this.#check(signal);
         await this.input.devices.commit(operationId, { ...passwordChangeDeviceContext(binding), operationId });
         return { state: result.state, receipt };
       } finally {
         // Ambiguous responses may already have revoked every old session. Also
         // clear registered plaintext/cache owners and stale public session state.
-        this.input.worker.logout(); await this.#auth?.logout().catch(() => {});
+        this.input.worker.logout(); await this.#auth?.invalidateSession().catch(() => {});
       }
     });
   }
   async resume(operationId: string, authenticated?: AuthSessionResult): Promise<PasswordChangeStatus> {
     return this.#run(async (signal) => {
       const pending = await this.#pending(operationId);
-      const status = snapshot(passwordChangeStatus, await this.input.transport.status(pending.reference, signal)); this.#check(signal);
+      const status = snapshot(passwordChangeStatus, await this.#exchange(signal, () => this.input.transport.status(pending.reference, signal))); this.#check(signal);
       if (status.receipt) {
         const receipt = await checkReceipt(pending, status.receipt);
         this.#check(signal);
@@ -316,10 +340,10 @@ export class PasswordChangeController {
   async cancel(operationId: string): Promise<PasswordChangeStatus> {
     return this.#run(async (signal) => {
       const pending = await this.#pending(operationId);
-      const existing = snapshot(passwordChangeStatus, await this.input.transport.status(pending.reference, signal));
+      const existing = snapshot(passwordChangeStatus, await this.#exchange(signal, () => this.input.transport.status(pending.reference, signal)));
       if (existing.receipt) throw new PasswordChangeClientError('CONFLICT');
       const status = ['expired', 'cancelled', 'revoked'].includes(existing.state) ? existing :
-        snapshot(passwordChangeStatus, await this.input.transport.cancel(pending.reference, signal));
+        snapshot(passwordChangeStatus, await this.#exchange(signal, () => this.input.transport.cancel(pending.reference, signal)));
       this.#check(signal);
       if (!['expired', 'cancelled', 'revoked'].includes(status.state)) throw new PasswordChangeClientError('CONFLICT');
       await this.input.devices.discardUncommitted(operationId, status.binding.deviceId);
@@ -329,13 +353,13 @@ export class PasswordChangeController {
   /** Logout aborts in-flight password work; encrypted pending wrappers remain available for receipt recovery. */
   clear() { for (const controller of this.#active) controller.abort(); this.input.worker.logout(); }
   async forgetDevice(reference: { workspaceId: string; accountId: string; deviceId: string }) {
-    this.clear(); await this.input.changes.forgetDevice(reference);
+    this.clear(); await Promise.allSettled([...this.#running]); await this.input.changes.forgetDevice(reference);
   }
   /** Register with AuthController when composing the client, including encrypted-draft cleanup on explicit forget. */
   attachAuthLifecycle(auth: {
     onClear(clear: () => void): () => void;
     onForget(forget: (reference: { workspaceId: string; accountId: string; deviceId: string }) => Promise<void>): () => void;
-    logout(): Promise<void>;
+    invalidateSession(): Promise<void>;
   }): () => void {
     this.#auth = auth;
     const detachClear = auth.onClear(() => this.clear());

@@ -10,7 +10,7 @@ import { pairingHistoryRequest, readAuthorizedSecurityHistoryPage } from './secu
 import { readSessionCookie } from './sessions.js';
 const historyRequest = accessReference.extend({ anchor: pairingHistoryRequest.shape.anchor, afterVersion: pairingHistoryRequest.shape.afterVersion })
   .refine((value) => value.afterVersion === '0' || !!value.anchor);
-const deliveryRequest = z.strictObject({ workspaceId: identifier });
+const deliveryRequest = z.strictObject({ workspaceId: identifier, includeProfile: z.literal(true).optional(), includeDirectory: z.literal(true).optional() });
 export function accessChangeAccountBudget(budgets: Pick<RequestBudgets, 'take'>) {
   return ({ workspaceId, accountId, history }: { workspaceId: string; accountId: string; history: boolean }) => budgets.take([
     { purpose: history ? 'access-change-history-account' : 'access-change-account', key: `${workspaceId}:${accountId}`, limit: history ? 1000 : 120, windowMs: 600000 },
@@ -48,7 +48,7 @@ export function registerAccessChangeRoutes(app: FastifyInstance, input: { origin
   route('stage', accessPayload, (body, request) => { const a = auth(request); return input.accessChanges.stage(a.cookieValue, a.csrfToken, body); });
   route('finalize', accessFinalize, (body, request) => { const a = optionalAuth(request); return input.accessChanges.finalize(a.cookieValue, a.csrfToken, body); });
   route('status', accessStatus, (body, request) => { const a = body.receiptToken ? optionalAuth(request) : auth(request); return input.accessChanges.status(a.cookieValue, a.csrfToken, body); });
-  route('delivery', deliveryRequest, (body, request) => { const a = auth(request); return input.accessChanges.currentDelivery(a.cookieValue, a.csrfToken, body); });
+  route('delivery', deliveryRequest, (body, request) => { const a = auth(request); return input.accessChanges.currentDelivery(a.cookieValue, a.csrfToken, body); }, true);
   for (const path of ['history', 'delivery/history'] as const) route(path, historyRequest, (body, request) => {
     const a = auth(request), read = path === 'history' ? input.accessChanges.withAuthorizedHistory.bind(input.accessChanges) : input.accessChanges.withDeliveryHistory.bind(input.accessChanges);
     return read(body.workspaceId, a, (control, context) => readAuthorizedSecurityHistoryPage(control,

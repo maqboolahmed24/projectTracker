@@ -10,7 +10,7 @@ export type ScopeProvisionRequest = z.infer<typeof scopeProvisionRequest>;
 export const scopeProvisionBinding = z.strictObject({ ...scopeProvisionRequest.shape, version: z.literal(1), origin: z.string().max(256),
   authorizer: accessBinding.shape.authorizer, securityVersion: positiveCounter, nextSecurityVersion: positiveCounter, securityHead: digest,
   dataGeneration: positiveCounter, ownershipVersion: positiveCounter, custodyEpoch: positiveCounter, workspaceKeyEpoch: positiveCounter,
-  genesisFingerprint: digest, issuedAt: z.iso.datetime(), expiresAt: z.iso.datetime() }).refine((v) => positiveCounter.safeParse(v.securityVersion).success &&
+  genesisFingerprint: digest, writeSchema:z.literal(2).optional(), issuedAt: z.iso.datetime(), expiresAt: z.iso.datetime() }).refine((v) => positiveCounter.safeParse(v.securityVersion).success &&
     positiveCounter.safeParse(v.nextSecurityVersion).success && BigInt(v.nextSecurityVersion) === BigInt(v.securityVersion) + 1n &&
     new Set(v.selected.map((s) => s.accountId)).size === v.selected.length && Date.parse(v.expiresAt) > Date.parse(v.issuedAt) && Date.parse(v.expiresAt) - Date.parse(v.issuedAt) <= 600_000);
 export type ScopeProvisionBinding = z.infer<typeof scopeProvisionBinding>;
@@ -19,10 +19,11 @@ export const scopeProvisionPlan = z.strictObject({ version: z.literal(1), projec
 export type ScopeProvisionPlan = z.infer<typeof scopeProvisionPlan>;
 const reference = z.strictObject({ id: identifier, digest, revision: positiveCounter });
 export const scopeProvisionTransition = z.strictObject({ body: z.strictObject({ version: z.literal(1), purpose: z.literal('ukda.project-scope-provision.v1'),
-  binding: scopeProvisionBinding, plan: scopeProvisionPlan, transcriptDigest: digest, custody: reference,
+  binding: scopeProvisionBinding, plan: scopeProvisionPlan, transcriptDigest: digest, custody: reference, project: reference.optional(),
   deliveries: z.array(z.strictObject({ id: identifier, digest, recipient: accessRecipient })).max(8192) }), signature: binary(64) });
 export type ScopeProvisionTransition = z.infer<typeof scopeProvisionTransition>;
 export const scopeProvisionPayload = z.strictObject({ transition: scopeProvisionTransition, custody: z.strictObject({ id: identifier, envelope: contentEnvelope }),
+  project: z.strictObject({ id: identifier, envelope: contentEnvelope }).optional(),
   deliveries: z.array(z.strictObject({ id: identifier, envelope: recipientEnvelope })).max(8192) });
 export type ScopeProvisionPayload = z.infer<typeof scopeProvisionPayload>;
 export class ScopeProvisionError extends Error { constructor() { super('Invalid signed project scope provisioning'); this.name = 'ScopeProvisionError'; } }
@@ -38,7 +39,7 @@ export function createScopeProvisionBinding(requestValue: ScopeProvisionRequest,
   const binding = scopeProvisionBinding.parse({ ...scopeProvisionRequest.parse(copy(requestValue)), version: 1, origin: state.origin, authorizer: actor,
     securityVersion: state.securityVersion, nextSecurityVersion: next(state.securityVersion), securityHead: state.securityHead,
     dataGeneration: state.dataGeneration, ownershipVersion: state.ownershipVersion, custodyEpoch: state.custodyEpoch, workspaceKeyEpoch: state.workspaceKeyEpoch,
-    genesisFingerprint: state.genesisFingerprint, ...times }); deriveScopeProvisionPlan(binding, state); return binding;
+    genesisFingerprint: state.genesisFingerprint,...(state.writeSchema===2?{writeSchema:2}:{}), ...times }); deriveScopeProvisionPlan(binding, state); return binding;
 }
 /** A security bootstrap primitive. It provisions no business project rows or inferred memberships. */
 export function deriveScopeProvisionPlan(value: ScopeProvisionBinding, state: SecurityHistoryState): ScopeProvisionPlan {
@@ -48,7 +49,7 @@ export function deriveScopeProvisionPlan(value: ScopeProvisionBinding, state: Se
   if (state.workspaceId !== b.workspaceId || state.origin !== b.origin || state.genesisFingerprint !== b.genesisFingerprint ||
     state.securityHead !== b.securityHead || state.securityVersion !== b.securityVersion || state.dataGeneration !== b.dataGeneration ||
     state.ownershipVersion !== b.ownershipVersion || state.custodyEpoch !== b.custodyEpoch || state.workspaceKeyEpoch !== b.workspaceKeyEpoch ||
-    state.licenceState !== 'active' || state.entitlementState !== 'activated' || state.scopeHeads[`project:${b.projectId}`] || b.projectId === b.workspaceId ||
+    state.licenceState !== 'active' || state.entitlementState !== 'activated' || (b.writeSchema??1)!==(state.writeSchema??1) || state.activeUpgrade || state.scopeHeads[`project:${b.projectId}`] || b.projectId === b.workspaceId ||
     !owner?.active || !owner.owner || !signer?.active || signer.accountId !== owner.accountId ||
     actor.credentialGeneration !== owner.credentialGeneration || actor.sessionGeneration !== owner.sessionGeneration ||
     !same(actor.device, { id: signer.id, keyGeneration: signer.keyGeneration, signingPublicKey: signer.signingPublicKey, recipientPublicKey: signer.recipientPublicKey }) ||
@@ -111,7 +112,8 @@ export async function validateScopeProvisionTransition(value: unknown, expected:
     body.transcriptDigest !== await scopeProvisionTranscriptDigest(expected, plan) || body.deliveries.length !== plan.recipients.length ||
     !same(ordered(body.deliveries.map((d) => d.recipient), (r) => `${r.kind}:${r.id}:${key(r.scope)}`), plan.recipients) ||
     !await verifyObject(transition, base64urlDecode(expected.authorizer.device.signingPublicKey, 32), 'ukda.project-scope-provision.v1')) invalid();
-  const ids = [expected.operationId, body.custody.id, ...body.deliveries.map((d) => d.id)]; if (new Set(ids).size !== ids.length) invalid(); return transition;
+  if (body.project && (body.project.id !== expected.projectId || body.project.revision !== '1')) invalid();
+  const ids = [expected.operationId, body.custody.id, ...(body.project ? [body.project.id] : []), ...body.deliveries.map((d) => d.id)]; if (new Set(ids).size !== ids.length) invalid(); return transition;
 }
 export async function validateScopeProvisionPayload(value: unknown, expected: ScopeProvisionBinding, state: SecurityHistoryState) {
   const payload = scopeProvisionPayload.parse(copy(value)), transition = await validateScopeProvisionTransition(payload.transition, expected, state), body = transition.body;
@@ -119,7 +121,18 @@ export async function validateScopeProvisionPayload(value: unknown, expected: Sc
   if (payload.custody.id !== body.custody.id || await digestObject(payload.custody.envelope) !== body.custody.digest ||
     !await verifyContentEnvelope(payload.custody.envelope, publicKey, scopeProvisionCustodyHeader(expected, body.plan, payload.custody.id)) ||
     payload.deliveries.length !== body.deliveries.length || new Set(payload.deliveries.map((d) => d.id)).size !== payload.deliveries.length) invalid();
+  if (body.project ? !payload.project || payload.project.id !== body.project.id || await digestObject(payload.project.envelope) !== body.project.digest ||
+    !await verifyContentEnvelope(payload.project.envelope, publicKey, scopeProvisionProjectHeader(expected)) : payload.project !== undefined) invalid();
   for (const d of body.deliveries) { const object = payload.deliveries.find((v) => v.id === d.id);
     if (!object || await digestObject(object.envelope) !== d.digest || !await verifyRecipientEnvelope(object.envelope, publicKey, await scopeProvisionRecipientHeader(expected, body.plan, d.recipient))) invalid(); }
   return { payload, securityHead: await digestObject(transition), requestHash: await digestObject(payload) };
+}
+
+/** The private name and optional details are authenticated to this project's first immutable revision. */
+export function scopeProvisionProjectHeader(b: ScopeProvisionBinding): ContentHeader {
+  return { version: 1, purpose: 'ukda.content.v1', algorithm: 'XChaCha20-Poly1305', workspaceId: b.workspaceId,
+    scope: 'project', scopeId: b.projectId, recordId: b.projectId, recordType: 'project', schema: b.writeSchema??1, keyEpoch: '1', revision: '1', operationId: b.operationId,
+    accountId: b.authorizer.accountId, deviceId: b.authorizer.device.id, keyGeneration: b.authorizer.device.keyGeneration,
+    permissionVersion: b.nextSecurityVersion, securityVersion: b.securityVersion, securityHead: b.securityHead, dataGeneration: b.dataGeneration,
+    action: 'project.create', approvalPolicyId: null, approvalPolicyRevision: null };
 }

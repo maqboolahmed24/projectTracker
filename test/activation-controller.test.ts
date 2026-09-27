@@ -1,15 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
+import type { AvatarSelection } from '../src/shared/avatar.js';
 import * as opaque from '@serenity-kit/opaque';
 import { IDBFactory } from 'fake-indexeddb';
 import { ActivationController, ActivationControllerError, HttpActivationTransport, IndexedActivationStore,
   type ActivationTransport, type ActivationReceipt, type ActivationStatus } from '../src/client/activation-controller.js';
 import { IndexedDeviceStore } from '../src/client/device-store.js';
-import { newOwnerPhrase } from '../src/client/recovery.js';
+import { newOwnerPhrase, recoveryKeys } from '../src/client/recovery.js';
 import { OpaqueService } from '../src/modules/identity/opaque.js';
-import { canonicalJson, digestObject } from '../src/shared/crypto.js';
-import { validateActivationPayload, type ActivationBinding, type ActivationPayload } from '../src/shared/activation.js';
+import { base64urlDecode, canonicalJson, decryptContent, digestObject, openRecipient } from '../src/shared/crypto.js';
+import { initialContentHeader, initialRecipientHeader, transcriptFromGenesis, validateActivationPayload, type ActivationBinding, type ActivationPayload } from '../src/shared/activation.js';
 import { AuthClientError, AuthController, type AuthTransport } from '../src/client/auth-controller.js';
 import { AuthWorkerClient } from '../src/client/auth-worker-client.js';
 import { IndexedPairingStore, seedActivationPin } from '../src/client/pairing.js';
@@ -19,7 +20,7 @@ const password = 'This owner has an unusual long passphrase 2965';
 const code = (expected: ActivationControllerError['code']) => (error: unknown) => error instanceof ActivationControllerError && error.code === expected;
 
 /** A real OPAQUE server with in-memory receipt state; persistence is tested separately. */
-async function fixture() {
+async function fixture(avatar?: AvatarSelection) {
   await opaque.ready;
   const service = new OpaqueService({ serverSetup: opaque.server.createSetup(), setupId: 'activation-controller-tests', serverIdentity: 'ukda:tests' });
   const factory = new IDBFactory();
@@ -115,7 +116,7 @@ async function fixture() {
   const positions = [1, 8, 20];
   const prepare = (operationId: string) => controller.prepare(operationId, { password, confirmation: password, phrase,
     challengePositions: positions, challengeAnswers: positions.map((position) => phrase.split(' ')[position]!),
-    displayName: 'Private Owner Name 3964', workspaceName: 'Private Workspace Name 6834' });
+    displayName: 'Private Owner Name 3964', workspaceName: 'Private Workspace Name 6834', ...(avatar ? { avatar } : {}) });
   const reopen = async () => {
     pending.close(); devices.close();
     pending = await IndexedActivationStore.open(pendingName, factory); devices = await IndexedDeviceStore.open(deviceName, factory);
@@ -192,6 +193,32 @@ test('CP03: lost reservation and final response resume the same operation after 
   assert.equal(f.finalizations, 1); assert.equal(f.proofStarts, 1); assert.equal(f.registrations, 1);
   assert.deepEqual(await f.devices.getStaged(id), draft.wrapper);
   assert.deepEqual(await f.devices.getActive(draft.context.workspaceId, draft.context.accountId, draft.context.deviceId), draft.wrapper);
+});
+
+test('avatar: activation controller retains its encrypted selection across a lost final response and IndexedDB reopen', async (t) => {
+  const avatar = { shapeId: 'shape-11', colourId: 'indigo' } as const, f = await fixture(avatar); t.after(() => f.close());
+  const id = await f.controller.create(); await f.controller.reserve(id, 'LIC-test-only'); await f.prepare(id);
+  const original = (await f.pending.get(id))!.draft!, transcript = transcriptFromGenesis(original.payload.genesis.body), objects = original.payload.objects;
+  const keys = await recoveryKeys(f.phrase, { workspaceId: original.context.workspaceId, accountId: original.context.accountId });
+  let custodyKey: Uint8Array | undefined, workspaceKey: Uint8Array | undefined;
+  try {
+    const signer = base64urlDecode(transcript.device.signingPublicKey, 32);
+    const custody = await openRecipient(objects.recoveryCustody, keys.recipient.privateKey, signer,
+      initialRecipientHeader(transcript, original.payload.genesis.body.transcriptDigest, 'recovery')) as { custodyKey: string };
+    custodyKey = base64urlDecode(custody.custodyKey, 32);
+    const manifest = await decryptContent(objects.custody, custodyKey, signer, initialContentHeader(transcript, 'custody')) as { workspaceKeys: { key: string }[] };
+    workspaceKey = base64urlDecode(manifest.workspaceKeys[0]!.key, 32);
+    assert.equal(canonicalJson(await decryptContent(objects.profile, workspaceKey, signer, initialContentHeader(transcript, 'profile'))),
+      canonicalJson({ displayName: 'Private Owner Name 3964', avatar }));
+  } finally { keys.signing.privateKey.fill(0); keys.recipient.privateKey.fill(0); custodyKey?.fill(0); workspaceKey?.fill(0); }
+  f.loseFinal(); await assert.rejects(f.controller.activate(id, password)); await f.reopen();
+  assert.equal((await f.controller.resume(id)).state, 'completed');
+  assert.deepEqual((await f.pending.get(id))!.draft!.payload, original.payload);
+  assert.equal(f.registrations, 1); assert.equal(f.finalizations, 1);
+  for (const value of [avatar.shapeId, '"colourId":"indigo"']) {
+    assert.equal(canonicalJson(await f.pending.get(id)).includes(value), false);
+    assert.equal(canonicalJson(f.sent).includes(value), false);
+  }
 });
 
 test('CP03: interrupted local staging cannot finalize and resumes the same encrypted draft', async (t) => {

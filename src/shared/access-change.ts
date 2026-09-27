@@ -24,7 +24,7 @@ export const accessPriorTarget = z.strictObject({ state: z.enum(['active', 'susp
 export const accessBinding = z.strictObject({ ...accessRequest.shape, version: z.literal(1), origin: z.string().max(256), authorizer,
   priorTarget: accessPriorTarget, securityVersion: positiveCounter, nextSecurityVersion: positiveCounter, securityHead: digest,
   dataGeneration: positiveCounter, ownershipVersion: positiveCounter, custodyEpoch: positiveCounter, workspaceKeyEpoch: positiveCounter,
-  genesisFingerprint: digest, issuedAt: z.iso.datetime(), expiresAt: z.iso.datetime() })
+  genesisFingerprint: digest, writeSchema:z.literal(2).optional(), issuedAt: z.iso.datetime(), expiresAt: z.iso.datetime() })
   .refine((v) => accessRequest.safeParse({ workspaceId: v.workspaceId, operationId: v.operationId, action: v.action,
     targetAccountId: v.targetAccountId, desired: v.desired, receiptTokenHash: v.receiptTokenHash }).success &&
     positiveCounter.safeParse(v.securityVersion).success && positiveCounter.safeParse(v.nextSecurityVersion).success &&
@@ -84,7 +84,7 @@ export function createAccessBinding(requestValue: AccessRequest, state: Security
   const result = accessBinding.parse({ ...request, version: 1, origin: state.origin, authorizer: actor, priorTarget: previous(target),
     securityVersion: state.securityVersion, nextSecurityVersion: next(state.securityVersion), securityHead: state.securityHead, dataGeneration: state.dataGeneration,
     ownershipVersion: state.ownershipVersion, custodyEpoch: state.custodyEpoch, workspaceKeyEpoch: state.workspaceKeyEpoch,
-    genesisFingerprint: state.genesisFingerprint, ...times });
+    genesisFingerprint: state.genesisFingerprint,...(state.writeSchema===2?{writeSchema:2}:{}), ...times });
   deriveAccessPlan(result, state); return result;
 }
 /** One deterministic authority plan; no server-selected recipient or epoch is trusted. */
@@ -94,7 +94,7 @@ export function deriveAccessPlan(value: AccessBinding, state: SecurityHistorySta
   const custody = (s: AccessScope) => s.scope === 'workspace' && s.scopeId === b.workspaceId && s.mode === 'custody' && s.keyEpoch === state.custodyEpoch && live(s);
   if (b.origin !== state.origin || b.workspaceId !== state.workspaceId || b.genesisFingerprint !== state.genesisFingerprint ||
     b.securityHead !== state.securityHead || b.securityVersion !== state.securityVersion || b.dataGeneration !== state.dataGeneration ||
-    b.ownershipVersion !== state.ownershipVersion || b.custodyEpoch !== state.custodyEpoch || b.workspaceKeyEpoch !== state.workspaceKeyEpoch ||
+    b.ownershipVersion !== state.ownershipVersion || b.custodyEpoch !== state.custodyEpoch || b.workspaceKeyEpoch !== state.workspaceKeyEpoch || (b.writeSchema??1)!==(state.writeSchema??1) ||
     !target || !same(b.priorTarget, previous(target)) || !owner?.active || !owner.owner || !signer?.active || signer.accountId !== owner.accountId ||
     b.authorizer.credentialGeneration !== owner.credentialGeneration || b.authorizer.sessionGeneration !== owner.sessionGeneration ||
     !same(b.authorizer.device, { id: signer.id, keyGeneration: signer.keyGeneration, signingPublicKey: signer.signingPublicKey, recipientPublicKey: signer.recipientPublicKey }) ||
@@ -174,7 +174,7 @@ export function accessCustodyHeader(b: AccessBinding, p: AccessPlan, id: string)
   if (!p.rotateCustody) invalid(); return { ...baseHeader(b), recordId: identifier.parse(id), recordType: 'custody', keyEpoch: p.nextCustodyEpoch, revision: p.nextCustodyEpoch, action: 'access.rotate_custody' };
 }
 export function accessProfileHeader(b: AccessBinding, p: AccessPlan): ContentHeader {
-  if (b.action !== 'remove') invalid(); return { ...baseHeader(b), recordId: b.targetAccountId, recordType: 'profile', keyEpoch: p.nextWorkspaceKeyEpoch, revision: p.target.profileRevision, action: 'profile.remove' };
+  if (b.action !== 'remove') invalid(); return { ...baseHeader(b), schema:b.writeSchema??1, recordId: b.targetAccountId, recordType: 'profile', keyEpoch: p.nextWorkspaceKeyEpoch, revision: p.target.profileRevision, action: 'profile.remove' };
 }
 export async function accessRecipientHeader(b: AccessBinding, p: AccessPlan, r: AccessRecipient): Promise<RecipientHeader> {
   if (!p.recipients.some((known) => same(known, r))) invalid();

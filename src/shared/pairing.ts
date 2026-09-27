@@ -7,6 +7,14 @@ export const pairingPublicDevice = z.strictObject({ id: identifier, keyGeneratio
 export const pairingBegin = z.strictObject({ operationId: identifier, device: pairingPublicDevice,
   localBundleDigest: digest }).refine((value) => value.device.keyGeneration === '1');
 export type PairingBegin = z.infer<typeof pairingBegin>;
+/** Authenticated discovery metadata only; never capabilities, fingerprints, or key material. */
+export const pairingListRequest = z.strictObject({ after: identifier.optional(), limit: z.number().int().min(1).max(50).default(25) });
+export const pairingList = z.strictObject({ workspaceId: identifier, observedAt: z.iso.datetime(), requests: z.array(z.strictObject({
+  operationId: identifier, accountId: identifier, deviceId: identifier,
+  state: z.enum(['waiting_approver', 'verifying', 'confirmed']), expiresAt: z.iso.datetime(),
+  approverAccountId: identifier.nullable(), approverDeviceId: identifier.nullable(),
+})).max(50), nextCursor: identifier.nullable() });
+export type PairingList = z.infer<typeof pairingList>;
 export const pairingSource = z.strictObject({ grantId: identifier, generation: positiveCounter,
   manifestId: identifier, manifestDigest: digest });
 export const pairingScope = z.strictObject({ scope: z.enum(['workspace', 'project']), scopeId: identifier,

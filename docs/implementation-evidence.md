@@ -34,14 +34,14 @@ A placeholder or an unexecuted test does not pass a check. Complete a checkpoint
 | 03 Licence activation | Section 8 first-owner setup and licence policy | F01, F06 | Verified — see CP03 report |
 | 04 Authentication and devices | Section 8 login/sessions; section 9 device contract | F02, F03, F05 | Verified — see CP04 report |
 | 05 Encryption and recovery | Sections 8–9 security; section 10 security state | F03, F05, F11 | Verified — see CP05 report |
-| 06 Profiles and access | Section 8 Owners, invitations, roles, access | F03, F04, F05 | In progress — see CP06 report |
-| 07 Projects and closure | Sections 2 and 4 | F07, F08 | Not assessed |
-| 08 Shared tasks and blockers | Section 4 task workflow; section 6 blockers | F07, F08, F09 | Not assessed |
-| 09 Collaboration and audit | Section 2 interaction defaults; section 10 jobs/audit | F04, F10 | Not assessed |
-| 10 Reporting and live updates | Sections 2 and 6 | F09 | Not assessed |
-| 11 Concurrency and upgrades | Sections 9–10 transactions, editing, schemas | F10 | Not assessed |
-| 12 Restore and data exit | Section 10 export, deletion, recovery | F11, F12 | Not assessed |
-| 13 End-to-end and release | Section 9 release checks; review delivery gates | F01–F12 | Not assessed |
+| 06 Profiles and access | Section 8 Owners, invitations, roles, access | F03, F04, F05 | Verified — see CP06 report |
+| 07 Projects and closure | Sections 2 and 4 | F07, F08 | Verified — see CP07 report |
+| 08 Shared tasks and blockers | Section 4 task workflow; section 6 blockers | F07, F08, F09 | Verified — see CP08 report |
+| 09 Collaboration and audit | Section 2 interaction defaults; section 10 jobs/audit | F04, F10 | Verified — see CP09 report |
+| 10 Reporting and live updates | Sections 2 and 6 | F09 | Verified — see CP10 report |
+| 11 Concurrency and upgrades | Sections 9–10 transactions, editing, schemas | F10 | Verified — see CP11 report |
+| 12 Restore and data exit | Section 10 export, deletion, recovery | F11, F12 | Verified — see CP12 report |
+| 13 End-to-end and release | Section 9 release checks; review delivery gates | F01–F12 | Verified — see CP13 report; production not deployed |
 
 ## 01. Backend foundation, environments, configuration, and deployment setup
 
@@ -151,19 +151,21 @@ Evidence: [Checkpoint 5 verification report](checkpoint-05-evidence.md). Combine
 Required success checks:
 
 - [x] **CP06-S1:** One-profile JOIN invitations expire after one hour; RESET keys after fifteen minutes. Keys are random, protected by keyed verification digests, revocable, generation-bound, and consumed once. Replacement cancels earlier incomplete setup.
-- [ ] **CP06-S2:** Pending enrolment/promotion becomes active only after verified device setup, required key delivery, current authority checks, and, for Owners, recovery-kit/custody completion. Another active Owner can take over a member ceremony after identity verification.
-- [ ] **CP06-S3:** Every matrix action is exercised for each default role and a minimal custom role. Members create self-assigned tasks; only Owners create projects/manage access. A Viewer sees the whole ordinary content of a joined project, not selected private tasks.
-- [ ] **CP06-S4:** Pending access becomes Active only after permission and current/historical project-key envelopes are ready. Team membership/task assignment cannot create project access.
-- [ ] **CP06-S5:** Revocation immediately fences service access and future grants, removes current assignments/leads/blocker responsibility, flags unassigned work, and rotates the future content epoch. Archived scopes preserve historical attribution.
-- [ ] **CP06-S6:** Add/promote/demote/remove/recover Owners without founder privilege; retain at least one fully active Owner. Pending Owners do not count, and a former Owner's phrase cannot restore ownership.
+- [x] **CP06-S2:** Pending enrolment/promotion becomes active only after verified device setup, required key delivery, current authority checks, and, for Owners, recovery-kit/custody completion. Another active Owner can take over a member ceremony after identity verification.
+- [x] **CP06-S3:** Every matrix action is exercised for each default role and a minimal custom role. Members create self-assigned tasks; only Owners create projects/manage access. A Viewer sees the whole ordinary content of a joined project, not selected private tasks.
+- [x] **CP06-S4:** Pending access becomes Active only after permission and current/historical project-key envelopes are ready. Team membership/task assignment cannot create project access.
+- [x] **CP06-S5:** Revocation immediately fences service access and future grants, removes current assignments/leads/blocker responsibility, flags unassigned work, and rotates the future content epoch. Archived scopes preserve historical attribution.
+- [x] **CP06-S6:** Add/promote/demote/remove/recover Owners without founder privilege; retain at least one fully active Owner. Pending Owners do not count, and a former Owner's phrase cannot restore ownership.
 
 Required failure checks:
 
-- [ ] **CP06-F1:** Concurrent Owner removals cannot remove the last Owner; stale ownership/custody versions fail. Partial promotion/invitation grants no privileged capability.
-- [ ] **CP06-F2:** Custom roles cannot obtain ownership/recovery through checkboxes, grant project access through assignment, or access another workspace. Removed users cannot retrieve protected cached/streamed data or notification details in later batches.
-- [ ] **CP06-F3:** Code reuse, replaced invitations, incomplete ceremony takeover by a removed Owner, or authority changes before finalisation cannot activate a profile or silently change its current role.
+- [x] **CP06-F1:** Concurrent Owner removals cannot remove the last Owner; stale ownership/custody versions fail. Partial promotion/invitation grants no privileged capability.
+- [x] **CP06-F2:** Custom roles cannot obtain ownership/recovery through checkboxes, grant project access through assignment, or access another workspace. Removed users cannot retrieve protected cached/streamed data or notification details in later batches.
+- [x] **CP06-F3:** Code reuse, replaced invitations, incomplete ceremony takeover by a removed Owner, or authority changes before finalisation cannot activate a profile or silently change its current role.
 
-Evidence — **checkpoint in progress**: [checkpoint 6 verification record](checkpoint-06-evidence.md). Current slices cover the fixed permission policy, authoritative membership/role/scope migrations, access projection and relationship cleanup with unassigned-work notices, real JOIN/equal-Owner/promotion journeys, and encrypted custom-role definitions with signed-history verification. The latest frozen snapshot passed 294 backend and 39 browser tests and runs in healthy local API/worker containers. CP06-S1 is verified by the JOIN/RESET replacement, redemption, revocation and expiry checks together with the keyed-digest/random-code implementations. Role assignment/access changes, suspension/demotion/removal with key rotation and concurrent last-Owner tests remain required. Checkpoint 6 stays unchecked in the project checklist.
+Evidence: [checkpoint 6 verification record](checkpoint-06-evidence.md), final acceptance section. The unchanged 165-file snapshot passed 325 backend and 48 browser tests; migrations replay cleanly and the matching local API/worker are healthy. Evidence covers equal-Owner enrolment/recovery, fixed/custom-role policy, signed access changes and rotation, real archived removal, later-page revocation, interruption receipts, deduplicated security notices and last-Owner enforcement.
+
+Dependency ownership: CP07–08 must exercise these policies through their business commands; CP09 completes general Inbox/preferences and collaboration event delivery; CP10 enforces revocation on live-stream batches; CP12 verifies retained keys and current authority through restore/deletion. The security fixture does not claim production project creation. CP13 retains the full combined journey, branded-browser matrix and independent security review. These are later implementation dependencies, not removed acceptance requirements.
 
 ## 07. Projects, teams, phases/waves, milestones, and closure
 
@@ -171,19 +173,21 @@ Evidence — **checkpoint in progress**: [checkpoint 6 verification record](chec
 
 Required success checks:
 
-- [ ] **CP07-S1:** An Owner creates a Planned project and provisions keys to active Owners before availability; optional Manager/team/dates/waves/milestones do not block simple projects.
-- [ ] **CP07-S2:** Waves may overlap, have explicit order/objective/dates/lead, and start manually. Unscheduled tasks remain part of the project. A milestone may span its project or belong to one wave; tasks linked to a wave milestone share that wave.
-- [ ] **CP07-S3:** Milestone acceptance requires all non-cancelled linked tasks Done and a recorded outcome; an empty milestone can be a manual checkpoint. Wave/project completion checks all required child states and records its outcome/snapshot.
-- [ ] **CP07-S4:** Carry-forward keeps task identity, assignments, activity, and origin/destination history; resolve incompatible milestone links. Cancellation handles unfinished work explicitly and commits its permitted cascade atomically.
-- [ ] **CP07-S5:** Reopen/unarchive terminal parents before business edits. Adding/restoring/reopening unfinished work reopens an Accepted milestone atomically. Earlier closing snapshots remain unchanged.
+- [x] **CP07-S1:** An Owner creates a Planned project and provisions keys to active Owners before availability; optional Manager/team/dates/waves/milestones do not block simple projects.
+- [x] **CP07-S2:** Waves may overlap, have explicit order/objective/dates/lead, and start manually. Unscheduled tasks remain part of the project. A milestone may span its project or belong to one wave; tasks linked to a wave milestone share that wave.
+- [x] **CP07-S3:** Milestone acceptance requires all non-cancelled linked tasks Done and a recorded outcome; an empty milestone can be a manual checkpoint. Wave/project completion checks all required child states and records its outcome/snapshot.
+- [x] **CP07-S4:** Carry-forward keeps task identity, assignments, activity, and origin/destination history; resolve incompatible milestone links. Cancellation handles unfinished work explicitly and commits its permitted cascade atomically.
+- [x] **CP07-S5:** Reopen/unarchive terminal parents before business edits. Adding/restoring/reopening unfinished work reopens an Accepted milestone atomically. Earlier closing snapshots remain unchanged.
 
 Required failure checks:
 
-- [ ] **CP07-F1:** Completion fails for unfinished unscheduled tasks, unaccepted milestones, or outstanding review. A fully Done task list cannot bypass manual acceptance/closure.
-- [ ] **CP07-F2:** Reject cross-project/wrong-wave links, partially permitted cancellation/moves, or writes into terminal/archived scopes, except documented security cleanup/moderation.
-- [ ] **CP07-F3:** Archiving non-terminal work is rejected; cancellation/reopening does not silently restore cancelled children, erase history, or invent automatic scheduling/dependency gates.
+- [x] **CP07-F1:** Completion fails for unfinished unscheduled tasks, unaccepted milestones, or outstanding review. A fully Done task list cannot bypass manual acceptance/closure.
+- [x] **CP07-F2:** Reject cross-project/wrong-wave links, partially permitted cancellation/moves, or writes into terminal/archived scopes, except documented security cleanup/moderation.
+- [x] **CP07-F3:** Archiving non-terminal work is rejected; cancellation/reopening does not silently restore cancelled children, erase history, or invent automatic scheduling/dependency gates.
 
-Evidence — implementation references: _pending_; lifecycle/atomicity reports: _pending_; environment/revision/date: _pending_; reviewer/findings: _pending_.
+Evidence: [checkpoint 7 verification record](checkpoint-07-evidence.md), final verification and acceptance mapping. The unchanged 205-file candidate passed all 377 backend and 75 browser checks; the matching API/worker and both databases are healthy. Real project/team creation, persistent planning, encrypted outcomes, carry-forward, cancellation, archive/reopening, scoped reads and interrupted receipts are verified.
+
+Dependency ownership: CP08 must exercise real task Done/Review producers and task restore/reopen against closure and acceptance guards; CP09 must preserve later comments/activity across moves and add moderation/notification delivery. CP13 retains combined journeys and release gates. These dependencies remain required and are not claimed by CP07 domain-only coverage.
 
 ## 08. Shared tasks, assignments, approvals, blockers, and lifecycle rules
 
@@ -191,19 +195,19 @@ Evidence — implementation references: _pending_; lifecycle/atomicity reports: 
 
 Required success checks:
 
-- [ ] **CP08-S1:** Two or more assignees share one status, description, dates, comments, acceptance, and activity stream; removing the lead clears/replaces its designation without duplicating work.
-- [ ] **CP08-S2:** Preparation and administrative cancellation work in Planned scopes; execution/completion requires Active containing scopes. Fixed permissions apply equally to custom roles.
-- [ ] **CP08-S3:** Review is off initially. When enabled, one named eligible non-assignee approves the submitted revision; rejection returns In progress with a reason. Missing reviewers are explicit; an eligible other Owner may replace them.
-- [ ] **CP08-S4:** Material edits invalidate pending approval. Done work is reopened before such edits; Cancelled work is restored first. Disabling review is Owner-authorised/audited and returns pending Review work to In progress.
-- [ ] **CP08-S5:** Blockers have reason, responsible member, next action, state, and actor/time history. Assigned editors can manage blockers on assigned work; managers may set another active responsible person. Resolution/reopening records reasons/outcomes.
+- [x] **CP08-S1:** Two or more assignees share one status, description, dates, comments, acceptance, and activity stream; removing the lead clears/replaces its designation without duplicating work.
+- [x] **CP08-S2:** Preparation and administrative cancellation work in Planned scopes; execution/completion requires Active containing scopes. Fixed permissions apply equally to custom roles.
+- [x] **CP08-S3:** Review is off initially. When enabled, one named eligible non-assignee approves the submitted revision; rejection returns In progress with a reason. Missing reviewers are explicit; an eligible other Owner may replace them.
+- [x] **CP08-S4:** Material edits invalidate pending approval. Done work is reopened before such edits; Cancelled work is restored first. Disabling review is Owner-authorised/audited and returns pending Review work to In progress.
+- [x] **CP08-S5:** Blockers have reason, responsible member, next action, state, and actor/time history. Assigned editors can manage blockers on assigned work; managers may set another active responsible person. Resolution/reopening records reasons/outcomes.
 
 Required failure checks:
 
-- [ ] **CP08-F1:** An assignee/Owner cannot self-approve, a removed/newly assigned reviewer cannot approve, and old revision proofs cannot complete changed work. No approval bypass exists through ordinary edit signatures.
-- [ ] **CP08-F2:** An Open blocker prevents Done; resolving only one of several leaves Blocked. Done tasks must reopen before an Open blocker is introduced.
-- [ ] **CP08-F3:** Comment/read-only actors cannot alter blockers or assignments. Cancellation excludes its inactive blockers from live health; restoring work reactivates still-Open blockers. Access removal never silently resolves a blocker.
+- [x] **CP08-F1:** An assignee/Owner cannot self-approve, a removed/newly assigned reviewer cannot approve, and old revision proofs cannot complete changed work. No approval bypass exists through ordinary edit signatures.
+- [x] **CP08-F2:** An Open blocker prevents Done; resolving only one of several leaves Blocked. Done tasks must reopen before an Open blocker is introduced.
+- [x] **CP08-F3:** Comment/read-only actors cannot alter blockers or assignments. Cancellation excludes its inactive blockers from live health; restoring work reactivates still-Open blockers. Access removal never silently resolves a blocker.
 
-Evidence — implementation references: _pending_; workflow/permission reports: _pending_; environment/revision/date: _pending_; reviewer/findings: _pending_.
+Evidence: [checkpoint 8 verification record](checkpoint-08-evidence.md). Combined passing evidence covers 410 backend and 84 browser tests, including repaired Owner enrolment after project creation, actual Review/Done closure integration, shared tasks, approval, blockers and archived cleanup. Matching local services are healthy. CP09 owns comments/activity and notifications on the same task identity; CP10 owns live health calculations from retained blocker state.
 
 ## 09. Comments, updates, in-app notifications, and audit history
 
@@ -211,18 +215,18 @@ Evidence — implementation references: _pending_; workflow/permission reports: 
 
 Required success checks:
 
-- [ ] **CP09-S1:** `comment` permits a new entry in an editable authorised scope. Corrections are new entries; moderation requires `manage_tasks`, records a reason, and retains the encrypted original in authorised history.
-- [ ] **CP09-S2:** Assignment changes and task comments/status changes notify affected assignees; reviews notify the reviewer; access/recovery/ownership events reach affected people/Owners. Ordinary self-notifications are excluded; security notices ignore project mute.
-- [ ] **CP09-S3:** Events/recipients are deduplicated. Payloads contain opaque references; details are fetched/decrypted only under current access. Removed access yields a generic content-free notice.
-- [ ] **CP09-S4:** Record changes, audit, and required durable job creation share the business transaction. Historical signing keys verify actor/action/time and encrypted before/after evidence.
+- [x] **CP09-S1:** `comment` permits a new entry in an editable authorised scope. Corrections are new entries; task-comment moderation requires `manage_tasks`, project/wave-update moderation requires `plan_projects`, and both record a reason and retain the encrypted original in authorised history, including terminal/archived scopes.
+- [x] **CP09-S2:** Assignment changes and task comments/status changes notify affected assignees; reviews notify the reviewer; access/recovery/ownership events reach affected people/Owners. Ordinary self-notifications are excluded; security notices ignore project mute.
+- [x] **CP09-S3:** Events/recipients are deduplicated. Payloads contain opaque references; details are fetched/decrypted only under current access. Removed access yields a generic content-free notice.
+- [x] **CP09-S4:** Record changes, audit, and required durable job creation share the business transaction. Historical signing keys verify actor/action/time and encrypted before/after evidence.
 
 Required failure checks:
 
-- [ ] **CP09-F1:** Duplicate delivery/replay produces one logical notification per recipient. Worker failure delays delivery without repeating or rolling back the already committed business action.
-- [ ] **CP09-F2:** Revoked/project-muted users, stale cache scopes, and cross-tenant recipients do not receive forbidden details. A comment-only custom role cannot moderate.
-- [ ] **CP09-F3:** Plaintext project names/comments, secrets, and recovery material do not enter hosted notification payloads, jobs, or logs. No external delivery is attempted.
+- [x] **CP09-F1:** Duplicate delivery/replay produces one logical notification per recipient. Worker failure delays delivery without repeating or rolling back the already committed business action.
+- [x] **CP09-F2:** Revoked/project-muted users, stale cache scopes, and cross-tenant recipients do not receive forbidden details. A comment-only custom role cannot moderate.
+- [x] **CP09-F3:** Plaintext project names/comments, secrets, and recovery material do not enter hosted notification payloads, jobs, or logs. No external delivery is attempted.
 
-Evidence — implementation references: _pending_; event/audit reports: _pending_; environment/revision/date: _pending_; reviewer/findings: _pending_.
+Evidence: [checkpoint 9 verification record](checkpoint-09-evidence.md). Combined verified coverage: 444 backend and 93 browser checks, with no unresolved failures. Comments, updates, Inbox, scoped moderation and authenticated retained history are implemented; matching local services are healthy. Checkpoints 10–13 retain their full requirements.
 
 ## 10. Progress calculations, deadlines, project health, and live updates
 
@@ -230,20 +234,20 @@ Evidence — implementation references: _pending_; event/audit reports: _pending
 
 Required success checks:
 
-- [ ] **CP10-S1:** Distinct Done/non-cancelled task counts apply consistently to project/wave/milestone/filter scopes. Count shared tasks once; round to whole percentages capped at 99 while unfinished work remains. Zero denominator displays a dash with the agreed no-work label.
-- [ ] **CP10-S2:** Europe/London defaults, Owner timezone changes, UTC events, calendar-date deadlines, next-local-midnight overdue boundaries, and labelled task/milestone/wave deadline inheritance produce deterministic results.
-- [ ] **CP10-S3:** Health requires complete/current/decrypted/verified input, then applies Delayed → At risk → Not enough information → On track. Cancelled work is excluded; outstanding acceptance counts as unfinished. Terminal scopes retain lifecycle/closing outcomes.
-- [ ] **CP10-S4:** Next milestone selection includes overdue Open milestones, effective dates, deterministic ties, then undated items. Blocker age uses elapsed UTC periods, with no configurable age trigger.
-- [ ] **CP10-S5:** Summaries bind exact permission/filter scope, source manifest/checkpoint, key epoch, calculation version, timezone, server as-of time, completeness, and device signature. Only Owners/scoped planners publish shared summaries; other readers calculate locally.
-- [ ] **CP10-S6:** Relevant writes/open/refocus/local-midnight invalidate calculations; SSE and sixty-second visible-page fallback refresh data. Offline values are last-known, and cross-project totals cover only visible projects.
+- [x] **CP10-S1:** Distinct Done/non-cancelled task counts apply consistently to project/wave/milestone/filter scopes. Count shared tasks once; round to whole percentages capped at 99 while unfinished work remains. Zero denominator displays a dash with the agreed no-work label.
+- [x] **CP10-S2:** Europe/London defaults, Owner timezone changes, UTC events, calendar-date deadlines, next-local-midnight overdue boundaries, and labelled task/milestone/wave deadline inheritance produce deterministic results.
+- [x] **CP10-S3:** Health requires complete/current/decrypted/verified input, then applies Delayed → At risk → Not enough information → On track. Cancelled work is excluded; outstanding acceptance counts as unfinished. Terminal scopes retain lifecycle/closing outcomes.
+- [x] **CP10-S4:** Next milestone selection includes overdue Open milestones, effective dates, deterministic ties, then undated items. Blocker age uses elapsed UTC periods, with no configurable age trigger.
+- [x] **CP10-S5:** Summaries bind exact permission/filter scope, source manifest/checkpoint, key epoch, calculation version, timezone, server as-of time, completeness, and device signature. Only Owners/scoped planners publish shared summaries; other readers calculate locally.
+- [x] **CP10-S6:** Relevant writes/open/refocus/local-midnight invalidate calculations; SSE and sixty-second visible-page fallback refresh data. Offline values are last-known, and cross-project totals cover only visible projects.
 
 Required failure checks:
 
-- [ ] **CP10-F1:** Test daylight-saving boundaries, due today, all-cancelled/empty scopes, 199 of 200 tasks, shared assignments, 100%-Done milestones awaiting late acceptance, and multiple blockers.
-- [ ] **CP10-F2:** Missing/decryption-invalid pages, unknown current checkpoints, stale summaries, mid-read access changes, and narrower/broader scope substitution cannot produce an accepted current or unauthorised aggregate.
-- [ ] **CP10-F3:** Identical fixtures/checkpoints/settings/as-of times yield identical outputs across supported clients; cancelled overdue tasks/waves do not keep current projects Delayed.
+- [x] **CP10-F1:** Test daylight-saving boundaries, due today, all-cancelled/empty scopes, 199 of 200 tasks, shared assignments, 100%-Done milestones awaiting late acceptance, and multiple blockers.
+- [x] **CP10-F2:** Missing/decryption-invalid pages, unknown current checkpoints, stale summaries, mid-read access changes, and narrower/broader scope substitution cannot produce an accepted current or unauthorised aggregate.
+- [x] **CP10-F3:** Identical fixtures/checkpoints/settings/as-of times yield identical outputs across supported clients; cancelled overdue tasks/waves do not keep current projects Delayed.
 
-Evidence — implementation references: _pending_; deterministic fixtures/reports: _pending_; browser/environment/revision/date: _pending_; reviewer/findings: _pending_.
+Evidence: [checkpoint 10 integration record](checkpoint-10-evidence.md) and [headless reporting protocol](reporting-protocol.md). All acceptance checks passed: 479 distinct backend and 102 browser cases, clean migration replay, and matching healthy local services. The final coverage manifest records exact source and report associations.
 
 ## 11. Concurrent edits, retry handling, background jobs, and encrypted upgrades
 
@@ -251,20 +255,20 @@ Evidence — implementation references: _pending_; deterministic fixtures/report
 
 Required success checks:
 
-- [ ] **CP11-S1:** Two edits of one revision yield one commit and one explicit conflict. API/domain conflict data permits the future interface to retain unsaved input and deliberately reapply against the current revision; no implicit merge/resubmission occurs.
-- [ ] **CP11-S2:** Same operation ID plus identical request returns the committed result once. Lost acknowledgements resolve through receipts before retrying the exact ciphertext. New content uses a new operation/nonce; current access and deletion tombstones override old receipts.
-- [ ] **CP11-S3:** Append-only posts have independent stable IDs. Multi-record moves/closure/cancellation validate permissions/revisions/checkpoints and commit all records/audit/receipts/jobs together.
-- [ ] **CP11-S4:** Jobs recheck scope, use stable deduplication, bounded exponential backoff with jitter, a failed state after ten attempts, and same-identity operator replay.
-- [ ] **CP11-S5:** Schema/envelope 1 and historical decoders are explicit. Owner-run upgrades pause content writes, preserve history, migrate current records with revision/epoch checks, record resumable progress, and invalidate summaries on finalisation.
-- [ ] **CP11-S6:** Another current Owner can resume. Recovery/revocation remain available; stale authority/keys invalidate batches. Licence/deletion restrictions pause migration, final deletion aborts it, and completion cannot clear another workspace restriction.
+- [x] **CP11-S1:** Two edits of one revision yield one commit and one explicit conflict. API/domain conflict data permits the future interface to retain unsaved input and deliberately reapply against the current revision; no implicit merge/resubmission occurs.
+- [x] **CP11-S2:** Same operation ID plus identical request returns the committed result once. Lost acknowledgements resolve through receipts before retrying the exact ciphertext. New content uses a new operation/nonce; current access and deletion tombstones override old receipts.
+- [x] **CP11-S3:** Append-only posts have independent stable IDs. Multi-record moves/closure/cancellation validate permissions/revisions/checkpoints and commit all records/audit/receipts/jobs together.
+- [x] **CP11-S4:** Jobs recheck scope, use stable deduplication, bounded exponential backoff with jitter, a failed state after ten attempts, and same-identity operator replay.
+- [x] **CP11-S5:** Schema/envelope 1 and historical decoders are explicit. Owner-run upgrades pause content writes, preserve history, migrate current records with revision/epoch checks, record resumable progress, and invalidate summaries on finalisation.
+- [x] **CP11-S6:** Another current Owner can resume. Recovery/revocation remain available; stale authority/keys invalidate batches. Licence/deletion restrictions pause migration, final deletion aborts it, and completion cannot clear another workspace restriction.
 
 Required failure checks:
 
-- [ ] **CP11-F1:** Different payload bytes under an existing operation ID, stale expected revisions, revoked scopes, wrong schema/epoch, and obsolete data generations fail without partial side effects.
-- [ ] **CP11-F2:** Simulate disconnect before send/after commit, lost acknowledgement, duplicate job execution, concurrent comments, and partial multi-record failure. No duplicate business effect or silent overwrite occurs.
-- [ ] **CP11-F3:** Old tabs cannot overwrite upgraded schemas or drop unknown fields. Interrupt migration, remove its Owner, rotate keys, request deletion, and restrict the licence; history remains verifiable and the specified resume/fail-closed route holds.
+- [x] **CP11-F1:** Different payload bytes under an existing operation ID, stale expected revisions, revoked scopes, wrong schema/epoch, and obsolete data generations fail without partial side effects.
+- [x] **CP11-F2:** Simulate disconnect before send/after commit, lost acknowledgement, duplicate job execution, concurrent comments, and partial multi-record failure. No duplicate business effect or silent overwrite occurs.
+- [x] **CP11-F3:** Old tabs cannot overwrite upgraded schemas or drop unknown fields. Interrupt migration, remove its Owner, rotate keys, request deletion, and restrict the licence; history remains verifiable and the specified resume/fail-closed route holds.
 
-Evidence — implementation references: _pending_; concurrency/fault-injection reports: _pending_; environment/revision/date: _pending_; reviewer/findings: _pending_.
+Evidence: [Checkpoint 11 verification report](checkpoint-11-evidence.md). All acceptance checks passed: 507 distinct backend and 111 browser cases, unchanged migration replay, and matching healthy local services. Source/report associations and bounded repairs are recorded; checkpoints 12–13 remain mandatory.
 
 ## 12. Backups, restoration, export, retention, and deletion
 
@@ -272,23 +276,23 @@ Evidence — implementation references: _pending_; concurrency/fault-injection r
 
 Required success checks:
 
-- [ ] **CP12-S1:** Daily content checkpoints and continuous recovery records have thirty-day retention and include referenced encrypted objects/key manifests. Record measured progress toward fifteen-minute content-loss and eight-hour service-restore targets; do not report targets as achieved without drills.
-- [ ] **CP12-S2:** Restore quarantines content, obtains latest acknowledged security authority, reconciles grants/credentials/custody/licence/deletion state forward, invalidates sessions/temporary ceremonies, increments data generation, and discards obsolete jobs.
-- [ ] **CP12-S3:** A currently authorised Owner uses the restricted recovery route to verify current and historical ciphertext/key coverage before normal service returns. Restoration preserves later revocations despite older business content.
-- [ ] **CP12-S4:** A recently authenticated Owner exports a consistent client-decrypted UTF-8 JSON schema-1 snapshot with source revisions/manifest/completeness and the specified ordinary business records/history. The export is plainly identified as plaintext data exit, not a restorable/key backup.
-- [ ] **CP12-S5:** Profile removal clears credentials/access/current responsibility, uses Former member for the current label, and preserves shared/historical contributions. The last Owner activates a successor or follows whole-workspace deletion.
-- [ ] **CP12-S6:** Any Owner requests deletion; any current Owner cancels before its 168-hour UTC deadline. Pending deletion allows the specified read/export/recovery/security routes and blocks ordinary writes/access expansion.
-- [ ] **CP12-S7:** Final deletion enforces its deadline despite worker delay/requester departure, records an irreversible tombstone, and denies ordinary access/recovery. Live payloads purge within twenty-four hours; backups expire within thirty days after purge. Only minimal opaque tombstones/retired IDs/consumed-entitlement markers remain permanently.
+- [x] **CP12-S1:** Daily content checkpoints and continuous recovery records have thirty-day retention and include referenced encrypted objects/key manifests. Record measured progress toward fifteen-minute content-loss and eight-hour service-restore targets; do not report targets as achieved without drills.
+- [x] **CP12-S2:** Restore quarantines content, obtains latest acknowledged security authority, reconciles grants/credentials/custody/licence/deletion state forward, invalidates sessions/temporary ceremonies, increments data generation, and discards obsolete jobs.
+- [x] **CP12-S3:** A currently authorised Owner uses the restricted recovery route to verify current and historical ciphertext/key coverage before normal service returns. Restoration preserves later revocations despite older business content.
+- [x] **CP12-S4:** A recently authenticated Owner exports a consistent client-decrypted UTF-8 JSON schema-1 snapshot with source revisions/manifest/completeness and the specified ordinary business records/history. The export is plainly identified as plaintext data exit, not a restorable/key backup.
+- [x] **CP12-S5:** Profile removal clears credentials/access/current responsibility, uses Former member for the current label, and preserves shared/historical contributions. The last Owner activates a successor or follows whole-workspace deletion.
+- [x] **CP12-S6:** Any Owner requests deletion; any current Owner cancels before its 168-hour UTC deadline. Pending deletion allows the specified read/export/recovery/security routes and blocks ordinary writes/access expansion.
+- [x] **CP12-S7:** Final deletion enforces its deadline despite worker delay/requester departure, records an irreversible tombstone, and denies ordinary access/recovery. Live payloads purge within twenty-four hours; backups expire within thirty days after purge. Only minimal opaque tombstones/retired IDs/consumed-entitlement markers remain permanently.
 
 Required failure checks:
 
-- [ ] **CP12-F1:** Restore snapshots from before member reset/removal, Owner removal, phrase rotation, and deletion. Old authority/phrases/requests cannot regain access; currently permitted users can recover retained history.
-- [ ] **CP12-F2:** Missing trusted current security head, missing required key/object manifests, failed security projection, or failed Owner verification leaves the workspace quarantined; no snapshot-only Owner or provider workaround opens it.
-- [ ] **CP12-F3:** Revoke export authority mid-generation or invalidate its source snapshot: abort/restart rather than mislabel incomplete data as complete. Passwords, private keys, envelopes, recovery/security records, and unrelated restricted content never appear in export.
-- [ ] **CP12-F4:** Owner A requests deletion/Owner B cancels; cancel races the deadline; requester leaves; deletion worker is delayed; old jobs/receipts retry; old snapshots restore; the consumed licence is reused. None bypasses final deletion or revives retired identities/entitlements.
-- [ ] **CP12-F5:** Migration completion, restore, or deletion cancellation cannot remove another remaining licence/maintenance restriction. No new backup extends deleted payload retention beyond the documented limit.
+- [x] **CP12-F1:** Restore snapshots from before member reset/removal, Owner removal, phrase rotation, and deletion. Old authority/phrases/requests cannot regain access; currently permitted users can recover retained history.
+- [x] **CP12-F2:** Missing trusted current security head, missing required key/object manifests, failed security projection, or failed Owner verification leaves the workspace quarantined; no snapshot-only Owner or provider workaround opens it.
+- [x] **CP12-F3:** Revoke export authority mid-generation or invalidate its source snapshot: abort/restart rather than mislabel incomplete data as complete. Passwords, private keys, envelopes, recovery/security records, and unrelated restricted content never appear in export.
+- [x] **CP12-F4:** Owner A requests deletion/Owner B cancels; cancel races the deadline; requester leaves; deletion worker is delayed; old jobs/receipts retry; old snapshots restore; the consumed licence is reused. None bypasses final deletion or revives retired identities/entitlements.
+- [x] **CP12-F5:** Migration completion, restore, or deletion cancellation cannot remove another remaining licence/maintenance restriction. No new backup extends deleted payload retention beyond the documented limit.
 
-Evidence — implementation references: _pending_; restore/export/purge drill artifacts and measured timings: _pending_; environment/revision/date: _pending_; reviewer/findings: _pending_.
+Evidence: [Checkpoint 12 verification report](checkpoint-12-evidence.md). All acceptance checks passed: 552 distinct Node cases, 120 browser cases, actual encrypted PITR/Owner recovery/purge/retention/scheduler/replica drills, unchanged migration replay, and matching healthy local services. Source/report associations, bounded repairs and single-host measurement limits are recorded. Checkpoint 13 remains mandatory.
 
 ## 13. End-to-end testing, independent security review, and production release
 
@@ -296,20 +300,20 @@ Evidence — implementation references: _pending_; restore/export/purge drill ar
 
 Required success checks:
 
-- [ ] **CP13-S1:** Run first Owner → equal second Owner → invited member → shared encrypted task → logout/login → new-device approval → member reset → Owner recovery/removal, retaining authorised history throughout.
-- [ ] **CP13-S2:** Run a repository-free iterative project with optional waves/milestones, two-assignee tasks, optional review, blockers, comments, notifications, carry-forward, closure/reopen/archive, deterministic reporting, export, and cancellation of a deletion request.
-- [ ] **CP13-S3:** Repeat protocol/crypto/local-storage/calculation journeys on current and previous stable desktop Chrome, Edge, Firefox, and Safari with supported WebAssembly/WebCrypto/IndexedDB. Record tested versions and unavailable environments honestly.
-- [ ] **CP13-S4:** Record actual independent security review of the composed authentication/pairing/recovery/custody implementation, resolve material findings, and retain reviewer/report identifiers. Dependency selection/audits do not substitute for this evidence.
-- [ ] **CP13-S5:** Record all prior checkpoint evidence, staging results, restore/deletion drill measurements, operational runbooks, release artifact/configuration review, and the status of production deployment. Distinguish release readiness from deployment actually performed.
+- [x] **CP13-S1:** Run first Owner → equal second Owner → invited member → shared encrypted task → logout/login → new-device approval → member reset → Owner recovery/removal, retaining authorised history throughout.
+- [x] **CP13-S2:** Run a repository-free iterative project with optional waves/milestones, two-assignee tasks, optional review, blockers, comments, notifications, carry-forward, closure/reopen/archive, deterministic reporting, export, and cancellation of a deletion request.
+- [x] **CP13-S3:** Repeat protocol/crypto/local-storage/calculation journeys on current and previous stable desktop Chrome, Edge, Firefox, and Safari with supported WebAssembly/WebCrypto/IndexedDB. Record tested versions and unavailable environments honestly.
+- [x] **CP13-S4:** Record actual independent security review of the composed authentication/pairing/recovery/custody implementation, resolve material findings, and retain reviewer/report identifiers. Dependency selection/audits do not substitute for this evidence.
+- [x] **CP13-S5:** Record all prior checkpoint evidence, staging results, restore/deletion drill measurements, operational runbooks, release artifact/configuration review, and the status of production deployment. Distinguish release readiness from deployment actually performed.
 
 Required failure checks:
 
-- [ ] **CP13-F1:** Integrated tests combine tenant/role denial, stale approvals, concurrent Owner removal, revoked devices, lost security-commit responses, migration interruption, restore after revocation, and deletion deadline enforcement; isolated unit success is insufficient.
-- [ ] **CP13-F2:** Unsupported capabilities fail explicitly without weaker crypto, fallback authentication, secret leakage, or a provider decryption route. Future feature outages/configuration absence cannot block core work.
-- [ ] **CP13-F3:** No security-review/production-ready claim is made while material findings, required supported-browser evidence, or recovery/deletion acceptance evidence remain missing.
+- [x] **CP13-F1:** Integrated tests combine tenant/role denial, stale approvals, concurrent Owner removal, revoked devices, lost security-commit responses, migration interruption, restore after revocation, and deletion deadline enforcement; isolated unit success is insufficient.
+- [x] **CP13-F2:** Unsupported capabilities fail explicitly without weaker crypto, fallback authentication, secret leakage, or a provider decryption route. Future feature outages/configuration absence cannot block core work.
+- [x] **CP13-F3:** No security-review/production-ready claim is made while material findings, required supported-browser evidence, or recovery/deletion acceptance evidence remain missing.
 
-Evidence — implementation references: _pending_; integrated test/drill reports: _pending_; independent reviewer/report: _pending_; browser/environment/revision/date: _pending_; release reviewer/findings/deployment record: _pending_.
+Evidence: [Checkpoint 13 evidence](checkpoint-13-evidence.md) and [repair progress](checkpoint-13-progress.md). The single-workspace browser core journey passed on bundled Chromium and four current/previous Chrome/Edge releases. The composed database failure journey passed; combined backend evidence covers 558 distinct cases. Chrome/Edge protocol/capability checks passed 28/28, official Firefox 8/8, native Safari 26.6.2 and 27.0 8/8, and missing-capability checks passed on all three bundled engines. Independent reports and repaired findings are retained under `docs/reviews/`; final matching runtime, release review and post-wake health evidence pass. All acceptance gates are verified. Production is not deployed; frontend and future features remain outside scope.
 
 ## Evidence summary
 
-Checkpoints 1–5 are verified against their linked reports. Checkpoint 6 is in progress; checkpoints 7–13 remain unverified. Append evidence as work proceeds in order, and update the [working checklist](../architecture/checklist.md) only when the corresponding acceptance requirements are verified. Regression evidence for an implementation slice does not complete an entire checkpoint.
+All thirteen checkpoints are verified against their linked reports and marked complete in the [working checklist](../architecture/checklist.md). The agreed local starter implementation is complete. Test counts distinguish actual branded browsers, bundled engines and combined rerun evidence; local recovery measurements do not claim independent-host production durability.

@@ -2,6 +2,7 @@ import sodium from 'libsodium-wrappers';
 import { z } from 'zod';
 import { binary, contentEnvelope, contentHeader, counter, digest, identifier, positiveCounter, type ContentEnvelope } from './contracts.js';
 import { parseJsonStrict } from './json.js';
+import { ContentSchemaError, decodeContentData, encodeContentData, requireContentSchema } from './content-schema.js';
 
 /** All sodium entry points await initialization; this module has no Node-only imports. */
 export const ready = sodium.ready;
@@ -140,8 +141,9 @@ function sameContext(actual: unknown, expected: unknown): boolean { return canon
 
 /** Encrypt a JSON record; retries persist/reuse this exact returned envelope. */
 export async function encryptContent(header: ContentHeader, plaintext: unknown, key: Uint8Array, signingPrivateKey: Uint8Array): Promise<ContentEnvelope> {
+  requireContentSchema(header.schema);
   const context = parsed(contentHeader, header);
-  const message = utf8.encode(canonicalJson(plaintext));
+  const message = utf8.encode(canonicalJson(encodeContentData(context.schema, context.recordType, plaintext)));
   // Also enforce the application parser's duplicate/prototype/Unicode policy before encryption.
   parseJsonStrict(decoder.decode(message));
   if (message.length > 512 * 1024 - 16) throw failure();
@@ -170,12 +172,14 @@ export async function verifyContentEnvelope(envelope: unknown, signingPublicKey:
 export async function decryptContent(envelope: ContentEnvelope, key: Uint8Array, signingPublicKey: Uint8Array, expectedHeader: ContentHeader): Promise<unknown> {
   const contentKey = bytesOfLength(key, 32);
   try {
+    requireContentSchema(expectedHeader.schema);
+    requireContentSchema(envelope.header.schema);
     // Parse/copy first so caller mutation across the verification await cannot replace ciphertext.
     const accepted = parsed(contentEnvelope, envelope);
     if (!await verifyContentEnvelope(accepted, signingPublicKey, expectedHeader)) throw failure();
     const message = sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(null, base64urlDecode(accepted.ciphertext), canonicalJson(accepted.header), base64urlDecode(accepted.nonce, 24), contentKey);
-    return parseJsonStrict(decoder.decode(message));
-  } catch { throw failure(); } finally { contentKey.fill(0); }
+    return decodeContentData(accepted.header.schema, accepted.header.recordType, parseJsonStrict(decoder.decode(message)));
+  } catch (error) { if (error instanceof ContentSchemaError) throw error; throw failure(); } finally { contentKey.fill(0); }
 }
 
 export const recipientHeader = z.strictObject({

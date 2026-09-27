@@ -20,6 +20,7 @@ WORKDIR /app
 COPY --from=production-dependencies --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/dist ./dist
 COPY --from=build --chown=node:node /app/migrations ./migrations
+COPY --from=build --chown=node:node /app/assets/avatars ./assets/avatars
 COPY --chown=node:node package.json package-lock.json ./
 USER node
 EXPOSE 3400

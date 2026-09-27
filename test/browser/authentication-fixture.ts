@@ -1,3 +1,16 @@
+import { deliverNotificationJob } from '../../src/modules/notifications/delivery.js';
+import { ExportService } from '../../src/modules/export/service.js';
+import { registerExportRoutes } from '../../src/modules/export/routes.js';
+import { RestorationService } from '../../src/modules/restoration/service.js';
+import { RESTORE_TABLES } from '../../src/modules/restoration/manifest.js';
+import { registerRestorationRoutes } from '../../src/modules/restoration/routes.js';
+import { finalizeDeletionIfDue } from '../../src/modules/lifecycle/deadline.js';
+import { LifecycleService } from '../../src/modules/lifecycle/service.js';
+import { registerLifecycleRoutes } from '../../src/modules/lifecycle/routes.js';
+import { UpgradeService } from '../../src/modules/upgrades/service.js';
+import { registerUpgradeRoutes } from '../../src/modules/upgrades/routes.js';
+import { ReceiptService } from '../../src/modules/work/receipts.js';
+import { registerReceiptRoutes } from '../../src/modules/work/receipt-routes.js';
 import { expect } from '@playwright/test';
 import { randomUUID, randomBytes } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -15,6 +28,7 @@ import { AuthenticationService } from '../../src/modules/identity/authentication
 import { SessionService, readSessionCookie } from '../../src/modules/identity/sessions.js';
 import { RequestBudgets, createRequestBudgetPool } from '../../src/modules/identity/budgets.js';
 import { registerAuthenticationRoutes } from '../../src/modules/identity/auth-routes.js';
+import { registerActivationRoutes } from '../../src/modules/identity/routes.js';
 import { registerSecurityRoutes } from '../../src/modules/identity/security-routes.js';
 import { PairingService } from '../../src/modules/identity/pairing.js';
 import { PasswordChangeService } from '../../src/modules/identity/password-change.js';
@@ -41,11 +55,25 @@ import type { RequestBudget } from '../../src/modules/identity/budgets.js';
 import { unwrapDeviceBundle } from '../../src/client/device-store.js';
 import { base64urlDecode, signObject } from '../../src/shared/crypto.js';
 import { provisionProjectScope } from '../project-scope-fixture.js';
+import { ProjectCreateService } from '../../src/modules/work/project-create.js';
+import { registerProjectCreateRoutes, projectCreateAccountBudget } from '../../src/modules/work/project-create-routes.js';
+import { TeamService } from '../../src/modules/work/teams.js';
+import { PlanningService } from '../../src/modules/work/planning.js';
+import { registerPlanningRoutes, planningAccountBudget } from '../../src/modules/work/planning-routes.js';
+import { CollaborationService } from '../../src/modules/collaboration/service.js';
+import { registerCollaborationRoutes, collaborationAccountBudget } from '../../src/modules/collaboration/routes.js';
+import { ReportingService } from '../../src/modules/work/reporting.js';
+import { registerReportingRoutes } from '../../src/modules/work/reporting-routes.js';
+import { LiveService } from '../../src/modules/work/live.js';
+import { registerLiveRoutes } from '../../src/modules/work/live-routes.js';
+import { InboxService } from '../../src/modules/notifications/inbox.js';
+import { registerInboxRoutes } from '../../src/modules/notifications/inbox-routes.js';
+import { registerTeamRoutes, teamAccountBudget } from '../../src/modules/work/team-routes.js';
 
 export const origin = 'https://127.0.0.1:3555';
 export const password = 'A browser session fixture password 24794';
 
-export async function authenticationFixture(restricted = false) {
+export async function authenticationFixture(restricted = false, avatar?: Client.AvatarSelection) {
   const local = parseEnv(await readFile('.env', 'utf8').catch(() => ''));
   const adminEnvironment = parseEnv(await readFile('.env.admin', 'utf8').catch(() => ''));
   const config = loadConfig({ ...local, ...process.env, NODE_ENV: 'test', APP_ORIGIN: origin, LOG_LEVEL: 'silent' });
@@ -70,6 +98,10 @@ export async function authenticationFixture(restricted = false) {
     for (const entry of entries) { const digest = secrets.digest(`rate:${entry.purpose}`, entry.key); recordedCounters.set(digest.toString('hex'), digest); }
     await realBudgets.take(entries);
   } };
+  registerActivationRoutes(app, { origin, service: activation, budgets });
+  const entitlements = new EntitlementOperations(databases, secrets);
+  const trustedServiceKeys = { [secrets.keyId]: await entitlements.publicSigningKey() };
+  app.get('/v1/application', async () => ({ version: 1, trustedServiceKeys }));
   registerAuthenticationRoutes(app, { origin, authentication, sessions, budgets });
   registerSecurityRoutes(app, { origin, databases, sessions, budgets, pairing: new PairingService({ databases, sessions, origin }),
     passwordChange: new PasswordChangeService({ databases, sessions, opaque, secrets, origin }) });
@@ -83,26 +115,68 @@ export async function authenticationFixture(restricted = false) {
   registerAccessChangeRoutes(app, { origin, budgets,
     accessChanges: new AccessChangeService({ databases, sessions, secrets, origin,
       requestBudget: accessChangeAccountBudget(budgets) }) });
+  registerProjectCreateRoutes(app, { origin, budgets,
+    projectCreation: new ProjectCreateService({ databases, sessions, secrets, origin,
+      requestBudget: projectCreateAccountBudget(budgets) }) });
+  registerLifecycleRoutes(app, { origin: origin, budgets, lifecycle: new LifecycleService({ databases, sessions, secrets, origin: origin }) });
+  const teams = new TeamService({ databases, sessions, requestBudget: teamAccountBudget(budgets) });
+  const planning = new PlanningService({ databases, sessions, secrets, origin: origin, requestBudget: planningAccountBudget(budgets) });
+  const collaboration = new CollaborationService({ databases, sessions, secrets, origin: origin, planning, requestBudget: collaborationAccountBudget(budgets) });
+  registerExportRoutes(app, { origin, budgets, exports: new ExportService({ databases, sessions, secrets, origin, planning, teams, collaboration }) });
+  const restoration = new RestorationService({ databases, sessions, secrets, origin,
+    beforeWorkspace: async workspaceId => { await finalizeDeletionIfDue({ databases, secrets, workspaceId }); } });
+  registerRestorationRoutes(app, { origin, budgets, restoration });
+  registerTeamRoutes(app, { origin: origin, budgets, teams });
+  registerPlanningRoutes(app, { origin: origin, budgets, planning });
+  registerCollaborationRoutes(app, { origin: origin, budgets, collaboration });
+  registerUpgradeRoutes(app, { origin: origin, budgets, upgrades: new UpgradeService({ databases, sessions, secrets, origin: origin,
+    handlers: { planning: (a,payload)=>planning.save(a.cookieValue,a.csrfToken,payload), team: (a,payload)=>teams.save(a,payload),
+      collaboration: (a,payload)=>collaboration.save(a.cookieValue,a.csrfToken,payload) } }) });
+  registerReceiptRoutes(app, { origin: origin, budgets, receipts: new ReceiptService({ databases, sessions,
+    requestBudget: ({ workspaceId, accountId })=>budgets.take([{purpose:'receipts-account',key:`${workspaceId}:${accountId}`,limit:600,windowMs:600000}]) }) });
+  registerInboxRoutes(app, { origin, budgets, inbox: new InboxService({ databases, sessions, origin }) });
+  registerReportingRoutes(app, { origin, budgets, reporting: new ReportingService({ databases, sessions, secrets, origin }) });
+  registerLiveRoutes(app, { origin, budgets, live: new LiveService({ databases, sessions }) });
   const passwordOperations = new Set<string>();
   const recoveryOperations = new Set<string>();
+  // Product UI tests activate additional isolated workspaces through the real
+  // HTTP routes. Track their issued licences so failed/resumed setups also clean up.
+  const frontendLicences = new Set<string>();
+  const issueFrontendLicence = async () => {
+    const issued = await activation.reservations.issueLicence();
+    frontendLicences.add(issued.licenceId);
+    return issued.licenceKey;
+  };
   let workspaceId: string | undefined, accountId: string | undefined, licenceId: string | undefined;
   const close = async () => {
     try {
-      if (workspaceId) {
+      const cleanupWorkspaces = new Set(workspaceId ? [workspaceId] : []);
+      if (frontendLicences.size) {
+        const rows = await admin.control.query<{ workspace_id: string }>('SELECT workspace_id FROM security.activation_attempts WHERE licence_id=ANY($1::uuid[])', [[...frontendLicences]]);
+        for (const row of rows.rows) cleanupWorkspaces.add(row.workspace_id);
+      }
+      for (const workspaceId of cleanupWorkspaces) {
         await databases.application.query('SELECT graphile_worker.remove_job($1)', [`activation:${workspaceId}`]);
+        const jobs = (await databases.application.query<{ key: string }>('SELECT key FROM graphile_worker.jobs WHERE key LIKE $1', [`notification:${workspaceId}:%`])).rows;
+        for (const job of jobs) await databases.application.query('SELECT graphile_worker.remove_job($1)', [job.key]);
         await transaction(admin.application, async (client) => {
           await client.query("SELECT set_config('ukda.workspace_id',$1,true)", [workspaceId]);
           await client.query("SELECT pg_advisory_xact_lock(hashtextextended('ukda.workspace:' || $1,0))", [workspaceId]);
-          for (const table of ['notifications', 'project_access', 'projects', 'profiles', 'roles', 'workspaces']) await client.query(`DELETE FROM app.${table} WHERE workspace_id=$1`, [workspaceId]);
+          // Fixture-only cleanup of immutable history for this disposable workspace.
+          await client.query("SET LOCAL session_replication_role='replica'");
+          for (const table of ['export_sessions','restorations','unrecovered_projects','lifecycle_tombstones','encrypted_upgrade_items','encrypted_upgrade_operations','encrypted_upgrade_sources','encrypted_upgrades','outbox', 'operation_receipts', 'audit_events', 'record_versions', 'comments', 'updates', 'blockers',
+            'task_assignments', 'tasks', 'milestones', 'project_phases', 'notification_preferences', 'notification_receipts', 'notifications', 'inbox_operations', 'summaries',
+            'reporting_operations', 'reporting_preparations', 'reporting_summaries', 'reporting_settings', 'collaboration_operations', 'planning_operations', 'project_planning_heads', 'project_access', 'projects', 'team_members', 'teams', 'profiles', 'roles', 'workspaces']) await client.query(`DELETE FROM app.${table} WHERE workspace_id=$1`, [workspaceId]);
         });
+        await admin.control.query('DELETE FROM security.encrypted_upgrade_operations WHERE workspace_id=$1',[workspaceId]);
         await admin.control.query('DELETE FROM security.ceremonies WHERE workspace_id=$1', [workspaceId]);
         await admin.control.query('DELETE FROM security.workspaces WHERE workspace_id=$1', [workspaceId]);
         await admin.control.query('DELETE FROM security.auth_attempts WHERE workspace_id=$1', [workspaceId]);
       }
-      if (licenceId) {
-        await admin.control.query('DELETE FROM security.entitlement_operations WHERE licence_id=$1', [licenceId]);
-        await admin.control.query('DELETE FROM security.activation_attempts WHERE licence_id=$1', [licenceId]);
-        await admin.control.query('DELETE FROM security.licences WHERE licence_id=$1', [licenceId]);
+      for (const ownedLicenceId of new Set([...(licenceId ? [licenceId] : []), ...frontendLicences])) {
+        await admin.control.query('DELETE FROM security.entitlement_operations WHERE licence_id=$1', [ownedLicenceId]);
+        await admin.control.query('DELETE FROM security.activation_attempts WHERE licence_id=$1', [ownedLicenceId]);
+        await admin.control.query('DELETE FROM security.licences WHERE licence_id=$1', [ownedLicenceId]);
       }
       const digests = [secrets.digest('rate:authentication-source', '127.0.0.1'), secrets.digest('rate:history-source', '127.0.0.1'),
         secrets.digest('rate:recovery-source', '127.0.0.1'), secrets.digest('rate:recovery-history-source', '127.0.0.1'),
@@ -131,7 +205,7 @@ export async function authenticationFixture(restricted = false) {
     const prepared = await prepareOwnerActivation({ binding: { workspaceId, accountId, operationId: reserved.operationId,
       activationId: reserved.activationId, reservationGeneration: reserved.reservationGeneration, draftGeneration: reserved.draftGeneration, origin }, configuration: response.configuration,
       registrationRecord: registered.registrationRecord, exportKey: registered.exportKey, phrase, challengePositions: positions,
-      challengeAnswers: positions.map((index) => phrase.split(' ')[index]!), displayName: 'Browser owner', workspaceName: 'Browser workspace' });
+      challengeAnswers: positions.map((index) => phrase.split(' ')[index]!), displayName: 'Browser owner', workspaceName: 'Browser workspace', ...(avatar ? { avatar } : {}) });
     const login = await startLogin(password);
     const proof = await activation.startProof(reserved.activationId, resumeToken, { draftGeneration: '1', payload: prepared.payload, startLoginRequest: login.startLoginRequest });
     const finish = await finishLogin({ password, clientLoginState: login.clientLoginState, loginResponse: proof.loginResponse, configuration: proof.configuration });
@@ -142,8 +216,6 @@ export async function authenticationFixture(restricted = false) {
       operationId: reserved.operationId, securityVersion: '1' });
     expect(receipt.genesisFingerprint).toMatch(/^[a-f0-9]{64}$/);
     expect(receipt.securityHead).toBe(receipt.genesisFingerprint);
-    const entitlements = new EntitlementOperations(databases, secrets);
-    const trustedServiceKeys = { [secrets.keyId]: await entitlements.publicSigningKey() };
     const provisionProject = async (selected: { accountId: string; roleId: string }[] = []) => {
       const deviceId = prepared.payload.genesis.body.device.id;
       const start = await startLogin(password);
@@ -156,9 +228,49 @@ export async function authenticationFixture(restricted = false) {
       return provisionProjectScope({ workspaceId: reserved.workspaceId, accountId: reserved.accountId, deviceId,
         originalBundle: bundle, databases, admin, secrets, sessions, auth: () => ({ cookieValue: approved.cookieValue, csrfToken: approved.csrfToken }), origin }, { selected });
     };
+    const quarantineCurrentCheckpoint = async () => {
+      const checkpointId = randomUUID(), restoreId = randomUUID(), actor = { operatorId: randomUUID() };
+      const snapshot = new Map<string, Record<string, unknown>[]>();
+      const capture = new RestorationService({ ...restoration.options, hooks: { checkpointCaptured: async () => {
+        // Capture under the same workspace fence as the signed inventory. The
+        // subsequent authority projection can legitimately update row timestamps.
+        for (const table of RESTORE_TABLES) snapshot.set(table, (await admin.application.query(`SELECT to_jsonb(t) AS row FROM app.${table} t WHERE workspace_id=$1`, [reserved.workspaceId])).rows.map(row => row.row));
+      } } });
+      const captured = await capture.captureCheckpoint({ workspaceId: reserved.workspaceId, checkpointId }, actor);
+      await restoration.begin({ workspaceId: reserved.workspaceId, restoreId, manifest: captured.manifest }, actor);
+      // Browser protocol fixture only; actual base-backup/WAL installation is
+      // exercised separately. Never copy application authority over control.
+      await transaction(admin.application, async client => {
+        await client.query("SELECT pg_advisory_xact_lock(hashtextextended('ukda.workspace:' || $1,0))", [reserved.workspaceId]);
+        await client.query("SET LOCAL session_replication_role='replica'");
+        for (const table of ['notifications','notification_receipts','notification_preferences','inbox_operations','operation_receipts','outbox','summaries','reporting_preparations','reporting_summaries', ...RESTORE_TABLES.filter(table => table !== 'workspaces')])
+          await client.query(`DELETE FROM app.${table} WHERE workspace_id=$1`, [reserved.workspaceId]);
+        for (const table of RESTORE_TABLES) for (const row of snapshot.get(table) ?? []) {
+          if (table === 'workspaces') await client.query('UPDATE app.workspaces SET encrypted_envelope=$2,revision=$3,fence_closed=true,restore_quarantine=true WHERE workspace_id=$1', [reserved.workspaceId, row.encrypted_envelope, row.revision]);
+          else await client.query(`INSERT INTO app.${table} SELECT * FROM jsonb_populate_record(NULL::app.${table},$1::jsonb)`, [JSON.stringify(row)]);
+        }
+      });
+      await restoration.reconcile({ workspaceId: reserved.workspaceId, restoreId });
+      return restoreId;
+    };
+    // Exercise the production notification job for this isolated fixture only.
+    // The global worker uses a different keyring and is deliberately not involved.
+    const deliverFrontendNotifications = async () => {
+      const pending = await transaction(databases.application, async client => {
+        await client.query("SELECT set_config('ukda.workspace_id',$1,true)", [reserved.workspaceId]);
+        return (await client.query<{ id: string; data_generation: string }>(
+          "SELECT id,data_generation FROM app.outbox WHERE workspace_id=$1 AND state='pending' AND notification_version=1 ORDER BY created_at,id LIMIT 1000",
+          [reserved.workspaceId])).rows;
+      });
+      for (const row of pending) await deliverNotificationJob(databases, {
+        workspaceId: reserved.workspaceId, outboxId: row.id, dataGeneration: row.data_generation,
+      });
+      return pending.length;
+    };
+    const restrictLicence = () => entitlements.change({ licenceId: issued.licenceId, operationId: randomUUID(), action: 'revoke' }, { operatorId: randomUUID() });
     if (restricted) await entitlements.change({ licenceId, operationId: randomUUID(), action: 'revoke' }, { operatorId: randomUUID() });
     await app.listen({ host: '127.0.0.1', port: 3556 });
     return { close, workspaceId, accountId, deviceId: prepared.payload.genesis.body.device.id, operationId: reserved.operationId, wrapper: prepared.deviceWrapper,
-      genesis: prepared.payload.genesis, receipt, passwordOperations, recoveryOperations, trustedServiceKeys, phrase, provisionProject };
+      genesis: prepared.payload.genesis, receipt, passwordOperations, recoveryOperations, trustedServiceKeys, phrase, provisionProject, restrictLicence, quarantineCurrentCheckpoint, issueFrontendLicence, deliverFrontendNotifications };
   } catch (error) { await close(); throw error; }
 }

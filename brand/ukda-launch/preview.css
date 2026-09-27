@@ -1,0 +1,16 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; min-width: 320px; min-height: 100%; }
+body { background: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.preview { --surface: #fff; --text: #555a61; --hover: #f3f4f5; --rule: #e1e3e6; min-height: 100svh; background: var(--surface); color: var(--text); transition: background 300ms, color 300ms; }
+.preview[data-theme="dark"] { --surface: #101113; --text: #afb3ba; --hover: #202226; --rule: #303238; }
+.preview-stage { min-height: 100svh; display: grid; place-items: center; padding: 90px 24px; }
+#mark { width: clamp(104px, 15vw, 144px); }
+#mark svg { display: block; width: 100%; height: auto; overflow: visible; }
+.ukds-bar { transform-box: fill-box; transform-origin: center; }
+.preview-controls { position: fixed; bottom: max(26px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 4px; width: max-content; max-width: calc(100% - 24px); flex-wrap: wrap; padding: 4px; border-radius: 14px; background: var(--surface); }
+button { color: inherit; background: transparent; border: 0; border-radius: 8px; padding: 11px 14px; font: 400 12px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; white-space: nowrap; cursor: pointer; }
+button:hover { background: var(--hover); }
+button:focus-visible { outline: 2px solid #9463ac; outline-offset: 3px; }
+.separator { width: 1px; height: 16px; background: var(--rule); margin: 0 5px; }
+@media (max-width: 440px) { button { padding: 11px 9px; } .separator { display: none; } }
+@media (prefers-reduced-motion: reduce) { .preview { transition: none; } }

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { assertOnline } from './write-state.js';
 import { identifier } from '../shared/contracts.js';
 import { base64urlEncode, canonicalJson, digestObject } from '../shared/crypto.js';
 import { accessContext, accessDelivery, accessRequest, accessView, accessReceiptTokenHash, validateAccessPayload, validateAccessReceiptForPayload,
@@ -18,7 +19,7 @@ export interface AccessChangeTransport {
   finalize(input: AccessReference & { requestHash: string; receiptToken: string }, options?: AuthRequestOptions): Promise<AccessView>;
   status(input: AccessReference & { receiptToken: string }, options?: AuthRequestOptions): Promise<AccessView>;
   history(input: AccessReference, options?: AuthRequestOptions): Promise<PairingHistoryResponse>;
-  delivery(input: { workspaceId: string }, options?: AuthRequestOptions): Promise<AccessDelivery>;
+  delivery(input: { workspaceId: string; includeProfile?: true; includeDirectory?: true }, options?: AuthRequestOptions): Promise<AccessDelivery>;
   deliveryHistory(input: AccessReference, options?: AuthRequestOptions): Promise<PairingHistoryResponse>;
 }
 export class HttpAccessChangeTransport extends AuthenticatedHttp implements AccessChangeTransport {
@@ -35,12 +36,13 @@ export class HttpAccessChangeTransport extends AuthenticatedHttp implements Acce
     return readSecurityHistoryPages(input.operationId, 'current', (page) => { const { mode: _mode, ...cursor } = page;
       return this.request('history', { workspaceId: input.workspaceId, ...cursor }, historyResponse, options); });
   }
-  delivery(input: { workspaceId: string }, options?: AuthRequestOptions) { return this.request('delivery', input, accessDelivery, options); }
+  delivery(input: { workspaceId: string; includeProfile?: true; includeDirectory?: true }, options?: AuthRequestOptions) { return this.request('delivery', input, accessDelivery, options); }
   deliveryHistory(input: AccessReference, options?: AuthRequestOptions) {
     return readSecurityHistoryPages(input.operationId, 'current', (page) => { const { mode: _mode, ...cursor } = page;
       return this.request('delivery/history', { workspaceId: input.workspaceId, ...cursor }, historyResponse, options); });
   }
   protected override responseLimit(path: string): number {
+    if (path === '/v1/auth/access-change/delivery') return 16 * 1024 * 1024;
     return ['/v1/auth/access-change/history', '/v1/auth/access-change/delivery/history'].includes(path) ? 3 * 1024 * 1024 : super.responseLimit(path);
   }
 }
@@ -87,6 +89,7 @@ export class AccessChangeController {
   }
   refreshKeys(): Promise<RefreshedAccess> { return this.run((signal, epoch) => this.refreshed(signal, epoch)); }
   private async finish(record: AccessChangeRecord, signal: AbortSignal, epoch: number): Promise<AccessChangeProgress> {
+    assertOnline();
     const binding = record.payload.transition.body.binding, reference = { workspaceId: record.workspaceId, operationId: record.operationId },
       requestHash = await digestObject(record.payload); this.check(epoch);
     if (await accessReceiptTokenHash(reference, record.receiptToken) !== binding.receiptTokenHash) throw new AccessChangeClientError('CONFLICT'); this.check(epoch);
@@ -115,11 +118,12 @@ export class AccessChangeController {
   }
   private async afterCommit(result: AccessChangeProgress): Promise<AccessChangeProgress> {
     const current = this.auth.current();
-    if (result.access === 'revoked' && current?.session.workspaceId === result.receipt.workspaceId && current.session.accountId === result.targetAccountId) await this.auth.logout();
+    if (result.access === 'revoked' && current?.session.workspaceId === result.receipt.workspaceId && current.session.accountId === result.targetAccountId) await this.auth.invalidateSession();
     return result;
   }
   private change(input: { action: AccessRequest['action']; accountId: string; desired: AccessRequest['desired']; operationId?: string }): Promise<AccessChangeProgress> {
     return this.run(async (signal, epoch) => {
+      assertOnline();
       const session = this.session(), reference = { workspaceId: session.workspaceId, operationId: input.operationId ?? crypto.randomUUID() };
       if (await this.operations.get(reference.operationId)) throw new AccessChangeClientError('CONFLICT'); this.check(epoch);
       const receiptToken = base64urlEncode(crypto.getRandomValues(new Uint8Array(32))), request = accessRequest.parse({ ...reference,
@@ -149,6 +153,7 @@ export class AccessChangeController {
   suspend(input: { accountId: string; operationId?: string }) { return this.change({ ...input, action: 'suspend', desired: null }); }
   remove(input: { accountId: string; operationId?: string }) { return this.change({ ...input, action: 'remove', desired: null }); }
   resume(operationId: string): Promise<AccessChangeProgress> { return this.run(async (signal, epoch) => {
+    assertOnline();
     const record = await this.operations.get(identifier.parse(operationId)); this.check(epoch);
     if (!record) throw new AccessChangeClientError('NOT_FOUND'); return this.finish(record, signal, epoch);
   }).then((result) => this.afterCommit(result)); }

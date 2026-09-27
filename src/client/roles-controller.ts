@@ -10,6 +10,9 @@ import type { PairingMaterial, PairingScope } from '../shared/pairing.js';
 import { AuthenticatedHttp, AuthClientError, type AuthController, type AuthRequestOptions } from './auth-controller.js';
 import type { DeviceBundle } from './device-store.js';
 import { IndexedPairingStore, historyResponse, readSecurityHistoryPages, readDeviceScopeKeyMaterial, type PairingHistoryResponse } from './pairing.js';
+import { assertOnline, isWriteConflict, WriteConflict, WriteError } from './write-state.js';
+import { identityUpgradeHistory } from '../shared/encrypted-upgrades.js';
+import { readIdentityUpgradeContent } from './upgrade-content-crypto.js';
 
 export class RolesClientError extends Error {
   constructor(readonly code: 'INVALID_ROLE' | 'TRUST_REQUIRED' | 'INCOMPLETE_KEYS' | 'CONFLICT' | 'EXPIRED' | 'NOT_FOUND' | 'STORAGE' | 'CANCELLED') {
@@ -49,7 +52,13 @@ async function openRoleLabel(reference: NonNullable<SecurityHistoryState['roles'
   // Full replay already authenticated the historical signer, including a subsequently retired device.
   const transition = history.transitions.map((item) => roleTransition.safeParse(item)).find((item) => item.success &&
     same(item.data.body.role.label, reference));
-  if (!transition?.success) invalid();
+  if (!transition?.success) {
+    const upgraded=history.transitions.map(item=>identityUpgradeHistory.safeParse(item)).find(item=>item.success&&
+      item.data.body.objects.some(ref=>ref.kind==='role'&&ref.id===reference.id&&ref.digest===reference.digest));
+    if(!upgraded?.success) invalid();
+    const ref=upgraded.data.body.objects.find(ref=>ref.kind==='role'&&ref.id===reference.id)!;
+    return labelPlaintext.parse(await readIdentityUpgradeContent(history,upgraded.data,'role',ref.recordId,ring)).displayName;
+  }
   const binding = transition.data.body.binding;
   await validateRolePayload({ transition: transition.data, label: object }, binding);
   const entry = ring.find((key) => key.epoch === object.envelope.header.keyEpoch); if (!entry) throw new RolesClientError('INCOMPLETE_KEYS');
@@ -223,6 +232,7 @@ export class RolesController {
       session.sessionGeneration !== profile.sessionGeneration || session.dataGeneration !== state.dataGeneration) invalid(); return history;
   }
   private async finish(record: StoredRoleOperation, signal: AbortSignal, epoch: number): Promise<RoleProgress> {
+    assertOnline();
     const binding = record.payload.transition.body.binding, reference = { workspaceId: record.workspaceId, operationId: record.operationId };
     const checked = await validateRolePayload(record.payload, binding); this.check(epoch);
     let view = roleView.parse(await this.transport.status(reference, { signal })); this.check(epoch);
@@ -244,14 +254,17 @@ export class RolesController {
     await this.pins.recordVerifiedHistory(history); this.check(epoch);
     return { operationId: record.operationId, roleId: binding.roleId, state: view.state as RoleProgress['state'], receipt };
   }
-  private change(input: { action: RoleBinding['action']; roleId?: string; operationId?: string; displayName?: string; permissions?: z.infer<typeof customRolePermissions> }): Promise<RoleProgress> {
+  private change(value: { action: RoleBinding['action']; roleId?: string; operationId?: string; displayName?: string; permissions?: z.infer<typeof customRolePermissions>; expectedRevision?: string }): Promise<RoleProgress> {
+    const input=structuredClone(value);
     return this.run(async (signal, epoch) => {
+      assertOnline();if(input.action!=='create'&&!input.expectedRevision)throw new WriteError('REVIEW_REQUIRED');
       const session = this.session(), request = roleContextRequest.parse({ workspaceId: session.workspaceId, operationId: input.operationId ?? crypto.randomUUID(), action: input.action, roleId: input.roleId ?? crypto.randomUUID() });
       // Reusing an operation id is explicit resume only; altered human intent must never replay an older change.
       if (await this.operations.get(request.workspaceId, request.operationId)) throw new RolesClientError('CONFLICT'); this.check(epoch);
       const context = roleContext.parse(await this.transport.context(request, { signal })); this.check(epoch);
       if (context.binding.authorizer.accountId !== session.accountId || context.binding.authorizer.device.id !== session.deviceId) invalid();
       const history = await this.history(request, signal, epoch);
+      if(input.action!=='create'&&context.binding.previous?.revision!==input.expectedRevision)throw new WriteConflict(request.operationId,await this.currentRole(request.roleId,signal,epoch),input);
       const payload = await this.auth.worker.prepareRoleChange({ request, context, history,
         ...(input.displayName === undefined ? {} : { displayName: input.displayName }), ...(input.permissions === undefined ? {} : { permissions: input.permissions }) }, { signal }); this.check(epoch);
       const record = storedRole.parse({ version: 1, origin: this.auth.origin, workspaceId: session.workspaceId, accountId: session.accountId, deviceId: session.deviceId, operationId: request.operationId, payload });
@@ -259,17 +272,24 @@ export class RolesController {
       const readback = await this.operations.get(record.workspaceId, record.operationId); this.check(epoch);
       if (!readback || !same(readback, record)) throw new RolesClientError('STORAGE');
       await validateRolePayload(readback.payload, context.binding); this.check(epoch);
-      return this.finish(readback, signal, epoch);
+      try{return await this.finish(readback, signal, epoch);}catch(error){if(isWriteConflict(error))throw new WriteConflict(request.operationId,await this.currentRole(request.roleId,signal,epoch),input);throw error;}
     });
   }
   create(input: { displayName: string; permissions: z.infer<typeof customRolePermissions>; roleId?: string; operationId?: string }) { return this.change({ ...input, action: 'create' }); }
-  update(input: { roleId: string; displayName: string; permissions: z.infer<typeof customRolePermissions>; operationId?: string }) { return this.change({ ...input, action: 'update' }); }
-  retire(input: { roleId: string; operationId?: string }) { return this.change({ ...input, action: 'retire' }); }
+  update(input: { roleId: string; expectedRevision: string; displayName: string; permissions: z.infer<typeof customRolePermissions>; operationId?: string }) { return this.change({ ...input, action: 'update' }); }
+  retire(input: { roleId: string; expectedRevision: string; operationId?: string }) { return this.change({ ...input, action: 'retire' }); }
   resume(operationId: string): Promise<RoleProgress> { return this.run(async (signal, epoch) => {
+    assertOnline();
     const session = this.session(), record = await this.operations.get(session.workspaceId, operationId); this.check(epoch);
     if (!record) throw new RolesClientError('NOT_FOUND'); return this.finish(record, signal, epoch);
   }); }
   pending() { return this.operations.list(this.session().workspaceId); }
+  private async currentRole(roleId:string,signal:AbortSignal,epoch:number):Promise<ReadableRole>{
+    const session=this.session(),history=await this.history({workspaceId:session.workspaceId,operationId:crypto.randomUUID()},signal,epoch),state=await verifySecurityHistory(history);this.check(epoch);
+    const ids=Object.keys(state.roles).sort(),index=ids.indexOf(roleId);if(index<0)throw new RolesClientError('NOT_FOUND');
+    const previous=ids[index-1],page=await this.list({limit:1,...(previous?{afterRoleId:previous}:{})});this.check(epoch);
+    const role=page.roles.find(role=>role.id===roleId);if(!role)throw new RolesClientError('CONFLICT');return role;
+  }
   list(input: { afterRoleId?: string; limit?: number } = {}): Promise<{ roles: ReadableRole[]; nextRoleId: string | null }> {
     return this.run(async (signal, epoch) => {
       const session = this.session(), request = roleListRequest.parse({ workspaceId: session.workspaceId, ...input }), page = await this.transport.list(request, { signal }); this.check(epoch);

@@ -1,3 +1,4 @@
+import { avatarSelection, type AvatarSelection } from '../shared/avatar.js';
 import { capabilities } from '../shared/contracts.js';
 import { activationBinding, activationManifest, initialContentHeader, initialRecipientHeader, validateActivationPayload, type ActivationBinding, type ActivationPayload, type ActivationTranscript } from '../shared/activation.js';
 import { base64urlEncode, digestObject, encryptContent, generateRecipientKeyPair, generateSigningKeyPair, randomKey, sealRecipient, signObject } from '../shared/crypto.js';
@@ -15,10 +16,11 @@ export async function prepareOwnerActivation(input: {
   binding: ActivationBinding; configuration: OpaquePublicConfiguration;
   registrationRecord: string; exportKey: string;
   phrase: string; challengePositions: readonly number[]; challengeAnswers: readonly string[];
-  displayName: string; workspaceName: string;
+  displayName: string; workspaceName: string; avatar?: AvatarSelection;
 }) {
   const binding = activationBinding.parse(input.binding);
   if (!input.displayName.trim() || input.displayName.length > 200 || !input.workspaceName.trim() || input.workspaceName.length > 200) throw new Error('A name is required');
+  const avatar = input.avatar === undefined ? undefined : avatarSelection.parse(input.avatar);
   verifyRecoveryWords(input.phrase, input.challengePositions, input.challengeAnswers);
   const signing = await generateSigningKeyPair();
   const recipient = await generateRecipientKeyPair();
@@ -38,7 +40,7 @@ export async function prepareOwnerActivation(input: {
     const custodyPayload = { version: 1, custodyEpoch: '1', custodyKey: base64urlEncode(custodyKey) };
     const objects = {
       workspace: await encryptContent(initialContentHeader(transcript, 'workspace'), { name: input.workspaceName, timezone: 'Europe/London' }, workspaceKey, signing.privateKey),
-      profile: await encryptContent(initialContentHeader(transcript, 'profile'), { displayName: input.displayName }, workspaceKey, signing.privateKey),
+      profile: await encryptContent(initialContentHeader(transcript, 'profile'), { displayName: input.displayName, ...(avatar ? { avatar } : {}) }, workspaceKey, signing.privateKey),
       custody: await encryptContent(initialContentHeader(transcript, 'custody'), { version: 1, custodyEpoch: '1', workspaceKeys: [{ epoch: '1', key: base64urlEncode(workspaceKey) }], projectKeys: [] }, custodyKey, signing.privateKey),
       deviceCustody: await sealRecipient(initialRecipientHeader(transcript, transcriptDigest, 'device'), custodyPayload, signing.privateKey),
       recoveryCustody: await sealRecipient(initialRecipientHeader(transcript, transcriptDigest, 'recovery'), custodyPayload, signing.privateKey),

@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { deletionElapsed,finalizeDeletionIfDue } from '../lifecycle/deadline.js';
 import type pg from 'pg';
 import { transaction, type Databases } from '../../db.js';
 import { AppError } from '../../errors.js';
@@ -70,8 +71,8 @@ export class AuthenticationService {
     configuration: OpaquePublicConfiguration): Promise<AccountRow | undefined> {
     await client.query("SELECT set_config('ukda.workspace_id', $1, true)", [workspaceId]);
     // Lock authority before the profile, consistent with security transitions.
-    const workspace = (await client.query<{ data_generation: string; lifecycle: string; security_version: string }>(
-      `SELECT data_generation, lifecycle, security_version FROM security.workspaces
+    const workspace = (await client.query<{ data_generation: string; lifecycle: string; security_version: string; delete_after:Date|null }>(
+      `SELECT data_generation, lifecycle, security_version,delete_after FROM security.workspaces
        WHERE workspace_id = $1 FOR SHARE`, [workspaceId])).rows[0];
     const profile = (await client.query<Omit<AccountRow, 'data_generation'> & { state: string }>(
       `SELECT state, credential_generation, session_generation, opaque_registration_record,
@@ -81,7 +82,7 @@ export class AuthenticationService {
     // Entitlement restrictions preserve authentication, password changes and recovery.
     // Quarantine blocks content through dataTransaction; it must still permit
     // current credentials to reach the separate restricted restore ceremony.
-    if (!workspace || !['active', 'pending_deletion'].includes(workspace.lifecycle) || workspace.security_version === '0' ||
+    if (!workspace || deletionElapsed(workspace,this.#now()) || !['active', 'pending_deletion'].includes(workspace.lifecycle) || workspace.security_version === '0' ||
       !profile || profile.state !== 'active' || !profile.opaque_registration_record ||
       profile.opaque_setup_id !== configuration.setupId || profile.opaque_config_id !== configuration.configId ||
       profile.opaque_identifiers?.client !== configuration.identifiers.client ||
@@ -131,6 +132,7 @@ export class AuthenticationService {
 
   async startLogin(input: LoginStartInput): Promise<AuthenticationStart> {
     if (!identifier.safeParse(input.workspaceId).success || !identifier.safeParse(input.accountId).success) throw failure();
+    await finalizeDeletionIfDue({databases:this.#options.databases,secrets:this.#options.secrets,workspaceId:input.workspaceId,now:this.#now()});
     return this.#transaction((client, now) => this.#start(client, input, now));
   }
 
@@ -154,6 +156,8 @@ export class AuthenticationService {
   async #finish(input: LoginFinishInput, purpose: AttemptRow['purpose'],
     context: { previousCookie?: string; cookieValue?: string; csrfToken?: string }): Promise<IssuedSession> {
     if (!identifier.safeParse(input.loginId).success) throw failure();
+    const located=(await this.#options.databases.control.query<{workspace_id:string}>('SELECT workspace_id FROM security.auth_attempts WHERE login_id=$1',[input.loginId])).rows[0];
+    if(located)await finalizeDeletionIfDue({databases:this.#options.databases,secrets:this.#options.secrets,workspaceId:located.workspace_id,now:this.#now()});
     const result = await this.#transaction(async (client, now): Promise<IssuedSession | undefined> => {
       // Read only the immutable locator before locks. Security mutations take
       // the workspace first and may then invalidate every pending proof.

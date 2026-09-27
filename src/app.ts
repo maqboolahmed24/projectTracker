@@ -7,6 +7,7 @@ import { AppError } from './errors.js';
 import { parseJsonStrict } from './shared/json.js';
 import { mapDatabaseError } from './http.js';
 import { registerWorkReadRoutes, type RequireSession } from './modules/work/routes.js';
+import { registerAvatarRoutes } from './modules/avatars/routes.js';
 
 export function buildApp(config: Config, databases: Databases = createDatabases(config), logStream?: Writable, requireSession?: RequireSession) {
   const app = Fastify({
@@ -56,6 +57,8 @@ export function buildApp(config: Config, databases: Databases = createDatabases(
     return reply.code(status).send({ error: { code: status === 500 ? 'INTERNAL_ERROR' : 'INVALID_REQUEST', message: status === 500 ? 'The request could not be completed' : 'Invalid request', requestId: request.id } });
   });
   app.setNotFoundHandler((request, reply) => reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Route not found', requestId: request.id } }));
+
+  registerAvatarRoutes(app);
 
   app.get('/health/live', async () => ({ status: 'ok', service: 'ukda-api' }));
   app.get('/health/ready', async (_request, reply) => {

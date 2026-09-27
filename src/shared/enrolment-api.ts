@@ -32,3 +32,13 @@ export const enrolmentView = z.strictObject({ workspaceId: identifier, accountId
   receipt: enrolmentReceipt.nullable(), expiresAt: z.iso.datetime(), resumeExpiresAt: z.iso.datetime() });
 export type EnrolmentView = z.infer<typeof enrolmentView>;
 export interface EnrolmentAuth { cookieValue: string; csrfToken: string }
+
+/** Discovery metadata only. Codes, resume capabilities and cryptographic drafts never belong in this list. */
+export const enrolmentListRequest = z.strictObject({ workspaceId: identifier, after: identifier.optional(), limit: z.number().int().min(1).max(50).default(25) });
+export const enrolmentList = z.strictObject({ workspaceId: identifier, observedAt: z.iso.datetime(),
+  invitations: z.array(z.strictObject({ operationId: identifier, accountId: identifier,
+    kind: z.enum(['join_member', 'join_owner', 'promote_owner']),
+    state: z.enum(['issued', 'waiting_approval', 'verifying', 'confirmed']),
+    expiresAt: z.iso.datetime(), issuerAccountId: identifier, authorizerAccountId: identifier.nullable(), recipientStarted: z.boolean(),
+  })).max(50), nextCursor: identifier.nullable() });
+export type EnrolmentList = z.infer<typeof enrolmentList>;

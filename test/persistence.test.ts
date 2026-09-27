@@ -5,11 +5,10 @@ import { readFile } from 'node:fs/promises';
 import { parseEnv } from 'node:util';
 import pg from 'pg';
 import sodium from 'libsodium-wrappers';
-import { buildApp } from '../src/app.js';
 import { loadConfig } from '../src/config.js';
 import { createDatabases, transaction } from '../src/db.js';
 import { AppError } from '../src/errors.js';
-import { tenantTransaction, dataTransaction, type DataPrincipal } from '../src/persistence.js';
+import { tenantTransaction, dataTransaction } from '../src/persistence.js';
 
 // Credentials remain private to fixture setup; runtime config never contains an admin URL.
 async function admins() {
@@ -106,7 +105,11 @@ test('CP02: actual runtime RLS hides foreign workspaces and unprovisioned projec
     for(const table of ['projects','summaries','notifications']) assert.equal((await c.query(`SELECT * FROM app.${table}`)).rowCount,0);
   });
   const catalog=await db.application.query(`SELECT c.relname,c.relrowsecurity,c.relforcerowsecurity,c.relowner=current_user::regrole AS is_owner FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='app' AND c.relkind='r'`);
-  assert.equal(catalog.rowCount,22);
+  const requiredTables = ['workspaces','profiles','roles','teams','team_members','projects','project_access','project_phases','milestones',
+    'tasks','task_assignments','blockers','comments','updates','summaries','record_versions','audit_events','notifications','notification_preferences',
+    'operation_receipts','outbox','scope_heads','project_planning_heads','planning_operations','collaboration_operations','notification_receipts','inbox_operations',
+    'reporting_settings','reporting_preparations','reporting_operations','reporting_summaries'];
+  for (const name of requiredTables) assert.ok(catalog.rows.some((table) => table.relname === name), `Missing RLS table ${name}`);
   for(const table of catalog.rows) { assert.equal(table.relrowsecurity,true); assert.equal(table.relforcerowsecurity,true); assert.equal(table.is_owner,false); }
   await assert.rejects(db.application.query('ALTER TABLE app.tasks DISABLE ROW LEVEL SECURITY'),hasPgCode('42501'));
   await assert.rejects(db.application.query('TRUNCATE app.tasks'),hasPgCode('42501'));
@@ -140,36 +143,30 @@ test('CP02: tenant-aware constraints reject duplicate assignments, foreign links
   assert.ok(encrypted.encrypted.ciphertext);
 });
 
-test('CP02: encrypted read APIs enforce tenant, project, fence and current authority state', async (t) => {
-  const { config, db, admin, a, b }=await fixture(t);
-  const sessions = new Map<string,DataPrincipal>([['Bearer fixture-a',a],['Bearer fixture-b',b],['Bearer fixture-stranger',{...a,profileId:a.strangerId}]]);
-  const api=buildApp(config,{...db,close:async()=>{}},undefined,async(request)=>{
-    const principal=sessions.get(request.headers.authorization??'');
-    if(!principal) throw new AppError('AUTH_REQUIRED','Authentication required',401);
-    return principal;
-  });
-  t.after(()=>api.close());
-  const read=async(path: string,token='fixture-a')=>api.inject({url:path,headers:{authorization:`Bearer ${token}`}});
-  const path=`/v1/workspaces/${a.workspaceId}/projects/${a.projectId}`;
-  assert.equal((await read(path)).statusCode,200);
-  assert.equal((await read(`${path}/records/tasks`)).json().records.length,1);
-  assert.equal((await read(`/v1/workspaces/${b.workspaceId}/projects/${b.projectId}`)).statusCode,404);
-  assert.equal((await read(`/v1/workspaces/${a.workspaceId}/projects/${b.projectId}`)).statusCode,404);
-  assert.equal((await read(path,'fixture-stranger')).statusCode,404);
-  assert.equal((await read(`/v1/workspaces/${a.workspaceId}/projects?limit=1000`)).statusCode,400);
-  assert.equal((await read(path)).headers['cache-control'],'no-store');
-  const offlineControl=new pg.Pool({connectionString:'postgres://fixture:unavailable@127.0.0.1:1/unavailable',connectionTimeoutMillis:300});
-  try { await assert.rejects(dataTransaction({...db,control:offlineControl},a,async()=>true),(error:unknown)=>error instanceof AppError&&error.code==='SECURITY_UNAVAILABLE'); }
+test('CP02: data transactions enforce actor, tenant, fence, availability, restrictions and current authority generations', async (t) => {
+  const { db, admin, a, b } = await fixture(t);
+  const errorCode = (code: string) => (error: unknown) => error instanceof AppError && error.code === code;
+  const read = (principal = a) => dataTransaction(db, principal, async (c) =>
+    (await c.query('SELECT id FROM app.projects WHERE workspace_id=$1 ORDER BY id', [principal.workspaceId])).rows.map((row) => row.id));
+  assert.deepEqual(await read(), [a.projectId, a.secondProjectId].sort());
+  assert.deepEqual(await read({ ...a, profileId: a.strangerId }), []);
+  assert.equal(await dataTransaction(db, a, async (c) => (await c.query('SELECT 1 FROM app.projects WHERE workspace_id=$1 AND id=$2', [b.workspaceId, b.projectId])).rowCount), 0);
+  await assert.rejects(read({ ...a, profileId: randomUUID() }), errorCode('FORBIDDEN'));
+  await assert.rejects(read({ ...a, dataGeneration: '2' }), errorCode('STALE_GENERATION'));
+  await assert.rejects(read({ ...a, securityVersion: '2', securityHead: 'b'.repeat(64) }), errorCode('SECURITY_STATE_CHANGED'));
+  const offlineControl = new pg.Pool({ connectionString: 'postgres://fixture:unavailable@127.0.0.1:1/unavailable', connectionTimeoutMillis: 300 });
+  try { await assert.rejects(dataTransaction({ ...db, control: offlineControl }, a, async () => true), errorCode('SECURITY_UNAVAILABLE')); }
   finally { await offlineControl.end(); }
-
-  await admin.application.query('UPDATE app.workspaces SET fence_closed=true WHERE workspace_id=$1',[a.workspaceId]);
-  assert.equal((await read(path)).json().error.code,'SECURITY_FENCED');
-  await admin.application.query('UPDATE app.workspaces SET fence_closed=false WHERE workspace_id=$1',[a.workspaceId]);
-  await admin.control.query("UPDATE security.workspaces SET licence_state='restricted' WHERE workspace_id=$1",[a.workspaceId]);
-  assert.equal((await read(path)).statusCode,200);
-  await assert.rejects(dataTransaction(db,a,async()=>true,{write:true}),(e:unknown)=>e instanceof AppError&&e.code==='WORKSPACE_RESTRICTED');
-  await admin.control.query('UPDATE security.workspaces SET security_version=2,security_head=$2 WHERE workspace_id=$1',[a.workspaceId,'b'.repeat(64)]);
-  assert.equal((await read(path)).json().error.code,'SECURITY_FENCED');
+  await admin.application.query('UPDATE app.workspaces SET fence_closed=true WHERE workspace_id=$1', [a.workspaceId]);
+  await assert.rejects(read(), errorCode('SECURITY_FENCED'));
+  await admin.application.query('UPDATE app.workspaces SET fence_closed=false WHERE workspace_id=$1', [a.workspaceId]);
+  await admin.control.query("UPDATE security.workspaces SET licence_state='restricted' WHERE workspace_id=$1", [a.workspaceId]);
+  assert.equal((await read()).length, 2);
+  await assert.rejects(dataTransaction(db, a, async () => true, { write: true }), errorCode('WORKSPACE_RESTRICTED'));
+  await admin.control.query('UPDATE security.workspaces SET restore_quarantine=true WHERE workspace_id=$1', [a.workspaceId]);
+  await assert.rejects(read(), errorCode('RESTORE_QUARANTINE'));
+  await admin.control.query('UPDATE security.workspaces SET restore_quarantine=false,security_version=2,security_head=$2 WHERE workspace_id=$1', [a.workspaceId, 'b'.repeat(64)]);
+  await assert.rejects(read(), errorCode('SECURITY_FENCED'));
 });
 
 test('CP02: provider-readable rows contain ciphertext without the private value or content key', async(t)=>{

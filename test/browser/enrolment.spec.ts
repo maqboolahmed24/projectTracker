@@ -21,10 +21,11 @@ async function ownerPage(page: Page, f: Fixture) {
 }
 
 test('CP06: member JOIN survives a lost commit reply and browser restart, then promotion retains its password and device', async ({ page, browser }) => {
-  const f = await authenticationFixture(), accountId = randomUUID(), operationId = randomUUID();
+  const f = await authenticationFixture(false, { shapeId: 'shape-03', colourId: 'violet' }), accountId = randomUUID(), operationId = randomUUID();
   const recipientContext = await browser.newContext({ ignoreHTTPSErrors: true }), recipient = await recipientContext.newPage();
   try {
     await ownerPage(page, f);
+    expect((await page.evaluate(() => window.clientRuntime.profiles.current())).avatar).toEqual({ shapeId: 'shape-03', colourId: 'violet' });
     const issued = await page.evaluate(({ accountId, operationId, roleId }) => window.clientRuntime.enrolments.issueJoin({
       accountId, operationId, kind: 'join_member', roleId, projectIds: [], displayName: 'Invited member' }),
     { accountId, operationId, roleId: f.genesis.body.roles.member });
@@ -37,7 +38,7 @@ test('CP06: member JOIN survives a lost commit reply and browser restart, then p
     await page.evaluate((reference) => window.clientRuntime.enrolments.claim(reference!), begun.operation);
     const prepared = await recipient.evaluate(async ({ localId, password }) => {
       const client = window.clientRuntime;
-      const prepared = await client.enrolments.prepare(localId, password, password, 'Confirmed member');
+      const prepared = await client.enrolments.prepare(localId, password, password, 'Confirmed member', undefined, { shapeId: 'shape-17', colourId: 'coral' });
       let wrongFingerprintRejected = false;
       try { await client.enrolments.confirmRecipient(localId, '0'.repeat(64)); } catch { wrongFingerprintRejected = true; }
       await client.enrolments.confirmRecipient(localId, prepared.fingerprint!);
@@ -61,10 +62,11 @@ test('CP06: member JOIN survives a lost commit reply and browser restart, then p
       const delivered = await client.enrolments.resume(localId);
       return { ...delivered, initialAccess: pending.access, credentialGeneration: login.session.credentialGeneration,
         projectStatus: (await fetch(`/v1/workspaces/${workspaceId}/projects`)).status,
-        remembered: await client.remembered.list() };
+        remembered: await client.remembered.list(), profile: await client.profiles.current() };
     }, { localId: begun.localId, workspaceId: f.workspaceId, accountId, password: memberPassword, trustedServiceKeys: f.trustedServiceKeys });
     expect(joined.initialAccess).toBe('login_required'); expect(joined.access).toBe('content_ready');
     expect(joined.credentialGeneration).toBe('1'); expect(joined.projectStatus).toBe(200);
+    expect(joined.profile.avatar).toEqual({ shapeId: 'shape-17', colourId: 'coral' });
     expect(joined.remembered).toEqual(expect.arrayContaining([expect.objectContaining({ accountId, displayName: 'Confirmed member' })]));
 
     const promotion = { workspaceId: f.workspaceId, operationId: randomUUID() };
@@ -87,6 +89,7 @@ test('CP06: member JOIN survives a lost commit reply and browser restart, then p
     }, { localId: target.localId, phrase: preparedPromotion.phrase, workspaceId: f.workspaceId, accountId, password: memberPassword });
     expect(promoted.access).toBe('content_ready'); expect(promoted.deviceId).toBe(joined.deviceId);
     expect(promoted.credentialGeneration).toBe('1'); expect(promoted.sessionGeneration).toBe('2');
+    expect((await recipient.evaluate(() => window.clientRuntime.profiles.current())).avatar).toEqual({ shapeId: 'shape-17', colourId: 'coral' });
     const newInvitation = await recipient.evaluate(({ roleId, accountId, operationId }) => window.clientRuntime.enrolments.issueJoin({
       accountId, operationId, kind: 'join_member', roleId, projectIds: [], displayName: 'Promoted Owner invitation' }),
     { roleId: f.genesis.body.roles.viewer, accountId: randomUUID(), operationId: randomUUID() });
@@ -117,7 +120,7 @@ test('CP06: an equal Owner can invite and approve; another Owner can take over s
     const prepared = await second.evaluate(async ({ localId, password }) => {
       const phrase = await window.ukda.recovery.newOwnerPhrase(), positions = [1, 11, 22];
       const result = await window.clientRuntime.enrolments.prepare(localId, password, password, 'Equal second Owner',
-        { phrase, positions, answers: positions.map((index) => phrase.split(' ')[index]!) });
+        { phrase, positions, answers: positions.map((index) => phrase.split(' ')[index]!) }, { shapeId: 'shape-20', colourId: 'mint' });
       await window.clientRuntime.enrolments.confirmRecipient(localId, result.fingerprint!);
       return { ...result, phrase };
     }, { localId: begun.localId, password: memberPassword });
@@ -133,6 +136,7 @@ test('CP06: an equal Owner can invite and approve; another Owner can take over s
     }, { localId: begun.localId, workspaceId: f.workspaceId, accountId, password: memberPassword, phrase: prepared.phrase,
       roleId: f.genesis.body.roles.member, newAccount: randomUUID(), newOperation: randomUUID() });
     expect(result.access).toBe('content_ready'); expect(result.deviceId).not.toBe(f.deviceId);
+    expect((await second.evaluate(() => window.clientRuntime.profiles.current())).avatar).toEqual({ shapeId: 'shape-20', colourId: 'mint' });
     expect(result.invitation.code).toMatch(/^JOIN-/); expect(result.invitation.workspaceId).toBe(f.workspaceId);
     await member.goto(origin); await member.waitForFunction(() => !!window.ukda);
     const pendingMember = await member.evaluate(async ({ workspaceId, code, genesisFingerprint, trustedServiceKeys }) => {
@@ -142,7 +146,7 @@ test('CP06: an equal Owner can invite and approve; another Owner can take over s
       trustedServiceKeys: f.trustedServiceKeys });
     await second.evaluate((reference) => window.clientRuntime.enrolments.claim(reference!), pendingMember.operation);
     const firstDraft = await member.evaluate(async ({ localId, password }) => {
-      const prepared = await window.clientRuntime.enrolments.prepare(localId, password, password, 'Takeover member');
+      const prepared = await window.clientRuntime.enrolments.prepare(localId, password, password, 'Takeover member', undefined, { shapeId: 'shape-07', colourId: 'sky' });
       await window.clientRuntime.enrolments.confirmRecipient(localId, prepared.fingerprint!); return prepared;
     }, { localId: pendingMember.localId, password: memberPassword });
     // Staging succeeds, but this approver loses connectivity before commit.
@@ -167,6 +171,7 @@ test('CP06: an equal Owner can invite and approve; another Owner can take over s
       return client.enrolments.resume(localId);
     }, { localId: pendingMember.localId, workspaceId: f.workspaceId, accountId: result.invitation.accountId, password: memberPassword });
     expect(completed.access).toBe('content_ready'); expect(completed.deviceId).toBe(firstDraft.deviceId);
+    expect((await member.evaluate(() => window.clientRuntime.profiles.current())).avatar).toEqual({ shapeId: 'shape-07', colourId: 'sky' });
     // The original Owner still has its original unlocked device context. It must
     // remain able to approve replacement devices and RESET after adding an Owner.
     const paired = await second.evaluate(async ({ workspaceId, accountId, password, trustedServiceKeys }) => {
@@ -200,6 +205,12 @@ test('CP06: an equal Owner can invite and approve; another Owner can take over s
       return { access: delivered.access, credentialGeneration: loggedIn.session.credentialGeneration };
     }, { localId: resetBegun.localId, workspaceId: f.workspaceId, accountId: result.invitation.accountId, password: resetPassword });
     expect(recovered).toEqual({ access: 'content_ready', credentialGeneration: '2' });
+    expect((await member.evaluate(() => window.clientRuntime.profiles.current())).avatar).toEqual({ shapeId: 'shape-07', colourId: 'sky' });
+    // This page was reused as the member's replacement device, now revoked by RESET.
+    expect(await second.evaluate(async () => {
+      try { await window.clientRuntime.profiles.current(); return false; }
+      catch (error) { return (error as { code?: string }).code === 'AUTH_REQUIRED'; }
+    })).toBe(true);
   } finally {
     await page.evaluate(() => window.clientRuntime?.close()).catch(() => {});
     await second.evaluate(() => window.clientRuntime?.close()).catch(() => {});

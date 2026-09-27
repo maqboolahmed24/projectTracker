@@ -156,10 +156,11 @@ export class AccessChangeService {
       device: { id: d.id, keyGeneration: d.keyGeneration, signingPublicKey: d.signingPublicKey, recipientPublicKey: d.recipientPublicKey } };
   }
   #guard(w: Authority, state: SecurityHistoryState, binding: AccessBinding): void {
-    if (w.content_maintenance || w.restore_quarantine) throw new AppError('WORKSPACE_RESTRICTED', 'Access preparation is unavailable during workspace maintenance', 423);
-    // Read-only deletion permits revocation, but never a broader replacement grant.
-    if (w.lifecycle === 'pending_deletion') try { deriveAccessPlan(binding, { ...state, licenceState: 'restricted' }); }
-    catch { throw new AppError('WORKSPACE_RESTRICTED', 'Expanded access is unavailable while deletion is pending', 423); }
+    if (w.restore_quarantine) throw new AppError('WORKSPACE_RESTRICTED', 'Access preparation is unavailable during restoration', 423);
+    // Content upgrades and read-only deletion permit restrictive security changes.
+    // Reuse the signed access evaluator so a replacement role cannot hide expansion.
+    if (w.content_maintenance || w.lifecycle === 'pending_deletion') try { deriveAccessPlan(binding, { ...state, licenceState: 'restricted' }); }
+    catch { throw new AppError('WORKSPACE_RESTRICTED', 'Expanded access is unavailable during workspace restrictions', 423); }
   }
   async #binding(c: pg.PoolClient, w: Authority, p: SessionPrincipal, now: Date, request: AccessRequest,
     times?: { issuedAt: string; expiresAt: string }): Promise<{ binding: AccessBinding; plan: AccessPlan; state: SecurityHistoryState }> {
@@ -363,8 +364,9 @@ export class AccessChangeService {
     return view.receipt ? this.#project(request.workspaceId, view.receipt) : view;
   }
   async currentDelivery(cookie: string, csrf: string, input: unknown): Promise<AccessDelivery> {
-    const request = parse(z.strictObject({ workspaceId: identifier }), input);
+    const request = parse(z.strictObject({ workspaceId: identifier, includeProfile: z.literal(true).optional(), includeDirectory: z.literal(true).optional() }), input);
     return this.#tx(request.workspaceId, { cookieValue: cookie, csrfToken: csrf }, async (c, w, p, now) => {
+      if (w.restore_quarantine) throw new AppError('RESTORE_QUARANTINE', 'Use current Owner restore verification while content is quarantined', 423);
       const state = await this.#history(c, request.workspaceId, w); await this.#live(c, request.workspaceId, state); await this.#liveGrants(c, state, now);
       const profile = state.profiles[p.accountId], device = state.devices[p.deviceId!]; if (!profile?.active || !device?.active) throw forbidden();
       const eligible = device.scopes.filter((scope) => {
@@ -378,8 +380,24 @@ export class AccessChangeService {
       const genesis = await this.#object(c, state.workspaceId, w.genesis_object_id), body = (genesis.versioned_object as { body: { device: { id: string }; deviceEnvelopeId: string; custodyId: string } }).body;
       if (profile.owner && body.device.id === device.id && eligible.some((s) => s.manifests.some((m) => m.id === body.custodyId))) ids.push(body.deviceEnvelopeId);
       if (profile.owner && eligible.some((s) => s.scope === 'workspace' && s.mode === 'custody')) ids.push(state.custodyManifest.id);
+      // Directory labels share the existing workspace content scope. Only current
+      // signed references are delivered; no name/avatar is decrypted by the service.
+      const directoryReferences = new Map<string, {digest:string;kind:string}>();
+      if (request.includeDirectory) {
+        if (!eligible.some((scope) => scope.scope === 'workspace' && scope.scopeId === state.workspaceId)) throw forbidden();
+        if (!state.workspaceContent) throw forbidden();
+        directoryReferences.set(state.workspaceContent.objectId, {digest:state.workspaceContent.digest,kind:'encrypted_workspace'});
+        for (const person of Object.values(state.profiles)) directoryReferences.set(person.profile.objectId,
+          {digest:person.profile.objectDigest,kind:'encrypted_profile'});
+        ids.push(...directoryReferences.keys());
+      }
+      if (request.includeProfile) {
+        if (!eligible.some((scope) => scope.scope === 'workspace' && scope.scopeId === state.workspaceId)) throw forbidden();
+        ids.push(profile.profile.objectId);
+      }
       const materials = await this.#materials(c, state.workspaceId, ids);
-      const allowed = profile.owner ? materials : materials.filter((m) => m.kind === 'key_envelope' &&
+      const allowed = profile.owner ? materials : materials.filter((m) => (directoryReferences.get(m.id)?.digest === m.digest && directoryReferences.get(m.id)?.kind === m.kind) || (request.includeProfile && m.kind === 'encrypted_profile' &&
+        m.id === profile.profile.objectId && m.digest === profile.profile.objectDigest) || m.kind === 'key_envelope' &&
         (m.value as { header?: { recipientKind?: string; recipientId?: string } }).header?.recipientKind === 'device' &&
         (m.value as { header: { recipientId: string } }).header.recipientId === device.id);
       return { workspaceId: state.workspaceId, accountId: p.accountId, deviceId: device.id,

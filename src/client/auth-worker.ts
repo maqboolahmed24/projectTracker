@@ -9,6 +9,18 @@ import type * as recoveryHelpers from './recovery-controller.js';
 import type * as enrolmentHelpers from './enrolment-controller.js';
 import type * as rolesHelpers from './roles-controller.js';
 import type * as accessHelpers from './access-change-crypto.js';
+import type * as projectCreateHelpers from './project-create-crypto.js';
+import type * as teamsHelpers from './teams-crypto.js';
+import type * as planningHelpers from './planning-crypto.js';
+import type * as collaborationHelpers from './collaboration-crypto.js';
+import type * as inboxHelpers from './inbox-crypto.js';
+import type * as reportingHelpers from './reporting-crypto.js';
+import type * as upgradeHelpers from './encrypted-upgrades-crypto.js';
+import type * as exportHelpers from './export-crypto.js';
+import type * as profileHelpers from './profile-crypto.js';
+import type * as directoryHelpers from './directory-crypto.js';
+import type * as restorationHelpers from './restoration-crypto.js';
+import type * as lifecycleHelpers from './lifecycle-crypto.js';
 
 export type DeviceProofContext = Omit<DeviceChallenge, 'version' | 'purpose' | 'ceremonyId' | 'nonce' | 'issuedAt' | 'expiresAt'>;
 export interface UnlockDeviceInput { context: DeviceContext; wrapper: DeviceWrapper; exportKey: string; proofContext: DeviceProofContext }
@@ -46,17 +58,42 @@ export interface AuthWorkerMethods {
   readRoleLabels: { input: rolesHelpers.ReadRolesInput; output: Awaited<ReturnType<typeof rolesHelpers.readRoleLabels>> };
   prepareAccessChange: { input: accessHelpers.PrepareAccessChangeInput; output: Awaited<ReturnType<typeof accessHelpers.prepareAccessChange>> };
   refreshAccessKeys: { input: accessHelpers.RefreshAccessKeysInput; output: Awaited<ReturnType<typeof accessHelpers.refreshAccessKeys>> };
+  prepareProjectCreate: { input: projectCreateHelpers.PrepareProjectCreateInput; output: Awaited<ReturnType<typeof projectCreateHelpers.prepareProjectCreate>> };
+  prepareTeamChange: { input: teamsHelpers.PrepareTeamChangeInput; output: Awaited<ReturnType<typeof teamsHelpers.prepareTeamChange>> };
+  readTeams: { input: teamsHelpers.ReadTeamsInput; output: Awaited<ReturnType<typeof teamsHelpers.readTeams>> };
+  readTeamHistory: { input: teamsHelpers.ReadTeamHistoryInput; output: Awaited<ReturnType<typeof teamsHelpers.readTeamHistory>> };
+  preparePlanning: { input: planningHelpers.PreparePlanningInput; output: Awaited<ReturnType<typeof planningHelpers.preparePlanning>> };
+  readPlanning: { input: planningHelpers.ReadPlanningInput; output: Awaited<ReturnType<typeof planningHelpers.readPlanning>> };
+  prepareCollaboration: { input: collaborationHelpers.PrepareCollaborationInput; output: Awaited<ReturnType<typeof collaborationHelpers.prepareCollaboration>> };
+  readCollaboration: { input: collaborationHelpers.ReadCollaborationInput; output: Awaited<ReturnType<typeof collaborationHelpers.readCollaboration>> };
+  prepareInbox: { input: inboxHelpers.PrepareInboxInput; output: Awaited<ReturnType<typeof inboxHelpers.prepareInbox>> };
+  readReportingSettings: { input: reportingHelpers.ReadReportingSettingsInput; output: Awaited<ReturnType<typeof reportingHelpers.readReportingSettings>> };
+  prepareReportingSettings: { input: reportingHelpers.PrepareReportingSettingsInput; output: Awaited<ReturnType<typeof reportingHelpers.prepareReportingSettings>> };
+  calculateReporting: { input: reportingHelpers.CalculateReportingInput; output: Awaited<ReturnType<typeof reportingHelpers.calculateReporting>> };
+  prepareReporting: { input: reportingHelpers.CalculateReportingInput; output: Awaited<ReturnType<typeof reportingHelpers.prepareReporting>> };
+  readReporting: { input: reportingHelpers.ReadReportingInput; output: Awaited<ReturnType<typeof reportingHelpers.readReporting>> };
+  prepareUpgradeStart: { input: upgradeHelpers.PrepareUpgradeStartInput; output: Awaited<ReturnType<typeof upgradeHelpers.prepareUpgradeStart>> };
+  prepareIdentityUpgrade: { input: upgradeHelpers.PrepareIdentityUpgradeInput; output: Awaited<ReturnType<typeof upgradeHelpers.prepareIdentityUpgrade>> };
+  prepareUpgradeFinish: { input: upgradeHelpers.PrepareUpgradeFinishInput; output: Awaited<ReturnType<typeof upgradeHelpers.prepareUpgradeFinish>> };
+  prepareTeamUpgrade: { input: teamsHelpers.PrepareTeamUpgradeInput; output: Awaited<ReturnType<typeof teamsHelpers.prepareTeamUpgrade>> };
+  prepareCollaborationUpgrade: { input: collaborationHelpers.PrepareCollaborationUpgradeInput; output: Awaited<ReturnType<typeof collaborationHelpers.prepareCollaborationUpgrade>> };
+  readWorkspaceDirectory: { input: directoryHelpers.ReadWorkspaceDirectoryInput; output: Awaited<ReturnType<typeof directoryHelpers.readWorkspaceDirectory>> };
+  readCurrentProfile: { input: profileHelpers.ReadCurrentProfileInput; output: Awaited<ReturnType<typeof profileHelpers.readCurrentProfile>> };
+  prepareExport: { input: exportHelpers.PrepareExportInput; output: Awaited<ReturnType<typeof exportHelpers.prepareExport>> };
+  readRestoration: { input: restorationHelpers.VerifyRestorationInput; output: Awaited<ReturnType<typeof restorationHelpers.readRestoration>> };
+  prepareRestorationVerification: { input: restorationHelpers.VerifyRestorationInput; output: Awaited<ReturnType<typeof restorationHelpers.prepareRestorationVerification>> };
+  prepareLifecycle: { input: lifecycleHelpers.PrepareLifecycleInput; output: Awaited<ReturnType<typeof lifecycleHelpers.prepareLifecycle>> };
   clear: { input: Record<string, never>; output: { cleared: true } };
 }
 export type AuthWorkerMethod = keyof AuthWorkerMethods;
-export const workerErrorCode = z.enum(['UNSUPPORTED', 'INVALID_REQUEST', 'PASSWORD_POLICY', 'CONFIGURATION', 'AUTHENTICATION',
+export const workerErrorCode = z.enum(['UNSUPPORTED', 'UPDATE_REQUIRED', 'INVALID_REQUEST', 'PASSWORD_POLICY', 'CONFIGURATION', 'AUTHENTICATION',
   'SERVER_KEY', 'LOCKED', 'CONTEXT_MISMATCH', 'CHALLENGE_EXPIRED', 'INCOMPLETE_KEYS', 'FINGERPRINT_MISMATCH', 'CANCELLED', 'LOGGED_OUT', 'CLOSED', 'INTERNAL']);
 export type AuthWorkerErrorCode = z.infer<typeof workerErrorCode>;
 export class AuthWorkerError extends Error {
   constructor(readonly code: AuthWorkerErrorCode) { super(`Authentication worker failed (${code})`); this.name = 'AuthWorkerError'; }
 }
 export const workerRequest = z.strictObject({ version: z.literal(1), id: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
-  method: z.enum(['capabilities', 'startRegistration', 'finishRegistration', 'startLogin', 'finishLogin', 'unlockDevice', 'deviceProof', 'preparePasswordChange', 'verifyPasswordChangeWrapper', 'createPairingDevice', 'verifyPairingDevice', 'confirmPairingRecipient', 'confirmPairingApprover', 'preparePairingApproval', 'verifyPairingDelivery', 'proveOwnerPhrase', 'prepareRecoveryDraft', 'verifyRecoveryDraftWrapper', 'confirmRecoveryRecipient', 'preparePhraseRecoveryApproval', 'prepareOwnerRecoveryApproval', 'verifyRecoveryDelivery', 'prepareJoinInvitation', 'prepareEnrolmentDraft', 'verifyEnrolmentDraft', 'confirmEnrolmentTarget', 'prepareEnrolmentApproval', 'verifyEnrolmentDelivery', 'prepareRoleChange', 'readRoleLabels', 'prepareAccessChange', 'refreshAccessKeys', 'clear']), input: z.unknown() });
+  method: z.enum(['capabilities', 'startRegistration', 'finishRegistration', 'startLogin', 'finishLogin', 'unlockDevice', 'deviceProof', 'preparePasswordChange', 'verifyPasswordChangeWrapper', 'createPairingDevice', 'verifyPairingDevice', 'confirmPairingRecipient', 'confirmPairingApprover', 'preparePairingApproval', 'verifyPairingDelivery', 'proveOwnerPhrase', 'prepareRecoveryDraft', 'verifyRecoveryDraftWrapper', 'confirmRecoveryRecipient', 'preparePhraseRecoveryApproval', 'prepareOwnerRecoveryApproval', 'verifyRecoveryDelivery', 'prepareJoinInvitation', 'prepareEnrolmentDraft', 'verifyEnrolmentDraft', 'confirmEnrolmentTarget', 'prepareEnrolmentApproval', 'verifyEnrolmentDelivery', 'prepareRoleChange', 'readRoleLabels', 'prepareAccessChange', 'refreshAccessKeys', 'prepareProjectCreate', 'prepareTeamChange', 'readTeams', 'readTeamHistory', 'preparePlanning', 'readPlanning', 'prepareCollaboration', 'readCollaboration', 'prepareInbox', 'readReportingSettings', 'prepareReportingSettings', 'calculateReporting', 'prepareReporting', 'readReporting', 'prepareUpgradeStart', 'prepareIdentityUpgrade', 'prepareUpgradeFinish', 'prepareTeamUpgrade', 'prepareCollaborationUpgrade', 'prepareExport', 'readCurrentProfile', 'readWorkspaceDirectory', 'readRestoration', 'prepareRestorationVerification', 'prepareLifecycle', 'clear']), input: z.unknown() });
 export const workerResponse = z.discriminatedUnion('ok', [
   z.strictObject({ version: z.literal(1), id: z.number().int().positive(), ok: z.literal(true), result: z.unknown() }),
   z.strictObject({ version: z.literal(1), id: z.number().int().positive(), ok: z.literal(false), code: workerErrorCode }),
@@ -150,6 +187,7 @@ export function installAuthWorker(scope: AuthWorkerScope, environment: AuthWorke
       return { webAssembly: true, webCrypto: true, indexedDB: true };
     }
     await initialize();
+    (await import('../shared/content-schema.js')).assertSupportedContentSchemas(input);
     if (epoch !== startedEpoch) throw new AuthWorkerError('CANCELLED');
     if (method === 'startRegistration' || method === 'startLogin') {
       const accepted = z.strictObject({ password: z.string().max(2048) }).parse(input);
@@ -317,6 +355,106 @@ export function installAuthWorker(scope: AuthWorkerScope, environment: AuthWorke
         signingPublicKey: context.signingPublicKey, recipientPublicKey: context.recipientPublicKey };
       return method === 'prepareRoleChange' ? helpers.prepareRoleChange(accepted, bundle) : helpers.readRoleLabels(accepted, bundle);
     }
+    if (method === 'prepareInbox') {
+      if (!cached) throw new AuthWorkerError('LOCKED');
+      const accepted = input as inboxHelpers.PrepareInboxInput, b = accepted.binding, c = cached.context, now = environment.now?.() ?? Date.now();
+      if (!b || b.origin !== environment.origin || b.workspaceId !== c.workspaceId || b.accountId !== c.accountId || b.deviceId !== c.deviceId ||
+        b.signingPublicKey !== c.signingPublicKey || b.keyGeneration !== c.keyGeneration || b.credentialGeneration !== c.credentialGeneration ||
+        b.sessionGeneration !== c.sessionGeneration || b.dataGeneration !== c.dataGeneration || BigInt(b.securityVersion) < BigInt(c.securityVersion) ||
+        b.securityVersion === c.securityVersion && b.securityHead !== c.securityHead || Date.parse(b.issuedAt) > now + 30000 || Date.parse(b.expiresAt) <= now) throw new AuthWorkerError('CONTEXT_MISMATCH');
+      const helpers = await import('./inbox-crypto.js');
+      return helpers.prepareInbox(accepted, { signingPrivateKey: crypto.base64urlEncode(cached.signing), recipientPrivateKey: crypto.base64urlEncode(cached.recipient),
+        signingPublicKey: c.signingPublicKey, recipientPublicKey: c.recipientPublicKey });
+    }
+    if (method === 'preparePlanning' || method === 'readPlanning' || method === 'prepareCollaboration' || method === 'readCollaboration' || method === 'prepareCollaborationUpgrade') {
+      if (!cached) throw new AuthWorkerError('LOCKED');
+      const helpers = await import('./planning-crypto.js'), accepted = input as planningHelpers.PreparePlanningInput;
+      if (accepted.history?.origin !== environment.origin) throw new AuthWorkerError('CONTEXT_MISMATCH');
+      const state = await (await import('../shared/security-history.js')).verifySecurityHistory(accepted.history), context = cached.context,
+        profile = state.profiles[context.accountId], device = state.devices[context.deviceId];
+      if (state.workspaceId !== context.workspaceId || !profile?.active || !device?.active || device.accountId !== context.accountId ||
+        device.keyGeneration !== context.keyGeneration || device.signingPublicKey !== context.signingPublicKey || device.recipientPublicKey !== context.recipientPublicKey ||
+        profile.credentialGeneration !== context.credentialGeneration || profile.sessionGeneration !== context.sessionGeneration || state.dataGeneration !== context.dataGeneration ||
+        BigInt(state.custodyEpoch) < BigInt(context.custodyEpoch) || BigInt(state.ownershipVersion) < BigInt(context.ownershipVersion) ||
+        BigInt(state.securityVersion) < BigInt(context.securityVersion) || (state.securityVersion === context.securityVersion && state.securityHead !== context.securityHead) ||
+        accepted.accountId !== context.accountId || accepted.deviceId !== context.deviceId) throw new AuthWorkerError('CONTEXT_MISMATCH');
+      const bundle = { signingPrivateKey: crypto.base64urlEncode(cached.signing), recipientPrivateKey: crypto.base64urlEncode(cached.recipient),
+        signingPublicKey: context.signingPublicKey, recipientPublicKey: context.recipientPublicKey };
+      if (method === 'prepareCollaboration' || method === 'readCollaboration' || method === 'prepareCollaborationUpgrade') {
+        const collaboration = await import('./collaboration-crypto.js');
+        if(method === 'prepareCollaborationUpgrade')return collaboration.prepareCollaborationUpgrade(input as collaborationHelpers.PrepareCollaborationUpgradeInput,bundle);
+        return method === 'prepareCollaboration' ? collaboration.prepareCollaboration(input as collaborationHelpers.PrepareCollaborationInput, bundle) :
+          collaboration.readCollaboration(input as collaborationHelpers.ReadCollaborationInput, bundle);
+      }
+      return method === 'preparePlanning' ? helpers.preparePlanning(accepted, bundle) : helpers.readPlanning(accepted, bundle);
+    }
+    if (method === 'readReportingSettings' || method === 'prepareReportingSettings' || method === 'calculateReporting' || method === 'prepareReporting' || method === 'readReporting' || method === 'prepareUpgradeStart' || method === 'prepareIdentityUpgrade' || method === 'prepareUpgradeFinish' || method === 'prepareExport' || method === 'readCurrentProfile' || method === 'readWorkspaceDirectory' || method === 'readRestoration' || method === 'prepareRestorationVerification' || method === 'prepareLifecycle') {
+      if (!cached) throw new AuthWorkerError('LOCKED');
+      const helpers = await import('./reporting-crypto.js'), accepted = input as reportingHelpers.ReportingKeys;
+      if (accepted.history?.origin !== environment.origin) throw new AuthWorkerError('CONTEXT_MISMATCH');
+      const state = await (await import('../shared/security-history.js')).verifySecurityHistory(accepted.history), context = cached.context,
+        profile = state.profiles[context.accountId], device = state.devices[context.deviceId];
+      if (state.workspaceId !== context.workspaceId || !profile?.active || !device?.active || device.accountId !== context.accountId ||
+        device.keyGeneration !== context.keyGeneration || device.signingPublicKey !== context.signingPublicKey || device.recipientPublicKey !== context.recipientPublicKey ||
+        profile.credentialGeneration !== context.credentialGeneration || profile.sessionGeneration !== context.sessionGeneration || state.dataGeneration !== context.dataGeneration ||
+        BigInt(state.custodyEpoch) < BigInt(context.custodyEpoch) || BigInt(state.ownershipVersion) < BigInt(context.ownershipVersion) ||
+        BigInt(state.securityVersion) < BigInt(context.securityVersion) || (state.securityVersion === context.securityVersion && state.securityHead !== context.securityHead) ||
+        accepted.accountId !== context.accountId || accepted.deviceId !== context.deviceId) throw new AuthWorkerError('CONTEXT_MISMATCH');
+      const bundle = { signingPrivateKey: crypto.base64urlEncode(cached.signing), recipientPrivateKey: crypto.base64urlEncode(cached.recipient),
+        signingPublicKey: context.signingPublicKey, recipientPublicKey: context.recipientPublicKey };
+      if(method==='prepareLifecycle') return (await import('./lifecycle-crypto.js')).prepareLifecycle(input as lifecycleHelpers.PrepareLifecycleInput,bundle);
+      if(method==='readWorkspaceDirectory') return (await import('./directory-crypto.js')).readWorkspaceDirectory(input as directoryHelpers.ReadWorkspaceDirectoryInput,bundle);
+      if(method==='readCurrentProfile') return (await import('./profile-crypto.js')).readCurrentProfile(input as profileHelpers.ReadCurrentProfileInput,bundle);
+      if(method==='prepareExport') return (await import('./export-crypto.js')).prepareExport(input as exportHelpers.PrepareExportInput,bundle);
+      if(method==='readRestoration'||method==='prepareRestorationVerification') {
+        const restoration=await import('./restoration-crypto.js');
+        return method==='readRestoration'?restoration.readRestoration(input as restorationHelpers.VerifyRestorationInput,bundle):
+          restoration.prepareRestorationVerification(input as restorationHelpers.VerifyRestorationInput,bundle);
+      }
+      if(method==='prepareUpgradeStart'||method==='prepareIdentityUpgrade'||method==='prepareUpgradeFinish') {
+        const upgrades=await import('./encrypted-upgrades-crypto.js');
+        if(method==='prepareUpgradeStart')return upgrades.prepareUpgradeStart(input as upgradeHelpers.PrepareUpgradeStartInput,bundle);
+        if(method==='prepareIdentityUpgrade')return upgrades.prepareIdentityUpgrade(input as upgradeHelpers.PrepareIdentityUpgradeInput,bundle);
+        return upgrades.prepareUpgradeFinish(input as upgradeHelpers.PrepareUpgradeFinishInput,bundle);
+      }
+      if(method==='readReportingSettings')return helpers.readReportingSettings(input as reportingHelpers.ReadReportingSettingsInput,bundle);
+      if(method==='prepareReportingSettings')return helpers.prepareReportingSettings(input as reportingHelpers.PrepareReportingSettingsInput,bundle);
+      if(method==='readReporting')return helpers.readReporting(input as reportingHelpers.ReadReportingInput,bundle);
+      return method==='calculateReporting'?helpers.calculateReporting(input as reportingHelpers.CalculateReportingInput,bundle):helpers.prepareReporting(input as reportingHelpers.CalculateReportingInput,bundle);
+    }
+    if (method === 'prepareTeamChange' || method === 'readTeams' || method === 'readTeamHistory' || method === 'prepareTeamUpgrade') {
+      if (!cached) throw new AuthWorkerError('LOCKED');
+      const helpers = await import('./teams-crypto.js'), accepted = input as teamsHelpers.PrepareTeamChangeInput & teamsHelpers.ReadTeamsInput & teamsHelpers.ReadTeamHistoryInput;
+      if (accepted.history?.origin !== environment.origin) throw new AuthWorkerError('CONTEXT_MISMATCH');
+      const state = await (await import('../shared/security-history.js')).verifySecurityHistory(accepted.history), context = cached.context,
+        profile = state.profiles[context.accountId], device = state.devices[context.deviceId];
+      if (state.workspaceId !== context.workspaceId || !profile?.active || !device?.active || device.accountId !== context.accountId ||
+        device.keyGeneration !== context.keyGeneration || device.signingPublicKey !== context.signingPublicKey || device.recipientPublicKey !== context.recipientPublicKey ||
+        profile.credentialGeneration !== context.credentialGeneration || profile.sessionGeneration !== context.sessionGeneration || state.dataGeneration !== context.dataGeneration ||
+        BigInt(state.custodyEpoch) < BigInt(context.custodyEpoch) || BigInt(state.ownershipVersion) < BigInt(context.ownershipVersion) ||
+        BigInt(state.securityVersion) < BigInt(context.securityVersion) || (state.securityVersion === context.securityVersion && state.securityHead !== context.securityHead) ||
+        accepted.accountId !== context.accountId || accepted.deviceId !== context.deviceId || (method === 'prepareTeamChange' && !profile.owner)) throw new AuthWorkerError('CONTEXT_MISMATCH');
+      const bundle = { signingPrivateKey: crypto.base64urlEncode(cached.signing), recipientPrivateKey: crypto.base64urlEncode(cached.recipient),
+        signingPublicKey: context.signingPublicKey, recipientPublicKey: context.recipientPublicKey };
+      if(method === 'prepareTeamUpgrade')return helpers.prepareTeamUpgrade(input as teamsHelpers.PrepareTeamUpgradeInput,bundle);
+      return method === 'prepareTeamChange' ? helpers.prepareTeamChange(accepted, bundle) :
+        method === 'readTeamHistory' ? helpers.readTeamHistory(accepted, bundle) : helpers.readTeams(accepted, bundle);
+    }
+    if (method === 'prepareProjectCreate') {
+      if (!cached) throw new AuthWorkerError('LOCKED');
+      const helpers = await import('./project-create-crypto.js'), accepted = input as projectCreateHelpers.PrepareProjectCreateInput;
+      if (accepted.history?.origin !== environment.origin) throw new AuthWorkerError('CONTEXT_MISMATCH');
+      const state = await (await import('../shared/security-history.js')).verifySecurityHistory(accepted.history), context = cached.context,
+        profile = state.profiles[context.accountId], device = state.devices[context.deviceId];
+      if (state.workspaceId !== context.workspaceId || !profile?.active || !profile.owner || !device?.active || device.accountId !== context.accountId ||
+        device.keyGeneration !== context.keyGeneration || device.signingPublicKey !== context.signingPublicKey || device.recipientPublicKey !== context.recipientPublicKey ||
+        profile.credentialGeneration !== context.credentialGeneration || profile.sessionGeneration !== context.sessionGeneration || state.dataGeneration !== context.dataGeneration ||
+        state.custodyEpoch !== context.custodyEpoch || BigInt(state.ownershipVersion) < BigInt(context.ownershipVersion) ||
+        BigInt(state.securityVersion) < BigInt(context.securityVersion) || (state.securityVersion === context.securityVersion && state.securityHead !== context.securityHead) ||
+        accepted.context.binding.authorizer.accountId !== context.accountId || accepted.context.binding.authorizer.device.id !== context.deviceId) throw new AuthWorkerError('CONTEXT_MISMATCH');
+      return helpers.prepareProjectCreate(accepted, { signingPrivateKey: crypto.base64urlEncode(cached.signing), recipientPrivateKey: crypto.base64urlEncode(cached.recipient),
+        signingPublicKey: context.signingPublicKey, recipientPublicKey: context.recipientPublicKey });
+    }
     if (method === 'prepareAccessChange' || method === 'refreshAccessKeys') {
       if (!cached) throw new AuthWorkerError('LOCKED');
       const helpers = await import('./access-change-crypto.js');
@@ -388,9 +526,10 @@ export function installAuthWorker(scope: AuthWorkerScope, environment: AuthWorke
       if (error instanceof AuthWorkerError) code = error.code;
       else if (error instanceof z.ZodError) code = 'INVALID_REQUEST';
       else if (error && typeof error === 'object' && 'name' in error && 'code' in error) {
-        if (error.name === 'ClientOpaqueError' && workerErrorCode.safeParse(error.code).success) code = error.code as AuthWorkerErrorCode;
+        if (error.name === 'ContentSchemaError' && error.code === 'UPDATE_REQUIRED') code='UPDATE_REQUIRED';
+        else if (error.name === 'ClientOpaqueError' && workerErrorCode.safeParse(error.code).success) code = error.code as AuthWorkerErrorCode;
         else if (error.name === 'DeviceStoreError') code = 'AUTHENTICATION';
-        else if (['PairingClientError', 'RecoveryClientError', 'EnrolmentClientError', 'EnrolmentCryptoError', 'RolesClientError', 'AccessChangeClientError'].includes(String(error.name))) code = ['INCOMPLETE_KEYS', 'FINGERPRINT_MISMATCH'].includes(String(error.code)) ? error.code as AuthWorkerErrorCode : 'CONTEXT_MISMATCH';
+        else if (['PairingClientError', 'RecoveryClientError', 'EnrolmentClientError', 'EnrolmentCryptoError', 'RolesClientError', 'AccessChangeClientError', 'ProjectCreateClientError', 'TeamsClientError', 'PlanningClientError', 'PlanningError'].includes(String(error.name))) code = ['INCOMPLETE_KEYS', 'FINGERPRINT_MISMATCH'].includes(String(error.code)) ? error.code as AuthWorkerErrorCode : 'CONTEXT_MISMATCH';
       }
       scope.postMessage({ version: 1, id, ok: false, code });
     });

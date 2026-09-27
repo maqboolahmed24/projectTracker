@@ -7,6 +7,7 @@ import { parseJsonStrict } from '../shared/json.js';
 import { AuthWorkerClient } from './auth-worker-client.js';
 import { IndexedDeviceStore } from './device-store.js';
 import type { RememberedProfiles, RememberedProfileReference } from './remembered-profiles.js';
+import { WriteError } from './write-state.js';
 
 export const authSessionSnapshot = authSessionResult.extend({ securityHead: digest, securityVersion: positiveCounter });
 export type AuthSessionSnapshot = z.infer<typeof authSessionSnapshot>;
@@ -72,6 +73,10 @@ export class AuthenticatedHttp {
       if (response.status === 503 && ['AUTHENTICATION_UNAVAILABLE', 'SETUP_UNAVAILABLE', 'PAIRING_UNAVAILABLE', 'RECOVERY_UNAVAILABLE', 'SECURITY_FENCED'].includes(code ?? '')) throw new AuthClientError('UNAVAILABLE');
       if (response.status === 409 && ['OPERATION_CONFLICT', 'PAIRING_CONFLICT', 'PAIRING_INVALID', 'STALE_SECURITY_STATE', 'HISTORY_CURSOR_INVALID', 'RECOVERY_CHANGED'].includes(code ?? '')) throw new AuthClientError('CONFLICT');
       if (response.status === 410 && ['PAIRING_EXPIRED', 'RECOVERY_EXPIRED'].includes(code ?? '')) throw new AuthClientError('EXPIRED');
+      if (response.status === 409 && ['REVISION_CONFLICT', 'PLANNING_CHANGED', 'COLLABORATION_CHANGED', 'REPORTING_CHANGED', 'RECORD_CONFLICT', 'STALE_GENERATION'].includes(code ?? '')) throw new WriteError('CONFLICT', code);
+      if (response.status === 409 && code === 'UNSUPPORTED_SCHEMA') throw new WriteError('UPDATE_REQUIRED', code);
+      if (response.status === 409 && code === 'RETRY_REQUIRED') throw new WriteError('RETRY_REQUIRED', code);
+      if (response.status === 423) throw new WriteError('RESTRICTED', code);
       throw new AuthClientError('TRANSPORT');
     }
     return parse(schema, value);
@@ -96,11 +101,14 @@ export class AuthController {
   private exportKey: string | undefined;
   private operation: AbortController | undefined;
   private loggingOut: Promise<void> | undefined;
+  private loggingOutForSignout = false;
   private epoch = 0;
   private unlocked = false;
   private readonly requests = new Set<Promise<unknown>>();
   private readonly clearers = new Set<() => void>();
   private readonly forgetters = new Set<(reference: RememberedProfileReference) => Promise<void>>();
+  private readonly signedOut = new Set<(reference: RememberedProfileReference) => Promise<void>>();
+  private logoutReference: RememberedProfileReference | undefined;
   constructor(private readonly transport: AuthTransport, readonly worker: AuthWorkerClient,
     private readonly devices: IndexedDeviceStore, private readonly remembered?: RememberedProfiles) {
     this.origin = authOrigin(transport.origin);
@@ -112,7 +120,12 @@ export class AuthController {
   /** Plaintext/cache owners register synchronous, idempotent cleanup; logout calls all of them. */
   onClear(clear: () => void): () => void { this.clearers.add(clear); return () => { this.clearers.delete(clear); }; }
   onForget(forget: (reference: RememberedProfileReference) => Promise<void>): () => void { this.forgetters.add(forget); return () => { this.forgetters.delete(forget); }; }
+  /** Runs only after server sign-out is confirmed; it never runs for refresh, lock, or a failed sign-out. */
+  onSignedOut(cleanup: (reference: RememberedProfileReference) => Promise<void>): () => void {
+    this.signedOut.add(cleanup); return () => { this.signedOut.delete(cleanup); };
+  }
   private clearLocal(): boolean {
+    if (this.sessionValue?.deviceId) this.logoutReference = { workspaceId: this.sessionValue.workspaceId, accountId: this.sessionValue.accountId, deviceId: this.sessionValue.deviceId };
     this.exportKey = undefined; this.sessionValue = undefined; this.unlocked = false; this.worker.logout();
     let clean = true; for (const clear of this.clearers) { try { clear(); } catch { clean = false; } } return clean;
   }
@@ -232,19 +245,29 @@ export class AuthController {
   }
   /** Local clearing happens before awaiting server revocation; a failed revocation is reported. */
   logout(): Promise<void> {
-    this.loggingOut ??= this.performLogout().finally(() => { this.loggingOut = undefined; }); return this.loggingOut;
+    if(this.loggingOut&&!this.loggingOutForSignout)return this.loggingOut.then(()=>this.logout());
+    if(!this.loggingOut){this.loggingOutForSignout=true;this.loggingOut=this.performLogout().finally(()=>{this.loggingOut=undefined;this.loggingOutForSignout=false;});}
+    return this.loggingOut;
   }
-  private async performLogout(): Promise<void> {
+  /** Automatic security invalidation ends the server session without discarding uncertain requests. */
+  invalidateSession(): Promise<void> {
+    this.loggingOut ??= this.performLogout(false).finally(() => { this.loggingOut = undefined; }); return this.loggingOut;
+  }
+  private async performLogout(clearPending = true): Promise<void> {
     this.epoch++; this.operation?.abort(); this.operation = undefined;
+    if (clearPending && this.sessionValue?.deviceId) this.logoutReference = { workspaceId: this.sessionValue.workspaceId, accountId: this.sessionValue.accountId, deviceId: this.sessionValue.deviceId };
     const clean = this.clearLocal();
     await Promise.allSettled([...this.requests]);
     try {
       const session = parse(authSessionSnapshot, await this.transport.session());
+      if (clearPending && session.deviceId) this.logoutReference = { workspaceId: session.workspaceId, accountId: session.accountId, deviceId: session.deviceId };
       parse(z.strictObject({ loggedOut: z.literal(true) }), await this.transport.logout(session.csrfToken));
     } catch (error) {
       if (!(error instanceof AuthClientError && error.code === 'AUTH_REQUIRED')) throw error;
     }
-    if (!clean) throw new AuthClientError('LOCAL_CLEANUP');
+    const cleanup = clearPending && this.logoutReference ? await Promise.allSettled([...this.signedOut].map((callback) => callback(this.logoutReference!))) : [];
+    if (!clean || cleanup.some((result) => result.status === 'rejected')) throw new AuthClientError('LOCAL_CLEANUP');
+    if (clearPending) this.logoutReference = undefined;
   }
   async forget(reference: RememberedProfileReference): Promise<void> {
     let failure: unknown;

@@ -1,3 +1,4 @@
+import type { AvatarSelection } from '../shared/avatar.js';
 import { z } from 'zod';
 import { activationBinding, activationPayload, genesisBody, validateActivationPayload, type ActivationPayload } from '../shared/activation.js';
 import { binary, digest, identifier, positiveCounter } from '../shared/contracts.js';
@@ -302,7 +303,7 @@ export class ActivationController {
   /** Returns the recovery kit in memory only. The caller must arrange the user's backup. */
   async prepare(operationId: string, input: {
     password: string; confirmation: string; phrase: string; challengePositions: readonly number[];
-    challengeAnswers: readonly string[]; displayName: string; workspaceName: string;
+    challengeAnswers: readonly string[]; displayName: string; workspaceName: string; avatar?: AvatarSelection;
   }) {
     const record = await this.load(operationId);
     if (!record.status || record.status.state !== 'reserved' || record.draft || record.replacement) throw new ActivationControllerError('CONFLICT');

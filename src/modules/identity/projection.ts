@@ -8,6 +8,8 @@ import { binary, contentEnvelope, identifier } from '../../shared/contracts.js';
 import { canonicalJson } from '../../shared/crypto.js';
 import { projectAccessSnapshot, readAccessSnapshot } from './access-projection.js';
 import { projectOwnershipNotices, readOwnershipNotices } from './ownership-notices.js';
+import { projectCommittedCreations, readProjectCreations } from '../work/project-projection.js';
+import { currentIdentityRepresentation,projectUpgradeAuthority,readUpgradeAuthority,readIdentityUpgradeOperations,projectIdentityUpgrades } from '../upgrades/projection.js';
 export { BUILTIN_ROLE_PERMISSIONS } from '../../shared/permissions.js';
 
 const lockName = (workspaceId: string) => `ukda.workspace:${workspaceId}`;
@@ -111,12 +113,22 @@ export async function projectAuthoritativeWorkspace(databases: Databases, worksp
         ON o.workspace_id=p.workspace_id AND o.object_id=p.profile_object_id
       WHERE p.workspace_id=$1 ORDER BY p.profile_id`, [workspaceId]);
     if (BigInt(projectedVersion) > BigInt(authority.security_version)) throw unavailable();
-    return { authority, objects: objects.rows, profiles: profiles.rows, access: await readAccessSnapshot(control, workspaceId),
+    return { authority, objects: objects.rows, profiles: profiles.rows, access: await readAccessSnapshot(control, workspaceId), upgrades:await readUpgradeAuthority(control,workspaceId),identityUpgrades:await readIdentityUpgradeOperations(control,workspaceId),
+      projects: await readProjectCreations(control, workspaceId, authority.security_version),
       notices: await readOwnershipNotices(control, workspaceId, projectedVersion, authority.security_version) };
   });
   const authority = snapshot.authority;
   if (authority.lifecycle === 'pending_activation') return { state: 'pending' };
-  if (authority.lifecycle === 'deleted') return { state: 'deleted' };
+  if (authority.lifecycle === 'deleted') {
+    await applicationTransaction(lockedAppClient,workspaceId,async()=>{
+      await lockedAppClient.query(`INSERT INTO app.lifecycle_tombstones(workspace_id,deleted_at,security_head,security_version)
+        SELECT workspace_id,clock_timestamp(),$2,$3 FROM app.workspaces WHERE workspace_id=$1 ON CONFLICT DO NOTHING`,[workspaceId,authority.security_head,authority.security_version]);
+      await lockedAppClient.query("UPDATE app.workspaces SET lifecycle='deleted',fence_closed=true,security_head=$2,security_version=$3,data_generation=$4 WHERE workspace_id=$1",
+        [workspaceId,authority.security_head,authority.security_version,authority.data_generation]);
+      await lockedAppClient.query("UPDATE app.encrypted_upgrades SET state='aborted',completed_at=clock_timestamp() WHERE workspace_id=$1 AND state IN('staged','active')",[workspaceId]);
+    });
+    return { state: 'deleted' };
+  }
   if (!snapshot.objects || !snapshot.profiles || !snapshot.access) throw unavailable();
   const access = snapshot.access;
   const genesis = snapshot.objects.find((object) => object.object_id === authority.genesis_object_id && object.object_kind === 'genesis' && object.state === 'committed');
@@ -149,15 +161,21 @@ export async function projectAuthoritativeWorkspace(databases: Databases, worksp
       authority.data_generation, authority.lifecycle, authority.licence_state, authority.write_schema,
       authority.content_maintenance, authority.restore_quarantine, workspaceParsed.data]);
     for (const profile of profiles) {
+      const current=await currentIdentityRepresentation(lockedAppClient,workspaceId,'profile',profile.profile_id,profile.envelope);
       await lockedAppClient.query(`INSERT INTO app.profiles (workspace_id,id,state,is_owner,revision,schema_version,key_epoch,encrypted_envelope)
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (workspace_id,id) DO UPDATE SET
         state=EXCLUDED.state,is_owner=EXCLUDED.is_owner,revision=EXCLUDED.revision,schema_version=EXCLUDED.schema_version,
         key_epoch=EXCLUDED.key_epoch,encrypted_envelope=EXCLUDED.encrypted_envelope,updated_at=clock_timestamp()`,
-      [workspaceId, profile.profile_id, profile.state, profile.is_owner, profile.revision, profile.schema, profile.keyEpoch, profile.envelope]);
+      [workspaceId, profile.profile_id, profile.state, profile.is_owner, current?.header.revision??profile.revision,
+        current?.header.schema??profile.schema,current?.header.keyEpoch??profile.keyEpoch,current??profile.envelope]);
     }
     await projectAccessSnapshot(lockedAppClient, workspaceId, access, genesisParsed.data.body, authority.security_version);
+    await projectCommittedCreations(lockedAppClient, workspaceId, snapshot.projects ?? []);
+    await projectIdentityUpgrades(lockedAppClient,workspaceId,snapshot.identityUpgrades??[]);
+    await projectUpgradeAuthority(lockedAppClient,workspaceId,snapshot.upgrades??[]);
     await projectOwnershipNotices(lockedAppClient, workspaceId, snapshot.notices ?? [],
-      profiles.filter((profile) => profile.state === 'active' && profile.is_owner).map((profile) => profile.profile_id));
+      profiles.filter((profile) => profile.state === 'active' && profile.is_owner).map((profile) => profile.profile_id),
+      profiles.filter((profile) => profile.state === 'active').map((profile) => profile.profile_id));
     // Every authority writer must hold the same fence. This additional reread fails closed
     // if a mismatched/out-of-protocol authority change occurred while copying the projection.
     const current = await tenantTransaction(databases.control, workspaceId, undefined, async (control) =>

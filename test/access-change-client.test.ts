@@ -175,7 +175,7 @@ test('CP06 access controller: self-removal lost commit reply resumes receipt-onl
   const auth = { origin, current: () => signedIn ? { localAccess: 'unlocked', session: { workspaceId: f.workspaceId, accountId: f.owner.accountId,
     deviceId: f.owner.deviceId, credentialGeneration: '1', sessionGeneration: '1', dataGeneration: '1' } } : undefined,
     worker: { prepareAccessChange: (input: Parameters<typeof prepareAccessChange>[0]) => prepareAccessChange(input, f.owner.bundle) },
-    logout: async () => { signedIn = false; } } as unknown as AuthController;
+    invalidateSession: async () => { signedIn = false; } } as unknown as AuthController;
   const status = async (): Promise<AccessView> => receipt ? { state: 'completed', requestHash: receipt.requestHash, receipt } : payload ?
     { state: 'staged', requestHash: await digestObject(payload), receipt: null } : { state: 'absent', requestHash: null, receipt: null };
   const unexpected = async (): Promise<never> => { throw new Error('No post-removal content delivery is authorised'); };

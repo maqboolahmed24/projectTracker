@@ -1,10 +1,11 @@
 import { z } from 'zod';
 import { identifier } from '../shared/contracts.js';
+import { avatarSelection } from '../shared/avatar.js';
 import type { IndexedDeviceStore } from './device-store.js';
 
 const reference = z.strictObject({ workspaceId: identifier, accountId: identifier, deviceId: identifier });
 export type RememberedProfileReference = z.infer<typeof reference>;
-const profileInput = reference.extend({ displayName: z.string().min(1).max(200).refine((name) => name.trim().length > 0 && !/[\uD800-\uDFFF]/u.test(name)) });
+const profileInput = reference.extend({ displayName: z.string().min(1).max(200).refine((name) => name.trim().length > 0 && !/[\uD800-\uDFFF]/u.test(name)), avatar: avatarSelection.optional() });
 export type RememberedProfileInput = z.infer<typeof profileInput>;
 const card = profileInput.extend({ version: z.literal(1), origin: z.string() });
 export type RememberedProfile = z.infer<typeof card>;
@@ -22,14 +23,19 @@ function originOf(value: string): string {
     return url.origin;
   } catch { throw new RememberedProfileError('INVALID_PROFILE'); }
 }
-/** No accessors, unknown fields, or nested data can enter this deliberately small card. */
+function plainData(value: unknown): asserts value is Record<string, unknown> {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || Object.getPrototypeOf(value) !== Object.prototype) throw new Error();
+  for (const key of Reflect.ownKeys(value)) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key)!;
+    if (typeof key !== 'string' || !descriptor.enumerable || !('value' in descriptor)) throw new Error();
+  }
+}
+/** Only plain data and a catalogue selection can enter this deliberately small card. */
 function parse<T>(schema: z.ZodType<T>, value: unknown): T {
   try {
-    if (!value || typeof value !== 'object' || Array.isArray(value) || Object.getPrototypeOf(value) !== Object.prototype) throw new Error();
-    for (const key of Reflect.ownKeys(value)) {
-      if (typeof key !== 'string' || !Object.getOwnPropertyDescriptor(value, key)?.enumerable ||
-        !('value' in Object.getOwnPropertyDescriptor(value, key)!)) throw new Error();
-    }
+    plainData(value);
+    const avatar = Object.getOwnPropertyDescriptor(value, 'avatar')?.value as unknown;
+    if (avatar !== undefined) plainData(avatar);
     return schema.parse(value);
   } catch { throw new RememberedProfileError('INVALID_PROFILE'); }
 }
@@ -79,8 +85,18 @@ export class RememberedProfiles {
   }
   async remember(input: RememberedProfileInput): Promise<RememberedProfile> {
     const accepted = parse(profileInput, input);
-    const value: RememberedProfile = { ...accepted, version: 1, origin: this.origin };
-    return this.transaction('readwrite', (store, result) => { store.put(value); result(value); });
+    return this.transaction('readwrite', (store, result, fail) => {
+      const request = store.get([this.origin, accepted.workspaceId, accepted.accountId, accepted.deviceId]);
+      request.onsuccess = () => {
+        try {
+          // Legacy/name-only callers must not erase an already verified selection.
+          const previous = request.result === undefined ? undefined : parse(card, request.result);
+          const avatar = accepted.avatar ?? previous?.avatar;
+          const value: RememberedProfile = { ...accepted, ...(avatar ? { avatar } : {}), version: 1, origin: this.origin };
+          store.put(value); result(value);
+        } catch { fail(new RememberedProfileError('STORAGE')); }
+      };
+    });
   }
   async list(): Promise<RememberedProfile[]> {
     return this.transaction('readonly', (store, result, fail) => {

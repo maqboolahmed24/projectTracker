@@ -7,7 +7,7 @@ import { enrolmentApproval, enrolmentBegin, enrolmentConfirmation, enrolmentOper
   type EnrolmentOperationReference } from '../../shared/enrolment.js';
 import { enrolmentBeginPromotion, enrolmentClaimPromotion, enrolmentIssueJoin, enrolmentIssuanceRequest, enrolmentPromotionDraft,
   enrolmentProofFinish, enrolmentProofStart, enrolmentRegistration, enrolmentRevokeJoin, enrolmentUnlockStart, enrolmentUnlockFinish,
-  type EnrolmentAuth } from '../../shared/enrolment-api.js';
+  enrolmentListRequest, type EnrolmentAuth } from '../../shared/enrolment-api.js';
 import type { RequestBudgets } from './budgets.js';
 import type { EnrolmentService } from './enrolment.js';
 import { pairingHistoryRequest, readAuthorizedSecurityHistoryPage } from './security-history.js';
@@ -25,11 +25,11 @@ const issuanceHistory = enrolmentOperationReference.extend({ anchor: pairingHist
 
 /** Resolved accounts share a quota across replacement invitations and approval attempts. */
 export function enrolmentAccountBudget(budgets: Pick<RequestBudgets, 'take'>) {
-  return ({ workspaceId, accountId, history }: { workspaceId: string; accountId: string; history: boolean }) => budgets.take([
-    { purpose: history ? 'enrolment-target-history-account' : 'enrolment-target-account', key: `${workspaceId}:${accountId}`,
-      limit: history ? 1000 : 120, windowMs: 600000 },
-    { purpose: history ? 'enrolment-target-history-workspace' : 'enrolment-target-workspace', key: workspaceId,
-      limit: history ? 4000 : 480, windowMs: 600000 },
+  return ({ workspaceId, accountId, history, read }: { workspaceId: string; accountId: string; history: boolean; read?: boolean }) => budgets.take([
+    { purpose: history ? 'enrolment-target-history-account' : read ? 'enrolment-target-read-account' : 'enrolment-target-account', key: `${workspaceId}:${accountId}`,
+      limit: history ? 1000 : read ? 600 : 120, windowMs: 600000 },
+    { purpose: history ? 'enrolment-target-history-workspace' : read ? 'enrolment-target-read-workspace' : 'enrolment-target-workspace', key: workspaceId,
+      limit: history ? 4000 : read ? 2400 : 480, windowMs: 600000 },
   ]);
 }
 
@@ -54,19 +54,20 @@ export function registerEnrolmentRoutes(app: FastifyInstance, input: {
       { workspaceId: body.workspaceId, operationId: body.operationId, resumeToken: body.resumeToken };
 
   function route<T>(path: string, schema: z.ZodType<T>, handler: (body: T, request: FastifyRequest) => Promise<unknown>, paged = false) {
+    const read = ['list', 'inspect', 'status'].includes(path);
     app.post(`/v1/auth/enrolment/${path}`, { preHandler: async (request) => {
       if (request.headers.origin !== input.origin || request.headers['sec-fetch-site'] === 'cross-site') throw new AppError('ORIGIN_REJECTED', 'Request origin is not allowed', 403);
       if (Object.keys(request.query as object).length) throw new AppError('INVALID_REQUEST', 'Invalid request', 400);
-      await input.budgets.take([{ purpose: paged ? 'enrolment-history-source' : 'enrolment-source', key: request.ip,
-        limit: paged ? 1200 : 120, windowMs: 600000 }]);
+      await input.budgets.take([{ purpose: paged ? 'enrolment-history-source' : read ? 'enrolment-read-source' : 'enrolment-source', key: request.ip,
+        limit: paged || read ? 1200 : 120, windowMs: 600000 }]);
     } }, async (request) => {
       const body = parseInput(schema, request.body);
       const keys = body as { workspaceId?: string; accountId?: string; operationId?: string; code?: string };
       await input.budgets.take([
-        ...(keys.workspaceId ? [{ purpose: paged ? 'enrolment-history-workspace' : 'enrolment-workspace', key: keys.workspaceId,
-          limit: paged ? 4000 : 480, windowMs: 600000 }] : []),
-        ...(keys.operationId || keys.code ? [{ purpose: paged ? 'enrolment-history-operation' : 'enrolment-operation',
-          key: `${keys.workspaceId}:${keys.operationId ?? keys.code}`, limit: paged ? 1000 : 120, windowMs: 600000 }] : []),
+        ...(keys.workspaceId ? [{ purpose: paged ? 'enrolment-history-workspace' : read ? 'enrolment-read-workspace' : 'enrolment-workspace', key: keys.workspaceId,
+          limit: paged ? 4000 : read ? 2400 : 480, windowMs: 600000 }] : []),
+        ...(keys.operationId || keys.code ? [{ purpose: paged ? 'enrolment-history-operation' : read ? 'enrolment-read-operation' : 'enrolment-operation',
+          key: `${keys.workspaceId}:${keys.operationId ?? keys.code}`, limit: paged ? 1000 : read ? 600 : 120, windowMs: 600000 }] : []),
         ...(keys.accountId ? [{ purpose: 'enrolment-account', key: `${keys.workspaceId}:${keys.accountId}`, limit: 15, windowMs: 600000 }] : []),
       ]);
       try { return await handler(body, request); }
@@ -76,6 +77,8 @@ export function registerEnrolmentRoutes(app: FastifyInstance, input: {
       }
     });
   }
+  route('list', enrolmentListRequest, (body, request) => { const credentials = auth(request);
+    return input.enrolment.listInvitations(credentials.cookieValue, credentials.csrfToken, body); });
   route('join/context', enrolmentIssuanceRequest, (body, request) => { const credentials = auth(request);
     return input.enrolment.issuanceContext(credentials.cookieValue, credentials.csrfToken, body); });
   route('join/history', issuanceHistory, (body, request) => input.enrolment.withIssuanceHistory(body.workspaceId, auth(request),

@@ -5,6 +5,7 @@ import type { GenesisBody } from '../../shared/activation.js';
 import { contentEnvelope } from '../../shared/contracts.js';
 import { canonicalJson } from '../../shared/crypto.js';
 import { BUILTIN_ROLE_PERMISSIONS } from '../../shared/permissions.js';
+import { currentIdentityRepresentation } from '../upgrades/projection.js';
 
 const unavailable = () => new AppError('SECURITY_FENCED', 'Workspace access state cannot be projected', 503);
 interface Role {
@@ -79,11 +80,12 @@ export async function projectAccessSnapshot(application: pg.PoolClient, workspac
         parsed.data.header.recordId !== role.role_id || parsed.data.header.recordType !== 'role' || parsed.data.header.revision !== role.revision) throw unavailable();
       label = parsed.data;
     } else if (role.template === 'custom') throw unavailable();
-    await application.query(`INSERT INTO app.roles(workspace_id,id,template,revision,state,permissions,encrypted_envelope)
-      VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(workspace_id,id) DO UPDATE SET template=EXCLUDED.template,
+    const current=await currentIdentityRepresentation(application,workspaceId,'role',role.role_id,label);
+    await application.query(`INSERT INTO app.roles(workspace_id,id,template,revision,state,permissions,encrypted_envelope,schema_version)
+      VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(workspace_id,id) DO UPDATE SET template=EXCLUDED.template,
       revision=EXCLUDED.revision,state=EXCLUDED.state,permissions=EXCLUDED.permissions,
-      encrypted_envelope=EXCLUDED.encrypted_envelope,updated_at=clock_timestamp()`,
-    [workspaceId, role.role_id, role.template, role.revision, role.state, role.permissions, label]);
+      encrypted_envelope=EXCLUDED.encrypted_envelope,schema_version=EXCLUDED.schema_version,updated_at=clock_timestamp()`,
+    [workspaceId, role.role_id, role.template, current?.header.revision??role.revision, role.state, role.permissions, current??label,current?.header.schema??1]);
   }
   // A deleted/missing definition must not leave an older application role usable.
   await application.query("UPDATE app.roles SET state='retired' WHERE workspace_id=$1 AND NOT(id=ANY($2::uuid[]))", [workspaceId, snapshot.roles.map((role) => role.role_id)]);
@@ -94,8 +96,12 @@ export async function projectAccessSnapshot(application: pg.PoolClient, workspac
       key_epoch=EXCLUDED.key_epoch,security_version=EXCLUDED.security_version`,
     [workspaceId, scope.scope_kind, scope.scope_id, scope.key_epoch, scope.security_version]);
   }
+  // Current security keeps later scopes even when their business content is
+  // absent from a selected recovery point. Do not create a dangling access row.
+  const absent = new Set((await application.query<{project_id:string}>('SELECT project_id FROM app.unrecovered_projects WHERE workspace_id=$1',[workspaceId])).rows.map(row=>row.project_id));
   const desired = new Map<string, Grant>();
   for (const grant of snapshot.grants) {
+    if (absent.has(grant.scope_id)) continue;
     // Older unbound security-only grants never supply application access.
     if (grant.role_id === null || grant.role_revision === null) continue;
     const key = `${grant.scope_id}:${grant.profile_id}`, prior = desired.get(key);
@@ -131,7 +137,8 @@ export async function projectAccessSnapshot(application: pg.PoolClient, workspac
 }
 
 async function clearRemovedResponsibilities(application: pg.PoolClient, workspaceId: string, projectId: string, securityVersion: string, now: Date) {
-  const people = (await application.query<{ id: string; is_owner: boolean; eligible: boolean }>(`SELECT p.id,p.is_owner,
+  const people = (await application.query<{ id: string; is_owner: boolean; eligible: boolean; can_approve: boolean }>(`SELECT p.id,p.is_owner,
+      (p.is_owner OR 'approve_tasks'=ANY(a.permissions)) AS can_approve,
       (p.state='active' AND a.state='active' AND r.state='active' AND 'read_project'=ANY(a.permissions)
        AND (a.expires_at IS NULL OR a.expires_at>$3)) AS eligible
     FROM app.project_access a JOIN app.profiles p ON p.workspace_id=a.workspace_id AND p.id=a.profile_id
@@ -142,6 +149,7 @@ async function clearRemovedResponsibilities(application: pg.PoolClient, workspac
   // Internal authority projection still runs through explicit Owner project RLS.
   await application.query("SELECT set_config('ukda.profile_id',$1,true)", [owner.id]);
   const eligible = people.filter((person) => person.eligible).map((person) => person.id);
+  const reviewers = people.filter((person) => person.eligible && person.can_approve).map((person) => person.id);
   // Capture only work that this cleanup will leave newly unassigned. Existing
   // unassigned tasks, terminal work and tasks with a surviving assignee do not
   // create another notification on every authority projection.
@@ -154,18 +162,32 @@ async function clearRemovedResponsibilities(application: pg.PoolClient, workspac
   [workspaceId, projectId, eligible])).rows;
   for (const [table, column, extra] of [
     ['tasks', 'lead_profile_id', " AND state NOT IN ('done','cancelled')"],
-    ['tasks', 'reviewer_profile_id', " AND state NOT IN ('done','cancelled')"],
     ['project_phases', 'lead_profile_id', " AND state NOT IN ('complete','cancelled')"],
     ['milestones', 'owner_profile_id', " AND state='open'"],
-    ['blockers', 'responsible_profile_id', " AND state='open'"],
+    ['blockers', 'responsible_profile_id', ''],
   ] as const) {
     await application.query(`UPDATE app.${table} SET ${column}=NULL,updated_at=clock_timestamp()
       WHERE workspace_id=$1 AND project_id=$2 AND ${column} IS NOT NULL AND NOT(${column}=ANY($3::uuid[]))${extra}`,
     [workspaceId, projectId, eligible]);
   }
+  // Missing review authority is explicit and must never delay access removal.
+  // Keep the submission and historical approvals; a current eligible reviewer
+  // must be selected before this unfinished work can be approved.
+  await application.query(`UPDATE app.tasks task SET reviewer_profile_id=NULL,updated_at=clock_timestamp()
+    WHERE task.workspace_id=$1 AND task.project_id=$2 AND task.state NOT IN ('done','cancelled')
+      AND task.reviewer_profile_id IS NOT NULL AND (NOT(task.reviewer_profile_id=ANY($3::uuid[]))
+        OR EXISTS (SELECT 1 FROM app.task_assignments assignment WHERE assignment.workspace_id=task.workspace_id
+          AND assignment.task_id=task.id AND assignment.member_id=task.reviewer_profile_id))`, [workspaceId, projectId, reviewers]);
   // All current assignments (including closed tasks) need valid references. History remains in record versions.
   await application.query(`UPDATE app.tasks SET lead_profile_id=NULL WHERE workspace_id=$1 AND project_id=$2
     AND lead_profile_id IS NOT NULL AND NOT(lead_profile_id=ANY($3::uuid[]))`, [workspaceId, projectId, eligible]);
+  // Membership is part of the submitted task. Removing any assignee invalidates
+  // pending review even when the named reviewer still has approval authority.
+  await application.query(`UPDATE app.tasks task SET state='in_progress',submitted_revision=NULL,
+      submitted_policy_revision=NULL,approval_operation_id=NULL,updated_at=clock_timestamp()
+    WHERE task.workspace_id=$1 AND task.project_id=$2 AND task.state='review'
+      AND EXISTS (SELECT 1 FROM app.task_assignments assignment WHERE assignment.workspace_id=task.workspace_id
+        AND assignment.task_id=task.id AND NOT(assignment.member_id=ANY($3::uuid[])))`, [workspaceId, projectId, eligible]);
   await application.query(`DELETE FROM app.task_assignments WHERE workspace_id=$1 AND project_id=$2
     AND NOT(member_id=ANY($3::uuid[]))`, [workspaceId, projectId, eligible]);
   await application.query(`UPDATE app.projects SET manager_profile_id=NULL,updated_at=clock_timestamp()

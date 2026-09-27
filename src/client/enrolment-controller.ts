@@ -1,3 +1,4 @@
+import { avatarSelection, type AvatarSelection } from '../shared/avatar.js';
 import { z } from 'zod';
 import { genesisBody } from '../shared/activation.js';
 import { binary, contentEnvelope, digest, identifier } from '../shared/contracts.js';
@@ -7,8 +8,8 @@ import { enrolmentBinding, enrolmentTranscript, enrolmentDraft, enrolmentPublicD
   enrolmentProfileHeader, validateEnrolmentDraft, validateEnrolmentPublicApproval, validateEnrolmentReceipt,
   type EnrolmentBinding, type EnrolmentDraft, type EnrolmentPublicDraft, type EnrolmentApproval, type EnrolmentReceipt,
   type EnrolmentReference, type EnrolmentOperationReference, type EnrolmentIssuedJoin } from '../shared/enrolment.js';
-import { enrolmentView, enrolmentIssueJoin, enrolmentIssuanceRequest, enrolmentIssuanceContext, type EnrolmentView, type EnrolmentIssuanceContext } from '../shared/enrolment-api.js';
-import { verifyEnrolmentBindingAgainstHistory, verifyEnrolmentTranscriptAgainstHistory, verifySecurityHistory, type SecurityHistoryInput } from '../shared/security-history.js';
+import { enrolmentView, enrolmentIssueJoin, enrolmentIssuanceRequest, enrolmentIssuanceContext, enrolmentListRequest, enrolmentList, type EnrolmentList, type EnrolmentView, type EnrolmentIssuanceContext } from '../shared/enrolment-api.js';
+import { verifyEnrolmentBindingAgainstHistory, verifyEnrolmentTranscriptAgainstHistory, verifySecurityHistory, type SecurityHistoryInput, type SecurityHistoryState } from '../shared/security-history.js';
 import type { PairingMaterial, PairingScope } from '../shared/pairing.js';
 import { prepareJoinEnrolment, rebindJoinEnrolment, preparePromotionEnrolment, verifyPreparedEnrolment, verifyEnrolmentFingerprint,
   confirmEnrolmentRecipient, confirmEnrolmentAuthorizer, encryptEnrolmentProfile, enrolmentDeviceContext,
@@ -20,6 +21,9 @@ import { recoveryKeys } from './recovery.js';
 import { AuthenticatedHttp, AuthClientError, type AuthController, type AuthRequestOptions } from './auth-controller.js';
 import type { OpaquePublicConfiguration } from './opaque.js';
 import type { RememberedProfiles } from './remembered-profiles.js';
+import { identityUpgradeHistory } from '../shared/encrypted-upgrades.js';
+import { readIdentityUpgradeContent } from './upgrade-content-crypto.js';
+import { roleTransition } from '../shared/roles.js';
 
 export class EnrolmentClientError extends Error {
   constructor(readonly code: 'INVALID_ENROLMENT' | 'TRUST_REQUIRED' | 'CONFLICT' | 'NOT_FOUND' | 'CANCELLED' | 'PASSWORD_CONFIRMATION' | 'INCOMPLETE_KEYS' | 'STORAGE') {
@@ -46,7 +50,7 @@ export async function prepareJoinInvitation(value: PrepareJoinInvitationInput, b
   if (state.workspaceId !== request.workspaceId || context.workspaceId !== request.workspaceId || context.accountId !== request.accountId ||
     context.operationId !== request.operationId || context.kind !== request.kind || context.genesisFingerprint !== state.genesisFingerprint ||
     !same(context.current, { securityHead: state.securityHead, securityVersion: state.securityVersion }) || context.custodyEpoch !== state.custodyEpoch ||
-    state.profiles[request.accountId] || state.licenceState !== 'active' || state.entitlementState !== 'activated' ||
+    state.profiles[request.accountId] || state.licenceState !== 'active' || state.entitlementState !== 'activated' ||state.activeUpgrade||
     !owner?.active || !owner.owner || !device?.active || device.accountId !== owner.accountId || !role || role.state !== 'active' ||
     !same(context.role, { id: role.id, revision: role.revision, permissions: role.permissions }) || (role.template === 'owner') !== (request.kind === 'join_owner') ||
     context.authorizer.credentialGeneration !== owner.credentialGeneration || context.authorizer.sessionGeneration !== owner.sessionGeneration ||
@@ -57,7 +61,7 @@ export async function prepareJoinInvitation(value: PrepareJoinInvitationInput, b
   if (!workspace || !device.scopes.some((scope) => scope.scope === 'workspace' && scope.mode === 'custody' && scope.keyEpoch === state.custodyEpoch && eligible(scope)) ||
     request.projectIds.some((id) => !owner.scopes.some((scope) => scope.scope === 'project' && scope.scopeId === id && eligible(scope) && role.permissions.every((permission) => scope.permissions.includes(permission))))) invalid();
   const expected = { version: 1, purpose: 'ukda.content.v1', algorithm: 'XChaCha20-Poly1305', workspaceId: request.workspaceId,
-    scope: 'workspace', scopeId: request.workspaceId, recordId: request.accountId, recordType: 'profile', schema: 1,
+    scope: 'workspace', scopeId: request.workspaceId, recordId: request.accountId, recordType: 'profile', schema: state.writeSchema??1,
     keyEpoch: state.workspaceKeyEpoch, revision: context.header.revision, operationId: request.operationId, accountId: owner.accountId,
     deviceId: device.id, keyGeneration: device.keyGeneration, permissionVersion: role.revision, securityVersion: state.securityVersion,
     securityHead: state.securityHead, dataGeneration: state.dataGeneration, action: 'profile.invite', approvalPolicyId: null, approvalPolicyRevision: null };
@@ -126,6 +130,24 @@ export async function confirmEnrolmentTarget(input: VerifyEnrolmentDraftInput & 
   return confirmEnrolmentRecipient(accepted, binding);
 }
 export interface PrepareEnrolmentApprovalInput { draft: EnrolmentPublicDraft; fingerprint: string; history: SecurityHistoryInput; materials: PairingMaterial[] }
+/** Only an authenticated representation transform may rebase an invitation's role revision. */
+async function sameInvitedRole(original:EnrolmentBinding['role'],current:EnrolmentBinding['role'],historical:SecurityHistoryState['roles'][string],
+  sourceSecurityVersion:string,history:SecurityHistoryInput,ring:{epoch:string;key:string}[]):Promise<boolean> {
+  if(same(original,current))return true;
+  if(original.id!==current.id||!same(original.permissions,current.permissions)||historical.template!=='custom'||!historical.label||
+    BigInt(current.revision)<=BigInt(original.revision))return false;
+  let revision=original.revision,labelDigest=historical.label.digest;
+  for(const value of history.transitions.slice(Number(BigInt(sourceSecurityVersion)-1n))) {
+    const definition=roleTransition.safeParse(value);
+    if(definition.success&&definition.data.body.role.id===original.id)return false;
+    const parsed=identityUpgradeHistory.safeParse(value);if(!parsed.success)continue;
+    const item=parsed.data.upgradeItems.find(item=>item.source.kind==='role'&&item.source.id===original.id);if(!item)continue;
+    if(item.source.revision!==revision||item.source.digest!==labelDigest)return false;
+    await readIdentityUpgradeContent(history,parsed.data,'role',original.id,ring);
+    revision=item.target.revision;labelDigest=item.target.digest;
+  }
+  return revision===current.revision;
+}
 /** The pending profile is signed original intent, not editable server invitation metadata. */
 async function verifyInvitationIntent(input: PrepareEnrolmentApprovalInput, workspaceKeyring: { epoch: string; key: string }[]) {
   const binding = input.draft.transcript.binding;
@@ -133,10 +155,18 @@ async function verifyInvitationIntent(input: PrepareEnrolmentApprovalInput, work
   const material = input.materials.find((entry) => entry.id === binding.profile.objectId);
   if (!material || material.kind !== 'encrypted_profile' || material.digest !== binding.profile.objectDigest ||
     await digestObject(material.value) !== binding.profile.objectDigest) throw new EnrolmentClientError('INCOMPLETE_KEYS');
-  const envelope = contentEnvelope.parse(material.value), header = envelope.header;
+  let envelope = contentEnvelope.parse(material.value), header = envelope.header, migrated:unknown;
+  if(header.action==='identity.upgrade_content') {
+    const transition=input.history.transitions.map(value=>identityUpgradeHistory.safeParse(value)).find(value=>value.success&&
+      value.data.body.objects.some(ref=>ref.kind==='profile'&&ref.recordId===binding.accountId&&ref.id===binding.profile.objectId&&ref.digest===binding.profile.objectDigest));
+    if(!transition?.success||header.revision!==binding.profile.revision) invalid();
+    migrated=await readIdentityUpgradeContent(input.history,transition.data,'profile',binding.accountId,workspaceKeyring);
+    const item=transition.data.upgradeItems.find(item=>item.target.kind==='profile'&&item.target.id===binding.accountId);if(!item) invalid();
+    envelope=item.sourceEnvelope;header=envelope.header;
+  }
   if (header.workspaceId !== binding.workspaceId || header.scope !== 'workspace' || header.scopeId !== binding.workspaceId ||
     header.recordId !== binding.accountId || header.recordType !== 'profile' || header.action !== 'profile.invite' ||
-    header.operationId !== binding.operationId || header.revision !== binding.profile.revision || header.schema !== 1 ||
+    header.operationId !== binding.operationId || migrated===undefined&&header.revision !== binding.profile.revision ||
     header.approvalPolicyId !== null || header.approvalPolicyRevision !== null || BigInt(header.securityVersion) < 1n ||
     BigInt(header.securityVersion) > BigInt(input.history.expected.securityVersion)) invalid();
   // The complete independently anchored chain was checked above. Verify its historical
@@ -146,15 +176,15 @@ async function verifyInvitationIntent(input: PrepareEnrolmentApprovalInput, work
     expected: { securityHead: header.securityHead, securityVersion: header.securityVersion } });
   const issuer = previous.profiles[header.accountId], signer = previous.devices[header.deviceId];
   if (!issuer?.active || !issuer.owner || !signer?.active || signer.accountId !== issuer.accountId || signer.keyGeneration !== header.keyGeneration ||
-    header.dataGeneration !== previous.dataGeneration || header.keyEpoch !== previous.workspaceKeyEpoch) invalid();
+    header.dataGeneration !== previous.dataGeneration || header.keyEpoch !== previous.workspaceKeyEpoch||header.schema!==(previous.writeSchema??1)) invalid();
   const entry = workspaceKeyring.find((key) => key.epoch === header.keyEpoch); if (!entry) throw new EnrolmentClientError('INCOMPLETE_KEYS');
   const key = base64urlDecode(entry.key, 32);
   try {
-    const plaintext = invitedProfile.parse(await decryptContent(envelope, key, base64urlDecode(signer.signingPublicKey, 32), header)), intent = plaintext.invitation;
+    const plaintext = invitedProfile.parse(migrated??await decryptContent(envelope, key, base64urlDecode(signer.signingPublicKey, 32), header)), intent = plaintext.invitation;
     const role = previous.roles[intent.role.id];
     if (!role || !same(intent.role, { id: role.id, revision: role.revision, permissions: role.permissions }) ||
       header.permissionVersion !== intent.role.revision || intent.workspaceId !== binding.workspaceId || intent.accountId !== binding.accountId ||
-      intent.operationId !== binding.operationId || intent.kind !== binding.kind || !same(intent.role, binding.role) ||
+      intent.operationId !== binding.operationId || intent.kind !== binding.kind || !await sameInvitedRole(intent.role,binding.role,role,header.securityVersion,input.history,workspaceKeyring) ||
       (intent.projectScope.mode === 'selected' && !same(intent.projectScope.projectIds, binding.scopes.filter((scope) => scope.scope === 'project').map((scope) => scope.scopeId).sort()))) invalid();
   } finally { key.fill(0); }
 }
@@ -202,7 +232,7 @@ const materialSchema = z.strictObject({ id: identifier, digest, kind: z.string()
 export const enrolmentDelivery = z.strictObject({ receipt: enrolmentReceipt, deliveries: enrolmentApproval.shape.deliveries, materials: z.array(materialSchema).max(4096) });
 export type EnrolmentDelivery = z.infer<typeof enrolmentDelivery>;
 export interface VerifyEnrolmentDeliveryInput { delivery: EnrolmentDelivery; history: SecurityHistoryInput; newOwnerPhrase?: string }
-export async function verifyEnrolmentDelivery(value: VerifyEnrolmentDeliveryInput, bundle: DeviceBundle): Promise<{ complete: true; scopeCount: number; displayName?: string }> {
+export async function verifyEnrolmentDelivery(value: VerifyEnrolmentDeliveryInput, bundle: DeviceBundle): Promise<{ complete: true; scopeCount: number; displayName?: string; avatar?: AvatarSelection }> {
   const input = copy(value), delivery = enrolmentDelivery.parse(input.delivery), transcript = delivery.receipt.transition.body.transcript, binding = transcript.binding;
   await validateEnrolmentReceipt(delivery.receipt, transcript);
   const state = await verifySecurityHistory(input.history), profile = state.profiles[binding.accountId], device = state.devices[transcript.device.id];
@@ -252,7 +282,7 @@ export async function verifyEnrolmentDelivery(value: VerifyEnrolmentDeliveryInpu
     } finally { keys.signing.privateKey.fill(0); keys.recipient.privateKey.fill(0); }
   }
   const descriptor = delivery.receipt.transition.body.profile;
-  let displayName: string | undefined;
+  let displayName: string | undefined, avatar: AvatarSelection | undefined;
   if (descriptor) {
     const material = materials.get(descriptor.id); if (!material || material.digest !== descriptor.digest) throw new EnrolmentClientError('INCOMPLETE_KEYS');
     const workspace = scopes.find((scope) => scope.scope === 'workspace')!;
@@ -260,15 +290,17 @@ export async function verifyEnrolmentDelivery(value: VerifyEnrolmentDeliveryInpu
     const ring = z.object({ mode: z.literal('content'), keys: z.array(z.object({ epoch: z.string(), key: binary(32) })) }).parse(payloads[0]);
     const entry = ring.keys.find((key) => key.epoch === binding.workspaceKeyEpoch); if (!entry) throw new EnrolmentClientError('INCOMPLETE_KEYS');
     const key = base64urlDecode(entry.key, 32);
-    try { displayName = z.strictObject({ displayName: z.string().min(1).max(200) }).parse(await decryptContent(contentEnvelope.parse(material.value), key,
-      base64urlDecode(binding.authorizer.device.signingPublicKey, 32), enrolmentProfileHeader(transcript))).displayName; } finally { key.fill(0); }
+    try { const profile = z.strictObject({ displayName: z.string().min(1).max(200), avatar: avatarSelection.optional() }).parse(await decryptContent(contentEnvelope.parse(material.value), key,
+      base64urlDecode(binding.authorizer.device.signingPublicKey, 32), enrolmentProfileHeader(transcript)));
+      displayName = profile.displayName; avatar = profile.avatar; } finally { key.fill(0); }
   }
-  return { complete: true, scopeCount: scopes.length, ...(displayName ? { displayName } : {}) };
+  return { complete: true, scopeCount: scopes.length, ...(displayName ? { displayName } : {}), ...(avatar ? { avatar } : {}) };
 }
 
 type Reference = EnrolmentReference | EnrolmentOperationReference;
 export interface EnrolmentTransport {
   readonly origin: string;
+  listInvitations?(input: z.input<typeof enrolmentListRequest>, options?: AuthRequestOptions): Promise<EnrolmentList>;
   issueJoin(input: z.infer<typeof enrolmentIssueJoin>, options?: AuthRequestOptions): Promise<EnrolmentIssuedJoin>;
   issuanceContext(input: z.infer<typeof enrolmentIssuanceRequest>, options?: AuthRequestOptions): Promise<EnrolmentIssuanceContext>;
   issuanceHistory(reference: EnrolmentOperationReference, options?: AuthRequestOptions): Promise<PairingHistoryResponse>;
@@ -301,6 +333,7 @@ export class HttpEnrolmentTransport extends AuthenticatedHttp implements Enrolme
     return this.post(`/v1/auth/enrolment/${path}`, body, schema, { ...options, ...(csrfToken ? { csrfToken } : {}) });
   }
   issueJoin(input: z.infer<typeof enrolmentIssueJoin>, options?: AuthRequestOptions) { return this.request('join/issue', input, enrolmentIssuedJoin, options, true); }
+  listInvitations(input: z.input<typeof enrolmentListRequest>, options?: AuthRequestOptions) { return this.request('list', enrolmentListRequest.parse(input), enrolmentList, options, true); }
   issuanceContext(input: z.infer<typeof enrolmentIssuanceRequest>, options?: AuthRequestOptions) { return this.request('join/context', input, enrolmentIssuanceContext, options, true); }
   issuanceHistory(reference: EnrolmentOperationReference, options?: AuthRequestOptions) {
     return readSecurityHistoryPages(reference.operationId, 'current', (page) => { const { mode: _mode, ...cursor } = page;
@@ -342,6 +375,32 @@ export class EnrolmentController {
   private readonly requests = new Set<AbortController>();
   private readonly running = new Set<Promise<unknown>>();
   private readonly exports = new Map<string, string>();
+  listInvitations(input: { after?: string; limit?: number } = {}): Promise<EnrolmentList> {
+    return this.run(async (signal, epoch) => {
+      const current = this.auth.current();
+      if (current?.localAccess !== 'unlocked' || !current.session.deviceId) throw new AuthClientError('AUTH_REQUIRED');
+      if (!this.transport.listInvitations) throw new EnrolmentClientError('INVALID_ENROLMENT');
+      const request = enrolmentListRequest.parse({ ...input, workspaceId: current.session.workspaceId });
+      const page = enrolmentList.parse(await this.transport.listInvitations(request, { signal })); this.check(epoch);
+      if (page.workspaceId !== request.workspaceId || page.invitations.length > request.limit ||
+        page.invitations.some((row, index) => (request.after && row.operationId <= request.after) ||
+          (index > 0 && row.operationId <= page.invitations[index - 1]!.operationId) || Date.parse(row.expiresAt) <= Date.parse(page.observedAt)) ||
+        (page.nextCursor !== null && page.nextCursor !== page.invitations.at(-1)?.operationId)) invalid();
+      return page;
+    });
+  }
+  /** Observe an explicitly claimed approval without taking it over or changing its attempt. */
+  inspectApproval(referenceValue: EnrolmentOperationReference): Promise<EnrolmentView> {
+    return this.run(async (signal, epoch) => {
+      const reference = enrolmentOperationReference.parse(referenceValue), current = this.auth.current();
+      if (current?.localAccess !== 'unlocked' || !current.session.deviceId || current.session.workspaceId !== reference.workspaceId) throw new AuthClientError('AUTH_REQUIRED');
+      const record = await this.operations.get('owner', reference.operationId); this.check(epoch);
+      if (!record || record.workspaceId !== reference.workspaceId || record.accountId !== current.session.accountId || record.deviceId !== current.session.deviceId) throw new EnrolmentClientError('NOT_FOUND');
+      const view = await this.acceptView(await this.transport.inspect(reference, { signal }), reference); this.check(epoch);
+      if (this.auth.current()?.session.sessionId !== current.session.sessionId || !same(view.binding, record.view?.binding)) throw new EnrolmentClientError('CONFLICT');
+      return view;
+    });
+  }
   constructor(private readonly auth: AuthController, private readonly transport: EnrolmentTransport, private readonly devices: IndexedDeviceStore,
     readonly operations: IndexedEnrolmentStore, private readonly pins: IndexedPairingStore, private readonly options: { trustedServiceKeys?: Record<string, string>; remembered?: RememberedProfiles } = {}) {
     if (auth.origin !== transport.origin || auth.origin !== operations.origin || auth.origin !== pins.origin) invalid();
@@ -491,7 +550,7 @@ export class EnrolmentController {
     await this.transport.finishProof({ ...this.reference(record), proofId: response.proofId, finishLoginRequest: finish.finishLoginRequest }, { signal }); this.check(epoch);
     this.exports.set(record.localId, finish.exportKey); return finish.exportKey;
   }
-  prepare(localId: string, password: string, confirmation: string, displayName: string, newOwnerKit?: NewEnrolmentOwnerKit): Promise<EnrolmentProgress> {
+  prepare(localId: string, password: string, confirmation: string, displayName: string, newOwnerKit?: NewEnrolmentOwnerKit, avatar?: AvatarSelection): Promise<EnrolmentProgress> {
     return this.run(async (signal, epoch) => {
       if (password !== confirmation) throw new EnrolmentClientError('PASSWORD_CONFIRMATION');
       let record = await this.recipient(localId);
@@ -504,7 +563,7 @@ export class EnrolmentController {
         const result = await this.auth.worker.finishRegistration({ password, clientRegistrationState: start.clientRegistrationState,
           registrationResponse: response.registrationResponse, configuration: response.configuration }, { signal }); this.check(epoch);
         const prepared = await this.auth.worker.prepareEnrolmentDraft({ mode: 'join', history, input: { binding: view.binding,
-          configuration: response.configuration, registrationRecord: result.registrationRecord, exportKey: result.exportKey, displayName, ...(newOwnerKit ? { newOwnerKit } : {}) } }, { signal }); this.check(epoch);
+          configuration: response.configuration, registrationRecord: result.registrationRecord, exportKey: result.exportKey, displayName, ...(avatar === undefined ? {} : { avatar }), ...(newOwnerKit ? { newOwnerKit } : {}) } }, { signal }); this.check(epoch);
         record = await this.save(record, { ...record, view, prepared, deviceId: prepared.draft.transcript.device.id }, epoch);
         await this.readback(record, result.exportKey, history, signal, epoch);
         this.exports.set(localId, result.exportKey);
@@ -640,7 +699,7 @@ export class EnrolmentController {
       try {
         const verified = await this.auth.worker.verifyEnrolmentDelivery({ delivery, history, ...(newOwnerPhrase ? { newOwnerPhrase } : {}) }, { signal }); this.check(epoch);
         if (verified.displayName && this.options.remembered) { await this.options.remembered.remember({ workspaceId: receipt.workspaceId,
-          accountId: receipt.accountId, deviceId: receipt.deviceId, displayName: verified.displayName }); this.check(epoch); }
+          accountId: receipt.accountId, deviceId: receipt.deviceId, displayName: verified.displayName, ...(verified.avatar ? { avatar: verified.avatar } : {}) }); this.check(epoch); }
       }
       catch (error) { this.check(epoch); if (error && typeof error === 'object' && 'code' in error && error.code === 'INCOMPLETE_KEYS') return { ...this.progress(record), access: 'incomplete_keys' }; throw error; }
       await this.pins.recordVerifiedHistory(history); this.check(epoch); return { ...this.progress(record), access: 'content_ready' };

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test, { type TestContext } from 'node:test';
-import { randomUUID } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import { AppError } from '../src/errors.js';
 import { EnrolmentService } from '../src/modules/identity/enrolment.js';
 import { PairingService } from '../src/modules/identity/pairing.js';
@@ -273,4 +273,37 @@ test('CP06: real member pairing then promotion preserves both healthy devices an
   const history = await verifySecurityHistory({ workspaceId: f.workspaceId, origin, genesisFingerprint: await digestObject(f.prepared.payload.genesis), genesis: f.prepared.payload.genesis,
     transitions: [member.result.receipt.transition, paired.receipt.grant, promoted.receipt.transition], expected: { securityHead: promoted.receipt.securityHead, securityVersion: promoted.receipt.securityVersion } });
   assert.equal(history.profiles[accountId]!.owner, true); assert.equal(history.devices[deviceId]!.scopes[0]!.mode, 'custody');
+});
+
+test('frontend: Owner invitation discovery pages only current live metadata and denies stale authority', async (t) => {
+  const f = await fixture(t), first = await f.issue(), second = await f.issue('join_owner'), replaced = await f.issue('join_member', first.issued.accountId);
+  const request = { workspaceId: f.workspaceId, limit: 1 };
+  const read = (input: object = request, auth = f.auth()) => f.enrolment.listInvitations(auth.cookieValue, auth.csrfToken, input);
+  const expected = [second.issued.operationId, replaced.issued.operationId].sort();
+  const page = await read(); assert.equal(page.invitations.length, 1); assert.equal(page.invitations[0]!.operationId, expected[0]);
+  assert.equal(page.nextCursor, expected[0]);
+  const nextPage = await read({ ...request, after: page.nextCursor }); assert.equal(nextPage.invitations[0]!.operationId, expected[1]); assert.equal(nextPage.nextCursor, null);
+  assert.deepEqual(Object.keys(page.invitations[0]!).sort(), ['accountId', 'authorizerAccountId', 'expiresAt', 'issuerAccountId', 'kind', 'operationId', 'recipientStarted', 'state']);
+  assert.equal(page.invitations[0]!.recipientStarted, false);
+  const serialized = JSON.stringify([page, nextPage]);
+  for (const secret of [first.issued.code, second.issued.code, replaced.issued.code, f.auth().csrfToken, 'public_state', 'codeDigest', 'resumeToken', 'Pending private person']) assert.equal(serialized.includes(secret), false);
+  await f.enrolment.begin({ workspaceId: f.workspaceId, code: replaced.issued.code, resumeToken: randomBytes(32).toString('base64url') });
+  const started = (await read({ workspaceId: f.workspaceId })).invitations.find(row => row.operationId === replaced.issued.operationId)!;
+  assert.equal(started.state, 'issued'); assert.equal(started.recipientStarted, true, 'A redeemed invitation is discoverable before Owner claim');
+  await f.enrolment.claim({ workspaceId: f.workspaceId, operationId: replaced.issued.operationId }, f.auth());
+  const claimed = await read({ workspaceId: f.workspaceId }); assert.equal(claimed.invitations.find(row => row.operationId === replaced.issued.operationId)!.state, 'waiting_approval');
+  assert.equal(claimed.invitations.find(row => row.operationId === replaced.issued.operationId)!.recipientStarted, true);
+  await f.enrolment.revokeJoin(f.auth().cookieValue, f.auth().csrfToken, { workspaceId: f.workspaceId, operationId: replaced.issued.operationId });
+  await f.admin.control.query('UPDATE security.ceremonies SET expires_at=$3 WHERE workspace_id=$1 AND ceremony_id=$2', [f.workspaceId, second.issued.operationId, new Date(Date.now() - 1)]);
+  assert.deepEqual((await read()).invitations, []);
+  await assert.rejects(read({ ...request, limit: 51 }), code('INVALID_REQUEST'));
+  await assert.rejects(read({ ...request, after: 'not-a-cursor' }), code('INVALID_REQUEST'));
+  const other = await fixture(t);
+  await assert.rejects(read({ ...request, workspaceId: other.workspaceId }), code('ENROLMENT_FORBIDDEN'));
+  const member = await f.joined(); await assert.rejects(read(request, member.auth), code('ENROLMENT_FORBIDDEN'));
+  const promotion = await f.enrolment.beginPromotion(f.auth().cookieValue, f.auth().csrfToken, { workspaceId: f.workspaceId, accountId: member.binding.accountId, operationId: randomUUID() });
+  assert.equal((await read({ workspaceId: f.workspaceId })).invitations[0]!.operationId, promotion.operationId);
+  await f.admin.control.query('UPDATE security.ceremonies SET expected_credential_generation=expected_credential_generation+1 WHERE workspace_id=$1 AND ceremony_id=$2', [f.workspaceId, promotion.operationId]);
+  assert.deepEqual((await read()).invitations, []);
+  f.advance(5 * 60_000); assert.deepEqual((await read()).invitations, [], 'Read-only discovery does not require fresh password confirmation');
 });

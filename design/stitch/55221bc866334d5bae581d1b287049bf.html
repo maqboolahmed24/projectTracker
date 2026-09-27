@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UKDA Workspace — Settings · People</title>
+<!-- Inter font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary": "#003824",
+            "secondary-fixed-dim": "#95d4b3",
+            "inverse-surface": "#dfe4de",
+            "on-tertiary-fixed-variant": "#3d4a41",
+            "surface-bright": "#353a37",
+            "on-surface": "#dfe4de",
+            "primary-fixed-dim": "#98d3b5",
+            "on-primary-fixed": "#002114",
+            "surface-dim": "#0f1412",
+            "on-error": "#690005",
+            "tertiary-fixed-dim": "#bccabe",
+            "secondary-fixed": "#b1f0ce",
+            "on-surface-variant": "#c0c9c2",
+            "secondary-container": "#12533a",
+            "primary-fixed": "#b4f0d1",
+            "outline-variant": "#404943",
+            "surface-tint": "#98d3b5",
+            "surface-container": "#1c211e",
+            "tertiary-container": "#c0cec2",
+            "on-secondary-container": "#87c6a5",
+            "on-primary-fixed-variant": "#14503a",
+            "on-primary": "#003826",
+            "on-error-container": "#ffdad6",
+            "surface-variant": "#313632",
+            "inverse-primary": "#306950",
+            "inverse-on-surface": "#2c322e",
+            "secondary": "#95d4b3",
+            "on-secondary-fixed-variant": "#0e5138",
+            "on-secondary-fixed": "#002114",
+            "on-primary-container": "#265f47",
+            "surface-container-highest": "#313632",
+            "surface": "#0f1412",
+            "background": "#0f1412",
+            "surface-container-lowest": "#0a0f0c",
+            "on-tertiary-container": "#4b584f",
+            "primary-container": "#9cd7b9",
+            "outline": "#8a938c",
+            "primary": "#b7f4d4",
+            "on-tertiary": "#27332b",
+            "tertiary-fixed": "#d8e6da",
+            "surface-container-low": "#181d1a",
+            "error-container": "#93000a",
+            "error": "#ffb4ab",
+            "surface-container-high": "#262b28",
+            "on-tertiary-fixed": "#121e17",
+            "on-background": "#dfe4de",
+            "tertiary": "#dceade"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "margin-tablet": "1.5rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "1rem",
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "display-mobile": ["Inter"],
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "display": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "display-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen selection:bg-secondary-container selection:text-primary">
+<div class="flex h-screen w-full overflow-hidden">
+<!-- 1. LEFT MAIN SIDEBAR (240px wide, from Shared Components SideNavBar) -->
+<aside class="w-60 h-screen flex flex-col justify-between shrink-0 bg-surface-container-lowest border-r border-outline-variant transition-colors duration-150 ease-in-out z-20">
+<!-- Top Section -->
+<div class="flex flex-col">
+<!-- Brand Header -->
+<div class="flex items-center gap-3 px-4 py-4 border-b border-outline-variant">
+<div class="w-8 h-8 rounded-lg bg-secondary-container border border-outline-variant flex items-center justify-center text-primary font-bold">
+<span class="material-symbols-outlined text-[20px]" data-icon="grid_view">grid_view</span>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-label-lg font-label-lg font-bold text-on-surface tracking-tight truncate">UKDA Workspace</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant truncate">Analytical Operations</span>
+</div>
+</div>
+<!-- Quick CTA -->
+<div class="p-3">
+<button class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant text-on-surface text-label-md font-label-md hover:bg-surface-container hover:text-primary hover:border-outline transition-colors duration-150">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+<span>+ Add task</span>
+</button>
+</div>
+<!-- Primary Navigation Tabs -->
+<nav class="flex flex-col px-2 space-y-0.5">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150 text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150 text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="folder_open">folder_open</span>
+<span>Projects</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150 text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="task_alt">task_alt</span>
+<span>My work</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150 text-label-md font-label-md" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px]" data-icon="inbox">inbox</span>
+<span>Inbox</span>
+</div>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-container-high border border-outline-variant text-label-sm font-label-sm text-secondary">3</span>
+</a>
+</nav>
+</div>
+<!-- Bottom / Footer Items -->
+<div class="flex flex-col px-2 pb-3 space-y-1 border-t border-outline-variant pt-3">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150 text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="group">group</span>
+<span>People</span>
+</a>
+<!-- Settings Item (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-primary bg-secondary-container border-l-2 border-primary font-semibold transition-colors duration-150 text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="tune">tune</span>
+<span>Preferences</span>
+</a>
+<!-- User Profile Badge -->
+<div class="mt-2 pt-2 border-t border-outline-variant px-1 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<!-- Geometric Fox Avatar -->
+<div class="w-8 h-8 rounded-full bg-secondary-container border border-primary/30 flex items-center justify-center text-primary" title="Alex Morgan">
+<span class="material-symbols-outlined text-[18px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="flex flex-col leading-tight">
+<span class="text-label-md font-label-md text-on-surface font-medium truncate">Alex Morgan</span>
+<span class="text-label-sm font-label-sm text-primary-fixed-dim">Owner</span>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded hover:bg-surface-container">
+<span class="material-symbols-outlined text-[18px]" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- 2. SETTINGS SECONDARY SUBNAV (190px wide) -->
+<aside class="w-48 h-screen shrink-0 bg-surface border-r border-outline-variant flex flex-col justify-between py-4 px-3 overflow-y-auto">
+<div>
+<div class="px-3 pb-3 mb-1">
+<span class="text-label-sm font-label-sm text-outline uppercase tracking-wider">Settings</span>
+</div>
+<nav class="flex flex-col space-y-1">
+<a class="flex items-center px-3 py-1.5 rounded-lg text-body-md font-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#">
+            General
+          </a>
+<!-- People is active local tab -->
+<a class="flex items-center justify-between px-3 py-1.5 rounded-lg bg-surface-container-high border-l-2 border-primary text-primary font-medium text-body-md font-body-md transition-colors duration-150" href="#">
+<span>People</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+</a>
+<a class="flex items-center px-3 py-1.5 rounded-lg text-body-md font-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#">
+            Teams
+          </a>
+<a class="flex items-center px-3 py-1.5 rounded-lg text-body-md font-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#">
+            Roles
+          </a>
+<a class="flex items-center px-3 py-1.5 rounded-lg text-body-md font-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#">
+            Security
+          </a>
+<a class="flex items-center px-3 py-1.5 rounded-lg text-body-md font-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#">
+            Your data
+          </a>
+<div class="pt-3 mt-3 border-t border-outline-variant">
+<div class="flex items-center justify-between px-3 py-1.5 text-body-md font-body-md text-outline cursor-default">
+<span>Coming later</span>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 rounded bg-surface-container-lowest text-outline">v1.2</span>
+</div>
+</div>
+</nav>
+</div>
+<!-- Security Customer Terms Preview in Subnav Bottom -->
+<div class="p-3 bg-surface-container-lowest border border-outline-variant rounded-lg">
+<div class="flex items-center gap-1.5 mb-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="verified_user">verified_user</span>
+<span class="text-label-sm font-label-sm text-on-surface font-medium">Security</span>
+</div>
+<div class="flex flex-col space-y-1 text-label-sm font-label-sm text-outline">
+<span class="flex items-center justify-between">Password <span class="text-primary-fixed-dim">Set</span></span>
+<span class="flex items-center justify-between">Recovery <span class="text-primary-fixed-dim">Enabled</span></span>
+<span class="flex items-center justify-between">Devices <span class="text-on-surface-variant">1 active</span></span>
+</div>
+</div>
+</aside>
+<!-- 3. MAIN CONTENT AREA -->
+<main class="flex-1 h-screen overflow-y-auto bg-surface flex flex-col">
+<!-- Top Bar / Breadcrumb Navigation -->
+<header class="h-14 shrink-0 flex items-center justify-between px-8 border-b border-outline-variant bg-surface">
+<div class="flex items-center gap-2 text-label-md font-label-md text-outline">
+<span>Workspace</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span>Settings</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface font-semibold">People</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-container-low border border-outline-variant text-label-sm font-label-sm text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span>System encrypted &amp; local</span>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Interior -->
+<div class="p-8 max-w-7xl w-full mx-auto space-y-8">
+<!-- Header & Action -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+<div>
+<h1 class="text-display font-display text-on-surface tracking-tight">People</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant mt-1">A good place to work, together.</p>
+</div>
+<div>
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary-container text-on-primary font-label-lg font-semibold hover:bg-secondary-fixed transition-all duration-150 active:scale-[0.98]" id="openModalBtn">
+<span class="material-symbols-outlined text-[20px]" data-icon="person_add">person_add</span>
+<span>+ Invite person</span>
+</button>
+</div>
+</div>
+<!-- Active Members Directory Table -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden shadow-none">
+<div class="px-6 py-4 border-b border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-headline-sm font-headline-sm text-on-surface font-medium">Directory</span>
+<span class="px-2 py-0.5 text-label-sm font-label-sm rounded-full bg-secondary-container text-primary border border-outline-variant">5 Members</span>
+</div>
+<div class="flex items-center gap-2 text-label-md font-label-md text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+<span>All active accounts</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest border-b border-outline-variant text-label-sm font-label-sm text-outline uppercase tracking-wider">
+<th class="py-3 px-6 font-semibold">Person</th>
+<th class="py-3 px-6 font-semibold">Role</th>
+<th class="py-3 px-6 font-semibold">Access</th>
+<th class="py-3 px-6 font-semibold">Status</th>
+<th class="py-3 px-6 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Person 1: Alex Morgan -->
+<tr class="hover:bg-surface-container transition-colors duration-150">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<!-- Geometric Fox glyph -->
+<div class="w-9 h-9 rounded-full bg-secondary-container border border-primary/40 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<div class="text-body-md font-body-md font-medium text-on-surface">Alex Morgan</div>
+<div class="text-body-sm font-body-sm text-outline">Local key · Primary station</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-container border border-outline-variant text-primary font-medium">
+                      Owner
+                    </span>
+</td>
+<td class="py-4 px-6 text-body-md font-body-md text-on-surface-variant">
+                    All projects
+                  </td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-body-sm font-body-sm text-on-surface">Active</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Person 2: Elena Vance (Owner - Identically styled) -->
+<tr class="hover:bg-surface-container transition-colors duration-150">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<!-- Geometric Owl glyph -->
+<div class="w-9 h-9 rounded-full bg-secondary-container border border-primary/40 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</div>
+<div>
+<div class="text-body-md font-body-md font-medium text-on-surface">Elena Vance</div>
+<div class="text-body-sm font-body-sm text-outline">Local key · Secure node</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-container border border-outline-variant text-primary font-medium">
+                      Owner
+                    </span>
+</td>
+<td class="py-4 px-6 text-body-md font-body-md text-on-surface-variant">
+                    All projects
+                  </td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-body-sm font-body-sm text-on-surface">Active</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Person 3: Maya Lin (Manager) -->
+<tr class="hover:bg-surface-container transition-colors duration-150">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<!-- Geometric Bear glyph -->
+<div class="w-9 h-9 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-[20px]" data-icon="pets">pets</span>
+</div>
+<div>
+<div class="text-body-md font-body-md font-medium text-on-surface">Maya Lin</div>
+<div class="text-body-sm font-body-sm text-outline">Local key · Research station</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container-high border border-outline-variant text-on-surface font-medium">
+                      Manager
+                    </span>
+</td>
+<td class="py-4 px-6 text-body-md font-body-md text-on-surface-variant">
+                    All projects
+                  </td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-body-sm font-body-sm text-on-surface">Active</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Person 4: Marcus Chen (Member) -->
+<tr class="hover:bg-surface-container transition-colors duration-150">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<!-- Geometric Rabbit glyph -->
+<div class="w-9 h-9 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary-fixed-dim">
+<span class="material-symbols-outlined text-[20px]" data-icon="cruelty_free">cruelty_free</span>
+</div>
+<div>
+<div class="text-body-md font-body-md font-medium text-on-surface">Marcus Chen</div>
+<div class="text-body-sm font-body-sm text-outline">Local key · Client device</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container border border-outline-variant text-on-surface-variant font-medium">
+                      Member
+                    </span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="text-body-md font-body-md text-on-surface">2 projects</span>
+<span class="text-outline">·</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded border border-outline-variant">Website refresh</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded border border-outline-variant">Autumn research</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-body-sm font-body-sm text-on-surface">Active</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Person 5: Sarah Jenkins (Viewer) -->
+<tr class="hover:bg-surface-container transition-colors duration-150">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<!-- Geometric Cat glyph -->
+<div class="w-9 h-9 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="flutter_dash">flutter_dash</span>
+</div>
+<div>
+<div class="text-body-md font-body-md font-medium text-on-surface">Sarah Jenkins</div>
+<div class="text-body-sm font-body-sm text-outline">Local key · Review station</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container border border-outline-variant text-outline font-medium">
+                      Viewer
+                    </span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-1.5">
+<span class="text-body-md font-body-md text-on-surface">1 project</span>
+<span class="text-outline">·</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded border border-outline-variant">Website refresh</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-body-sm font-body-sm text-on-surface">Active</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 5. LOWER SECTION: 'Coming later' preview cards -->
+<div class="pt-6">
+<div class="mb-4">
+<h2 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Coming later</h2>
+<p class="text-body-sm font-body-sm text-outline mt-0.5">Features planned for future local releases</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Card 1: Email updates -->
+<div class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/60 flex flex-col justify-between opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="mail">mail</span>
+</div>
+<div>
+<h3 class="text-label-lg font-label-lg text-on-surface font-medium">Email updates</h3>
+<p class="text-body-sm font-body-sm text-outline mt-1">Not available in this build.</p>
+</div>
+</div>
+</div>
+<!-- Card 2: GitHub connections -->
+<div class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/60 flex flex-col justify-between opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="code">code</span>
+</div>
+<div>
+<h3 class="text-label-lg font-label-lg text-on-surface font-medium">GitHub connections</h3>
+<p class="text-body-sm font-body-sm text-outline mt-1">Not available in this build.</p>
+</div>
+</div>
+</div>
+<!-- Card 3: Assisted insights -->
+<div class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/60 flex flex-col justify-between opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="insights">insights</span>
+</div>
+<div>
+<h3 class="text-label-lg font-label-lg text-on-surface font-medium">Assisted insights</h3>
+<p class="text-body-sm font-body-sm text-outline mt-1">Not available in this build.</p>
+</div>
+</div>
+</div>
+<!-- Card 4: Board view -->
+<div class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/60 flex flex-col justify-between opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="view_kanban">view_kanban</span>
+</div>
+<div>
+<h3 class="text-label-lg font-label-lg text-on-surface font-medium">Board view</h3>
+<p class="text-body-sm font-body-sm text-outline mt-1">Not available in this build.</p>
+</div>
+</div>
+</div>
+<!-- Card 5: Attachments -->
+<div class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/60 flex flex-col justify-between opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="attach_file">attach_file</span>
+</div>
+<div>
+<h3 class="text-label-lg font-label-lg text-on-surface font-medium">Attachments</h3>
+<p class="text-body-sm font-body-sm text-outline mt-1">Not available in this build.</p>
+</div>
+</div>
+</div>
+<!-- Card 6: Customer-hosted processing -->
+<div class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/60 flex flex-col justify-between opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="dns">dns</span>
+</div>
+<div>
+<h3 class="text-label-lg font-label-lg text-on-surface font-medium">Customer-hosted processing</h3>
+<p class="text-body-sm font-body-sm text-outline mt-1">Not available in this build.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- 4. FLOATING 'INVITE PERSON' MODAL OVERLAY -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-200" id="inviteModal">
+<div class="relative w-full max-w-xl mx-4 bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden p-6 space-y-6">
+<!-- Modal Header -->
+<div class="flex items-start justify-between">
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface font-semibold">Invite a team member</h3>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">
+            Invitations are offline and cryptographic. No email or third-party service required.
+          </p>
+</div>
+<button class="p-1 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container transition-colors" id="closeModalBtn">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+</div>
+<!-- Role Choice Segment -->
+<div>
+<label class="block text-label-sm font-label-sm uppercase tracking-wider text-outline mb-2">Assign Role</label>
+<div class="grid grid-cols-4 gap-2">
+<label class="flex items-center justify-center py-2 px-3 rounded-lg border border-outline-variant text-label-md font-label-md text-outline hover:text-on-surface hover:bg-surface-container cursor-pointer transition-colors">
+<input class="hidden" name="role" type="radio" value="Owner"/>
+<span>Owner</span>
+</label>
+<label class="flex items-center justify-center py-2 px-3 rounded-lg border border-outline-variant text-label-md font-label-md text-outline hover:text-on-surface hover:bg-surface-container cursor-pointer transition-colors">
+<input class="hidden" name="role" type="radio" value="Manager"/>
+<span>Manager</span>
+</label>
+<label class="flex items-center justify-center py-2 px-3 rounded-lg border border-primary bg-secondary-container text-label-md font-label-md text-primary font-semibold cursor-pointer">
+<input checked="" class="hidden" name="role" type="radio" value="Member"/>
+<span>Member</span>
+</label>
+<label class="flex items-center justify-center py-2 px-3 rounded-lg border border-outline-variant text-label-md font-label-md text-outline hover:text-on-surface hover:bg-surface-container cursor-pointer transition-colors">
+<input class="hidden" name="role" type="radio" value="Viewer"/>
+<span>Viewer</span>
+</label>
+</div>
+</div>
+<!-- Project Checklist / Access selection -->
+<div>
+<label class="block text-label-sm font-label-sm uppercase tracking-wider text-outline mb-2">Project Access</label>
+<div class="space-y-2 bg-surface-container-lowest p-3 rounded-lg border border-outline-variant">
+<label class="flex items-center gap-3 cursor-pointer text-body-md font-body-md text-on-surface">
+<input checked="" class="rounded border-outline-variant bg-surface text-primary focus:ring-0 focus:ring-offset-0 w-4 h-4" type="checkbox"/>
+<span>Website refresh</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer text-body-md font-body-md text-on-surface">
+<input checked="" class="rounded border-outline-variant bg-surface text-primary focus:ring-0 focus:ring-offset-0 w-4 h-4" type="checkbox"/>
+<span>Autumn research</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer text-body-md font-body-md text-on-surface-variant">
+<input class="rounded border-outline-variant bg-surface text-primary focus:ring-0 focus:ring-offset-0 w-4 h-4" type="checkbox"/>
+<span>Member experience</span>
+</label>
+</div>
+</div>
+<!-- Success State / Preview Code Block -->
+<div class="p-4 rounded-lg bg-surface-container border border-outline-variant space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 text-primary text-label-sm font-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]" data-icon="key">key</span>
+<span>Invitation code ready</span>
+</div>
+<button class="flex items-center gap-1 px-2 py-1 rounded bg-surface-container-high border border-outline-variant text-label-sm font-label-sm text-on-surface hover:text-primary transition-colors" id="copyBtn">
+<span class="material-symbols-outlined text-[14px]" data-icon="content_copy">content_copy</span>
+<span id="copyText">Copy code</span>
+</button>
+</div>
+<div class="font-mono text-label-md bg-surface-container-lowest px-3 py-2 rounded border border-outline-variant text-primary flex items-center justify-between">
+<code>ukda-inv-88f2-91a0</code>
+<span class="text-label-sm font-label-sm text-outline">Offline token</span>
+</div>
+<p class="text-body-sm font-body-sm text-outline">
+          Share privately with the person you want to invite.
+        </p>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="px-4 py-2 rounded-lg border border-outline-variant text-label-md font-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" id="cancelModalBtn">
+          Cancel
+        </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-container text-on-primary text-label-md font-label-md font-semibold hover:bg-secondary-fixed transition-all duration-150" id="createInviteBtn">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+<span>Create invitation</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+    // Interactive Modal Controller
+    const modal = document.getElementById('inviteModal');
+    const openBtn = document.getElementById('openModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelModalBtn');
+    const createBtn = document.getElementById('createInviteBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const copyText = document.getElementById('copyText');
+
+    function closeModal() {
+      modal.classList.add('hidden');
+    }
+
+    function openModal() {
+      modal.classList.remove('hidden');
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    createBtn.addEventListener('click', () => {
+      closeModal();
+    });
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Copy invitation code interaction
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText('ukda-inv-88f2-91a0');
+      copyText.textContent = 'Copied!';
+      setTimeout(() => {
+        copyText.textContent = 'Copy code';
+      }, 2000);
+    });
+  </script>
+</body></html>

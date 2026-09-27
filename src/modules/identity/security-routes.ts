@@ -4,7 +4,7 @@ import type { Databases } from '../../db.js';
 import { AppError } from '../../errors.js';
 import { parseInput } from '../../http.js';
 import { binary, identifier } from '../../shared/contracts.js';
-import { pairingApproval, pairingBegin, pairingConfirmation } from '../../shared/pairing.js';
+import { pairingApproval, pairingBegin, pairingConfirmation, pairingListRequest } from '../../shared/pairing.js';
 import { passwordChangeBegin, passwordChangeReference, passwordChangeRegistration, passwordChangeProofStart,
   passwordChangeProofFinish, passwordChangeFinalize } from '../../shared/password-change.js';
 import type { RequestBudgets } from './budgets.js';
@@ -41,8 +41,18 @@ export function registerSecurityRoutes(app: FastifyInstance, input: {
       { purpose: 'security-workspace', key: principal.workspaceId, limit: 240, windowMs: 600000 },
     ]);
   }
-  function pairingRoute(path: string, handler: (request: FastifyRequest) => Promise<unknown>) {
-    app.post(`/v1/auth/pairing/${path}`, { preHandler: accountGuard }, async (request) => {
+  async function pairingReadGuard(request: FastifyRequest) {
+    if (request.headers.origin !== input.origin || request.headers['sec-fetch-site'] === 'cross-site') throw new AppError('ORIGIN_REJECTED', 'Request origin is not allowed', 403);
+    if (Object.keys(request.query as object).length) throw new AppError('INVALID_REQUEST', 'Invalid request', 400);
+    await input.budgets.take([{ purpose: 'pairing-read-source', key: request.ip, limit: 1200, windowMs: 600000 }]);
+    const principal = await input.sessions.authenticate(cookie(request));
+    await input.budgets.take([
+      { purpose: 'pairing-read-account', key: `${principal.workspaceId}:${principal.accountId}`, limit: 600, windowMs: 600000 },
+      { purpose: 'pairing-read-workspace', key: principal.workspaceId, limit: 2400, windowMs: 600000 },
+    ]);
+  }
+  function pairingRoute(path: string, handler: (request: FastifyRequest) => Promise<unknown>, read = false) {
+    app.post(`/v1/auth/pairing/${path}`, { preHandler: read ? pairingReadGuard : accountGuard }, async (request) => {
       try { return await handler(request); }
       catch (error) {
         if (error instanceof AppError) throw error;
@@ -50,8 +60,9 @@ export function registerSecurityRoutes(app: FastifyInstance, input: {
       }
     });
   }
+  pairingRoute('list', (request) => input.pairing.listPending(cookie(request), csrf(request), parseInput(pairingListRequest, request.body)), true);
   pairingRoute('begin', (request) => input.pairing.begin(cookie(request), csrf(request), parseInput(pairingBegin, request.body)));
-  pairingRoute('inspect', (request) => input.pairing.inspect(cookie(request), parseInput(operation, request.body).operationId));
+  pairingRoute('inspect', (request) => input.pairing.inspect(cookie(request), parseInput(operation, request.body).operationId), true);
   pairingRoute('claim', (request) => input.pairing.claim(cookie(request), csrf(request), parseInput(operation, request.body).operationId));
   pairingRoute('confirm', (request) => input.pairing.confirm(cookie(request), csrf(request), parseInput(pairingConfirmation, request.body)));
   pairingRoute('materials', (request) => input.pairing.materials(cookie(request), parseInput(operation, request.body).operationId));

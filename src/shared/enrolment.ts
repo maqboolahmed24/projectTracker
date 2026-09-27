@@ -1,3 +1,4 @@
+import { avatarSelection } from './avatar.js';
 import { z } from 'zod';
 import { genesisBody } from './activation.js';
 import { binary, capabilities, contentEnvelope, counter, digest, identifier, positiveCounter } from './contracts.js';
@@ -47,7 +48,7 @@ export const enrolmentBinding = z.strictObject({
   securityVersion: positiveCounter, nextSecurityVersion: positiveCounter,
   securityHead: digest, genesisFingerprint: digest, dataGeneration: positiveCounter, custodyEpoch: positiveCounter, workspaceKeyEpoch: positiveCounter,
   authorizer: enrolmentAuthorizer, currentDevices: z.array(pairingPublicDevice).max(256),
-  scopes: z.array(pairingScope).min(1).max(256), issuedAt: z.iso.datetime(), expiresAt: z.iso.datetime(),
+  scopes: z.array(pairingScope).min(1).max(256), writeSchema:z.literal(2).optional(), issuedAt: z.iso.datetime(), expiresAt: z.iso.datetime(),
 }).refine((value) => value.profile.id === value.accountId && value.authorizer.accountId !== value.accountId &&
   value.approvalAttemptId !== value.operationId && next(value.securityVersion, value.nextSecurityVersion) &&
   next(value.sessionGeneration, value.nextSessionGeneration) && Date.parse(value.expiresAt) > Date.parse(value.issuedAt) &&
@@ -109,7 +110,7 @@ export const enrolmentPreName = z.strictObject({ version: z.literal(1), binding:
 export type EnrolmentPreName = z.infer<typeof enrolmentPreName>;
 export const enrolmentSetupNamePayload = z.strictObject({ version: z.literal(1), mode: z.literal('setup_name'),
   workspaceId: identifier, accountId: identifier, operationId: identifier, approvalAttemptId: identifier,
-  attemptGeneration: positiveCounter, labelContextDigest: digest, displayName: z.string().min(1).max(200).refine((value) => value.trim().length > 0) });
+  attemptGeneration: positiveCounter, labelContextDigest: digest, displayName: z.string().min(1).max(200).refine((value) => value.trim().length > 0), avatar: avatarSelection.optional() });
 export type EnrolmentSetupNamePayload = z.infer<typeof enrolmentSetupNamePayload>;
 
 export const enrolmentConfirmationBody = z.strictObject({ version: z.literal(1), purpose: z.literal('ukda.enrolment-confirmation.v1'),
@@ -216,7 +217,7 @@ export function enrolmentProfileHeader(transcript: EnrolmentTranscript): Content
   const { binding } = transcript, owner = binding.authorizer;
   if (binding.kind === 'promote_owner') throw new EnrolmentContractError();
   return { version: 1, purpose: 'ukda.content.v1', algorithm: 'XChaCha20-Poly1305', workspaceId: binding.workspaceId,
-    scope: 'workspace', scopeId: binding.workspaceId, recordId: binding.accountId, recordType: 'profile', schema: 1,
+    scope: 'workspace', scopeId: binding.workspaceId, recordId: binding.accountId, recordType: 'profile', schema: binding.writeSchema??1,
     keyEpoch: binding.workspaceKeyEpoch, revision: binding.nextProfileRevision, operationId: binding.approvalAttemptId,
     accountId: owner.accountId, deviceId: owner.device.id, keyGeneration: owner.device.keyGeneration,
     permissionVersion: binding.role.revision, securityVersion: binding.securityVersion, securityHead: binding.securityHead,

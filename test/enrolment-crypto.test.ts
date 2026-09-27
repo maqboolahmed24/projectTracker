@@ -1,7 +1,8 @@
 import test, { type TestContext } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { base64urlDecode, base64urlEncode, decryptContent, digestObject, generateRecipientKeyPair, generateSigningKeyPair, randomKey, verifyObject } from '../src/shared/crypto.js';
+import type { AvatarSelection } from '../src/shared/avatar.js';
+import { base64urlDecode, base64urlEncode, canonicalJson, decryptContent, digestObject, generateRecipientKeyPair, generateSigningKeyPair, randomKey, verifyObject } from '../src/shared/crypto.js';
 import { capabilities } from '../src/shared/contracts.js';
 import { enrolmentBinding, enrolmentProfileHeader, validateEnrolmentDraft, type EnrolmentBinding } from '../src/shared/enrolment.js';
 import { OPAQUE_CONFIG_ID, OPAQUE_KEY_STRETCHING, type OpaquePublicConfiguration } from '../src/client/opaque.js';
@@ -49,6 +50,45 @@ async function confirmed(prepared: PreparedEnrolment, exportKey: string, binding
   prepared.draft.recipientConfirmation = await confirmEnrolmentRecipient({ prepared, exportKey, fingerprint }, binding);
   return fingerprint;
 }
+
+test('avatar: member and equal Owner JOIN preserve encrypted selection through reload and approval takeover', async (t) => {
+  for (const kind of ['join_member', 'join_owner'] as const) {
+    const f = await fixture(t, kind), avatar = { shapeId: 'shape-18', colourId: 'rose' } as const;
+    const newOwnerKit = kind === 'join_owner' ? await kit() : undefined;
+    const original = await prepareJoinEnrolment({ ...f, displayName: 'Avatar recipient', avatar, ...(newOwnerKit ? { newOwnerKit } : {}) }, f.binding);
+    const saved = JSON.stringify(original), prepared = JSON.parse(saved) as PreparedEnrolment;
+    for (const secret of ['Avatar recipient', avatar.shapeId, '"colourId":"rose"']) assert.equal(saved.includes(secret), false);
+    await verifyPreparedEnrolment(prepared, f.exportKey, f.binding);
+    const localContext = { origin: f.binding.origin, workspaceId: f.binding.workspaceId, accountId: f.binding.accountId,
+      operationId: f.binding.operationId, credentialGeneration: f.binding.nextCredentialGeneration };
+    assert.equal(await unwrapSetupName(localContext, prepared.nameWrapper!, f.exportKey), 'Avatar recipient', 'Legacy string helper remains compatible');
+    const nextOwner = await device(t), nextBinding = enrolmentBinding.parse({ ...f.binding, approvalAttemptId: randomUUID(), attemptGeneration: '2',
+      authorizer: { ...f.binding.authorizer, accountId: randomUUID(), device: nextOwner.publicDevice } });
+    const rebound = await rebindJoinEnrolment({ prepared, binding: nextBinding, exportKey: f.exportKey, ...(newOwnerKit ? { newOwnerKit } : {}) }, nextBinding);
+    assert.deepEqual(rebound.nameWrapper, original.nameWrapper); assert.deepEqual(rebound.deviceWrapper, original.deviceWrapper);
+    const fingerprint = await confirmed(rebound, f.exportKey, nextBinding), key = await randomKey();
+    try {
+      assert.equal(await openEnrolmentSetupName({ draft: publicDraft(rebound), fingerprint }, nextOwner.bundle, nextBinding), 'Avatar recipient');
+      const encrypted = await encryptEnrolmentProfile({ draft: publicDraft(rebound), fingerprint }, nextOwner.bundle, key, nextBinding);
+      const profile = await decryptContent(encrypted.envelope, key, base64urlDecode(nextOwner.publicDevice.signingPublicKey, 32), enrolmentProfileHeader(rebound.draft.transcript));
+      assert.equal(canonicalJson(profile), canonicalJson({ displayName: 'Avatar recipient', avatar }));
+      assert.equal(JSON.stringify({ rebound, encrypted }).includes(avatar.shapeId), false);
+      await assert.rejects(encryptEnrolmentProfile({ draft: publicDraft(rebound), fingerprint }, f.owner.bundle, key, nextBinding));
+    } finally { key.fill(0); }
+    const changed = structuredClone(rebound); changed.nameWrapper!.ciphertext = flip(changed.nameWrapper!.ciphertext);
+    await assert.rejects(verifyPreparedEnrolment(changed, f.exportKey, nextBinding));
+    const alteredPacket = structuredClone(rebound); alteredPacket.draft.setupName!.ciphertext = flip(alteredPacket.draft.setupName!.ciphertext);
+    await assert.rejects(openEnrolmentSetupName({ draft: publicDraft(alteredPacket), fingerprint }, nextOwner.bundle, nextBinding));
+  }
+});
+
+test('avatar: JOIN rejects unknown selections and arbitrary image input before creating encrypted drafts', async (t) => {
+  const f = await fixture(t);
+  for (const avatar of [null, { shapeId: 'shape-00', colourId: 'teal' }, { shapeId: 'shape-01', colourId: 'https://example.test' },
+    { shapeId: 'shape-01', colourId: 'teal', svg: '<svg />' }]) {
+    await assert.rejects(prepareJoinEnrolment({ ...f, displayName: 'Avatar recipient', avatar: avatar as unknown as AvatarSelection }, f.binding));
+  }
+});
 
 test('CP06: local setup-name encryption uses fresh nonces, operation separation and exact authenticated context', async () => {
   const context: SetupNameContext = { origin, workspaceId: randomUUID(), accountId: randomUUID(), operationId: randomUUID(), credentialGeneration: '1' };

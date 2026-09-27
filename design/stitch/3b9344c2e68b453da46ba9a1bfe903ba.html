@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UKDA — Setup Workspace</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#ebf9d0",
+            "on-tertiary": "#f0fed5",
+            "on-surface": "#2c3433",
+            "on-tertiary-fixed": "#424e30",
+            "inverse-primary": "#affedb",
+            "primary-fixed": "#a4f3d0",
+            "surface-container-low": "#f1f4f3",
+            "primary-container": "#a4f3d0",
+            "surface": "#f9f9f8",
+            "primary": "#176b50",
+            "outline": "#747c7c",
+            "outline-variant": "#abb4b3",
+            "secondary-fixed-dim": "#cdd7d2",
+            "surface-tint": "#176b50",
+            "secondary-container": "#dbe5e0",
+            "primary-dim": "#005e45",
+            "on-background": "#2c3433",
+            "tertiary-dim": "#4b5738",
+            "tertiary-container": "#ebf9d0",
+            "inverse-on-surface": "#9b9d9d",
+            "tertiary-fixed-dim": "#ddebc2",
+            "secondary-fixed": "#dbe5e0",
+            "on-primary-container": "#005e44",
+            "surface-variant": "#dce4e3",
+            "on-primary-fixed-variant": "#12684d",
+            "inverse-surface": "#0c0f0e",
+            "on-error": "#fff7f6",
+            "surface-container-highest": "#dce4e3",
+            "background": "#f9f9f8",
+            "on-primary-fixed": "#004934",
+            "secondary-dim": "#4c5551",
+            "error-dim": "#4e0309",
+            "on-primary": "#e0ffee",
+            "on-error-container": "#752121",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-container": "#4b5450",
+            "on-secondary": "#f2fbf6",
+            "surface-container-high": "#e3e9e8",
+            "on-tertiary-fixed-variant": "#5e6a4a",
+            "tertiary": "#576343",
+            "error": "#9f403d",
+            "on-secondary-fixed": "#39413e",
+            "surface-bright": "#f9f9f8",
+            "secondary": "#58615d",
+            "on-tertiary-container": "#546040",
+            "surface-dim": "#d2dcdb",
+            "primary-fixed-dim": "#96e4c2",
+            "on-secondary-fixed-variant": "#555d5a",
+            "on-surface-variant": "#586160",
+            "surface-container": "#eaefee",
+            "error-container": "#fe8983"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "2rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "fontWeight": "600" }],
+            "body-md": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "label-sm": ["0.75rem", { "lineHeight": "0.875rem", "fontWeight": "500" }],
+            "headline-lg": ["1.75rem", { "lineHeight": "2.25rem", "fontWeight": "600" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1rem", "fontWeight": "500" }],
+            "body-sm": ["0.8125rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "headline-md": ["1.375rem", { "lineHeight": "1.875rem", "fontWeight": "600" }],
+            "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #abb4b3;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TOP HEADER BAR -->
+<header class="sticky top-0 z-50 h-16 w-full bg-surface-container-lowest/90 backdrop-blur-sm border-b border-outline-variant/30 px-8 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<!-- UKDA Triangular Capsule Mark -->
+<div class="flex items-center gap-1">
+<svg aria-label="UKDA logo" fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 18L10 6L13 12L7 18H4Z" fill="#176b50"></path>
+<path d="M10 6L14 14L19 14L13 6H10Z" fill="#576343"></path>
+<path d="M12 18L16 11L20 18H12Z" fill="#a4f3d0"></path>
+</svg>
+<span class="font-headline-sm text-headline-sm font-semibold tracking-tight text-on-surface ml-1">UKDA</span>
+</div>
+<span class="text-xs font-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded-full border border-outline-variant/20">Initial Setup</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-xs font-label-sm text-secondary">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+<span>Local node active</span>
+</div>
+<div class="h-4 w-px bg-outline-variant/30"></div>
+<button aria-label="Toggle theme" class="p-2 text-secondary hover:text-on-surface transition-colors rounded-lg hover:bg-surface-container" type="button">
+<span class="material-symbols-outlined text-[18px]">light_mode</span>
+</button>
+</div>
+</header>
+<!-- MAIN TWO-COLUMN CONTAINER -->
+<main class="flex-1 w-full max-w-[1440px] mx-auto flex flex-col lg:flex-row min-h-[calc(100vh-64px)]">
+<!-- LEFT COLUMN: Ambient Canvas & Editorial Anchor (40%) -->
+<section class="lg:w-[42%] bg-surface-container-low p-8 lg:p-12 border-r border-outline-variant/20 flex flex-col justify-between relative overflow-hidden">
+<!-- Subtle top pattern / soft ambient light -->
+<div class="space-y-8 z-10">
+<div class="space-y-3">
+<span class="text-xs font-label-md uppercase tracking-wider text-primary font-semibold">Workspace Initiation</span>
+<h1 class="font-headline-lg text-headline-lg font-semibold text-on-surface tracking-tight leading-tight">
+            Make room for your best work.
+          </h1>
+<p class="font-body-md text-body-md text-secondary leading-relaxed max-w-sm">
+            A serene workspace built for teams who think in waves and deliverables. No speculative clutter, no endless notifications.
+          </p>
+</div>
+<!-- Overlapping Creature Avatars Showcase -->
+<div class="py-2">
+<div class="flex items-center -space-x-3">
+<!-- Creature 1: Sage Bear/Cat -->
+<div class="w-12 h-12 rounded-full bg-[#e0ffee] border-2 border-surface-container-low flex items-center justify-center shadow-sm">
+<svg fill="none" height="28" viewbox="0 0 28 28" width="28">
+<circle cx="8" cy="8" fill="#176b50" r="3.5"></circle>
+<circle cx="20" cy="8" fill="#176b50" r="3.5"></circle>
+<rect fill="#176b50" height="15" rx="7.5" width="18" x="5" y="9"></rect>
+<circle cx="10.5" cy="15" fill="#f0fed5" r="1.5"></circle>
+<circle cx="17.5" cy="15" fill="#f0fed5" r="1.5"></circle>
+<path d="M12 18.5C13 19.5 15 19.5 16 18.5" stroke="#f0fed5" stroke-linecap="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<!-- Creature 2: Amber Owl/Fox -->
+<div class="w-12 h-12 rounded-full bg-[#fdecdb] border-2 border-surface-container-low flex items-center justify-center shadow-sm">
+<svg fill="none" height="28" viewbox="0 0 28 28" width="28">
+<polygon fill="#b85d19" points="6,6 10,13 5,13"></polygon>
+<polygon fill="#b85d19" points="22,6 18,13 23,13"></polygon>
+<circle cx="14" cy="15" fill="#b85d19" r="8.5"></circle>
+<circle cx="11" cy="14" fill="#fff7f6" r="2"></circle>
+<circle cx="17" cy="14" fill="#fff7f6" r="2"></circle>
+<polygon fill="#fff7f6" points="14,16 12,18 16,18"></polygon>
+</svg>
+</div>
+<!-- Creature 3: Mist Blue Robot/Geom -->
+<div class="w-12 h-12 rounded-full bg-[#e3ecfa] border-2 border-surface-container-low flex items-center justify-center shadow-sm">
+<svg fill="none" height="28" viewbox="0 0 28 28" width="28">
+<rect fill="#305988" height="4" width="2" x="13" y="4"></rect>
+<circle cx="14" cy="4" fill="#305988" r="2"></circle>
+<rect fill="#305988" height="14" rx="4" width="16" x="6" y="8"></rect>
+<rect fill="#f9f9f8" height="4" rx="2" width="10" x="9" y="12"></rect>
+<circle cx="11.5" cy="14" fill="#305988" r="1"></circle>
+<circle cx="16.5" cy="14" fill="#305988" r="1"></circle>
+</svg>
+</div>
+<div class="pl-5 text-xs font-label-md text-secondary">
+<span class="font-semibold text-on-surface">3 collaborators</span> ready
+            </div>
+</div>
+</div>
+<!-- Abstract Stacked Wave Workflow Card -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm space-y-4 max-w-md">
+<div class="flex items-center justify-between border-b border-outline-variant/20 pb-3">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-sm bg-primary"></span>
+<span class="font-headline-sm text-xs font-semibold text-on-surface">Wave 1: Foundations</span>
+</div>
+<span class="text-[11px] font-label-sm px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-medium">On track</span>
+</div>
+<div class="space-y-2.5">
+<div class="flex items-center justify-between text-xs py-1 px-2 rounded hover:bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-3.5 rounded border border-outline-variant flex items-center justify-center text-[10px] text-primary">✓</span>
+<span class="text-on-surface text-xs">Cryptographic team genesis</span>
+</div>
+<span class="text-secondary text-[11px]">Milestone</span>
+</div>
+<div class="flex items-center justify-between text-xs py-1 px-2 rounded hover:bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-3.5 rounded border border-outline-variant"></span>
+<span class="text-on-surface text-xs">First deliverable roadmap</span>
+</div>
+<span class="text-secondary text-[11px]">4 days</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-3">
+<div class="bg-primary h-1.5 rounded-full w-2/3"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Left Bottom Subtle Trust Statement -->
+<div class="pt-8 border-t border-outline-variant/20 flex items-center justify-between text-xs text-secondary">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+<span>Encrypted on-device. Zero telemetry.</span>
+</div>
+<span class="text-[11px] font-label-sm">v2.4.0</span>
+</div>
+</section>
+<!-- RIGHT COLUMN: Centered Setup Form (58%) -->
+<section class="lg:w-[58%] bg-background p-6 lg:p-12 flex flex-col items-center justify-center">
+<div class="w-full max-w-[460px] space-y-7">
+<!-- STEP INDICATOR -->
+<nav aria-label="Progress" class="flex items-center justify-between border-b border-outline-variant/20 pb-4">
+<!-- Step 1 -->
+<div class="flex items-center gap-2 text-xs font-label-md text-secondary">
+<div class="w-5 h-5 rounded-full bg-surface-container-high text-primary flex items-center justify-center text-[11px] font-bold">
+              ✓
+            </div>
+<span>Welcome</span>
+</div>
+<div class="w-8 h-px bg-outline-variant/30"></div>
+<!-- Step 2 -->
+<div class="flex items-center gap-2 text-xs font-label-md text-secondary">
+<div class="w-5 h-5 rounded-full bg-surface-container-high text-primary flex items-center justify-center text-[11px] font-bold">
+              ✓
+            </div>
+<span>Protect</span>
+</div>
+<div class="w-8 h-px bg-outline-variant/30"></div>
+<!-- Step 3 (Active) -->
+<div class="flex items-center gap-2 text-xs font-label-md text-on-surface font-semibold">
+<div class="w-5 h-5 rounded-full bg-primary text-surface-container-lowest flex items-center justify-center text-[11px]">
+              3
+            </div>
+<span class="text-primary">Personalise</span>
+</div>
+</nav>
+<!-- FORM CARD HEADLINE -->
+<div class="space-y-1">
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface">Make it yours.</h2>
+<p class="font-body-md text-body-md text-secondary">A name and a little personality. Your private workspace starts here.</p>
+</div>
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<!-- Field: Your Name -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md text-on-surface font-medium" for="full-name">Your name</label>
+<input class="w-full rounded-lg border border-outline-variant/50 bg-surface-container-lowest px-3.5 py-2.5 text-on-surface text-body-md placeholder:text-outline-variant focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors" id="full-name" name="name" placeholder="e.g. Alex Morgan" type="text" value="Alex Morgan"/>
+<p class="text-[11px] font-label-sm text-secondary">Visible to your team members within this workspace.</p>
+</div>
+<!-- Field: Workspace Name -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md text-on-surface font-medium" for="workspace-name">Workspace name</label>
+<div class="relative flex items-center">
+<input class="w-full rounded-lg border border-outline-variant/50 bg-surface-container-lowest px-3.5 py-2.5 text-on-surface text-body-md placeholder:text-outline-variant focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary pr-28 transition-colors" id="workspace-name" name="workspace" placeholder="e.g. Northstar Studio" type="text" value="Northstar Studio"/>
+<span class="absolute right-3 text-xs font-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded border border-outline-variant/30 select-none">
+                .ukda.local
+              </span>
+</div>
+</div>
+<!-- Section: Choose your avatar -->
+<div class="space-y-3 pt-1">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface font-medium">Choose your avatar</label>
+<span class="text-[11px] font-label-sm text-secondary">Geometric identity mark</span>
+</div>
+<!-- Avatar Preview & Grid -->
+<div class="p-4 rounded-xl border border-outline-variant/30 bg-surface-container-lowest space-y-4">
+<!-- Active Selected Preview Bar -->
+<div class="flex items-center gap-4 border-b border-outline-variant/20 pb-3.5">
+<div class="relative w-14 h-14 rounded-full bg-[#176b50] flex items-center justify-center text-white ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest transition-all" id="avatar-preview-container">
+<svg fill="none" height="34" id="preview-svg" viewbox="0 0 28 28" width="34">
+<!-- Fox/Geometric Creature -->
+<polygon fill="currentColor" opacity="0.9" points="5,7 10,13 4,13"></polygon>
+<polygon fill="currentColor" opacity="0.9" points="23,7 18,13 24,13"></polygon>
+<circle cx="14" cy="15" fill="currentColor" r="9"></circle>
+<circle cx="11" cy="14" fill="#ffffff" r="1.5"></circle>
+<circle cx="17" cy="14" fill="#ffffff" r="1.5"></circle>
+<polygon fill="#ffffff" points="14,16.5 12,19 16,19"></polygon>
+</svg>
+</div>
+<div>
+<h4 class="font-headline-sm text-xs font-semibold text-on-surface" id="creature-name">Geometric Fox</h4>
+<p class="text-[11px] font-body-sm text-secondary">Rendered with on-device vectors</p>
+</div>
+</div>
+<!-- 20 Geometric Creature Head Shapes (5x4 Grid) -->
+<div>
+<p class="text-[11px] font-label-sm text-secondary mb-2">Creature head type</p>
+<div class="grid grid-cols-5 gap-2" id="creature-grid">
+<!-- 1: Fox (Selected Initially) -->
+<button class="avatar-option h-11 w-11 rounded-lg border-2 border-primary bg-primary-container/20 flex items-center justify-center text-primary transition-all" data-svg="fox" data-title="Geometric Fox" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<polygon fill="currentColor" points="5,7 10,13 4,13"></polygon>
+<polygon fill="currentColor" points="23,7 18,13 24,13"></polygon>
+<circle cx="14" cy="15" fill="currentColor" r="8.5"></circle>
+<circle cx="11" cy="14" fill="#ffffff" r="1.5"></circle>
+<circle cx="17" cy="14" fill="#ffffff" r="1.5"></circle>
+</svg>
+</button>
+<!-- 2: Bear -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="bear" data-title="Calm Bear" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<circle cx="8" cy="8" fill="currentColor" r="3"></circle>
+<circle cx="20" cy="8" fill="currentColor" r="3"></circle>
+<rect fill="currentColor" height="13" rx="6" width="16" x="6" y="9"></rect>
+<circle cx="11" cy="14" fill="#ffffff" r="1"></circle>
+<circle cx="17" cy="14" fill="#ffffff" r="1"></circle>
+</svg>
+</button>
+<!-- 3: Robot Antennae -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="robot" data-title="Quiet Robot" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<line stroke="currentColor" stroke-width="2" x1="14" x2="14" y1="5" y2="8"></line>
+<circle cx="14" cy="4" fill="currentColor" r="2"></circle>
+<rect fill="currentColor" height="13" rx="3" width="16" x="6" y="9"></rect>
+<rect fill="#ffffff" height="3" rx="1" width="10" x="9" y="13"></rect>
+</svg>
+</button>
+<!-- 4: Owl Goggles -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="owl" data-title="Night Owl" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<polygon fill="currentColor" points="6,6 10,10 6,12"></polygon>
+<polygon fill="currentColor" points="22,6 18,10 22,12"></polygon>
+<circle cx="10" cy="15" fill="currentColor" r="4"></circle>
+<circle cx="18" cy="15" fill="currentColor" r="4"></circle>
+<circle cx="10" cy="15" fill="#ffffff" r="1.5"></circle>
+<circle cx="18" cy="15" fill="#ffffff" r="1.5"></circle>
+</svg>
+</button>
+<!-- 5: Cat Ears -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="cat" data-title="Nimble Cat" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<polygon fill="currentColor" points="7,5 12,12 5,12"></polygon>
+<polygon fill="currentColor" points="21,5 16,12 23,12"></polygon>
+<circle cx="14" cy="16" fill="currentColor" r="8"></circle>
+<line stroke="#ffffff" stroke-width="1.5" x1="11" x2="13" y1="15" y2="15"></line>
+<line stroke="#ffffff" stroke-width="1.5" x1="15" x2="17" y1="15" y2="15"></line>
+</svg>
+</button>
+<!-- 6: Frog Eyes -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="frog" data-title="Pond Frog" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<circle cx="8" cy="10" fill="currentColor" r="3.5"></circle>
+<circle cx="20" cy="10" fill="currentColor" r="3.5"></circle>
+<ellipse cx="14" cy="16" fill="currentColor" rx="9" ry="6"></ellipse>
+<circle cx="8" cy="10" fill="#ffffff" r="1.2"></circle>
+<circle cx="20" cy="10" fill="#ffffff" r="1.2"></circle>
+</svg>
+</button>
+<!-- 7: Round Panda -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="panda" data-title="Gentle Panda" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<circle cx="7" cy="8" fill="currentColor" r="3"></circle>
+<circle cx="21" cy="8" fill="currentColor" r="3"></circle>
+<circle cx="14" cy="15" r="8.5" stroke="currentColor" stroke-width="2"></circle>
+<ellipse cx="10.5" cy="14" fill="currentColor" rx="2" ry="1.5"></ellipse>
+<ellipse cx="17.5" cy="14" fill="currentColor" rx="2" ry="1.5"></ellipse>
+</svg>
+</button>
+<!-- 8: Bird Beak -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="bird" data-title="Songbird" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<circle cx="14" cy="13" fill="currentColor" r="7.5"></circle>
+<polygon fill="#ebf9d0" points="11,15 17,15 14,21"></polygon>
+<circle cx="11.5" cy="11.5" fill="#ffffff" r="1.2"></circle>
+<circle cx="16.5" cy="11.5" fill="#ffffff" r="1.2"></circle>
+</svg>
+</button>
+<!-- 9: Koala -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="koala" data-title="Quiet Koala" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<circle cx="6" cy="11" fill="currentColor" r="4"></circle>
+<circle cx="22" cy="11" fill="currentColor" r="4"></circle>
+<circle cx="14" cy="15" fill="currentColor" r="7.5"></circle>
+<ellipse cx="14" cy="16" fill="#ffffff" rx="2" ry="3"></ellipse>
+</svg>
+</button>
+<!-- 10: Hare / Long Ears -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="hare" data-title="Spring Hare" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<ellipse cx="10" cy="7" fill="currentColor" rx="2.5" ry="6"></ellipse>
+<ellipse cx="18" cy="7" fill="currentColor" rx="2.5" ry="6"></ellipse>
+<circle cx="14" cy="17" fill="currentColor" r="7"></circle>
+<circle cx="11.5" cy="16" fill="#ffffff" r="1"></circle>
+<circle cx="16.5" cy="16" fill="#ffffff" r="1"></circle>
+</svg>
+</button>
+<!-- 11: Geometric Deer -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="deer" data-title="Forest Deer" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<path d="M8 5L10 9M6 7L9 9" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
+<path d="M20 5L18 9M22 7L19 9" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
+<polygon fill="currentColor" points="14,21 9,11 19,11"></polygon>
+<circle cx="12" cy="13" fill="#ffffff" r="1"></circle>
+<circle cx="16" cy="13" fill="#ffffff" r="1"></circle>
+</svg>
+</button>
+<!-- 12: Seal -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="seal" data-title="Harbour Seal" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<ellipse cx="14" cy="15" fill="currentColor" rx="8" ry="7"></ellipse>
+<circle cx="11" cy="14" fill="#ffffff" r="1.2"></circle>
+<circle cx="17" cy="14" fill="#ffffff" r="1.2"></circle>
+<ellipse cx="14" cy="17" fill="#ffffff" rx="2" ry="1"></ellipse>
+</svg>
+</button>
+<!-- 13: Hedgehog -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="hedgehog" data-title="Bramble Hedgehog" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<path d="M7 16L5 12L9 13L10 8L13 11L16 7L17 11L21 9L20 13L23 14L19 19H9L7 16Z" fill="currentColor"></path>
+<circle cx="12" cy="15" fill="#ffffff" r="1"></circle>
+</svg>
+</button>
+<!-- 14: Otter -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="otter" data-title="River Otter" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<circle cx="7" cy="11" fill="currentColor" r="2.5"></circle>
+<circle cx="21" cy="11" fill="currentColor" r="2.5"></circle>
+<ellipse cx="14" cy="15" fill="currentColor" rx="8" ry="6.5"></ellipse>
+<circle cx="11.5" cy="13.5" fill="#ffffff" r="1.2"></circle>
+<circle cx="16.5" cy="13.5" fill="#ffffff" r="1.2"></circle>
+<circle cx="14" cy="17" fill="#ffffff" r="1.5"></circle>
+</svg>
+</button>
+<!-- 15: Cyber Beetle -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="beetle" data-title="Beetle Scout" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<path d="M11 6L9 9M17 6L19 9" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
+<circle cx="14" cy="11" fill="currentColor" r="3.5"></circle>
+<rect fill="currentColor" height="9" rx="4" width="10" x="9" y="14"></rect>
+</svg>
+</button>
+<!-- 16: Wolf / Arctic Dog -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="wolf" data-title="Arctic Wolf" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<polygon fill="currentColor" points="8,4 12,11 6,11"></polygon>
+<polygon fill="currentColor" points="20,4 16,11 22,11"></polygon>
+<polygon fill="currentColor" points="14,21 7,12 21,12"></polygon>
+<circle cx="11.5" cy="13.5" fill="#ffffff" r="1"></circle>
+<circle cx="16.5" cy="13.5" fill="#ffffff" r="1"></circle>
+</svg>
+</button>
+<!-- 17: Penguin -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="penguin" data-title="Glacier Penguin" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<ellipse cx="14" cy="14" fill="currentColor" rx="7.5" ry="9"></ellipse>
+<ellipse cx="14" cy="16" fill="#ffffff" rx="5" ry="6.5"></ellipse>
+<polygon fill="currentColor" points="12,13 16,13 14,16"></polygon>
+</svg>
+</button>
+<!-- 18: Red Panda / Raccoon -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="raccoon" data-title="Masked Scout" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<polygon fill="currentColor" points="6,6 10,12 5,12"></polygon>
+<polygon fill="currentColor" points="22,6 18,12 23,12"></polygon>
+<circle cx="14" cy="15" fill="currentColor" r="8"></circle>
+<rect fill="#ffffff" height="4" rx="2" width="14" x="7" y="13"></rect>
+<circle cx="10.5" cy="15" fill="currentColor" r="1.2"></circle>
+<circle cx="17.5" cy="15" fill="currentColor" r="1.2"></circle>
+</svg>
+</button>
+<!-- 19: Mouse / Pip -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="mouse" data-title="Little Mouse" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<circle cx="7" cy="8" fill="currentColor" r="4.5"></circle>
+<circle cx="21" cy="8" fill="currentColor" r="4.5"></circle>
+<circle cx="14" cy="16" fill="currentColor" r="7"></circle>
+<circle cx="12" cy="15" fill="#ffffff" r="1"></circle>
+<circle cx="16" cy="15" fill="#ffffff" r="1"></circle>
+</svg>
+</button>
+<!-- 20: Minimal Prism Totem -->
+<button class="avatar-option h-11 w-11 rounded-lg border border-outline-variant/30 hover:border-outline-variant bg-surface flex items-center justify-center text-secondary hover:text-on-surface transition-all" data-svg="prism" data-title="Northstar Totem" type="button">
+<svg fill="none" height="22" viewbox="0 0 28 28" width="22">
+<polygon fill="currentColor" points="14,4 22,12 14,24 6,12"></polygon>
+<circle cx="14" cy="13" fill="#ffffff" r="2.5"></circle>
+</svg>
+</button>
+</div>
+</div>
+<!-- 12 Subtle Palette Swatches -->
+<div class="pt-2 border-t border-outline-variant/20">
+<p class="text-[11px] font-label-sm text-secondary mb-2">Accent swatch</p>
+<div class="flex items-center justify-between gap-1" id="swatch-container">
+<!-- 1: Sage Green (Active) -->
+<button aria-label="Deep Sage" class="color-swatch w-6 h-6 rounded-full bg-[#176b50] flex items-center justify-center text-white ring-2 ring-primary ring-offset-1 focus:outline-none" data-hex="#176b50" type="button">
+<span class="text-[10px] leading-none">✓</span>
+</button>
+<!-- 2: Emerald -->
+<button aria-label="Emerald" class="color-swatch w-6 h-6 rounded-full bg-[#005e45] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#005e45" type="button"></button>
+<!-- 3: Olive -->
+<button aria-label="Olive" class="color-swatch w-6 h-6 rounded-full bg-[#576343] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#576343" type="button"></button>
+<!-- 4: Teal -->
+<button aria-label="Teal" class="color-swatch w-6 h-6 rounded-full bg-[#147a76] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#147a76" type="button"></button>
+<!-- 5: Mist Blue -->
+<button aria-label="Mist Blue" class="color-swatch w-6 h-6 rounded-full bg-[#355b88] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#355b88" type="button"></button>
+<!-- 6: Lavender -->
+<button aria-label="Lavender" class="color-swatch w-6 h-6 rounded-full bg-[#65558f] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#65558f" type="button"></button>
+<!-- 7: Blush -->
+<button aria-label="Blush" class="color-swatch w-6 h-6 rounded-full bg-[#9c4d62] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#9c4d62" type="button"></button>
+<!-- 8: Warm Terracotta -->
+<button aria-label="Terracotta" class="color-swatch w-6 h-6 rounded-full bg-[#9f403d] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#9f403d" type="button"></button>
+<!-- 9: Golden Sand -->
+<button aria-label="Golden Sand" class="color-swatch w-6 h-6 rounded-full bg-[#916b1f] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#916b1f" type="button"></button>
+<!-- 10: Charcoal -->
+<button aria-label="Charcoal" class="color-swatch w-6 h-6 rounded-full bg-[#2c3433] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#2c3433" type="button"></button>
+<!-- 11: Slate -->
+<button aria-label="Slate" class="color-swatch w-6 h-6 rounded-full bg-[#586160] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#586160" type="button"></button>
+<!-- 12: Mint -->
+<button aria-label="Mint" class="color-swatch w-6 h-6 rounded-full bg-[#418870] flex items-center justify-center text-white hover:scale-110 transition-transform" data-hex="#418870" type="button"></button>
+</div>
+</div>
+</div>
+</div>
+<!-- PRIMARY ACTIONS -->
+<div class="space-y-3 pt-3">
+<button class="w-full h-11 bg-primary text-surface-container-lowest font-label-md text-label-md rounded-lg shadow-sm hover:opacity-95 active:scale-[0.99] transition-all flex items-center justify-center gap-2 font-medium" type="button">
+<span>Open my workspace</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+<div class="flex items-center justify-center">
+<button class="text-xs font-label-sm text-secondary hover:text-on-surface transition-colors py-1 inline-flex items-center gap-1" type="button">
+<span>← Back to recovery key</span>
+</button>
+</div>
+</div>
+</form>
+<!-- DISCREET FOOTER NOTE -->
+<p class="text-center text-[11px] font-body-sm text-secondary/80 border-t border-outline-variant/20 pt-4">
+          Private by design. Built for working together.
+        </p>
+</div>
+</section>
+</main>
+<script>
+    // Lightweight interactive switcher for avatar preview & swatches
+    const previewContainer = document.getElementById('avatar-preview-container');
+    const previewSvg = document.getElementById('preview-svg');
+    const creatureName = document.getElementById('creature-name');
+    const avatarButtons = document.querySelectorAll('.avatar-option');
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+
+    let currentColor = '#176b50';
+
+    avatarButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Deselect all
+        avatarButtons.forEach(b => {
+          b.classList.remove('border-2', 'border-primary', 'bg-primary-container/20', 'text-primary');
+          b.classList.add('border', 'border-outline-variant/30', 'bg-surface', 'text-secondary');
+        });
+
+        // Select clicked
+        btn.classList.remove('border', 'border-outline-variant/30', 'bg-surface', 'text-secondary');
+        btn.classList.add('border-2', 'border-primary', 'bg-primary-container/20', 'text-primary');
+
+        // Update preview title & SVG content
+        creatureName.textContent = btn.getAttribute('data-title');
+        const svgInner = btn.querySelector('svg').innerHTML;
+        previewSvg.innerHTML = svgInner;
+      });
+    });
+
+    colorSwatches.forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        colorSwatches.forEach(s => {
+          s.classList.remove('ring-2', 'ring-primary', 'ring-offset-1');
+          s.innerHTML = '';
+        });
+
+        swatch.classList.add('ring-2', 'ring-primary', 'ring-offset-1');
+        swatch.innerHTML = '<span class="text-[10px] leading-none">✓</span>';
+
+        currentColor = swatch.getAttribute('data-hex');
+        previewContainer.style.backgroundColor = currentColor;
+      });
+    });
+  </script>
+</body></html>

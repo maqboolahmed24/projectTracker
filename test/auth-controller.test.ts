@@ -204,3 +204,18 @@ test('CP04: Forget runs all encrypted-store cleanup hooks even when one cleanup 
   assert.equal(cleaned, true); assert.equal((await f.remembered.list()).length, 0);
   assert.equal(await f.devices.getStaged(f.operationId), undefined);
 });
+
+test('CP11: only confirmed explicit sign-out awaits pending cleanup; refresh, automatic invalidation and failed logout preserve requests', async (t) => {
+  const f=await fixture();t.after(()=>f.close());let cleared=0,cleaned=0,release:(()=>void)|undefined;
+  f.controller.onClear(()=>{cleared++;});
+  f.controller.onSignedOut(async reference=>{assert.deepEqual(reference,f.reference);await new Promise<void>(resolve=>{release=resolve;});cleaned++;});
+  await f.controller.login(f.reference,password);await f.controller.refresh();assert.equal(cleaned,0);
+  await f.controller.invalidateSession();assert.equal(f.logoutCalls,1);assert.equal(cleaned,0);
+  await f.controller.login(f.reference,password);f.failLogout=true;await assert.rejects(f.controller.logout(),code('UNAVAILABLE'));
+  assert.equal(cleaned,0);assert.equal(f.controller.current(),undefined);assert.ok(cleared>0);
+  assert.deepEqual(await f.devices.getStaged(f.operationId),f.wrapper);
+  f.failLogout=false;let done=false;const logout=f.controller.logout().then(()=>{done=true;});
+  for(let attempt=0;attempt<20&&!release;attempt++)await new Promise(resolve=>setImmediate(resolve));
+  assert.ok(release);assert.equal(done,false);release();await logout;assert.equal(cleaned,1);
+  assert.equal((await f.remembered.list()).length,1);assert.deepEqual(await f.devices.getStaged(f.operationId),f.wrapper);
+});

@@ -19,7 +19,7 @@ export const roleBinding = roleContextRequest.extend({ version: z.literal(1), or
   authorizer: z.strictObject({ accountId: identifier, device: pairingPublicDevice, credentialGeneration: positiveCounter, sessionGeneration: positiveCounter }),
   securityVersion: positiveCounter, nextSecurityVersion: positiveCounter, securityHead: digest, dataGeneration: positiveCounter,
   ownershipVersion: positiveCounter, custodyEpoch: positiveCounter, workspaceKeyEpoch: positiveCounter, genesisFingerprint: digest,
-  issuedAt: z.iso.datetime(), expiresAt: z.iso.datetime(),
+  writeSchema:z.literal(2).optional(),issuedAt: z.iso.datetime(), expiresAt: z.iso.datetime(),
 }).refine((value) => [value.securityVersion, value.nextSecurityVersion, value.nextRevision, ...(value.previous ? [value.previous.revision] : [])]
   .every((entry) => positiveCounter.safeParse(entry).success) && BigInt(value.nextSecurityVersion) === BigInt(value.securityVersion) + 1n &&
   BigInt(value.nextRevision) === BigInt(value.previous?.revision ?? '0') + 1n &&
@@ -59,7 +59,7 @@ function snapshot<T>(schema: z.ZodType<T>, value: unknown): T {
 export function roleLabelHeader(value: RoleBinding): ContentHeader {
   const binding = snapshot(roleBinding, value), actor = binding.authorizer;
   return { version: 1, purpose: 'ukda.content.v1', algorithm: 'XChaCha20-Poly1305', workspaceId: binding.workspaceId,
-    scope: 'workspace', scopeId: binding.workspaceId, recordId: binding.roleId, recordType: 'role', schema: 1,
+    scope: 'workspace', scopeId: binding.workspaceId, recordId: binding.roleId, recordType: 'role', schema: binding.writeSchema??1,
     keyEpoch: binding.workspaceKeyEpoch, revision: binding.nextRevision, operationId: binding.operationId,
     accountId: actor.accountId, deviceId: actor.device.id, keyGeneration: actor.device.keyGeneration, permissionVersion: binding.nextRevision,
     securityVersion: binding.securityVersion, securityHead: binding.securityHead, dataGeneration: binding.dataGeneration,

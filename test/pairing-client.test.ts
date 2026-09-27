@@ -1,4 +1,5 @@
 import test, { type TestContext } from 'node:test';
+import type { PairingList } from '../src/shared/pairing.js';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import * as opaque from '@serenity-kit/opaque';
@@ -350,4 +351,40 @@ test('CP04: Forget deletes matching corrupt ciphertext while unrelated malformed
     request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error);
   });
   assert.deepEqual(remaining.sort(), ['different-identity', 'unrelated-corrupt']);
+});
+
+test('onboarding: discovery remains independent of approval singleflight and rejects stale or oversized metadata', async t => {
+  const f = await fixture(t), pending = await f.target.controller.begin();
+  const page: PairingList = { workspaceId: f.workspaceId, observedAt: new Date().toISOString(), requests: [{ operationId: pending.operationId,
+    accountId: f.accountId, deviceId: pending.deviceId, state: 'waiting_approver', expiresAt: new Date(Date.now() + 600_000).toISOString(),
+    approverAccountId: null, approverDeviceId: null }], nextCursor: null };
+  let release!: (value: PairingList) => void, started!: () => void;
+  const called = new Promise<void>(resolve => { started = resolve; });
+  f.transport.listPending = async () => { started(); return new Promise(resolve => { release = resolve; }); };
+  const discovery = f.owner.controller.listPending(); await called;
+  assert.ok((await f.owner.controller.claim(pending.operationId)).fingerprint, 'Pending discovery must not block mutation operations');
+  release(page); assert.deepEqual(await discovery, page);
+  f.transport.listPending = async () => ({ ...page, workspaceId: randomUUID() });
+  await assert.rejects(f.owner.controller.listPending(), fails('INVALID_PAIRING'));
+  f.transport.listPending = async () => ({ ...page, requests: [...page.requests, ...page.requests] });
+  await assert.rejects(f.owner.controller.listPending({ limit: 1 }), fails('INVALID_PAIRING'));
+  f.transport.listPending = async () => ({ ...page, nextCursor: randomUUID() });
+  await assert.rejects(f.owner.controller.listPending(), fails('INVALID_PAIRING'));
+});
+
+test('onboarding: polling observes confirmations without claiming or signing; logout aborts discovery', async t => {
+  const f = await fixture(t), pending = await f.target.controller.begin();
+  const before = await f.target.controller.inspect(pending.operationId);
+  assert.equal(before.state, 'waiting_approver'); assert.equal(before.recipientConfirmed, false); assert.equal(before.approverConfirmed, false);
+  const claimed = await f.owner.controller.claim(pending.operationId);
+  const record = await f.owner.store.get('approver', pending.operationId);
+  assert.equal((await f.owner.controller.inspect(pending.operationId)).fingerprint, claimed.fingerprint);
+  assert.deepEqual(await f.owner.store.get('approver', pending.operationId), record, 'Read-only inspection must not mutate the saved ceremony');
+  await f.target.controller.confirmRecipient(pending.operationId, claimed.fingerprint!);
+  const observed = await f.owner.controller.inspect(pending.operationId);
+  assert.equal(observed.recipientConfirmed, true); assert.equal(observed.approverConfirmed, false);
+  let started!: () => void; const called = new Promise<void>(resolve => { started = resolve; });
+  f.transport.listPending = async () => { started(); return new Promise(() => {}); };
+  const discovery = f.owner.controller.listPending(); const cancelled = assert.rejects(discovery, fails('CANCELLED'));
+  await called; await f.owner.auth.logout(); await cancelled;
 });

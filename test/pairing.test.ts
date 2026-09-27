@@ -138,6 +138,26 @@ test('CP04: both full transcript confirmations activate one device; private deli
   await assert.rejects(f.pairing.confirm(approved.cookieValue, approved.csrfToken, confirmed.recipientConfirmation), code('PAIRING_INVALID'));
 });
 
+test('onboarding: pairing discovery pages live metadata and rechecks current approved authority', async (t) => {
+  const f = await fixture(t), one = await f.start(), two = await f.start();
+  const read = (input: object = { limit: 1 }) => f.pairing.listPending(f.existing.cookieValue, f.existing.csrfToken, input);
+  const expected = [one.request.operationId, two.request.operationId].sort();
+  const page = await read(); assert.equal(page.requests[0]!.operationId, expected[0]); assert.equal(page.nextCursor, expected[0]);
+  const last = await read({ limit: 1, after: page.nextCursor }); assert.equal(last.requests[0]!.operationId, expected[1]); assert.equal(last.nextCursor, null);
+  assert.deepEqual(Object.keys(page.requests[0]!).sort(), ['accountId', 'approverAccountId', 'approverDeviceId', 'deviceId', 'expiresAt', 'operationId', 'state']);
+  assert.equal(page.requests[0]!.state, 'verifying'); assert.equal(page.requests[0]!.approverDeviceId, f.deviceId);
+  for (const privateValue of [one.view.transcriptDigest!, one.request.localBundleDigest, one.request.device.signingPublicKey, f.existing.csrfToken]) assert.equal(JSON.stringify(page).includes(privateValue), false);
+  await assert.rejects(f.pairing.listPending(f.fresh.cookieValue, f.fresh.csrfToken, {}), code('DEVICE_APPROVAL_REQUIRED'));
+  await assert.rejects(read({ limit: 51 }), code('INVALID_REQUEST'));
+  await f.admin.control.query("UPDATE security.ceremonies SET state='cancelled' WHERE workspace_id=$1 AND ceremony_id=$2", [f.workspaceId, one.request.operationId]);
+  assert.equal((await read({})).requests.length, 1);
+  await f.admin.control.query('UPDATE security.workspaces SET restore_quarantine=true WHERE workspace_id=$1', [f.workspaceId]);
+  await assert.rejects(read(), code('PAIRING_FORBIDDEN'));
+  await f.admin.control.query('UPDATE security.workspaces SET restore_quarantine=false WHERE workspace_id=$1', [f.workspaceId]);
+  f.advance(5 * 60_000); assert.equal((await read({})).requests.length, 1, 'Discovery requires a current session, not recent password proof');
+  f.advance(5 * 60_000); assert.deepEqual((await read({})).requests, [], 'Expired requests are absent');
+});
+
 test('CP04: operation resume and lost-response replay keep the same grant and immutable delivery', async (t) => {
   const f = await fixture(t), pending = await f.start();
   const again = await f.issue();
@@ -228,6 +248,8 @@ test('CP04: any active Owner can pair an existing member; an ordinary member can
   const fresh = await f.issue(false, memberId), signing = await generateSigningKeyPair(), recipient = await generateRecipientKeyPair();
   const request = { operationId: randomUUID(), device: { id: randomUUID(), keyGeneration: '1', signingPublicKey: base64urlEncode(signing.publicKey), recipientPublicKey: base64urlEncode(recipient.publicKey) }, localBundleDigest: 'd'.repeat(64) };
   await f.pairing.begin(fresh.cookieValue, fresh.csrfToken, request);
+  assert.deepEqual((await f.pairing.listPending(ordinaryApproved.cookieValue, ordinaryApproved.csrfToken, {})).requests.map(row => row.accountId), [memberId]);
+  assert.deepEqual(new Set((await f.pairing.listPending(f.existing.cookieValue, f.existing.csrfToken, {})).requests.map(row => row.accountId)), new Set([f.accountId, memberId]));
   const view = await f.pairing.claim(f.existing.cookieValue, f.existing.csrfToken, request.operationId);
   assert.equal(view.transcript?.accountId, memberId); assert.equal(view.transcript?.scopes[0]?.mode, 'content');
   assert.deepEqual(view.transcript?.scopes[0]?.permissions, ['read_project']);

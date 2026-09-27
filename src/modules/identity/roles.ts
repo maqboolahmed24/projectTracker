@@ -15,7 +15,7 @@ export interface RoleAuth { cookieValue: string; csrfToken: string }
 interface Options { databases: Databases; sessions: SessionService; origin: string; now?: () => Date;
   requestBudget?: (scope: { workspaceId: string; accountId: string; history: boolean }) => Promise<void>;
   hooks?: { beforeControlCommit?: () => Promise<void>; afterControlCommit?: () => Promise<void>; beforeProjection?: () => Promise<void> } }
-interface Authority { lifecycle: string; licence_state: string; security_head: string; security_version: string; data_generation: string;
+interface Authority { write_schema:number; lifecycle: string; licence_state: string; security_head: string; security_version: string; data_generation: string;
   ownership_version: string; custody_epoch: string; genesis_object_id: string; content_maintenance: boolean; restore_quarantine: boolean }
 interface Stored { object_id: string; object_hash: string; object_kind: string; versioned_object: unknown; staged_operation_id: string; state: string; expires_at: Date | null }
 interface RoleRow { role_id: string; template: 'owner' | 'manager' | 'member' | 'viewer' | 'custom'; revision: string; state: 'active' | 'retired';
@@ -42,7 +42,7 @@ export class RoleService {
       await this.#o.requestBudget?.({ workspaceId, accountId: p.accountId, history }); return action(c, w, p, this.#now());
     }); } catch (error) { if (error instanceof AppError) throw error; throw unavailable(); }
   }
-  #writable(w: Authority) { assertEntitlementAllows(w.licence_state, 'expand_access'); if (w.lifecycle !== 'active' || w.content_maintenance || w.restore_quarantine) throw new AppError('WORKSPACE_RESTRICTED', 'Role definitions cannot change while workspace writes are restricted', 423); }
+  #writable(w: Authority) { if(![1,2].includes(w.write_schema))throw new AppError('UPDATE_REQUIRED','Update the client before changing content',409); assertEntitlementAllows(w.licence_state, 'expand_access'); if (w.lifecycle !== 'active' || w.content_maintenance || w.restore_quarantine) throw new AppError('WORKSPACE_RESTRICTED', 'Role definitions cannot change while workspace writes are restricted', 423); }
   async #object(c: pg.PoolClient, workspaceId: string, objectId: string, kind?: string, committed = true): Promise<Stored> {
     const o = (await c.query<Stored>('SELECT * FROM security.staged_objects WHERE workspace_id=$1 AND object_id=$2', [workspaceId, objectId])).rows[0];
     if (!o || (committed && o.state !== 'committed') || (kind && o.object_kind !== kind) || await digestObject(o.versioned_object) !== o.object_hash) throw changed(); return o;
@@ -72,7 +72,7 @@ export class RoleService {
     const d = (await c.query<{ key_generation: string; signing_public_key: Buffer; recipient_public_key: Buffer }>('SELECT key_generation,signing_public_key,recipient_public_key FROM security.devices WHERE workspace_id=$1 AND profile_id=$2 AND device_id=$3', [request.workspaceId, p.accountId, p.deviceId])).rows[0]; if (!d) throw forbidden();
     const epoch = (await c.query<{ key_epoch: string }>("SELECT key_epoch FROM security.scope_heads WHERE workspace_id=$1 AND scope_kind='workspace' AND scope_id=$1", [request.workspaceId])).rows[0]?.key_epoch;
     const genesis = await this.#object(c, request.workspaceId, w.genesis_object_id, 'genesis'); if (!epoch) throw changed();
-    return roleBinding.parse({ version: 1, origin: this.#o.origin, ...request, previous: previous?.definition ?? null, nextRevision: previous ? next(previous.row.revision) : '1',
+    return roleBinding.parse({ version: 1,...(w.write_schema===2?{writeSchema:2}:{}), origin: this.#o.origin, ...request, previous: previous?.definition ?? null, nextRevision: previous ? next(previous.row.revision) : '1',
       authorizer: { accountId: p.accountId, device: { id: p.deviceId!, keyGeneration: d.key_generation, signingPublicKey: base64urlEncode(d.signing_public_key), recipientPublicKey: base64urlEncode(d.recipient_public_key) }, credentialGeneration: p.credentialGeneration, sessionGeneration: p.sessionGeneration },
       securityVersion: w.security_version, nextSecurityVersion: next(w.security_version), securityHead: w.security_head, dataGeneration: w.data_generation,
       ownershipVersion: w.ownership_version, custodyEpoch: w.custody_epoch, workspaceKeyEpoch: epoch, genesisFingerprint: genesis.object_hash,

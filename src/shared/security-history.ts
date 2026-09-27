@@ -12,6 +12,10 @@ import { roleBinding, roleTransition, validateRoleTransition, type RoleBinding }
 import { accessTransition, validateAccessTransition, type AccessTransition } from './access-change.js';
 import { scopeProvisionTransition, validateScopeProvisionTransition, type ScopeProvisionTransition } from './scope-provision.js';
 import { parseJsonStrict } from './json.js';
+import { applyIdentityUpgradeHistory, verifyUpgradeOwner, type UpgradeRecordRef } from './encrypted-upgrades.js';
+import { upgradeStart, upgradeFinish, validateUpgradeLifecycle } from './upgrade-api.js';
+import { applyLifecycleHistory, type DeletionReference } from './lifecycle.js';
+import { applyRestoreTransition, restoreStart, restoreVerification } from './restoration.js';
 
 export interface HistoryScope {
   scope: 'workspace' | 'project'; scopeId: string; mode: 'custody' | 'content'; keyEpoch: string;
@@ -50,6 +54,18 @@ export interface SecurityHistoryState {
   roles: Record<string, HistoryRole>;
   scopeHeads: Record<string, { scope: 'workspace' | 'project'; scopeId: string; keyEpoch: string }>;
   custodyManifest: { id: string; digest: string; revision: string };
+  /** Genesis stores the first device delivery separately from its custody-manifest scope source. */
+  genesisDeviceEnvelope?: { deviceId: string; id: string; digest: string };
+  writeSchema?: 1 | 2;
+  activeUpgrade?: { migrationId:string;manifestDigest:string;manifest:UpgradeRecordRef[] } | null;
+  workspaceContent?: { objectId:string;digest:string;revision:string };
+  /** Content-only pending invitations never confer membership or capabilities. */
+  pendingProfileContent?: Record<string, {objectId:string;digest:string;revision:string}>;
+  lifecycle?: 'active'|'pending_deletion'|'deleted';
+  deletion?: DeletionReference|null;
+  deletionRequestDigest?: string;
+  restoreQuarantine?: boolean;
+  activeRestore?: {restoreId:string;manifestDigest:string}|null;
 }
 export const securityPin = z.strictObject({ genesisFingerprint: digest, securityHead: digest, securityVersion: positiveCounter });
 export type SecurityPin = z.infer<typeof securityPin>;
@@ -91,7 +107,7 @@ export function verifyEnrolmentBindingAgainstHistory(value: EnrolmentBinding, st
     if (binding.workspaceId !== state.workspaceId || binding.origin !== state.origin || binding.genesisFingerprint !== state.genesisFingerprint ||
       binding.securityHead !== state.securityHead || binding.securityVersion !== state.securityVersion || binding.dataGeneration !== state.dataGeneration ||
       binding.ownershipVersion !== state.ownershipVersion || binding.custodyEpoch !== state.custodyEpoch || binding.workspaceKeyEpoch !== state.workspaceKeyEpoch ||
-      state.licenceState !== 'active' || state.entitlementState !== 'activated') throw invalid();
+      state.licenceState !== 'active' || state.entitlementState !== 'activated' || (binding.writeSchema??1)!==(state.writeSchema??1) || state.activeUpgrade) throw invalid();
     const role = state.roles[binding.role.id], ownerKind = binding.kind !== 'join_member';
     if (!role || role.state !== 'active' || role.revision !== binding.role.revision || !equal(role.permissions, binding.role.permissions) ||
       (role.template === 'owner') !== ownerKind) throw invalid();
@@ -122,6 +138,8 @@ export function verifyEnrolmentBindingAgainstHistory(value: EnrolmentBinding, st
     } else if (target || Object.values(state.devices).some((device) => device.accountId === binding.accountId) ||
       Object.values(state.recoveryAuthorities).some((authority) => authority.accountId === binding.accountId)) throw invalid();
 
+    const pendingContent=state.pendingProfileContent?.[binding.accountId];
+    if (pendingContent && (binding.profile.objectId!==pendingContent.objectId || binding.profile.objectDigest!==pendingContent.digest || binding.profile.revision!==pendingContent.revision)) throw invalid();
     const currentScopes = [
       ...Object.values(state.profiles).filter((profile) => profile.active).flatMap((profile) => profile.scopes),
       ...Object.values(state.devices).filter((device) => device.active && state.profiles[device.accountId]?.active).flatMap((device) => device.scopes),
@@ -223,7 +241,7 @@ export function verifyRoleBindingAgainstHistory(value: RoleBinding, state: Secur
     if (binding.workspaceId !== state.workspaceId || binding.origin !== state.origin || binding.genesisFingerprint !== state.genesisFingerprint ||
       binding.securityHead !== state.securityHead || binding.securityVersion !== state.securityVersion || binding.dataGeneration !== state.dataGeneration ||
       binding.ownershipVersion !== state.ownershipVersion || binding.custodyEpoch !== state.custodyEpoch || binding.workspaceKeyEpoch !== state.workspaceKeyEpoch ||
-      state.licenceState !== 'active' || state.entitlementState !== 'activated') throw invalid();
+      state.licenceState !== 'active' || state.entitlementState !== 'activated' || (binding.writeSchema??1)!==(state.writeSchema??1) || state.activeUpgrade) throw invalid();
     const profile = state.profiles[actor.accountId], device = state.devices[actor.device.id];
     const custody = (scope: HistoryScope) => scope.scope === 'workspace' && scope.scopeId === state.workspaceId && scope.mode === 'custody' &&
       scope.keyEpoch === state.custodyEpoch && scope.permissions.includes('read_project') &&
@@ -321,9 +339,11 @@ export async function verifySecurityHistory(value: SecurityHistoryInput): Promis
       !equal(body.ownerPermissions, [...capabilities]) || !unique(body.manifest.map((entry) => entry.id)) ||
       !await verifyObject(input.genesis, base64urlDecode(body.device.signingPublicKey, 32), 'ukda.genesis.v1')) throw invalid();
     const custody = body.manifest.find((entry) => entry.id === body.custodyId && entry.kind === 'custody_manifest');
+    const deviceEnvelope = body.manifest.find((entry) => entry.id === body.deviceEnvelopeId && entry.kind === 'key_envelope');
     const recoveryEnvelope = body.manifest.find((entry) => entry.id === body.recoveryEnvelopeId && entry.kind === 'key_envelope');
     const profileObject = body.manifest.find((entry) => entry.id === body.accountId && entry.kind === 'encrypted_profile');
-    if (!custody || !recoveryEnvelope || !profileObject || !unique(Object.values(body.roles)) ||
+    const workspaceObject = body.manifest.find((entry) => entry.id === body.workspaceId && entry.kind === 'encrypted_workspace');
+    if (!custody || !deviceEnvelope || !recoveryEnvelope || !profileObject || !unique(Object.values(body.roles)) ||
       Object.values(body.roles).some((id) => [body.workspaceId, body.accountId, body.device.id, body.recovery.id, body.genesisId,
         body.custodyId, body.deviceEnvelopeId, body.recoveryEnvelopeId].includes(id))) throw invalid();
     const workspaceScope: HistoryScope = { scope: 'workspace', scopeId: body.workspaceId, mode: 'custody', keyEpoch: '1',
@@ -341,7 +361,9 @@ export async function verifySecurityHistory(value: SecurityHistoryInput): Promis
       roles: Object.fromEntries((Object.keys(BUILTIN_ROLE_PERMISSIONS) as BuiltinRole[]).map((template) => [body.roles[template],
         { id: body.roles[template], template, revision: '1', permissions: [...BUILTIN_ROLE_PERMISSIONS[template]], state: 'active', label: null }])),
       scopeHeads: { [`workspace:${body.workspaceId}`]: { scope: 'workspace', scopeId: body.workspaceId, keyEpoch: '1' } },
-      custodyManifest: { id: custody.id, digest: custody.digest, revision: '1' } };
+      custodyManifest: { id: custody.id, digest: custody.digest, revision: '1' },
+      genesisDeviceEnvelope: { deviceId: body.device.id, id: deviceEnvelope.id, digest: deviceEnvelope.digest },writeSchema:1,activeUpgrade:null,
+      ...(workspaceObject?{workspaceContent:{objectId:workspaceObject.id,digest:workspaceObject.digest,revision:'1'}}:{}) };
     if (input.pin && BigInt(input.expected.securityVersion) < BigInt(input.pin.securityVersion)) throw new SecurityHistoryError('ROLLBACK');
     let foundPin = !input.pin;
     const acceptPin = () => {
@@ -353,9 +375,37 @@ export async function verifySecurityHistory(value: SecurityHistoryInput): Promis
     acceptPin();
     const operations = new Set([body.operationId]);
     for (const unknown of input.transitions) {
+      if (state.lifecycle === 'deleted') throw invalid();
       const outer = z.object({ body: z.object({ purpose: z.string() }), signature: binary(64) }).parse(unknown);
       let operationId: string;
-      if (outer.body.purpose === 'ukda.entitlement-transition.v1') {
+      if (outer.body.purpose === 'ukda.workspace-lifecycle.v1' || outer.body.purpose === 'ukda.workspace-deleted.v1') {
+        operationId=await applyLifecycleHistory(unknown,state,input.trustedServiceKeys);
+      } else if (outer.body.purpose === 'ukda.restore-start.v1' || outer.body.purpose === 'ukda.restore-verify.v1') {
+        const restored=await applyRestoreTransition(state,unknown,input.trustedServiceKeys);
+        operationId=outer.body.purpose==='ukda.restore-start.v1'?restoreStart.parse(unknown).body.operationId:restoreVerification.parse(unknown).body.binding.operationId;
+        Object.assign(state,{...restored,securityHead:state.securityHead,securityVersion:state.securityVersion});
+      } else if (outer.body.purpose === 'ukda.encrypted-upgrade-start.v1') {
+        const transition=upgradeStart.parse(unknown),b=transition.body.binding;
+        checkHead(state,b.workspaceId,b.securityHead,b.nextSecurityVersion);verifyUpgradeOwner(b,state);
+        await validateUpgradeLifecycle(transition,'start');
+        if ((state.writeSchema??1)!==1||state.activeUpgrade) throw invalid();
+        const scoped=(projectId:string)=>[state.profiles[b.accountId]!.scopes,state.devices[b.deviceId]!.scopes].every(scopes=>scopes.some(scope=>
+          scope.scope==='project'&&scope.scopeId===projectId&&scope.permissions.includes('read_project')&&scope.permissions.includes('plan_projects')&&
+          scope.keyEpoch===state.scopeHeads[`project:${projectId}`]?.keyEpoch&&(scope.expiresAt===null||Date.parse(scope.expiresAt)>Date.parse(b.issuedAt))));
+        if (transition.body.manifest.some(ref=>ref.projectId!==null&&!scoped(ref.projectId))) throw invalid();
+        state.activeUpgrade={migrationId:b.migrationId,manifestDigest:b.manifestDigest,manifest:copy(transition.body.manifest)};
+        operationId=b.operationId;
+      } else if (outer.body.purpose === 'ukda.encrypted-upgrade-finish.v1') {
+        const transition=upgradeFinish.parse(unknown),b=transition.body.binding;
+        checkHead(state,b.workspaceId,b.securityHead,b.nextSecurityVersion);verifyUpgradeOwner(b,state);
+        await validateUpgradeLifecycle(transition,'finish');
+        if ((state.writeSchema??1)!==1||state.activeUpgrade?.migrationId!==b.migrationId||state.activeUpgrade.manifestDigest!==b.manifestDigest||
+          !equal(transition.body.targets.map(ref=>({kind:ref.kind,id:ref.id,projectId:ref.projectId})),state.activeUpgrade.manifest.map(ref=>({kind:ref.kind,id:ref.id,projectId:ref.projectId})))) throw invalid();
+        state.writeSchema=2;state.activeUpgrade=null;operationId=b.operationId;
+      } else if (outer.body.purpose === 'ukda.identity-content-upgrade.v1') {
+        const transition=await applyIdentityUpgradeHistory(unknown,state),b=transition.body.binding;
+        checkHead(state,b.workspaceId,b.securityHead,b.nextSecurityVersion);operationId=b.operationId;
+      } else if (outer.body.purpose === 'ukda.entitlement-transition.v1') {
         const transition = z.strictObject({ body: entitlementTransitionBody, signature: binary(64) }).parse(unknown);
         const change = transition.body;
         if (!change.workspaceId) throw invalid();
@@ -453,6 +503,7 @@ export async function verifySecurityHistory(value: SecurityHistoryInput): Promis
           role: { id: binding.role.id, revision: binding.role.revision },
           projectRoles: Object.fromEntries(binding.scopes.filter((scope) => scope.scope === 'project').map((scope) => [scope.scopeId, { id: binding.role.id, revision: binding.role.revision }])),
           profile: profile ? { id: binding.accountId, revision: profile.revision, objectId: profile.id, objectDigest: profile.digest } : copy(binding.profile) };
+        if (state.pendingProfileContent) delete state.pendingProfileContent[binding.accountId];
         if (recovery) {
           for (const authority of authorities) if (authority.accountId === binding.accountId) authority.active = false;
           const delivery = deliveries.find((item) => item.recipientKind === 'recovery' && item.recipientId === recovery.id)!;

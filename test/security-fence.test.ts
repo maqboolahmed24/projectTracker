@@ -60,6 +60,11 @@ async function fixture(t: TestContext, pending = false) {
     try {
       await admin.application.query('SELECT graphile_worker.remove_job($1)', [`activation:${workspaceId}`]);
       await transaction(admin.application, async (client) => {
+        // Only the isolated test administrator removes this fixture's permanent marker.
+        await client.query("SET LOCAL session_replication_role='replica'");
+        await client.query('DELETE FROM app.lifecycle_tombstones WHERE workspace_id=$1', [workspaceId]);
+      });
+      await transaction(admin.application, async (client) => {
         for (const table of ['notifications', 'notification_preferences', 'blockers', 'task_assignments', 'tasks', 'milestones', 'project_phases', 'project_access', 'projects', 'profiles', 'roles', 'workspaces']) await client.query(`DELETE FROM app.${table} WHERE workspace_id=$1`, [workspaceId]);
       });
       await admin.control.query('DELETE FROM security.workspaces WHERE workspace_id=$1', [workspaceId]);
@@ -381,7 +386,24 @@ test('CP03: pending/deleted workspaces stay fenced and an arbitrary application 
   const unheld = await f.db.application.connect();
   try { await assert.rejects(projectAuthoritativeWorkspace(f.db, f.workspaceId, unheld), (error: unknown) => error instanceof AppError && error.code === 'SECURITY_FENCED'); }
   finally { unheld.release(); }
-  await f.admin.control.query("UPDATE security.workspaces SET lifecycle='deleted',deleted_at=now() WHERE workspace_id=$1", [f.workspaceId]);
-  assert.deepEqual(await projectAuthoritativeWorkspace(f.db, f.workspaceId), { state: 'deleted' });
-  assert.equal((await f.admin.application.query('SELECT fence_closed FROM app.workspaces WHERE workspace_id=$1', [f.workspaceId])).rows[0]?.fence_closed, true);
+  // Unactivated reservations are discarded, not transitioned to deleted at
+  // version zero. Test terminal projection with an already activated authority.
+  // This remains a synthetic projection fixture; CP12 covers signed deletion.
+  const retired = await fixture(t);
+  assert.equal((await projectAuthoritativeWorkspace(retired.db, retired.workspaceId)).state, 'ready');
+  await withSecurityFence(retired.db, retired.workspaceId, async client => {
+    await transaction(retired.admin.control, async control => {
+      await control.query(`INSERT INTO security.security_transitions(workspace_id,sequence,operation_id,previous_head,head,action,actor_kind,signed_transition)
+        VALUES($1,2,$2,repeat('a',64),repeat('b',64),'fixture.deleted','service','{}')`, [retired.workspaceId, randomUUID()]);
+      await control.query("UPDATE security.workspaces SET lifecycle='deleted',deleted_at=now(),security_version=2,security_head=repeat('b',64),data_generation=2 WHERE workspace_id=$1", [retired.workspaceId]);
+    });
+    assert.deepEqual(await projectAuthoritativeWorkspace(retired.db, retired.workspaceId, client), { state: 'deleted' });
+  });
+  assert.deepEqual((await retired.admin.application.query('SELECT lifecycle,fence_closed,security_version,data_generation FROM app.workspaces WHERE workspace_id=$1', [retired.workspaceId])).rows[0],
+    { lifecycle: 'deleted', fence_closed: true, security_version: '2', data_generation: '2' });
+  assert.deepEqual((await retired.admin.application.query('SELECT security_head,security_version FROM app.lifecycle_tombstones WHERE workspace_id=$1', [retired.workspaceId])).rows[0],
+    { security_head: 'b'.repeat(64), security_version: '2' });
+  const unheldDeleted = await retired.db.application.connect();
+  try { await assert.rejects(projectAuthoritativeWorkspace(retired.db, retired.workspaceId, unheldDeleted), (error: unknown) => error instanceof AppError && error.code === 'SECURITY_FENCED'); }
+  finally { unheldDeleted.release(); }
 });

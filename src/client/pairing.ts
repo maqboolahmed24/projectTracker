@@ -4,7 +4,7 @@ import { binary, contentEnvelope, counter, digest, identifier, positiveCounter }
 import { base64urlDecode, base64urlEncode, canonicalJson, decryptContent, digestObject, generateRecipientKeyPair,
   generateSigningKeyPair, openRecipient, recipientEnvelope, sealRecipient, signObject, verifyObject } from '../shared/crypto.js';
 import { pairingApproval, pairingBegin, pairingConfirmation, pairingConfirmationFor, pairingGrant, pairingGrantBody,
-  pairingReceipt, pairingRecipientHeader, pairingTranscript, type PairingApproval, type PairingBegin, type PairingConfirmation,
+  pairingReceipt, pairingRecipientHeader, pairingTranscript, pairingList, pairingListRequest, type PairingList, type PairingApproval, type PairingBegin, type PairingConfirmation,
   type PairingDelivery, type PairingMaterial, type PairingReceipt, type PairingScope, type PairingTranscript, type PairingView } from '../shared/pairing.js';
 import { securityPin, verifySecurityHistory, type SecurityHistoryInput, type SecurityHistoryState, type SecurityPin, type HistoryScope } from '../shared/security-history.js';
 import { deviceContext, deviceWrapper, IndexedDeviceStore, unwrapDeviceBundle, wrapDeviceBundle, type DeviceBundle, type DeviceContext, type DeviceWrapper } from './device-store.js';
@@ -138,10 +138,12 @@ function signer(state: SecurityHistoryState, deviceId: string, accountId: string
 }
 async function openCustodyManifest(id: string, expectedDigest: string, custodyKey: string, epoch: string,
   materials: Map<string, PairingMaterial>, state: SecurityHistoryState) {
+  if (id !== state.custodyManifest.id || expectedDigest !== state.custodyManifest.digest || epoch !== state.custodyEpoch)
+    throw new PairingClientError('INCOMPLETE_KEYS');
   const item = materials.get(id);
   if (!item || item.digest !== expectedDigest || item.kind !== 'custody_manifest') throw new PairingClientError('INCOMPLETE_KEYS');
   const envelope = contentEnvelope.parse(item.value), header = envelope.header;
-  if (header.workspaceId !== state.workspaceId || header.scope !== 'workspace' || header.scopeId !== state.workspaceId || header.recordId !== id || header.recordType !== 'custody') throw new PairingClientError('INCOMPLETE_KEYS');
+  if (header.workspaceId !== state.workspaceId || header.scope !== 'workspace' || header.scopeId !== state.workspaceId || header.recordId !== id || header.recordType !== 'custody' || header.keyEpoch !== epoch) throw new PairingClientError('INCOMPLETE_KEYS');
   const key = base64urlDecode(custodyKey, 32);
   try {
     const manifest = custodyManifest.parse(await decryptContent(envelope, key, signer(state, header.deviceId, header.accountId, header.keyGeneration), header));
@@ -149,29 +151,49 @@ async function openCustodyManifest(id: string, expectedDigest: string, custodyKe
     return manifest;
   } finally { key.fill(0); }
 }
-function scopeMatches(value: { scope: string; scopeId: string }, scope: PairingScope) { return value.scope === scope.scope && value.scopeId === scope.scopeId; }
+function scopeMatches(value: { scope: string; scopeId: string }, scope: { scope: string; scopeId: string }) { return value.scope === scope.scope && value.scopeId === scope.scopeId; }
 async function scopePayload(scope: PairingScope, transcript: Pick<PairingTranscript, 'workspaceId' | 'custodyEpoch' | 'approverAccountId' | 'approverDevice'>, state: SecurityHistoryState,
   materials: Map<string, PairingMaterial>, bundle: DeviceBundle) {
   for (const source of scope.sources) if (materials.get(source.manifestId)?.digest !== source.manifestDigest) throw new PairingClientError('INCOMPLETE_KEYS');
-  const opened: unknown[] = [];
+  const profile = state.profiles[transcript.approverAccountId], device = state.devices[transcript.approverDevice.id];
+  if (transcript.workspaceId !== state.workspaceId || transcript.custodyEpoch !== state.custodyEpoch ||
+    !profile?.active || !device?.active || device.accountId !== profile.accountId || device.keyGeneration !== transcript.approverDevice.keyGeneration ||
+    device.signingPublicKey !== bundle.signingPublicKey || device.recipientPublicKey !== bundle.recipientPublicKey)
+    throw new PairingClientError('INCOMPLETE_KEYS');
+  const live = (entry: HistoryScope) => entry.permissions.includes('read_project') &&
+    (entry.expiresAt === null || Date.parse(entry.expiresAt) > Date.now());
+  const sources = device.scopes.filter((entry) => live(entry) && profile.scopes.some((personal) =>
+    scopeMatches(personal, entry) && personal.mode === entry.mode && personal.keyEpoch === entry.keyEpoch && live(personal)) &&
+    (entry.mode === 'custody' ? profile.owner && entry.scope === 'workspace' && entry.scopeId === state.workspaceId && entry.keyEpoch === state.custodyEpoch :
+      scope.mode === 'content' && scopeMatches(entry, scope) && entry.keyEpoch === scope.keyEpoch &&
+      state.scopeHeads[`${entry.scope}:${entry.scopeId}`]?.keyEpoch === entry.keyEpoch));
+  const opened: { value: unknown; custody: boolean }[] = [];
   const recipientKey = base64urlDecode(bundle.recipientPrivateKey, 32);
   try {
     for (const item of materials.values()) {
       if (item.kind !== 'key_envelope') continue;
+      // Presence of genuine source bytes does not authorise unrelated signed envelopes.
+      // Resolve each selected delivery through this holder's current signed scope.
+      const source = sources.find((entry) => entry.manifests.some((ref) => ref.id === item.id && ref.digest === item.digest));
+      const initial = state.custodyEpoch === '1' && state.genesisDeviceEnvelope?.deviceId === device.id &&
+        state.genesisDeviceEnvelope.id === item.id && state.genesisDeviceEnvelope.digest === item.digest && sources.some((entry) => entry.mode === 'custody');
+      if (!source && !initial) continue;
       const parsed = recipientEnvelope.safeParse(item.value); if (!parsed.success) throw new PairingClientError('INCOMPLETE_KEYS');
       const header = parsed.data.header;
       if (header.recipientId !== transcript.approverDevice.id || header.recipientKind !== 'device' || header.recipientAccountId !== transcript.approverAccountId ||
         header.recipientPublicKey !== bundle.recipientPublicKey || header.workspaceId !== transcript.workspaceId ||
         !(scopeMatches(header, scope) || (scope.mode === 'content' && header.scope === 'workspace'))) continue;
-      opened.push(await openRecipient(parsed.data, recipientKey, signer(state, header.senderDeviceId, header.senderAccountId, header.senderKeyGeneration), header));
+      opened.push({ value: await openRecipient(parsed.data, recipientKey, signer(state, header.senderDeviceId, header.senderAccountId, header.senderKeyGeneration), header),
+        custody: initial || source?.mode === 'custody' });
     }
   } finally { recipientKey.fill(0); }
-  for (const value of opened) {
+  for (const { value, custody: permitted } of opened) {
+    if (!permitted) continue;
     const delivered = custodyPayload.safeParse(value), initial = initialCustodyPayload.safeParse(value);
     if (!delivered.success && !initial.success) continue;
     const custody = delivered.success ? delivered.data : initial.data!;
     if (custody.custodyEpoch !== transcript.custodyEpoch) continue;
-    const references = delivered.success ? [delivered.data.manifest] : [...materials.values()].filter((item) => item.kind === 'custody_manifest').map((item) => ({ id: item.id, digest: item.digest }));
+    const references = delivered.success ? [delivered.data.manifest] : [{ id: state.custodyManifest.id, digest: state.custodyManifest.digest }];
     for (const ref of references) {
       const manifest = await openCustodyManifest(ref.id, ref.digest, custody.custodyKey, custody.custodyEpoch, materials, state);
       if (scope.mode === 'custody') return { version: 1 as const, mode: 'custody' as const, custodyEpoch: custody.custodyEpoch, custodyKey: custody.custodyKey, manifest: ref };
@@ -180,7 +202,8 @@ async function scopePayload(scope: PairingScope, transcript: Pick<PairingTranscr
     }
   }
   const merged = new Map<string, string>();
-  for (const value of opened) {
+  for (const { value, custody } of opened) {
+    if (custody) continue;
     const parsed = contentPayload.safeParse(value);
     if (!parsed.success || !scopeMatches(parsed.data, scope) || parsed.data.keyEpoch !== scope.keyEpoch) continue;
     for (const key of parsed.data.keys) {
@@ -472,6 +495,7 @@ export interface PairingHistoryResponse { genesis: SecurityHistoryInput['genesis
 
 export interface PairingTransport {
   readonly origin: string;
+  listPending?(csrf: string, input: z.input<typeof pairingListRequest>, options?: AuthRequestOptions): Promise<PairingList>;
   begin(csrf: string, input: PairingBegin, options?: AuthRequestOptions): Promise<PairingView>;
   inspect(operationId: string, options?: AuthRequestOptions): Promise<PairingView>;
   claim(csrf: string, operationId: string, options?: AuthRequestOptions): Promise<PairingView>;
@@ -483,6 +507,7 @@ export interface PairingTransport {
   history(operationId: string, mode: 'transcript' | 'current', options?: AuthRequestOptions): Promise<PairingHistoryResponse>;
 }
 export class HttpPairingTransport extends AuthenticatedHttp implements PairingTransport {
+  listPending(csrfToken: string, input: z.input<typeof pairingListRequest>, options?: AuthRequestOptions) { return this.post('/v1/auth/pairing/list', pairingListRequest.parse(input), pairingList, { ...options, csrfToken }); }
   begin(csrfToken: string, input: PairingBegin, options?: AuthRequestOptions) { return this.post('/v1/auth/pairing/begin', input, pairingViewSchema, { ...options, csrfToken }); }
   inspect(operationId: string, options?: AuthRequestOptions) { return this.post('/v1/auth/pairing/inspect', { operationId }, pairingViewSchema, options); }
   claim(csrfToken: string, operationId: string, options?: AuthRequestOptions) { return this.post('/v1/auth/pairing/claim', { operationId }, pairingViewSchema, { ...options, csrfToken }); }
@@ -544,27 +569,70 @@ export type PairingProgress = { operationId: string; state: PairingView['state']
 /** Coordinates durable ciphertext only; password/export keys and unwrapped keys never enter its store. */
 export class PairingController {
   private operation: AbortController | undefined;
+  private readonly reads = new Set<AbortController>();
+  private readonly running = new Set<Promise<unknown>>();
   private epoch = 0;
   private readonly detach: (() => void)[];
   constructor(private readonly auth: AuthController, private readonly transport: PairingTransport,
     private readonly devices: IndexedDeviceStore, readonly store: IndexedPairingStore,
     private readonly options: { remembered?: RememberedProfiles; trustedServiceKeys?: Record<string, string> } = {}) {
     if (auth.origin !== transport.origin || store.origin !== auth.origin || (options.remembered && options.remembered.origin !== auth.origin)) throw new PairingClientError('INVALID_PAIRING');
-    this.detach = [auth.onClear(() => this.clear()), auth.onForget((reference) => store.forget(reference))];
+    this.detach = [auth.onClear(() => this.clear()), auth.onForget((reference) => this.forgetDevice(reference))];
   }
-  clear(): void { this.epoch++; this.operation?.abort(); this.operation = undefined; }
+  clear(): void { this.epoch++; this.operation?.abort(); this.operation = undefined; for (const read of this.reads) read.abort(); }
   close(): void { this.clear(); this.detach.forEach((detach) => detach()); }
+  async forgetDevice(reference: Pick<DeviceContext, 'workspaceId' | 'accountId' | 'deviceId'>): Promise<void> {
+    this.clear(); await Promise.allSettled([...this.running]); await this.store.forget(reference);
+  }
   private check(epoch: number) { if (this.epoch !== epoch) throw new PairingClientError('CANCELLED'); }
-  private async run<T>(action: (signal: AbortSignal, epoch: number) => Promise<T>): Promise<T> {
-    if (this.operation) throw new PairingClientError('CONFLICT');
+  /** Cancel the local continuation even if a transport ignores its AbortSignal. */
+  private exchange<T>(signal:AbortSignal,send:()=>Promise<T>):Promise<T> {
+    if(signal.aborted)return Promise.reject(new PairingClientError('CANCELLED'));
+    return new Promise<T>((resolve,reject)=>{
+      const cancelled=()=>{signal.removeEventListener('abort',cancelled);reject(new PairingClientError('CANCELLED'));};
+      signal.addEventListener('abort',cancelled,{once:true});
+      void Promise.resolve().then(()=>{if(signal.aborted)throw new PairingClientError('CANCELLED');return send();}).then(
+        value=>{signal.removeEventListener('abort',cancelled);if(signal.aborted)reject(new PairingClientError('CANCELLED'));else resolve(value);},
+        error=>{signal.removeEventListener('abort',cancelled);reject(signal.aborted?new PairingClientError('CANCELLED'):error);});
+    });
+  }
+  private run<T>(action: (signal: AbortSignal, epoch: number) => Promise<T>): Promise<T> {
+    if (this.operation) return Promise.reject(new PairingClientError('CONFLICT'));
     const operation = new AbortController(), epoch = this.epoch; this.operation = operation;
-    try { const value = await action(operation.signal, epoch); this.check(epoch); return value; }
-    finally { if (this.operation === operation) this.operation = undefined; }
+    const promise=(async()=>{try { const value = await action(operation.signal, epoch); this.check(epoch); return value; }
+    finally { if (this.operation === operation) this.operation = undefined; }})();
+    this.running.add(promise);void promise.finally(()=>this.running.delete(promise)).catch(()=>{});return promise;
   }
   private session(approved = false) {
     const state = this.auth.current();
     if (!state || (approved && (state.localAccess !== 'unlocked' || state.session.accessLevel !== 'device_approved'))) throw new AuthClientError('AUTH_REQUIRED');
     return state.session;
+  }
+  /** Discovery is independent of mutation singleflight; logout still aborts and fences every page. */
+  async listPending(input: z.input<typeof pairingListRequest> = {}): Promise<PairingList> {
+    const request = pairingListRequest.parse(input), session = this.session(true), epoch = this.epoch, controller = new AbortController();
+    if (!this.transport.listPending) throw new PairingClientError('INVALID_PAIRING');
+    this.reads.add(controller);
+    try {
+      const page = pairingList.parse(await this.exchange(controller.signal, () => this.transport.listPending!(session.csrfToken, request, { signal: controller.signal })));
+      this.check(epoch);
+      if (this.auth.current()?.session.sessionId !== session.sessionId || page.workspaceId !== session.workspaceId || page.requests.length > request.limit ||
+        page.requests.some((row, index) => (request.after && row.operationId <= request.after) ||
+          (index > 0 && row.operationId <= page.requests[index - 1]!.operationId) || Date.parse(row.expiresAt) <= Date.parse(page.observedAt)) ||
+        (page.nextCursor !== null && page.nextCursor !== page.requests.at(-1)?.operationId)) throw new PairingClientError('INVALID_PAIRING');
+      return page;
+    } finally { this.reads.delete(controller); }
+  }
+  /** Read progress without claiming/rebinding or signing either party's confirmation. */
+  inspect(operationId: string): Promise<PairingProgress & { recipientConfirmed: boolean; approverConfirmed: boolean }> {
+    identifier.parse(operationId);
+    return this.run(async (signal, epoch) => {
+      const record = await this.store.get('approver', operationId) ?? await this.store.get('recipient', operationId); this.check(epoch);
+      if (!record) throw new PairingClientError('NOT_FOUND');
+      if (record.role === 'approver') this.approver(record); else this.recipient(record);
+      const view = await this.view(await this.exchange(signal, () => this.transport.inspect(operationId, { signal })), operationId, record); this.check(epoch);
+      return { ...this.progress(view), recipientConfirmed: !!view.recipientConfirmation, approverConfirmed: !!view.approverConfirmation };
+    });
   }
   private recipient(record: PairingRecipientRecord) {
     const session = this.session();
@@ -593,7 +661,7 @@ export class PairingController {
   private async history(transcript: PairingTranscript, signal: AbortSignal, receipt?: PairingReceipt, requirePin = false): Promise<SecurityHistoryInput> {
     const pin = await this.store.pin(transcript.workspaceId);
     if (requirePin && !pin) throw new PairingClientError('TRUST_REQUIRED');
-    const response = await this.transport.history(transcript.operationId, receipt ? 'current' : 'transcript', { signal });
+    const response = await this.exchange(signal,()=>this.transport.history(transcript.operationId, receipt ? 'current' : 'transcript', { signal }));
     if (!receipt && !same(response.anchor, { securityHead: transcript.securityHead, securityVersion: transcript.securityVersion })) throw new PairingClientError('INVALID_PAIRING');
     if (receipt && (BigInt(response.anchor.securityVersion) < BigInt(receipt.securityVersion) || !same(response.anchor, response.current))) throw new PairingClientError('CONFLICT');
     const input: SecurityHistoryInput = { genesis: response.genesis, transitions: response.transitions, workspaceId: transcript.workspaceId, origin: transcript.origin,
@@ -629,13 +697,13 @@ export class PairingController {
         if (verified.signingPublicKey !== draft.request.device.signingPublicKey || verified.recipientPublicKey !== draft.request.device.recipientPublicKey) throw new PairingClientError('INVALID_PAIRING');
       });
       this.check(epoch);
-      return this.progress(await this.view(await this.transport.begin(session.csrfToken, draft.request, { signal }), operationId, draft));
+      return this.progress(await this.view(await this.exchange(signal,()=>this.transport.begin(session.csrfToken, draft.request, { signal })), operationId, draft));
     });
   }
   confirmRecipient(operationId: string, fullFingerprint: string): Promise<PairingProgress> {
     return this.run(async (signal, epoch) => {
       let record = await this.store.get('recipient', operationId); if (!record) throw new PairingClientError('NOT_FOUND');
-      const session = this.recipient(record), view = await this.view(await this.transport.inspect(operationId, { signal }), operationId, record);
+      const session = this.recipient(record), view = await this.view(await this.exchange(signal,()=>this.transport.inspect(operationId, { signal })), operationId, record);
       if (!view.transcript || view.receipt) throw new PairingClientError('CONFLICT');
       const fingerprint = await verifyPairingFingerprint(view.transcript, fullFingerprint);
       const history = await this.history(view.transcript, signal);
@@ -646,12 +714,12 @@ export class PairingController {
       this.check(epoch);
       if (!record.confirmation) record = await this.store.save({ ...record, revision: record.revision + 1, transcript, confirmation: proof }, record.revision);
       await this.store.recordVerifiedHistory(history); this.check(epoch);
-      return this.progress(await this.view(await this.transport.confirm(session.csrfToken, proof, { signal }), operationId, record));
+      return this.progress(await this.view(await this.exchange(signal,()=>this.transport.confirm(session.csrfToken, proof, { signal })), operationId, record));
     });
   }
   claim(operationId: string): Promise<PairingProgress> {
     return this.run(async (signal, epoch) => {
-      const session = this.session(true), view = await this.view(await this.transport.claim(session.csrfToken, operationId, { signal }), operationId);
+      const session = this.session(true), view = await this.view(await this.exchange(signal,()=>this.transport.claim(session.csrfToken, operationId, { signal })), operationId);
       if (!view.transcript || view.receipt || view.transcript.approverAccountId !== session.accountId || view.transcript.approverDevice.id !== session.deviceId) throw new PairingClientError('INVALID_PAIRING');
       await this.history(view.transcript, signal, undefined, true); this.check(epoch);
       const existing = await this.store.get('approver', operationId); this.check(epoch);
@@ -664,7 +732,7 @@ export class PairingController {
   confirmApprover(operationId: string, fullFingerprint: string): Promise<PairingProgress> {
     return this.run(async (signal, epoch) => {
       let record = await this.store.get('approver', operationId); if (!record) throw new PairingClientError('NOT_FOUND');
-      const session = this.approver(record), view = await this.view(await this.transport.inspect(operationId, { signal }), operationId, record);
+      const session = this.approver(record), view = await this.view(await this.exchange(signal,()=>this.transport.inspect(operationId, { signal })), operationId, record);
       if (view.receipt) throw new PairingClientError('CONFLICT');
       const fingerprint = await verifyPairingFingerprint(record.transcript, fullFingerprint);
       const history = await this.history(record.transcript, signal, undefined, true);
@@ -672,29 +740,29 @@ export class PairingController {
       this.check(epoch);
       if (!record.confirmation) record = await this.store.save({ ...record, revision: record.revision + 1, confirmation: proof }, record.revision);
       await this.store.recordVerifiedHistory(history); this.check(epoch);
-      return this.progress(await this.view(await this.transport.confirm(session.csrfToken, proof, { signal }), operationId, record));
+      return this.progress(await this.view(await this.exchange(signal,()=>this.transport.confirm(session.csrfToken, proof, { signal })), operationId, record));
     });
   }
   /** Persist exact signed ciphertext before staging; retries never re-seal an ambiguous submission. */
   approve(operationId: string): Promise<PairingReceipt> {
     return this.run(async (signal, epoch) => {
       let record = await this.store.get('approver', operationId); if (!record?.confirmation) throw new PairingClientError('TRUST_REQUIRED');
-      const session = this.approver(record), view = await this.view(await this.transport.inspect(operationId, { signal }), operationId, record);
+      const session = this.approver(record), view = await this.view(await this.exchange(signal,()=>this.transport.inspect(operationId, { signal })), operationId, record);
       let receipt = view.receipt;
       if (!receipt) {
         if (!view.recipientConfirmation || !view.approverConfirmation || !same(view.approverConfirmation, record.confirmation)) throw new PairingClientError('CONFLICT');
         if (!record.approval) {
           const history = await this.history(record.transcript, signal, undefined, true);
           const approval = await this.auth.worker.preparePairingApproval({ transcript: record.transcript, fingerprint: await digestObject(record.transcript), history,
-            recipientConfirmation: view.recipientConfirmation, approverConfirmation: record.confirmation, materials: await this.transport.materials(operationId, { signal }) }, { signal });
+            recipientConfirmation: view.recipientConfirmation, approverConfirmation: record.confirmation, materials: await this.exchange(signal,()=>this.transport.materials(operationId, { signal })) }, { signal });
           this.check(epoch); record = await this.store.save({ ...record, revision: record.revision + 1, approval }, record.revision);
         }
         const readback = await this.store.get('approver', operationId);
         if (!readback?.approval || !same(record.approval, readback.approval)) throw new PairingClientError('STORAGE');
         this.check(epoch);
-        await this.view(await this.transport.stage(session.csrfToken, readback.approval, { signal }), operationId, record);
+        await this.view(await this.exchange(signal,()=>this.transport.stage(session.csrfToken, readback.approval!, { signal })), operationId, record);
         this.check(epoch);
-        receipt = (await this.transport.commit(session.csrfToken, operationId, { signal })).receipt;
+        receipt = (await this.exchange(signal,()=>this.transport.commit(session.csrfToken, operationId, { signal }))).receipt;
       }
       const verified = await verifyPairingReceipt(receipt, record.transcript);
       if (record.approval && !same(verified.grant, record.approval.grant)) throw new PairingClientError('INVALID_PAIRING');
@@ -708,7 +776,7 @@ export class PairingController {
     return this.run(async (signal, epoch) => {
       let record = await this.store.get('recipient', operationId); if (!record) throw new PairingClientError('NOT_FOUND');
       this.recipient(record);
-      const view = await this.view(await this.transport.inspect(operationId, { signal }), operationId, record);
+      const view = await this.view(await this.exchange(signal,()=>this.transport.inspect(operationId, { signal })), operationId, record);
       if (!view.receipt) return this.progress(view);
       if (!record.transcript || !record.confirmation) throw new PairingClientError('TRUST_REQUIRED');
       const receipt = await verifyPairingReceipt(view.receipt, record.transcript);
@@ -730,7 +798,7 @@ export class PairingController {
         await this.auth.approveLocalDevice(record.context.deviceId);
       }
       this.check(epoch);
-      const delivery = await this.transport.delivery(operationId, { signal });
+      const delivery = await this.exchange(signal,()=>this.transport.delivery(operationId, { signal }));
       if (!same(delivery.receipt, receipt)) throw new PairingClientError('INVALID_PAIRING');
       try { await this.auth.worker.verifyPairingDelivery({ delivery, history }, { signal }); }
       catch (error) {

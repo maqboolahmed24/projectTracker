@@ -141,3 +141,16 @@ test('CP06: replacement operations share resolved-target quotas and unexpected e
   assert.equal(response.statusCode, 503); assert.equal(response.json().error.code, 'ENROLMENT_UNAVAILABLE');
   assert.ok(response.body.length < 512); assert.equal(response.body.includes(secret), false); assert.equal(f.logs.join('').includes(secret), false);
 });
+
+test('frontend: invitation discovery requires same-origin Owner cookie and CSRF with bounded strict input', async (t) => {
+  const f = await fixture(t), request = { workspaceId: f.workspaceId, limit: 25 };
+  assert.equal((await f.post('list', request)).statusCode, 403);
+  assert.equal((await f.post('list', request, { ...f.headers, 'x-csrf-token': f.csrfToken })).statusCode, 401);
+  assert.equal((await f.post('list', request, { ...f.ownerHeaders, origin: 'https://foreign.example' })).statusCode, 403);
+  for (const invalid of [{ ...request, limit: 0 }, { ...request, limit: 51 }, { ...request, after: 'bad' }, { ...request, resumeToken: f.resumeToken }]) {
+    assert.equal((await f.post('list', invalid, f.ownerHeaders)).statusCode, 400);
+  }
+  assert.equal(f.calls.length, 0);
+  const response = await f.post('list', request, f.ownerHeaders); assert.equal(response.statusCode, 200); assert.equal(response.headers['cache-control'], 'no-store');
+  assert.deepEqual(f.calls[0], { method: 'listInvitations', args: [f.cookieValue, f.csrfToken, request] });
+});

@@ -10,7 +10,8 @@ import { enrolmentBinding, enrolmentApproval, enrolmentConfirmation, enrolmentCo
   type EnrolmentBinding, type EnrolmentDraft, type EnrolmentPublicDraft, type EnrolmentApproval, type EnrolmentConfirmation,
   type EnrolmentReference, type EnrolmentOperationReference, type EnrolmentReceipt, type EnrolmentResult, type EnrolmentIssuedJoin } from '../../shared/enrolment.js';
 import { enrolmentBegin, enrolmentIssueJoin, enrolmentBeginPromotion, enrolmentClaimPromotion, enrolmentRegistration,
-  enrolmentProofStart, enrolmentProofFinish, enrolmentPromotionDraft, enrolmentUnlockStart, enrolmentUnlockFinish, enrolmentIssuanceRequest, type EnrolmentIssuanceContext, type EnrolmentAuth, type EnrolmentView } from '../../shared/enrolment-api.js';
+  enrolmentProofStart, enrolmentProofFinish, enrolmentPromotionDraft, enrolmentUnlockStart, enrolmentUnlockFinish, enrolmentIssuanceRequest,
+  enrolmentListRequest, enrolmentList, type EnrolmentList, type EnrolmentIssuanceContext, type EnrolmentAuth, type EnrolmentView } from '../../shared/enrolment-api.js';
 import type { PairingMaterial, PairingScope } from '../../shared/pairing.js';
 import { OpaqueService } from './opaque.js';
 import { ServiceSecrets } from './secrets.js';
@@ -20,9 +21,9 @@ import { intersectDeviceScopes, PersonalScopeError, personalScopesCover, readPer
 import { projectAuthoritativeWorkspace, withSecurityFence } from './projection.js';
 export type { EnrolmentAuth } from '../../shared/enrolment-api.js';
 interface Options { databases: Databases; secrets: ServiceSecrets; opaque: OpaqueService; sessions: SessionService; origin: string;
-  now?: () => Date; requestBudget?: (scope: { workspaceId: string; accountId: string; history: boolean }) => Promise<void>;
+  now?: () => Date; requestBudget?: (scope: { workspaceId: string; accountId: string; history: boolean; read?: boolean }) => Promise<void>;
   hooks?: { beforeControlCommit?: () => Promise<void>; afterControlCommit?: () => Promise<void>; beforeProjection?: () => Promise<void> } }
-interface Authority { lifecycle: string; licence_state: string; security_head: string; security_version: string; data_generation: string;
+interface Authority { write_schema:number; lifecycle: string; licence_state: string; security_head: string; security_version: string; data_generation: string;
   ownership_version: string; custody_epoch: string; genesis_object_id: string; current_custody_manifest_object_id: string; content_maintenance: boolean; restore_quarantine: boolean }
 interface Profile { profile_id: string; state: string; is_owner: boolean; credential_generation: string; session_generation: string;
   invitation_generation: string; recovery_generation: string; profile_object_id: string; opaque_registration_record: string | null }
@@ -45,6 +46,39 @@ function parse<T>(schema: z.ZodType<T>, value: unknown): T { const p = schema.sa
 export class EnrolmentService {
   readonly #o: Options; readonly #now: () => Date;
   constructor(options: Options) { if (new URL(options.origin).origin !== options.origin) throw new Error('Enrolment requires an exact origin'); this.#o = options; this.#now = options.now ?? (() => new Date()); }
+  async listInvitations(cookie: string, csrf: string, input: unknown): Promise<EnrolmentList> {
+    const r = parse(enrolmentListRequest, input);
+    return this.#tx(r.workspaceId, async (c, w, now) => {
+      // A current approved Owner is required on every page, including after revocation or expiry.
+      const owner = await this.#owner(c, r.workspaceId, { cookieValue: cookie, csrfToken: csrf }, now, false);
+      if (w.restore_quarantine) throw forbidden();
+      const personal = await readPersonalScopes(c, r.workspaceId, owner.accountId, true, now);
+      await intersectDeviceScopes(c, r.workspaceId, owner.accountId, owner.deviceId!, personal, now);
+      const rows = (await c.query<{ operation_id: string; account_id: string; kind: EnrolmentList['invitations'][number]['kind'];
+        state: EnrolmentList['invitations'][number]['state']; expires_at: Date; issuer_account_id: string; authorizer_account_id: string | null; recipient_started: boolean }>(`
+        SELECT q.ceremony_id AS operation_id,q.profile_id AS account_id,q.public_state->>'kind' AS kind,
+          CASE WHEN q.public_state->>'requestHash' IS NOT NULL THEN 'confirmed'
+            WHEN q.public_state->'draft' IS NOT NULL THEN 'verifying'
+            WHEN q.public_state->'binding' IS NOT NULL THEN 'waiting_approval' ELSE 'issued' END AS state,
+          q.expires_at,q.public_state->>'issuerAccountId' AS issuer_account_id,
+          q.public_state->'binding'->'authorizer'->>'accountId' AS authorizer_account_id,
+          q.public_state->>'redeemedAt' IS NOT NULL AS recipient_started
+        FROM security.ceremonies q JOIN security.profiles p ON p.workspace_id=q.workspace_id AND p.profile_id=q.profile_id
+        WHERE q.workspace_id=$1 AND q.state IN ('issued','waiting_approval') AND q.expires_at>$2
+          AND ($3::uuid IS NULL OR q.ceremony_id>$3::uuid) AND p.is_owner=false
+          AND ((q.kind='invitation' AND q.public_state->>'kind' IN ('join_member','join_owner')
+            AND p.state='pending' AND p.credential_generation=0 AND q.generation=p.invitation_generation
+            AND q.public_state->>'invitationGeneration'=p.invitation_generation::text)
+          OR (q.kind='owner_promotion' AND q.public_state->>'kind'='promote_owner' AND p.state='active'
+            AND q.expected_credential_generation=p.credential_generation))
+        ORDER BY q.ceremony_id LIMIT $4`, [r.workspaceId, now, r.after ?? null, r.limit + 1])).rows;
+      const selected = rows.slice(0, r.limit);
+      return enrolmentList.parse({ workspaceId: r.workspaceId, observedAt: now.toISOString(), invitations: selected.map(row => ({
+        operationId: row.operation_id, accountId: row.account_id, kind: row.kind, state: row.state,
+        expiresAt: row.expires_at.toISOString(), issuerAccountId: row.issuer_account_id, authorizerAccountId: row.authorizer_account_id, recipientStarted: row.recipient_started,
+      })), nextCursor: rows.length > r.limit ? selected.at(-1)!.operation_id : null });
+    });
+  }
   async #tx<T>(workspaceId: string, action: (c: pg.PoolClient, w: Authority, now: Date) => Promise<T>): Promise<T> {
     if (!identifier.safeParse(workspaceId).success) throw invalid();
     try { return await transaction(this.#o.databases.control, async (c) => {
@@ -54,16 +88,16 @@ export class EnrolmentService {
       return action(c, w, this.#now());
     }); } catch (e) { if (e instanceof AppError) throw e; throw new AppError('ENROLMENT_UNAVAILABLE', 'Enrolment is temporarily unavailable; retain the local draft', 503); }
   }
-  #writable(w: Authority, kind: EnrolmentBinding['kind']) { assertEntitlementAllows(w.licence_state, kind === 'promote_owner' ? 'promote_owner' : 'invite');
+  #writable(w: Authority, kind: EnrolmentBinding['kind']) { if(![1,2].includes(w.write_schema))throw new AppError('UPDATE_REQUIRED','Update the client before writing this workspace',409); assertEntitlementAllows(w.licence_state, kind === 'promote_owner' ? 'promote_owner' : 'invite');
     if (w.lifecycle !== 'active' || w.content_maintenance || w.restore_quarantine) throw new AppError('WORKSPACE_RESTRICTED', 'Enrolment is unavailable while workspace writes are restricted', 423); }
   async #profile(c: pg.PoolClient, workspaceId: string, id: string): Promise<Profile> { const p = (await c.query<Profile>('SELECT * FROM security.profiles WHERE workspace_id=$1 AND profile_id=$2 FOR SHARE', [workspaceId, id])).rows[0]; if (!p) throw invalid(); return p; }
   async #session(c: pg.PoolClient, workspaceId: string, auth: EnrolmentAuth, now: Date, recent = true) { const p = await this.#o.sessions.resolveCurrent(c, auth.cookieValue, { csrfToken: auth.csrfToken, approved: true, recent }, now); if (p.workspaceId !== workspaceId) throw forbidden(); return p; }
-  async #owner(c: pg.PoolClient, workspaceId: string, auth: EnrolmentAuth, now: Date) { const p = await this.#session(c, workspaceId, auth, now); const a = await this.#profile(c, workspaceId, p.accountId); if (!a.is_owner || a.state !== 'active') throw forbidden(); return p; }
-  async #row(c: pg.PoolClient, ref: EnrolmentOperationReference, history = false): Promise<Ceremony> {
+  async #owner(c: pg.PoolClient, workspaceId: string, auth: EnrolmentAuth, now: Date, recent = true) { const p = await this.#session(c, workspaceId, auth, now, recent); const a = await this.#profile(c, workspaceId, p.accountId); if (!a.is_owner || a.state !== 'active') throw forbidden(); return p; }
+  async #row(c: pg.PoolClient, ref: EnrolmentOperationReference, history = false, read = false): Promise<Ceremony> {
     if (!identifier.safeParse(ref.operationId).success) throw invalid();
     const row = (await c.query<Ceremony>('SELECT * FROM security.ceremonies WHERE workspace_id=$1 AND ceremony_id=$2 FOR UPDATE', [ref.workspaceId, ref.operationId])).rows[0];
     if (!row || !['invitation', 'owner_promotion'].includes(row.kind) || !['join_member', 'join_owner', 'promote_owner'].includes(row.public_state.kind)) throw invalid();
-    await this.#o.requestBudget?.({ workspaceId: row.workspace_id, accountId: row.profile_id, history }); return row;
+    await this.#o.requestBudget?.({ workspaceId: row.workspace_id, accountId: row.profile_id, history, ...(read ? { read: true } : {}) }); return row;
   }
   #cap(row: Ceremony, ref: EnrolmentReference, now: Date) { parse(enrolmentReference, { workspaceId: ref.workspaceId, operationId: ref.operationId, resumeToken: ref.resumeToken });
     if (!row.verification_digest || row.verification_key_id !== this.#o.secrets.keyId || Date.parse(row.public_state.resumeExpiresAt) <= now.getTime() ||
@@ -106,7 +140,7 @@ export class EnrolmentService {
     }
     const maximum = allDevices.reduce((n, d) => BigInt(d.key_generation) > n ? BigInt(d.key_generation) : n, 0n).toString();
     if (!promote && allDevices.length) throw changed();
-    return enrolmentBinding.parse({ version: 1, kind: s.kind, origin: this.#o.origin, workspaceId: row.workspace_id, accountId: row.profile_id, operationId: row.ceremony_id,
+    return enrolmentBinding.parse({ version: 1,...(w.write_schema===2?{writeSchema:2}:{}), kind: s.kind, origin: this.#o.origin, workspaceId: row.workspace_id, accountId: row.profile_id, operationId: row.ceremony_id,
       approvalAttemptId: attemptId, attemptGeneration, invitationGeneration: promote ? '0' : target.invitation_generation,
       profile: { id: row.profile_id, revision: profileEnvelope.header.revision, objectId: profileObject.object_id, objectDigest: profileObject.object_hash },
       nextProfileRevision: promote ? profileEnvelope.header.revision : next(profileEnvelope.header.revision), role: { id: role.role_id, revision: role.revision, permissions: role.permissions },
@@ -128,9 +162,9 @@ export class EnrolmentService {
     if (!equal(b, await this.#binding(c, row, w, b.authorizer, now, b.approvalAttemptId, b.attemptGeneration))) throw changed();
   }
   async #with<T>(ref: EnrolmentOperationReference | EnrolmentReference, auth: EnrolmentAuth | undefined,
-    action: (c: pg.PoolClient, row: Ceremony, w: Authority, now: Date, principal?: SessionPrincipal) => Promise<T>, checked = true): Promise<T> {
-    return this.#tx(ref.workspaceId, async (c, w, now) => { const principal = auth ? await this.#owner(c, ref.workspaceId, auth, now) : undefined;
-      const row = await this.#row(c, ref); if (!principal) { if (!('resumeToken' in ref)) throw invalid(); this.#cap(row, ref, now); }
+    action: (c: pg.PoolClient, row: Ceremony, w: Authority, now: Date, principal?: SessionPrincipal) => Promise<T>, checked = true, read = false): Promise<T> {
+    return this.#tx(ref.workspaceId, async (c, w, now) => { const principal = auth ? await this.#owner(c, ref.workspaceId, auth, now, !read) : undefined;
+      const row = await this.#row(c, ref, false, read); if (!principal) { if (!('resumeToken' in ref)) throw invalid(); this.#cap(row, ref, now); }
       if (checked) await this.#check(c, row, w, now); return action(c, row, w, now, principal); });
   }
   #approver(row: Ceremony, p?: SessionPrincipal) { const a = row.public_state.binding?.authorizer; if (!a || !p || a.accountId !== p.accountId || a.device.id !== p.deviceId) throw forbidden(); }
@@ -164,7 +198,7 @@ export class EnrolmentService {
       const prior = existing?.profile_object_id ? (await c.query<Stored>('SELECT * FROM security.staged_objects WHERE workspace_id=$1 AND object_id=$2', [r.workspaceId, existing.profile_object_id])).rows[0] : undefined;
       const revision = prior ? next(contentEnvelope.parse(prior.versioned_object).header.revision) : '1', header = r.profile.envelope.header;
       const expected = { version: 1 as const, purpose: 'ukda.content.v1' as const, algorithm: 'XChaCha20-Poly1305' as const, workspaceId: r.workspaceId,
-        scope: 'workspace' as const, scopeId: r.workspaceId, recordId: r.accountId, recordType: 'profile' as const, schema: 1 as const,
+        scope: 'workspace' as const, scopeId: r.workspaceId, recordId: r.accountId, recordType: 'profile' as const, schema: w.write_schema as 1|2,
         keyEpoch: epoch!, revision, operationId: r.operationId, accountId: owner.accountId, deviceId: signer.id, keyGeneration: signer.keyGeneration,
         permissionVersion: role.revision, securityVersion: w.security_version, securityHead: w.security_head, dataGeneration: w.data_generation,
         action: 'profile.invite', approvalPolicyId: null, approvalPolicyRevision: null };
@@ -226,7 +260,7 @@ export class EnrolmentService {
     await c.query("UPDATE security.ceremonies SET state='waiting_approval',approving_profile_id=$3,approving_device_id=$4,public_state=$5,server_state_ciphertext=NULL,server_state_key_id=NULL WHERE workspace_id=$1 AND ceremony_id=$2", [row.workspace_id, row.ceremony_id, principal!.accountId, principal!.deviceId, s]);
     row.state = 'waiting_approval'; return this.#view(c, row, now);
   }, false); }
-  async inspect(ref: EnrolmentOperationReference | EnrolmentReference, auth?: EnrolmentAuth): Promise<EnrolmentView> { return this.#with(ref, auth, (c, row, _w, now) => this.#view(c, row, now), false); }
+  async inspect(ref: EnrolmentOperationReference | EnrolmentReference, auth?: EnrolmentAuth): Promise<EnrolmentView> { return this.#with(ref, auth, (c, row, _w, now) => this.#view(c, row, now), false, true); }
   async registration(input: unknown) { const r = parse(enrolmentRegistration, input); return this.#with(r, undefined, (_c, row) => { if (row.kind !== 'invitation') throw invalid(); return this.#o.opaque.response(row.workspace_id, row.profile_id, r.registrationRequest); }); }
   #proofContext(row: Ceremony, proofId: string, hash: string) { return canonicalJson(['ukda.enrolment-password-proof.v1', this.#o.origin, row.workspace_id, row.ceremony_id, row.public_state.binding!.approvalAttemptId, row.profile_id, proofId, hash]); }
   async #freshKeys(c: pg.PoolClient, row: Ceremony, transcript: EnrolmentDraft['transcript']) {
@@ -449,7 +483,7 @@ export class EnrolmentService {
       return { workspaceId: r.workspaceId, accountId: r.accountId, operationId: r.operationId, kind: r.kind,
         role: { id: role.role_id, revision: role.revision, permissions: role.permissions }, authorizer: { accountId: owner.accountId, device, credentialGeneration: owner.credentialGeneration, sessionGeneration: owner.sessionGeneration },
         header: { version: 1, purpose: 'ukda.content.v1', algorithm: 'XChaCha20-Poly1305', workspaceId: r.workspaceId, scope: 'workspace', scopeId: r.workspaceId,
-          recordId: r.accountId, recordType: 'profile', schema: 1, keyEpoch: epoch, revision: previous ? next(contentEnvelope.parse(previous.versioned_object).header.revision) : '1',
+          recordId: r.accountId, recordType: 'profile', schema: w.write_schema as 1|2, keyEpoch: epoch, revision: previous ? next(contentEnvelope.parse(previous.versioned_object).header.revision) : '1',
           operationId: r.operationId, accountId: owner.accountId, deviceId: device.id, keyGeneration: device.keyGeneration, permissionVersion: role.revision,
           securityVersion: w.security_version, securityHead: w.security_head, dataGeneration: w.data_generation, action: 'profile.invite', approvalPolicyId: null, approvalPolicyRevision: null },
         genesisFingerprint: genesis.object_hash, custodyEpoch: w.custody_epoch, current: { securityHead: w.security_head, securityVersion: w.security_version },

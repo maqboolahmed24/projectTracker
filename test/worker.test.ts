@@ -49,6 +49,11 @@ test('real queue deduplicates pending jobs, executes them as a restricted role, 
   t.after(() => worker.stop());
 
   await eventually(async () => (await worker.app.inject('/health/ready')).statusCode === 200);
+  const queue = await worker.app.inject('/health/queue');
+  assert.equal(queue.statusCode, 200);
+  assert.equal(queue.json().status, 'ok');
+  assert.equal(typeof queue.json().pending, 'number');
+  assert.equal(typeof queue.json().failed, 'number');
   const role = await worker.pool.query<{ rolsuper: boolean; rolbypassrls: boolean; can_create: boolean }>(`
     SELECT rolsuper, rolbypassrls, has_schema_privilege(current_user, 'graphile_worker', 'CREATE') AS can_create
     FROM pg_roles WHERE rolname = current_user
@@ -83,5 +88,8 @@ test('real queue deduplicates pending jobs, executes them as a restricted role, 
   await eventually(async () => (await worker.app.inject('/health/ready')).statusCode === 503);
   const response = await worker.app.inject('/health/ready');
   assert.deepEqual(response.json(), { status: 'unavailable' });
+  const unavailableQueue = await worker.app.inject('/health/queue');
+  assert.equal(unavailableQueue.statusCode, 503);
+  assert.deepEqual(unavailableQueue.json(), { status: 'unavailable' });
   assert.equal((await worker.app.inject('/health/live')).statusCode, 200);
 });

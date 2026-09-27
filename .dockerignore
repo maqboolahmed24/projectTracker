@@ -6,7 +6,16 @@
 node_modules
 dist
 coverage
+test-results
+playwright-report
+.local
+.tools
 *.log
 .DS_Store
 architecture
 README.md
+web/.next
+web/public/client
+web/public/brand
+*.tsbuildinfo
+**/*.tsbuildinfo

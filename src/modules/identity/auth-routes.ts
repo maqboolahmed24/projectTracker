@@ -24,12 +24,21 @@ export function publicSession(issued: IssuedSession) {
 export function registerAuthenticationRoutes(app: FastifyInstance, input: {
   origin: string; authentication: AuthenticationService; sessions: SessionService; budgets: Pick<RequestBudgets, 'take'>;
 }) {
-  async function originGuard(request: FastifyRequest) {
+  function exactOrigin(request: FastifyRequest) {
     if (request.headers.origin !== input.origin || request.headers['sec-fetch-site'] === 'cross-site') {
       throw new AppError('ORIGIN_REJECTED', 'Request origin is not allowed', 403);
     }
     if (Object.keys(request.query as object).length) throw new AppError('INVALID_REQUEST', 'Invalid request', 400);
+  }
+  async function originGuard(request: FastifyRequest) {
+    exactOrigin(request);
     await input.budgets.take([{ purpose: 'authentication-source', key: request.ip, limit: 60, windowMs: 600000 }]);
+  }
+  async function sessionGuard(request: FastifyRequest) {
+    exactOrigin(request);
+    // Polling shares a NAT/proxy address, but must not spend password-attempt
+    // capacity. The source guard also bounds requests without a valid session.
+    await input.budgets.take([{ purpose: 'session-refresh-source', key: request.ip, limit: 3000, windowMs: 600000 }]);
   }
   const cookie = (request: FastifyRequest) => {
     const value = readSessionCookie(request.headers.cookie);
@@ -55,9 +64,10 @@ export function registerAuthenticationRoutes(app: FastifyInstance, input: {
     reply.header('set-cookie', buildSessionCookie(issued.cookieValue, new Date(issued.absoluteExpiresAt)));
     return publicSession(issued);
   });
-  app.post('/v1/auth/session', { preHandler: originGuard }, async (request) => {
+  app.post('/v1/auth/session', { preHandler: sessionGuard }, async (request) => {
     parseInput(empty, request.body);
     const session = await input.sessions.authenticate(cookie(request));
+    await input.budgets.take([{ purpose: 'session-refresh-session', key: `${session.workspaceId}:${session.sessionId}`, limit: 600, windowMs: 600000 }]);
     // Explicit fields avoid accidentally exposing a bearer or future internal authority values.
     return { workspaceId: session.workspaceId, accountId: session.profileId, sessionId: session.sessionId,
       deviceId: session.deviceId, accessLevel: session.accessLevel, credentialGeneration: session.credentialGeneration,

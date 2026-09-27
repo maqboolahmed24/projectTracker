@@ -49,13 +49,14 @@ test('CP06: encrypted custom roles survive lost replies, support edits/retiremen
       return result;
     });
     expect(rows).toHaveLength(5); expect(rows.find((role) => role.id === roleId)?.displayName).toBe(privateLabel);
-    const updated = await page.evaluate(({ roleId, updatedLabel }) => window.clientRuntime.roles.update({ roleId, displayName: updatedLabel, permissions: ['read_project'] }), { roleId, updatedLabel });
+    const updated = await page.evaluate(({ roleId, updatedLabel, expectedRevision }) => window.clientRuntime.roles.update({ roleId, expectedRevision, displayName: updatedLabel, permissions: ['read_project'] }), { roleId, updatedLabel, expectedRevision:rows.find(role=>role.id===roleId)!.revision });
     expect(updated.receipt.roleRevision).toBe('2');
-    const retired = await page.evaluate((roleId) => window.clientRuntime.roles.retire({ roleId }), roleId);
+    const retired = await page.evaluate(({roleId,expectedRevision}) => window.clientRuntime.roles.retire({ roleId,expectedRevision }), {roleId,expectedRevision:updated.receipt.roleRevision});
     expect(retired.receipt.roleRevision).toBe('3');
     const retiredRow = await page.evaluate(async (roleId) => (await window.clientRuntime.roles.list()).roles.find((role) => role.id === roleId), roleId);
     expect(retiredRow).toMatchObject({ displayName: updatedLabel, state: 'retired', permissions: ['read_project'] });
-    expect(await page.evaluate(async (roleId) => { try { await window.clientRuntime.roles.update({ roleId, displayName: 'Forbidden builtin', permissions: ['read_project'] }); return false; } catch { return true; } }, f.genesis.body.roles.viewer)).toBe(true);
+    expect(await page.evaluate(async (roleId) => { const expectedRevision=(await window.clientRuntime.roles.list()).roles.find(role=>role.id===roleId)!.revision;
+      try { await window.clientRuntime.roles.update({ roleId,expectedRevision, displayName: 'Forbidden builtin', permissions: ['read_project'] }); return false; } catch { return true; } }, f.genesis.body.roles.viewer)).toBe(true);
 
     const joinedRole = await page.evaluate(() => window.clientRuntime.roles.create({ displayName: 'Private QA members', permissions: ['read_project', 'comment'] }));
     const accountId = randomUUID(), invitationId = randomUUID(), memberPassword = 'Custom role member password 514682';
@@ -77,8 +78,10 @@ test('CP06: encrypted custom roles survive lost replies, support edits/retiremen
       return window.clientRuntime.enrolments.resume(localId);
     }, { localId: begun.localId, workspaceId: f.workspaceId, accountId, password: memberPassword });
     expect(joined.access).toBe('content_ready');
-    await page.evaluate((roleId) => window.clientRuntime.roles.update({ roleId, displayName: 'Private QA future members', permissions: ['read_project'] }), joinedRole.roleId);
-    expect(await page.evaluate(async (roleId) => { try { await window.clientRuntime.roles.retire({ roleId }); return false; } catch { return true; } }, joinedRole.roleId)).toBe(true);
+    await page.evaluate(async(roleId) => {const expectedRevision=(await window.clientRuntime.roles.list()).roles.find(role=>role.id===roleId)!.revision;
+      return window.clientRuntime.roles.update({ roleId,expectedRevision, displayName: 'Private QA future members', permissions: ['read_project'] });}, joinedRole.roleId);
+    expect(await page.evaluate(async (roleId) => {const expectedRevision=(await window.clientRuntime.roles.list()).roles.find(role=>role.id===roleId)!.revision;
+      try { await window.clientRuntime.roles.retire({ roleId,expectedRevision }); return false; } catch { return true; } }, joinedRole.roleId)).toBe(true);
     expect(requests.some((body) => body.includes(privateLabel) || body.includes(updatedLabel) || body.includes('Private QA'))).toBe(false);
   } finally {
     await Promise.allSettled([page.evaluate(() => window.clientRuntime?.close()), recipient.evaluate(() => window.clientRuntime?.close())]);

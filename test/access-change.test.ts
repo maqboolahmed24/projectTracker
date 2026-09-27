@@ -62,7 +62,7 @@ test('CP06: demotion rotates custody, preserves historical keys and remaining Ow
   assert.equal((await f.finalize(prepared)).state, 'completed');
   await assert.rejects(f.sessions.authenticate(owner.session.cookieValue));
   const notices = (await f.admin.application.query("SELECT recipient_profile_id,event_id,record_id FROM app.notifications WHERE workspace_id=$1 AND event_type='security.owner_demoted'", [f.workspaceId])).rows;
-  assert.equal(notices.length, 1); assert.equal(notices[0].recipient_profile_id, third.binding.accountId);
+  assert.equal(notices.length, 3); assert.deepEqual(notices.map(row=>row.recipient_profile_id).sort(),[f.accountId,owner.binding.accountId,third.binding.accountId].sort());
   assert.equal(notices[0].event_id, prepared.reference.operationId); assert.equal(notices[0].record_id, owner.binding.accountId);
   const logged = await f.login(owner.prepared, owner.registered.exportKey), ordinary = await f.refresh(logged.auth, logged.bundle);
   assert.equal(ordinary.refreshed.scopeCount, 1); assert.ok(ordinary.delivery.materials.every((m) => m.kind === 'key_envelope'));

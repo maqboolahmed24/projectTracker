@@ -64,6 +64,10 @@ test('CP06: preparing access requires approved-session credentials and excludes 
   assert.deepEqual(f.calls.at(-1), { method: 'context', args: [f.cookie, f.csrfToken, context] });
   assert.equal((await f.post('delivery', { workspaceId: f.workspaceId })).statusCode, 200);
   assert.deepEqual(f.calls.at(-1), { method: 'currentDelivery', args: [f.cookie, f.csrfToken, { workspaceId: f.workspaceId }] });
+  assert.equal((await f.post('delivery', { workspaceId: f.workspaceId, includeProfile: true })).statusCode, 200);
+  assert.deepEqual(f.calls.at(-1), { method: 'currentDelivery', args: [f.cookie, f.csrfToken, { workspaceId: f.workspaceId, includeProfile: true }] });
+  for (const extra of [{ accountId: f.accountId }, { avatar: { shapeId: 'shape-01', colourId: 'teal' } }, { includeProfile: false }])
+    assert.equal((await f.post('delivery', { workspaceId: f.workspaceId, ...extra })).statusCode, 400);
 });
 
 test('CP06: receipt retries share operation budgets and resolved subjects share independent durable account quotas', async (t) => {
@@ -80,4 +84,21 @@ test('CP06: receipt retries share operation budgets and resolved subjects share 
   const secret = `database-private-${randomUUID()}`; f.fail(new Error(secret));
   const response = await f.post('status', { workspaceId: f.workspaceId, operationId: randomUUID(), receiptToken: capability.receiptToken });
   assert.equal(response.statusCode, 503); assert.equal(response.json().error.code, 'ACCESS_UNAVAILABLE'); assert.ok(response.body.length < 512); assert.equal(f.logs.join('').includes(secret), false);
+});
+
+test('frontend: key and directory delivery use bounded read budgets without spending mutation capacity', async (t) => {
+  const f = await fixture(t), source = '192.0.2.95', body = { workspaceId: f.workspaceId, includeDirectory: true };
+  assert.equal((await f.post('delivery', body)).statusCode, 200);
+  assert.equal(await f.count('access-change-history-source', source), 1);
+  assert.equal(await f.count('access-change-history-workspace', f.workspaceId), 1);
+  assert.equal(await f.count('access-change-source', source), undefined);
+  assert.equal(await f.count('access-change-workspace', f.workspaceId), undefined);
+  const context = { ...f.reference, action: 'remove', targetAccountId: f.accountId, desired: null, receiptTokenHash: 'a'.repeat(64) };
+  assert.equal((await f.post('context', context)).statusCode, 200);
+  await f.databases.control.query('UPDATE security.request_budgets SET attempts=120 WHERE bucket_digest=$1', [f.digest('access-change-source', source)]);
+  assert.equal((await f.post('context', context)).statusCode, 429);
+  assert.equal((await f.post('delivery', body)).statusCode, 200, 'Reads remain available when the unchanged mutation source limit is exhausted');
+  await f.databases.control.query('UPDATE security.request_budgets SET attempts=1199 WHERE bucket_digest=$1', [f.digest('access-change-history-source', source)]);
+  assert.equal((await f.post('delivery', body)).statusCode, 200); assert.equal((await f.post('delivery', body)).statusCode, 429);
+  assert.equal(f.calls.at(-1)!.method, 'currentDelivery');
 });

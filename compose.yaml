@@ -67,11 +67,11 @@ services:
       NODE_ENV: development
       HOST: 0.0.0.0
       PORT: "3400"
-      APP_ORIGIN: http://localhost:3400
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:3400}
       DATABASE_URL: postgres://ukda_app_dev:ukda_app_local_only@app-db:5432/ukda_app
       CONTROL_DATABASE_URL: postgres://ukda_control_dev:ukda_control_local_only@control-db:5432/ukda_control
     ports:
-      - "127.0.0.1:3400:3400"
+      - "127.0.0.1:${UKDA_API_PORT:-3400}:3400"
     depends_on:
       app-db:
         condition: service_healthy
@@ -96,7 +96,7 @@ services:
       NODE_ENV: development
       HOST: 0.0.0.0
       PORT: "3401"
-      APP_ORIGIN: http://localhost:3400
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:3400}
       DATABASE_URL: postgres://ukda_app_dev:ukda_app_local_only@app-db:5432/ukda_app
       CONTROL_DATABASE_URL: postgres://ukda_control_dev:ukda_control_local_only@control-db:5432/ukda_control
     # Health is reachable inside the Compose network only, with no host port.
@@ -105,6 +105,34 @@ services:
       app-db:
         condition: service_healthy
       control-db:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+  # Enable with both --profile app and --profile frontend. The existing app-only
+  # profile remains API + worker. APP_ORIGIN must be the browser's exact origin.
+  frontend:
+    profiles: [frontend]
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      target: runtime
+    init: true
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+      NEXT_TELEMETRY_DISABLED: "1"
+      UKDA_API_ORIGIN: http://api:3400
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:3400}
+    ports:
+      - "127.0.0.1:${UKDA_FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      api:
         condition: service_healthy
     read_only: true
     tmpfs:

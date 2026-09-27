@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { deletionElapsed,finalizeDeletionIfDue } from '../lifecycle/deadline.js';
 import type pg from 'pg';
 import { z } from 'zod';
 import { transaction, type Databases } from '../../db.js';
@@ -24,6 +25,7 @@ interface Options { databases: Databases; secrets: ServiceSecrets; opaque: Opaqu
   requestBudget?: (scope: { workspaceId: string; accountId: string; history: boolean }) => Promise<void>;
   now?: () => Date; hooks?: { beforeControlCommit?: () => Promise<void>; afterControlCommit?: () => Promise<void>; beforeProjection?: () => Promise<void> } }
 interface Authority { lifecycle: string; licence_state: string; security_head: string; security_version: string; data_generation: string;
+  delete_after:Date|null;
   ownership_version: string; custody_epoch: string; genesis_object_id: string }
 interface Profile { profile_id: string; state: string; is_owner: boolean; credential_generation: string; session_generation: string;
   reset_generation: string; recovery_generation: string }
@@ -58,7 +60,7 @@ export class RecoveryService {
       await client.query("SET LOCAL synchronous_commit='on'");
       await client.query("SELECT set_config('ukda.workspace_id',$1,true)", [workspaceId]);
       const authority = (await client.query<Authority>('SELECT * FROM security.workspaces WHERE workspace_id=$1 FOR UPDATE', [workspaceId])).rows[0];
-      if (!authority || !['active', 'pending_deletion'].includes(authority.lifecycle) || authority.security_version === '0') throw invalid();
+      if (!authority || deletionElapsed(authority,this.#now()) || !['active', 'pending_deletion'].includes(authority.lifecycle) || authority.security_version === '0') throw invalid();
       assertEntitlementAllows(authority.licence_state, 'recover');
       return action(client, authority, this.#now());
     }); } catch (error) { if (error instanceof AppError) throw error;
@@ -197,6 +199,7 @@ export class RecoveryService {
   }
   async beginReset(input: unknown): Promise<RecoveryView> {
     const request = parse(recoveryBeginReset, input);
+    await finalizeDeletionIfDue({databases:this.#options.databases,secrets:this.#options.secrets,workspaceId:request.workspaceId,now:this.#now()});
     return this.#transaction(request.workspaceId, async (client, _authority, now) => {
       const digest = this.#options.secrets.digest('recovery-reset-code', `${request.workspaceId}:${request.code}`).toString('hex');
       const row = (await client.query<Ceremony>(`SELECT * FROM security.ceremonies WHERE workspace_id=$1 AND kind IN ('member_reset','owner_reset')
@@ -221,6 +224,7 @@ export class RecoveryService {
   }
   async beginPhrase(input: unknown): Promise<RecoveryPhraseChallenge> {
     const request = parse(recoveryBeginPhrase, input);
+    await finalizeDeletionIfDue({databases:this.#options.databases,secrets:this.#options.secrets,workspaceId:request.workspaceId,now:this.#now()});
     return this.#transaction(request.workspaceId, async (client, authority, now) => {
       const profile = await this.#profile(client, request.workspaceId, request.accountId);
       await this.#options.requestBudget?.({ workspaceId: request.workspaceId, accountId: profile.profile_id, history: false });

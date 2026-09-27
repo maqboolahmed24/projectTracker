@@ -8,6 +8,15 @@ import { identifier } from './shared/contracts.js';
 import { projectAuthoritativeWorkspace } from './modules/identity/projection.js';
 import { pruneRequestBudgets } from './modules/identity/budgets.js';
 import { pruneAuthenticationAttempts } from './modules/identity/authentication-cleanup.js';
+import { deliverNotificationJob } from './modules/notifications/delivery.js';
+import { safeJob, reconcileJobFailure, reconcileFailedJobs, jobMetrics } from './jobs.js';
+import { recoveryHealth } from './recovery-health.js';
+
+// Graphile adds this metadata to scheduled jobs before JSON persistence. Manual
+// cleanup jobs still use {}, and no other payload fields are accepted.
+const cleanupPayload = z.strictObject({
+  _cron: z.strictObject({ ts: z.iso.datetime(), backfilled: z.boolean() }).optional(),
+});
 
 /** Queue payloads are operational metadata only; this foundation task accepts none. */
 export const healthProbe: Task = async (payload, helpers) => {
@@ -26,7 +35,10 @@ export function workerLogger(silent = false): Logger {
   });
 }
 
-export async function startWorker(config: Config, options: { port?: number } = {}) {
+export async function startWorker(config: Config, options: { port?: number;
+  /** Test-only fault injection; never accepted in a running development/production service. */
+  taskOverrides?: Partial<Record<'notification_delivery' | 'activation_projection', Task>> } = {}) {
+  if (options.taskOverrides && config.NODE_ENV !== 'test') throw new Error('Worker test overrides are not enabled');
   const databases = createDatabases(config);
   const pool = databases.application;
   pool.on('connect', (client) => { client.on('error', () => {}); });
@@ -35,10 +47,20 @@ export async function startWorker(config: Config, options: { port?: number } = {
   let running = true;
   let lastQueueContact = 0;
   let stopPromise: Promise<void> | undefined;
+  const failedIds = new Set<string>();
+  let failureUpdate: Promise<void> | undefined, reconciliationTimer: ReturnType<typeof setInterval> | undefined;
+  const reconcile = () => {
+    if (failureUpdate || !failedIds.size) return failureUpdate ?? Promise.resolve();
+    failureUpdate = (async () => {
+      for (const id of failedIds) if (await reconcileJobFailure(databases, id)) failedIds.delete(id);
+    })().catch(() => { lastQueueContact = 0; }).finally(() => { failureUpdate = undefined; });
+    return failureUpdate;
+  };
 
   try {
     // Only bootstrap scripts may perform DDL. An absent/outdated schema fails startup.
     await pool.query('SELECT 1 FROM graphile_worker.jobs LIMIT 0');
+    await reconcileFailedJobs(databases);
     runner = await run({
       pgPool: pool,
       schema: 'graphile_worker',
@@ -48,22 +70,32 @@ export async function startWorker(config: Config, options: { port?: number } = {
       logger: workerLogger(config.LOG_LEVEL === 'silent'),
       taskList: {
         health_probe: healthProbe,
-        activation_projection: async (payload) => {
+        notification_delivery: safeJob(options.taskOverrides?.notification_delivery ?? (async (payload) => { await deliverNotificationJob(databases, payload); })),
+        activation_projection: safeJob(options.taskOverrides?.activation_projection ?? (async (payload) => {
           const { workspaceId } = z.object({ workspaceId: identifier }).strict().parse(payload);
           await projectAuthoritativeWorkspace(databases, workspaceId);
-        },
-        request_budget_cleanup: async (payload) => {
-          z.object({}).strict().parse(payload);
+        })),
+        request_budget_cleanup: safeJob(async (payload) => {
+          cleanupPayload.parse(payload);
           await pruneRequestBudgets(databases.control);
           await pruneAuthenticationAttempts(databases.control);
-        },
+        }),
       },
-      parsedCronItems: parseCrontab('*/5 * * * * request_budget_cleanup ?max=3 {}'),
+      parsedCronItems: parseCrontab('*/5 * * * * request_budget_cleanup ?max=10 {}'),
     });
     void runner.promise.then(() => { running = false; }, () => { running = false; });
     runner.events.on('worker:getJob:empty', () => { lastQueueContact = Date.now(); });
     runner.events.on('localQueue:getJobs:complete', () => { lastQueueContact = Date.now(); });
     runner.events.on('job:complete', () => { lastQueueContact = Date.now(); });
+    runner.events.on('job:complete', ({ job, error }) => {
+      if (!error) return;
+      failedIds.add(job.id);
+      void reconcile();
+    });
+    // Graphile 0.18 emits job:complete before its batched failure SQL settles.
+    // Poll only those exact IDs still locked; startup repairs a process crash.
+    reconciliationTimer = setInterval(() => { void reconcile(); }, 1000);
+    reconciliationTimer.unref();
     runner.events.on('worker:getJob:error', () => { lastQueueContact = 0; });
     runner.events.on('worker:fatalError', () => { lastQueueContact = 0; });
 
@@ -72,6 +104,16 @@ export async function startWorker(config: Config, options: { port?: number } = {
       reply.header('x-content-type-options', 'nosniff');
     });
     app.get('/health/live', async () => ({ status: 'ok', service: 'ukda-worker' }));
+    app.get('/health/queue', async (_request, reply) => {
+      try { return { status: 'ok', ...await jobMetrics(pool) }; }
+      catch { return reply.code(503).send({ status: 'unavailable' }); }
+    });
+    app.get('/health/recovery', async (_request, reply) => {
+      try {
+        const result = await recoveryHealth(databases.control);
+        return reply.code(result.status === 'healthy' ? 200 : 503).send(result);
+      } catch { return reply.code(503).send({ status: 'unavailable' }); }
+    });
     app.get('/health/ready', async (_request, reply) => {
       try {
         if (!running || Date.now() - lastQueueContact > 15_000) throw new Error('Queue polling unavailable');
@@ -83,8 +125,10 @@ export async function startWorker(config: Config, options: { port?: number } = {
     });
     await app.listen({ host: config.HOST, port: options.port ?? config.PORT });
   } catch {
+    clearInterval(reconciliationTimer);
     await app.close();
     await runner?.stop().catch(() => {});
+    await failureUpdate;
     await databases.close();
     throw new Error('Worker startup failed; check database access and run worker:migrate before starting');
   }
@@ -94,9 +138,12 @@ export async function startWorker(config: Config, options: { port?: number } = {
   const stop = () => {
     stopPromise ??= (async () => {
       running = false;
+      clearInterval(reconciliationTimer);
       await app.close();
       // A stopped runner may already have released itself after a fatal queue error.
       await activeRunner.stop().catch(() => {});
+      await failureUpdate;
+      await reconcile();
       await databases.close();
     })();
     return stopPromise;

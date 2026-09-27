@@ -12,3 +12,7 @@ playwright-report/
 *.log
 .DS_Store
 /architecture/
+/web/.next/
+/web/public/client/
+/web/public/brand/
+/web/tsconfig.tsbuildinfo

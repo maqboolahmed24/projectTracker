@@ -1,13 +1,15 @@
 import test, { type TestContext } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
+import type { AvatarSelection } from '../src/shared/avatar.js';
 import { IDBFactory } from 'fake-indexeddb';
 import { prepareOwnerActivation } from '../src/client/activation.js';
 import { newOwnerPhrase } from '../src/client/recovery.js';
 import { unwrapDeviceBundle } from '../src/client/device-store.js';
 import { enrolmentDeviceContext, type PreparedEnrolment } from '../src/client/enrolment-crypto.js';
 import { prepareJoinInvitation, prepareEnrolmentDraft, confirmEnrolmentTarget, verifyEnrolmentDraft, prepareEnrolmentApproval, verifyEnrolmentDelivery,
-  type EnrolmentDelivery } from '../src/client/enrolment-controller.js';
+  EnrolmentController, EnrolmentClientError, type EnrolmentDelivery } from '../src/client/enrolment-controller.js';
+import type { EnrolmentView } from '../src/shared/enrolment-api.js';
 import { IndexedEnrolmentStore, EnrolmentStoreError, type EnrolmentRecord } from '../src/client/enrolment-store.js';
 import { OPAQUE_CONFIG_ID, OPAQUE_KEY_STRETCHING, type OpaquePublicConfiguration } from '../src/client/opaque.js';
 import { base64urlDecode, base64urlEncode, canonicalJson, digestObject, generateRecipientKeyPair, generateSigningKeyPair, randomKey, signObject } from '../src/shared/crypto.js';
@@ -96,12 +98,12 @@ async function pendingInvitation(f: OwnerFixture, binding: EnrolmentBinding, sel
   binding.profile = { ...binding.profile, objectId: issued.profile.id, objectDigest: digest };
   f.materials.push({ id: issued.profile.id, digest, kind: 'encrypted_profile', value: issued.profile.envelope });
 }
-async function joinedFixture(scopeExpiry: string | null = null, owner = false) {
+async function joinedFixture(scopeExpiry: string | null = null, owner = false, avatar?: AvatarSelection) {
   const f = await ownerFixture(), binding = bindingFor(f, f.state, owner ? 'join_owner' : 'join_member'), exportKey = base64urlEncode(await randomKey());
   await pendingInvitation(f, binding);
   if (scopeExpiry !== null) binding.scopes = binding.scopes.map((scope) => ({ ...scope, expiresAt: scopeExpiry }));
   const phrase = owner ? await newOwnerPhrase() : undefined, positions = [2, 8, 20];
-  const prepared = await prepareEnrolmentDraft({ mode: 'join', history: f.history, input: { binding, exportKey, registrationRecord: base64urlEncode(await randomKey()), displayName: name,
+  const prepared = await prepareEnrolmentDraft({ mode: 'join', history: f.history, input: { binding, exportKey, registrationRecord: base64urlEncode(await randomKey()), displayName: name, ...(avatar ? { avatar } : {}),
     configuration: { ...f.configuration, identifiers: { client: `ukda:${binding.workspaceId}:${binding.accountId}`, server: origin } },
     ...(phrase ? { newOwnerKit: { phrase, positions, answers: positions.map((index) => phrase.split(' ')[index]!) } } : {}) } });
   const approval = await approve(f, f.history, prepared, exportKey), receipt = await receiptFor(approval), current = await appended(f.history, approval.transition);
@@ -120,6 +122,42 @@ test('CP06: approved JOIN ciphertext yields its private profile name and rejects
   await assert.rejects(verifyEnrolmentDelivery({ delivery: altered, history: f.current.history }, f.bundle));
   const stale = { ...f.current.history, expected: f.f.history.expected };
   await assert.rejects(verifyEnrolmentDelivery({ delivery: f.delivery, history: stale }, f.bundle));
+});
+
+test('onboarding: claimed enrolment inspection is read-only and refuses a changed binding or session', async () => {
+  const f = await joinedFixture(), reference = { workspaceId: f.binding.workspaceId, operationId: f.binding.operationId };
+  const view: EnrolmentView = { ...reference, accountId: f.binding.accountId, kind: 'join_member', state: 'verifying', binding: f.binding,
+    publicDraft: publicDraft(f.prepared), transcript: f.prepared.draft.transcript, transcriptDigest: await digestObject(f.prepared.draft.transcript),
+    recipientConfirmation: f.approval.transition.body.recipientConfirmation, newRecoveryConfirmation: null, authorizerConfirmation: null,
+    passwordProved: true, approvalStaged: false, approvalHash: null, requestHash: null, receipt: null,
+    expiresAt: f.binding.expiresAt, resumeExpiresAt: f.binding.expiresAt };
+  const record: EnrolmentRecord = { version: 1, role: 'owner', localId: reference.operationId, revision: 1, origin,
+    ...reference, accountId: f.f.accountId, deviceId: f.f.deviceId, resumeToken: null, genesisFingerprint: f.f.history.genesisFingerprint,
+    view, prepared: null, approval: null, receipt: null };
+  let live = true, returned = view, reads = 0;
+  const auth = { origin, current: () => live ? { localAccess: 'unlocked', session: { ...reference, sessionId: 'current-session', accountId: f.f.accountId, deviceId: f.f.deviceId } } : undefined };
+  const controller = new EnrolmentController(auth as unknown as ConstructorParameters<typeof EnrolmentController>[0],
+    { origin, async inspect() { reads++; return structuredClone(returned); } } as unknown as ConstructorParameters<typeof EnrolmentController>[1], {} as never,
+    { origin, async get() { return structuredClone(record); }, async put() { throw new Error('Read must not save or rebind'); } } as unknown as IndexedEnrolmentStore,
+    { origin } as ConstructorParameters<typeof EnrolmentController>[4]);
+  assert.equal(canonicalJson(await controller.inspectApproval(reference)), canonicalJson(view)); assert.equal(reads, 1);
+  returned = { ...view, publicDraft: null, transcript: null, transcriptDigest: null, binding: { ...f.binding, approvalAttemptId: randomUUID() } };
+  await assert.rejects(controller.inspectApproval(reference), error => error instanceof EnrolmentClientError && error.code === 'CONFLICT');
+  live = false; await assert.rejects(controller.inspectApproval(reference), /AUTH_REQUIRED/); assert.equal(reads, 2);
+});
+
+test('avatar: verified member and equal Owner delivery return the selected avatar from authenticated ciphertext', async () => {
+  const avatar = { shapeId: 'shape-13', colourId: 'sky' } as const;
+  for (const owner of [false, true]) {
+    const f = await joinedFixture(null, owner, avatar);
+    const verification = { delivery: f.delivery, history: f.current.history, ...(f.phrase ? { newOwnerPhrase: f.phrase } : {}) };
+    assert.deepEqual(await verifyEnrolmentDelivery(verification, f.bundle),
+      { complete: true, scopeCount: 1, displayName: name, avatar });
+    assert.equal(JSON.stringify(f.delivery).includes(avatar.shapeId), false);
+    const altered = structuredClone(f.delivery), material = altered.materials.find(value => value.kind === 'encrypted_profile')!;
+    const envelope = material.value as { ciphertext: string }; envelope.ciphertext = flip(envelope.ciphertext);
+    await assert.rejects(verifyEnrolmentDelivery({ ...verification, delivery: altered }, f.bundle));
+  }
 });
 
 test('CP06: an authentic Viewer invitation cannot be substituted with a history-valid Member approval', async () => {

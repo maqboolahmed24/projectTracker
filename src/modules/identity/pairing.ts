@@ -4,9 +4,9 @@ import { transaction, type Databases } from '../../db.js';
 import { AppError } from '../../errors.js';
 import { identifier } from '../../shared/contracts.js';
 import { base64urlDecode, base64urlEncode, canonicalJson, digestObject, verifyObject, verifyRecipientEnvelope } from '../../shared/crypto.js';
-import { pairingApproval, pairingBegin, pairingConfirmation, pairingConfirmationFor, pairingReceipt, pairingRecipientHeader, pairingTranscript,
+import { pairingApproval, pairingBegin, pairingConfirmation, pairingConfirmationFor, pairingReceipt, pairingRecipientHeader, pairingTranscript, pairingListRequest, pairingList,
   type PairingApproval, type PairingBegin, type PairingConfirmation, type PairingDelivery, type PairingMaterial, type PairingReceipt,
-  type PairingScope, type PairingTranscript, type PairingView } from '../../shared/pairing.js';
+  type PairingScope, type PairingTranscript, type PairingView, type PairingList } from '../../shared/pairing.js';
 import { assertEntitlementAllows } from './entitlements.js';
 import { projectAuthoritativeWorkspace, withSecurityFence, type ProjectionResult } from './projection.js';
 import { SessionService, type SessionPrincipal } from './sessions.js';
@@ -17,7 +17,7 @@ const forbidden = () => new AppError('PAIRING_FORBIDDEN', 'This session cannot a
 const conflict = () => new AppError('OPERATION_CONFLICT', 'Pairing operation does not match its saved request', 409);
 const equal = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
 interface Authority { security_head: string; security_version: string; data_generation: string; ownership_version: string;
-  custody_epoch: string; genesis_object_id: string; licence_state: string; lifecycle: string }
+  custody_epoch: string; genesis_object_id: string; licence_state: string; lifecycle: string; restore_quarantine: boolean }
 interface Profile { profile_id: string; state: string; is_owner: boolean; credential_generation: string; session_generation: string }
 interface Device { device_id: string; profile_id: string; key_generation: string; signing_public_key: Buffer; recipient_public_key: Buffer; state: string }
 interface Saved { expected: { credentialGeneration: string; sessionGeneration: string; dataGeneration: string }; request: PairingBegin; requestHash: string; transcript: PairingTranscript | null; transcriptDigest: string | null;
@@ -35,6 +35,43 @@ export class PairingService {
     if (new URL(input.origin).origin !== input.origin) throw new Error('Pairing origin must be exact');
     this.#db = input.databases; this.#sessions = input.sessions; this.#origin = input.origin; this.#now = input.now ?? (() => new Date());
   }
+  async listPending(cookie: string, csrf: string, input: unknown): Promise<PairingList> {
+    const parsed = pairingListRequest.safeParse(input);
+    if (!parsed.success) throw new AppError('INVALID_REQUEST', 'Invalid pairing list request', 400);
+    const request = parsed.data;
+    return this.#transaction(cookie, csrf, async (client, principal) => {
+      const now = this.#now(), profile = await this.#profile(client, principal.workspaceId, principal.accountId);
+      const authority = await this.#authority(client, principal.workspaceId);
+      if (authority.restore_quarantine) throw forbidden();
+      // Discovery requires the same current approved personal/device scopes used by approval.
+      try { await intersectDeviceScopes(client, principal.workspaceId, principal.accountId, principal.deviceId!,
+        await readPersonalScopes(client, principal.workspaceId, principal.accountId, profile.is_owner, now), now); }
+      catch (error) { if (error instanceof PersonalScopeError) throw forbidden(); throw error; }
+      const rows = (await client.query<{ operation_id: string; account_id: string; device_id: string;
+        state: PairingList['requests'][number]['state']; expires_at: Date; approver_account_id: string | null; approver_device_id: string | null }>(`
+        SELECT q.ceremony_id AS operation_id,q.profile_id AS account_id,q.device_id,
+          CASE WHEN q.public_state->'recipientConfirmation' NOT IN ('null'::jsonb) AND q.public_state->'approverConfirmation' NOT IN ('null'::jsonb) THEN 'confirmed'
+            WHEN q.public_state->'transcript' NOT IN ('null'::jsonb) THEN 'verifying' ELSE 'waiting_approver' END AS state,
+          q.expires_at,q.public_state->'transcript'->>'approverAccountId' AS approver_account_id,
+          q.public_state->'transcript'->'approverDevice'->>'id' AS approver_device_id
+        FROM security.ceremonies q JOIN security.profiles p ON p.workspace_id=q.workspace_id AND p.profile_id=q.profile_id
+          JOIN security.devices d ON d.workspace_id=q.workspace_id AND d.device_id=q.device_id AND d.profile_id=q.profile_id
+        WHERE q.workspace_id=$1 AND q.kind='device_pair' AND q.state IN ('issued','waiting_approval') AND q.expires_at>$2
+          AND ($3::uuid IS NULL OR q.ceremony_id>$3::uuid) AND ($4 OR q.profile_id=$5)
+          AND p.state='active' AND d.state='pending' AND d.revoked_at IS NULL
+          AND q.public_state->'expected'->>'credentialGeneration'=p.credential_generation::text
+          AND q.public_state->'expected'->>'sessionGeneration'=p.session_generation::text
+          AND q.public_state->'expected'->>'dataGeneration'=$6
+          AND (q.public_state->'transcript'='null'::jsonb OR q.public_state->'transcript'->>'securityHead'=$7)
+        ORDER BY q.ceremony_id LIMIT $8`, [principal.workspaceId, now, request.after ?? null, profile.is_owner,
+        principal.accountId, authority.data_generation, authority.security_head, request.limit + 1])).rows;
+      const selected = rows.slice(0, request.limit);
+      return pairingList.parse({ workspaceId: principal.workspaceId, observedAt: now.toISOString(), requests: selected.map(row => ({
+        operationId: row.operation_id, accountId: row.account_id, deviceId: row.device_id, state: row.state,
+        expiresAt: row.expires_at.toISOString(), approverAccountId: row.approver_account_id, approverDeviceId: row.approver_device_id,
+      })), nextCursor: rows.length > request.limit ? selected.at(-1)!.operation_id : null });
+    }, true);
+  }
   async #transaction<T>(cookie: string, csrf: string | undefined, action: (client: pg.PoolClient, principal: SessionPrincipal) => Promise<T>, approved = false, recent = false): Promise<T> {
     // Authenticate before acquiring a workspace write lock; unauthenticated callers cannot fence another tenant.
     const initial = await this.#sessions.authenticate(cookie, { ...(csrf !== undefined ? { csrfToken: csrf } : {}), approved, recent });
@@ -46,7 +83,7 @@ export class PairingService {
     });
   }
   async #authority(client: pg.PoolClient, workspaceId: string): Promise<Authority> {
-    const state = (await client.query<Authority>('SELECT security_head,security_version,data_generation,ownership_version,custody_epoch,genesis_object_id,licence_state,lifecycle FROM security.workspaces WHERE workspace_id=$1', [workspaceId])).rows[0];
+    const state = (await client.query<Authority>('SELECT security_head,security_version,data_generation,ownership_version,custody_epoch,genesis_object_id,licence_state,lifecycle,restore_quarantine FROM security.workspaces WHERE workspace_id=$1', [workspaceId])).rows[0];
     if (!state || !['active', 'pending_deletion'].includes(state.lifecycle) || !state.genesis_object_id) throw invalid();
     assertEntitlementAllows(state.licence_state, 'replace_device_existing_scopes');
     return state;

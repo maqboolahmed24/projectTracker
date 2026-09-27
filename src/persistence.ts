@@ -27,6 +27,23 @@ interface WorkspaceState {
   security_head: string; security_version: string; data_generation: string;
   lifecycle: string; licence_state: string; content_maintenance: boolean; restore_quarantine: boolean;
   write_schema: number;
+  delete_after: Date|null;
+}
+
+/** Call after a current-access receipt lookup and before any new content effect.
+ * The caller retains the workspace fence and passes its existing control transaction.
+ * A submitted schema is a property of authenticated ciphertext, never an HTTP hint.
+ */
+export async function assertAuthoritativeContentWrite(control: pg.PoolClient, workspaceId: string,
+  schemas: readonly number[]): Promise<number> {
+  const state = (await control.query<WorkspaceState>(`SELECT lifecycle,licence_state,content_maintenance,
+    restore_quarantine,write_schema FROM security.workspaces WHERE workspace_id=$1`, [workspaceId])).rows[0];
+  if (!state || state.lifecycle === 'deleted') throw new AppError('NOT_FOUND', 'Workspace not available', 404);
+  if (state.lifecycle !== 'active' || state.licence_state !== 'active' || state.content_maintenance || state.restore_quarantine)
+    throw new AppError('WORKSPACE_RESTRICTED', 'Workspace writes are temporarily restricted', 423);
+  if (![1, 2].includes(state.write_schema) || schemas.some(schema => schema !== state.write_schema))
+    throw new AppError('UPDATE_REQUIRED', 'Update the client and reload the current content schema before saving', 409);
+  return state.write_schema;
 }
 
 /** The shared lock drains before any exclusive security fence can change authority. */
@@ -42,11 +59,12 @@ export async function dataTransaction<T>(databases: Databases, principal: DataPr
     let authority: WorkspaceState | undefined;
     try {
       authority = await tenantTransaction(databases.control, principal.workspaceId, undefined, async (control) =>
-        (await control.query<WorkspaceState>('SELECT security_head,security_version,data_generation,lifecycle,licence_state,content_maintenance,restore_quarantine,write_schema FROM security.workspaces WHERE workspace_id = $1', [principal.workspaceId])).rows[0]);
+        (await control.query<WorkspaceState>('SELECT security_head,security_version,data_generation,lifecycle,licence_state,content_maintenance,restore_quarantine,write_schema,delete_after FROM security.workspaces WHERE workspace_id = $1', [principal.workspaceId])).rows[0]);
     } catch {
       throw new AppError('SECURITY_UNAVAILABLE', 'Workspace security state is unavailable', 503);
     }
     if (!authority || !['active', 'pending_deletion'].includes(authority.lifecycle)) throw new AppError('NOT_FOUND', 'Workspace not available', 404);
+    if (authority.lifecycle==='pending_deletion' && authority.delete_after && authority.delete_after.getTime()<=Date.now()) throw new AppError('NOT_FOUND','Workspace not available',404);
     if (authority.restore_quarantine) throw new AppError('RESTORE_QUARANTINE', 'Workspace restoration is in progress', 503);
     if (projected.security_head !== authority.security_head || projected.security_version !== authority.security_version ||
       projected.data_generation !== authority.data_generation) throw new AppError('SECURITY_FENCED', 'Workspace security state is being synchronized', 503);

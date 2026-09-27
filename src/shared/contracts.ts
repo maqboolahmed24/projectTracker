@@ -25,7 +25,7 @@ export function binary(minBytes: number, maxBytes = minBytes) {
 export const contentHeader = z.strictObject({
   version: z.literal(1), purpose: z.literal('ukda.content.v1'), algorithm: z.literal('XChaCha20-Poly1305'),
   workspaceId: identifier, scope: z.enum(['workspace', 'project']), scopeId: identifier,
-  recordId: identifier, recordType: z.enum(recordTypes), schema: z.literal(1),
+  recordId: identifier, recordType: z.enum(recordTypes), schema: z.union([z.literal(1), z.literal(2)]),
   keyEpoch: positiveCounter, revision: positiveCounter, operationId: identifier,
   accountId: identifier, deviceId: identifier, keyGeneration: positiveCounter,
   permissionVersion: positiveCounter, securityVersion: counter, securityHead: digest,

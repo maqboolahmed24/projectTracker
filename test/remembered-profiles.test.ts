@@ -5,6 +5,7 @@ import { IDBFactory } from 'fake-indexeddb';
 import { RememberedProfiles, RememberedProfileError, type RememberedProfileInput } from '../src/client/remembered-profiles.js';
 import { IndexedDeviceStore, wrapDeviceBundle } from '../src/client/device-store.js';
 import { base64urlEncode, generateRecipientKeyPair, generateSigningKeyPair, randomKey } from '../src/shared/crypto.js';
+import type { AvatarSelection } from '../src/shared/avatar.js';
 
 const origin = 'https://ukda.example';
 const profile = (): RememberedProfileInput => ({ workspaceId: randomUUID(), accountId: randomUUID(), deviceId: randomUUID(), displayName: 'Remembered Owner' });
@@ -51,11 +52,59 @@ test('CP04: profile cards are origin/account/device scoped with no remote member
   await assert.rejects(RememberedProfiles.open('http://untrusted.example', name, factory), code('INVALID_PROFILE'));
 });
 
+test('CP04: validated optional avatar survives reload and name-only writes without crossing card boundaries', async () => {
+  const factory = new IDBFactory(), name = randomUUID(), input = profile();
+  let cards = await RememberedProfiles.open(origin, name, factory);
+  const elsewhere = await RememberedProfiles.open('https://other.example', name, factory);
+  const selected: AvatarSelection = { shapeId: 'shape-07', colourId: 'coral' };
+  try {
+    await cards.remember(input);
+    cards.close(); cards = await RememberedProfiles.open(origin, name, factory);
+    assert.equal((await cards.list())[0]!.avatar, undefined, 'Legacy cards remain readable');
+    const saved = await cards.remember({ ...input, avatar: selected });
+    selected.colourId = 'blue'; saved.avatar!.shapeId = 'shape-20';
+    cards.close(); cards = await RememberedProfiles.open(origin, name, factory);
+    assert.deepEqual((await cards.list())[0]!.avatar, { shapeId: 'shape-07', colourId: 'coral' });
+    await cards.remember({ ...input, displayName: 'Updated name' });
+    assert.deepEqual((await cards.list())[0]!.avatar, { shapeId: 'shape-07', colourId: 'coral' }, 'A name-only ceremony does not reset the avatar');
+    await cards.remember({ ...input, avatar: { shapeId: 'shape-12', colourId: 'violet' } });
+    assert.deepEqual((await cards.list())[0]!.avatar, { shapeId: 'shape-12', colourId: 'violet' });
+    const otherDevice = { ...input, deviceId: randomUUID() }, otherAccount = { ...input, accountId: randomUUID() }, otherWorkspace = { ...input, workspaceId: randomUUID() };
+    for (const other of [otherDevice, otherAccount, otherWorkspace]) {
+      assert.equal((await cards.remember(other)).avatar, undefined);
+    }
+    assert.equal((await elsewhere.remember(input)).avatar, undefined);
+    await cards.remove(reference(input));
+    assert.equal((await cards.list()).length, 3);
+    assert.equal((await elsewhere.list()).length, 1);
+  } finally { cards.close(); elsewhere.close(); }
+});
+
+test('CP04: remembered avatar accepts only plain catalogue IDs without executing nested accessors', async () => {
+  const cards = await RememberedProfiles.open(origin, randomUUID(), new IDBFactory()), input = profile();
+  let getterCalls = 0;
+  const selection = { shapeId: 'shape-07', colourId: 'coral' };
+  const nestedGetter = { get shapeId() { getterCalls++; return 'shape-07'; }, colourId: 'coral' };
+  const extraGetter = { ...selection, get url() { getterCalls++; return 'https://example.test/avatar.svg'; } };
+  const inherited = Object.assign(Object.create(selection) as object, { colourId: 'coral' });
+  const hidden = Object.defineProperty({ ...selection }, 'hidden', { value: 'ignored', enumerable: false });
+  const symbolic = { ...selection, [Symbol('avatar')]: 'ignored' };
+  try {
+    for (const avatar of [null, [], 'coral', {}, { shapeId: 'shape-21', colourId: 'coral' },
+      { shapeId: 'shape-07', colourId: '#e97667' }, { ...selection, svg: '<svg/>' },
+      { ...selection, url: 'https://example.test/avatar.svg' }, nestedGetter, extraGetter, inherited, hidden, symbolic]) {
+      await assert.rejects(cards.remember({ ...input, avatar } as RememberedProfileInput), code('INVALID_PROFILE'));
+    }
+    assert.equal(getterCalls, 0);
+    assert.deepEqual(await cards.list(), []);
+  } finally { cards.close(); }
+});
+
 test('CP04: explicit Forget removes all scoped encrypted generations then its card, preserving other devices', async () => {
   const factory = new IDBFactory();
   const cards = await RememberedProfiles.open(origin, randomUUID(), factory);
   const devices = await IndexedDeviceStore.open(randomUUID(), factory);
-  const first = profile(); const other = { ...first, deviceId: randomUUID(), displayName: 'Other device' };
+  const first = { ...profile(), avatar: { shapeId: 'shape-07', colourId: 'coral' } satisfies AvatarSelection }; const other = { ...first, deviceId: randomUUID(), displayName: 'Other device' };
   const signing = await generateSigningKeyPair(); const recipient = await generateRecipientKeyPair(); const exportKey = await randomKey();
   const bundle = { signingPrivateKey: base64urlEncode(signing.privateKey), signingPublicKey: base64urlEncode(signing.publicKey),
     recipientPrivateKey: base64urlEncode(recipient.privateKey), recipientPublicKey: base64urlEncode(recipient.publicKey) };
@@ -77,5 +126,6 @@ test('CP04: explicit Forget removes all scoped encrypted generations then its ca
     assert.equal(await devices.getActive(first.workspaceId, first.accountId, first.deviceId), undefined);
     assert.deepEqual(await devices.getActive(other.workspaceId, other.accountId, other.deviceId), otherWrapper);
     assert.deepEqual((await cards.list()).map((card) => card.deviceId), [other.deviceId]);
+    assert.deepEqual((await cards.list())[0]!.avatar, other.avatar);
   } finally { cards.close(); devices.close(); signing.privateKey.fill(0); recipient.privateKey.fill(0); exportKey.fill(0); }
 });

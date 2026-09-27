@@ -8,6 +8,7 @@ import { authSessionResult, deviceChallenge, deviceProof, type AuthSessionResult
 import { binary, identifier, positiveCounter } from '../../shared/contracts.js';
 import { base64urlEncode, canonicalJson, digestObject, verifyObject } from '../../shared/crypto.js';
 import { ServiceSecrets } from './secrets.js';
+import { deletionElapsed,finalizeDeletionIfDue } from '../lifecycle/deadline.js';
 
 const IDLE_MS = 30 * 60_000, ABSOLUTE_MS = 12 * 60 * 60_000, RECENT_MS = 5 * 60_000;
 export const SESSION_COOKIE_NAME = '__Host-ukda_session';
@@ -56,6 +57,7 @@ interface SessionRow {
 }
 interface Authority {
   lifecycle: string; security_head: string; security_version: string; data_generation: string; ownership_version: string; custody_epoch: string;
+  delete_after:Date|null;
   profile_state: string; credential_generation: string; session_generation: string;
 }
 interface DeviceAuthority {
@@ -101,9 +103,9 @@ export class SessionService {
     return row;
   }
   async #identity(client: pg.PoolClient, workspaceId: string, profileId: string): Promise<Authority> {
-    const workspace = (await client.query<Omit<Authority, 'profile_state' | 'credential_generation' | 'session_generation'>>(`SELECT lifecycle,security_head,security_version,data_generation,ownership_version,custody_epoch
+    const workspace = (await client.query<Omit<Authority, 'profile_state' | 'credential_generation' | 'session_generation'>>(`SELECT lifecycle,security_head,security_version,data_generation,ownership_version,custody_epoch,delete_after
       FROM security.workspaces WHERE workspace_id=$1 FOR SHARE`, [workspaceId])).rows[0];
-    if (!workspace) throw rejected();
+    if (!workspace || deletionElapsed(workspace,this.#now())) throw rejected();
     const profile = (await client.query<Pick<Authority, 'profile_state' | 'credential_generation' | 'session_generation'>>(`SELECT state AS profile_state,credential_generation,session_generation
       FROM security.profiles WHERE workspace_id=$1 AND profile_id=$2 FOR SHARE`, [workspaceId, profileId])).rows[0];
     if (!profile) throw rejected();
@@ -198,6 +200,8 @@ export class SessionService {
     return { ...principal, idleExpiresAt: idle };
   }
   async authenticate(cookieValue: string, options: SessionOptions = {}): Promise<SessionPrincipal> {
+    const ref=cookieParts(cookieValue);
+    if(ref)await finalizeDeletionIfDue({databases:this.#db,secrets:this.#secrets,workspaceId:ref.workspaceId,now:this.#now()});
     return transaction(this.#db.control, (client) => this.resolveCurrent(client, cookieValue, options));
   }
   async revoke(client: pg.PoolClient, workspaceId: string, sessionId: string, now = this.#now()): Promise<void> {

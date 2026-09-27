@@ -1,5 +1,6 @@
 import sodium from 'libsodium-wrappers';
 import { z } from 'zod';
+import { avatarSelection, type AvatarSelection } from '../shared/avatar.js';
 import { genesisBody } from '../shared/activation.js';
 import { binary, identifier, positiveCounter } from '../shared/contracts.js';
 import { base64urlDecode, base64urlEncode, canonicalJson, decryptContent, digestObject, encryptContent,
@@ -16,6 +17,8 @@ const NAME_WRAP_PURPOSE = 'ukda.setup-name-wrap.v1' as const;
 const NAME_LOCAL_PURPOSE = 'ukda.local-setup-name.v1' as const;
 const utf8 = new TextEncoder(), decoder = new TextDecoder('utf-8', { fatal: true });
 const displayName = z.string().min(1).max(200).refine((name) => name.trim() === name && name.length > 0 && !/[\uD800-\uDFFF]/u.test(name));
+const setupProfile = z.strictObject({ displayName, avatar: avatarSelection.optional() });
+type SetupProfile = z.infer<typeof setupProfile>;
 const origin = z.string().max(256).refine((value) => {
   try { const url = new URL(value); return url.origin === value && (url.protocol === 'https:' ||
     (url.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname))); } catch { return false; }
@@ -58,24 +61,32 @@ async function nameKey(source: Uint8Array, context: SetupNameContext): Promise<U
 }
 /** Worker-only plaintext input. Persist the returned ciphertext, never the name or export key. */
 export async function wrapSetupName(context: SetupNameContext, name: string, exportKey: string | Uint8Array): Promise<SetupNameWrapper> {
-  const accepted = snapshot(setupNameContext, context), normalized = nameOf(name), source = exportBytes(exportKey);
+  return wrapSetupProfile(context, { displayName: nameOf(name) }, exportKey);
+}
+/** Retains the selection inside the same encrypted retry wrapper as the setup name. */
+async function wrapSetupProfile(context: SetupNameContext, profile: SetupProfile, exportKey: string | Uint8Array): Promise<SetupNameWrapper> {
+  const accepted = snapshot(setupNameContext, context), normalized = snapshot(setupProfile, profile), source = exportBytes(exportKey);
   let key: Uint8Array | undefined, message: Uint8Array | undefined;
   try {
     await ready; key = await nameKey(source, accepted); const header = headerFor(accepted), nonce = sodium.randombytes_buf(24);
-    message = utf8.encode(canonicalJson({ version: 1, displayName: normalized }));
+    message = utf8.encode(canonicalJson({ version: 1, ...normalized }));
     const ciphertext = sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(message, canonicalJson(header), null, nonce, key);
     return { header, nonce: base64urlEncode(nonce), ciphertext: base64urlEncode(ciphertext) };
   } finally { source.fill(0); key?.fill(0); message?.fill(0); }
 }
 /** Worker-only; decrypted name must never be persisted or logged by callers. */
 export async function unwrapSetupName(context: SetupNameContext, wrapper: SetupNameWrapper, exportKey: string | Uint8Array): Promise<string> {
+  return (await unwrapSetupProfile(context, wrapper, exportKey)).displayName;
+}
+async function unwrapSetupProfile(context: SetupNameContext, wrapper: SetupNameWrapper, exportKey: string | Uint8Array): Promise<SetupProfile> {
   const accepted = snapshot(setupNameContext, context), envelope = snapshot(setupNameWrapper, wrapper);
   if (!same(envelope.header, headerFor(accepted))) throw new EnrolmentCryptoError('LOCAL_VERIFICATION');
   const source = exportBytes(exportKey); let key: Uint8Array | undefined, message: Uint8Array | undefined;
   try {
     await ready; key = await nameKey(source, accepted);
     message = sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(null, base64urlDecode(envelope.ciphertext), canonicalJson(envelope.header), base64urlDecode(envelope.nonce, 24), key);
-    return z.strictObject({ version: z.literal(1), displayName }).parse(parseJsonStrict(decoder.decode(message))).displayName;
+    const { version: _version, ...profile } = setupProfile.extend({ version: z.literal(1) }).parse(parseJsonStrict(decoder.decode(message)));
+    return profile;
   } catch { throw new EnrolmentCryptoError('LOCAL_VERIFICATION'); }
   finally { source.fill(0); key?.fill(0); message?.fill(0); }
 }
@@ -96,7 +107,7 @@ export interface NewEnrolmentOwnerKit { phrase: string; positions: readonly numb
 export interface PreparedEnrolment { draft: EnrolmentDraft; deviceWrapper: DeviceWrapper; nameWrapper: SetupNameWrapper | null }
 export interface PrepareJoinEnrolmentInput {
   binding: EnrolmentBinding; configuration: z.infer<typeof genesisBody.shape.opaque>; registrationRecord: string; exportKey: string;
-  displayName: string; newOwnerKit?: NewEnrolmentOwnerKit;
+  displayName: string; avatar?: AvatarSelection; newOwnerKit?: NewEnrolmentOwnerKit;
 }
 /** Callers must independently verify binding against current signed history before invoking authority-sensitive helpers. */
 async function recoveryFor(binding: EnrolmentBinding, kit: NewEnrolmentOwnerKit | undefined) {
@@ -108,29 +119,29 @@ async function newRecoveryConfirmation(transcript: EnrolmentTranscript, keys: Aw
   if (!keys) return null;
   return signObject(enrolmentConfirmationFor(transcript, await digestObject(transcript), 'new_recovery'), keys.signing.privateKey);
 }
-async function setupNameProposal(preName: EnrolmentPreName, name: string, signing: Uint8Array) {
+async function setupNameProposal(preName: EnrolmentPreName, profile: SetupProfile, signing: Uint8Array) {
   const binding = preName.binding, context = await enrolmentLabelContextHash(preName);
   return sealRecipient(enrolmentSetupNameHeader(preName, context), { version: 1, mode: 'setup_name', workspaceId: binding.workspaceId,
     accountId: binding.accountId, operationId: binding.operationId, approvalAttemptId: binding.approvalAttemptId,
-    attemptGeneration: binding.attemptGeneration, labelContextDigest: context, displayName: nameOf(name) }, signing);
+    attemptGeneration: binding.attemptGeneration, labelContextDigest: context, ...snapshot(setupProfile, profile) }, signing);
 }
 /** Generates a device only for JOIN. Returned objects contain no plaintext private keys, name, phrase or export key. */
 export async function prepareJoinEnrolment(input: PrepareJoinEnrolmentInput, expectedBinding: EnrolmentBinding): Promise<PreparedEnrolment> {
   input = parseJsonStrict(canonicalJson(input)) as typeof input;
   const binding = acceptedBinding(input.binding, expectedBinding); if (binding.kind === 'promote_owner') invalid();
   const configuration = snapshot(genesisBody.shape.opaque, input.configuration), registrationRecord = snapshot(binary(1, 4096), input.registrationRecord);
-  const normalizedName = nameOf(input.displayName), signing = await generateSigningKeyPair();
+  const profile = snapshot(setupProfile, { displayName: nameOf(input.displayName), ...(input.avatar === undefined ? {} : { avatar: input.avatar }) }), signing = await generateSigningKeyPair();
   let recipient: KeyPair | undefined, recovery: Awaited<ReturnType<typeof recoveryKeys>> | undefined;
   try {
     recipient = await generateRecipientKeyPair(); recovery = await recoveryFor(binding, input.newOwnerKit);
     const device = { id: crypto.randomUUID(), keyGeneration: binding.nextDeviceKeyGeneration, signingPublicKey: base64urlEncode(signing.publicKey), recipientPublicKey: base64urlEncode(recipient.publicKey) };
     const wrapper = await wrapDeviceBundle({ workspaceId: binding.workspaceId, accountId: binding.accountId, deviceId: device.id, credentialGeneration: binding.nextCredentialGeneration },
       { signingPrivateKey: base64urlEncode(signing.privateKey), recipientPrivateKey: base64urlEncode(recipient.privateKey), signingPublicKey: device.signingPublicKey, recipientPublicKey: device.recipientPublicKey }, input.exportKey);
-    const wrappedName = await wrapSetupName(nameContext(binding), normalizedName, input.exportKey);
+    const wrappedName = await wrapSetupProfile(nameContext(binding), profile, input.exportKey);
     const preName: EnrolmentPreName = { version: 1, binding, device, recovery: recovery ? { id: crypto.randomUUID(), generation: binding.nextRecoveryGeneration,
       signingPublicKey: base64urlEncode(recovery.signing.publicKey), recipientPublicKey: base64urlEncode(recovery.recipient.publicKey) } : null,
       wrapperHash: await digestObject(wrapper), configuration, registrationRecordHash: await digestObject(registrationRecord) };
-    const setupName = await setupNameProposal(preName, normalizedName, signing.privateKey);
+    const setupName = await setupNameProposal(preName, profile, signing.privateKey);
     const transcript = snapshot(enrolmentTranscript, { ...preName, version: 1, purpose: 'ukda.enrolment-transcript.v1', setupNameDigest: await digestObject(setupName) });
     const prepared: PreparedEnrolment = { draft: { transcript, registrationRecord, setupName, recipientConfirmation: null,
       newRecoveryConfirmation: await newRecoveryConfirmation(transcript, recovery) }, deviceWrapper: wrapper, nameWrapper: wrappedName };
@@ -169,13 +180,13 @@ export async function rebindJoinEnrolment(input: { prepared: PreparedEnrolment; 
     Date.parse(binding.expiresAt) > Date.parse(prior.binding.expiresAt)) invalid();
   await verifyPreparedEnrolment(input.prepared, input.exportKey, prior.binding);
   const bundle = await unwrapDeviceBundle(enrolmentDeviceContext(prior), input.prepared.deviceWrapper, input.exportKey);
-  const name = await unwrapSetupName(nameContext(binding), input.prepared.nameWrapper!, input.exportKey), signing = base64urlDecode(bundle.signingPrivateKey, 64);
+  const profile = await unwrapSetupProfile(nameContext(binding), input.prepared.nameWrapper!, input.exportKey), signing = base64urlDecode(bundle.signingPrivateKey, 64);
   let recovery: Awaited<ReturnType<typeof recoveryKeys>> | undefined;
   try {
     recovery = await recoveryFor(binding, input.newOwnerKit);
     if (recovery && (!prior.recovery || base64urlEncode(recovery.signing.publicKey) !== prior.recovery.signingPublicKey ||
       base64urlEncode(recovery.recipient.publicKey) !== prior.recovery.recipientPublicKey)) invalid();
-    const preName = preNameFor(prior, binding), setupName = await setupNameProposal(preName, name, signing);
+    const preName = preNameFor(prior, binding), setupName = await setupNameProposal(preName, profile, signing);
     const transcript = snapshot(enrolmentTranscript, { ...prior, binding, setupNameDigest: await digestObject(setupName) });
     const result: PreparedEnrolment = { deviceWrapper: snapshot(deviceWrapper, input.prepared.deviceWrapper), nameWrapper: snapshot(setupNameWrapper, input.prepared.nameWrapper),
       draft: { transcript, registrationRecord: input.prepared.draft.registrationRecord, setupName, recipientConfirmation: null,
@@ -231,6 +242,10 @@ async function ownerDraft(input: EnrolmentPublicDraft, fingerprint: string, bund
 /** Worker-only name opening. No workspace key is shared with a pending profile. */
 export async function openEnrolmentSetupName(input: { draft: EnrolmentPublicDraft; fingerprint: string }, bundle: DeviceBundle,
   expectedBinding: EnrolmentBinding): Promise<string> {
+  return (await openEnrolmentSetupProfile(input, bundle, expectedBinding)).displayName;
+}
+async function openEnrolmentSetupProfile(input: { draft: EnrolmentPublicDraft; fingerprint: string }, bundle: DeviceBundle,
+  expectedBinding: EnrolmentBinding): Promise<SetupProfile> {
   input = parseJsonStrict(canonicalJson(input)) as typeof input;
   bundle = snapshot(deviceBundle, bundle);
   const { transcript, binding } = await ownerDraft(input.draft, input.fingerprint, bundle, expectedBinding);
@@ -241,8 +256,9 @@ export async function openEnrolmentSetupName(input: { draft: EnrolmentPublicDraf
     const expected = { version: 1 as const, mode: 'setup_name' as const, workspaceId: binding.workspaceId, accountId: binding.accountId,
       operationId: binding.operationId, approvalAttemptId: binding.approvalAttemptId, attemptGeneration: binding.attemptGeneration, labelContextDigest: context };
     const parsed = snapshot(enrolmentSetupNamePayload, payload);
-    displayName.parse(parsed.displayName);
-    const { displayName: name, ...actual } = parsed; if (!same(actual, expected)) invalid(); return name;
+    const { displayName: name, avatar, ...actual } = parsed;
+    if (!same(actual, expected)) invalid();
+    return snapshot(setupProfile, { displayName: name, ...(avatar === undefined ? {} : { avatar }) });
   } finally { key.fill(0); }
 }
 export async function confirmEnrolmentAuthorizer(input: { draft: EnrolmentPublicDraft; fingerprint: string }, bundle: DeviceBundle,
@@ -261,10 +277,10 @@ export async function encryptEnrolmentProfile(input: { draft: EnrolmentPublicDra
   bundle = snapshot(deviceBundle, bundle);
   const key = new Uint8Array(workspaceKey), signing = base64urlDecode(bundle.signingPrivateKey, 64);
   try {
-    const name = await openEnrolmentSetupName(input, bundle, expectedBinding), transcript = snapshot(enrolmentTranscript, input.draft.transcript);
-    const header = enrolmentProfileHeader(transcript), envelope = await encryptContent(header, { displayName: name }, key, signing);
+    const profile = await openEnrolmentSetupProfile(input, bundle, expectedBinding), transcript = snapshot(enrolmentTranscript, input.draft.transcript);
+    const header = enrolmentProfileHeader(transcript), envelope = await encryptContent(header, profile, key, signing);
     const readback = await decryptContent(envelope, key, base64urlDecode(bundle.signingPublicKey, 32), header);
-    if (!same(readback, { displayName: name })) throw new EnrolmentCryptoError('LOCAL_VERIFICATION');
+    if (!same(readback, profile)) throw new EnrolmentCryptoError('LOCAL_VERIFICATION');
     return { id: crypto.randomUUID(), envelope };
   } finally { key.fill(0); signing.fill(0); }
 }
