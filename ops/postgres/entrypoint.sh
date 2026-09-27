@@ -4,6 +4,12 @@ set -euo pipefail
 # Never echo this file or pass its contents in process arguments.
 install -d -m 700 -o postgres -g postgres /etc/pgbackrest /backrest
 install -m 600 -o postgres -g postgres /run/secrets/pgbackrest.conf /etc/pgbackrest/pgbackrest.conf
+if [ -n "${RUNTIME_DB_PASSWORD_FILE:-}" ]; then
+  # Init scripts run after the stock entrypoint drops to postgres. Docker bind
+  # secrets remain root-owned; copy this one before the drop, outside PGDATA.
+  install -m 600 -o postgres -g postgres "$RUNTIME_DB_PASSWORD_FILE" /etc/pgbackrest/runtime-password
+  export RUNTIME_DB_PASSWORD_FILE=/etc/pgbackrest/runtime-password
+fi
 case "${UKDA_POSTGRES_TLS-false}" in
   true)
     # Keep private keys outside PGDATA so physical backups never contain them.

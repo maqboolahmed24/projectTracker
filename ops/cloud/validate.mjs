@@ -78,6 +78,15 @@ try {
     assert(pin.test(service.image ?? ''), `${name} requires an image pinned by a full SHA-256 digest or local image ID`);
     assert(service.pull_policy === 'never', `${name} requires explicitly loaded or pulled images`);
     assert(service.read_only === true && service.restart === 'unless-stopped', `${name} requires the configured restart and filesystem protection`);
+    assert(Array.isArray(service.tmpfs) && service.tmpfs.every(entry => typeof entry === 'string' && entry.startsWith('/')),
+      `${name} has invalid tmpfs entries; quote comma-separated mount options in YAML`);
+    const temporaryMounts = service.tmpfs.filter(entry => entry.startsWith('/tmp:'));
+    assert(temporaryMounts.length === 1, `${name} requires exactly one configured /tmp mount`);
+    const temporary = temporaryMounts[0];
+    const flags = new Set(temporary?.slice('/tmp:'.length).split(',') ?? []);
+    assert(['rw', 'noexec', 'nosuid'].every(flag => flags.has(flag)) &&
+      [...flags].some(flag => /^size=[1-9][0-9]*[kmg]?$/i.test(flag)),
+      `${name} requires one bounded /tmp mount with rw, noexec and nosuid flags`);
   }
   for (const [name, secret] of Object.entries(config.secrets ?? {})) {
     await externalFile(secret.file, `Secret ${name}`, !name.endsWith('-ca') && !name.endsWith('-cert'));

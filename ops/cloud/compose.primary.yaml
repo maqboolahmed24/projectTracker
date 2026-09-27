@@ -6,7 +6,7 @@ x-node: &node
   init: true
   restart: unless-stopped
   read_only: true
-  tmpfs: [/tmp:rw,noexec,nosuid,size=64m]
+  tmpfs: ["/tmp:rw,noexec,nosuid,size=64m"]
   cap_drop: [ALL]
   security_opt: [no-new-privileges:true]
   pids_limit: 256
@@ -33,7 +33,18 @@ x-postgres: &postgres
   logging: *logging
   networks: [database]
   healthcheck:
-    test: [CMD-SHELL, 'gosu postgres psql -X -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}" -Atqc "SELECT 1" >/dev/null']
+    # The entrypoint's temporary initialization server has only a Unix socket.
+    # Require final TCP, verified TLS and the limited role created by init.
+    # The entrypoint copies its password before dropping privileges; partial
+    # initialization must remain unhealthy even if the admin role can connect.
+    test:
+      - CMD-SHELL
+      - >-
+        PGPASSWORD="$$(cat /etc/pgbackrest/runtime-password)"
+        PGSSLMODE=verify-full PGSSLROOTCERT=/run/secrets/database-ca.crt
+        psql -X --host=127.0.0.1 --port=5432 --username="$${RUNTIME_DB_USER}"
+        --dbname="$${POSTGRES_DB}" --no-password --set=ON_ERROR_STOP=1
+        --tuples-only --command='SELECT 1' >/dev/null 2>&1
     interval: 10s
     timeout: 5s
     retries: 12
@@ -68,6 +79,7 @@ services:
       - {source: app-backrest, target: pgbackrest.conf}
       - {source: app-tls-cert, target: server.crt}
       - {source: app-tls-key, target: server.key}
+      - {source: database-ca, target: database-ca.crt}
 
   control-db:
     <<: *postgres
@@ -101,6 +113,7 @@ services:
       - {source: control-backrest, target: pgbackrest.conf}
       - {source: control-tls-cert, target: server.crt}
       - {source: control-tls-key, target: server.key}
+      - {source: database-ca, target: database-ca.crt}
 
   api:
     <<: *node
@@ -172,7 +185,7 @@ services:
     pull_policy: never
     restart: unless-stopped
     read_only: true
-    tmpfs: [/tmp:rw,noexec,nosuid,size=16m]
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=16m"]
     cap_drop: [ALL]
     cap_add: [NET_BIND_SERVICE]
     security_opt: [no-new-privileges:true]
