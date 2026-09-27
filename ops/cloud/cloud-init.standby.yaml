@@ -73,6 +73,8 @@ write_files:
       # Fresh directories only: never recursively chown backup/database contents.
       install -d -o 999 -g 999 -m 0700 /srv/maqbool-backups/app /srv/maqbool-backups/control
       install -d -o root -g root -m 0700 /srv/maqbool-backups/records
+      # sshd may not have been socket-activated when cloud-init validates it.
+      install -d -o root -g root -m 0755 /run/sshd
       /usr/sbin/sshd -t
       systemctl reload-or-restart ssh.service
       systemctl enable docker.service

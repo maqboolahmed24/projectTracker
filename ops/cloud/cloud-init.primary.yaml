@@ -117,6 +117,8 @@ write_files:
       docker compose config --help | grep -q -- '--no-env-resolution'
       install -d -o root -g root -m 0755 /opt/maqbool
       install -d -o root -g root -m 0700 /opt/maqbool/secrets /opt/maqbool/recovery-records
+      # sshd may not have been socket-activated when cloud-init validates it.
+      install -d -o root -g root -m 0755 /run/sshd
       /usr/sbin/sshd -t
       systemctl reload-or-restart ssh.service
       systemctl enable docker.service

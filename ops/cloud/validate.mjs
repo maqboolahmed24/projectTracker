@@ -5,6 +5,8 @@ import { spawnSync } from 'node:child_process';
 import { readFile, realpath, stat } from 'node:fs/promises';
 import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseEnv } from 'node:util';
+import { recoveryDeployment } from '../recovery-deployment.mjs';
 
 const folder = dirname(fileURLToPath(import.meta.url));
 const root = resolve(folder, '../..');
@@ -35,6 +37,36 @@ try {
     'Usage: node ops/cloud/validate.mjs primary|standby /absolute/cloud.env');
   await externalFile(envPath, 'Cloud configuration', false);
   const manifest = resolve(folder, `compose.${target}.yaml`);
+  if (target === 'primary') {
+    // These host-operator settings are not interpolated into a Compose service.
+    // Require them in the selected file before any local recovery defaults apply.
+    let cloud;
+    try { cloud = parseEnv(await readFile(envPath, 'utf8')); }
+    catch { throw new Error('Cloud operator configuration could not be parsed'); }
+    for (const key of ['UKDA_RECOVERY_REPLICA_MODE', 'UKDA_REPLICATION_REQUIRE_TLS',
+      'UKDA_REPLICATION_PRIMARY_HOST', 'UKDA_REPLICATION_ALLOWED_CIDR',
+      'UKDA_RECOVERY_COMPOSE_FILE', 'UKDA_OPERATOR_IMAGE', 'UKDA_PRIMARY_PRIVATE_IP', 'UKDA_BACKUP_PRIVATE_IP']) {
+      assert(Object.hasOwn(cloud, key) && cloud[key].length > 0, `Cloud configuration must explicitly set ${key}`);
+      assert(process.env[key] === undefined || process.env[key] === cloud[key],
+        `Shell override for ${key} must agree with the selected cloud configuration`);
+    }
+    assert(cloud.UKDA_RECOVERY_REPLICA_MODE === 'external', 'Cloud recovery requires explicit external replica mode');
+    assert(cloud.UKDA_REPLICATION_REQUIRE_TLS === 'true', 'Cloud recovery requires explicit verified replication TLS');
+    assert(privateIPv4(cloud.UKDA_PRIMARY_PRIVATE_IP) && privateIPv4(cloud.UKDA_BACKUP_PRIVATE_IP) &&
+      cloud.UKDA_PRIMARY_PRIVATE_IP !== cloud.UKDA_BACKUP_PRIVATE_IP,
+      'Cloud recovery requires separate private primary and secondary IPv4 addresses');
+    assert(cloud.UKDA_REPLICATION_ALLOWED_CIDR === `${cloud.UKDA_BACKUP_PRIVATE_IP}/32`,
+      'Replication must permit only the secondary private IPv4 address with a /32 mask');
+    assert(isAbsolute(cloud.UKDA_RECOVERY_COMPOSE_FILE) && resolve(cloud.UKDA_RECOVERY_COMPOSE_FILE) === manifest,
+      'Recovery Compose file must be this primary manifest by absolute path');
+    assert(pin.test(cloud.UKDA_OPERATOR_IMAGE), 'Operator image requires a full SHA-256 digest or immutable local image ID');
+    // Reuse the operator's hostname/CIDR/image parsing, without inspecting a DB
+    // or echoing source values. A numeric host must target the primary itself.
+    recoveryDeployment(cloud);
+    if (/^[0-9.]+$/.test(cloud.UKDA_REPLICATION_PRIMARY_HOST))
+      assert(cloud.UKDA_REPLICATION_PRIMARY_HOST === cloud.UKDA_PRIMARY_PRIVATE_IP,
+        'Replication primary IP must match the private database binding');
+  }
   const result = spawnSync('docker', ['compose', '--env-file', envPath, '-f', manifest,
     '--profile', 'application', 'config', '--format', 'json'], {encoding: 'utf8', maxBuffer: 2 * 1024 * 1024});
   assert(result.status === 0, 'Compose validation failed; check required variables and external file paths (resolved output is withheld)');
