@@ -32,10 +32,8 @@ async function createProject(page: Page, name: string, loseFirstRefresh = false)
   }, { timeout: 20_000 }).toBe(true);
   const id = new URL(page.url()).pathname.split('/')[2];
   expect(id).toMatch(/^[0-9a-f-]{36}$/);
-  await projectOptions(page);
-  await page.getByRole('button', { name: 'Start project', exact: true }).click();
+  await page.locator('.page-header').getByRole('button', { name: 'Start project', exact: true }).click();
   await expect(page.locator('.page-header')).toContainText('Active');
-  await closeDialog(page.getByRole('dialog', { name: 'Project options', exact: true }));
   return id!;
 }
 
@@ -221,7 +219,7 @@ test('a project moves through waves, shared work history, completion and archive
     await page.getByRole('button', { name: 'All projects', exact: false }).click();
     await page.getByLabel('Project status', { exact: true }).selectOption('archived');
     await expect(page.locator('.project-card').filter({ hasText: projectName })).toHaveCount(1);
-    await page.locator('.project-card').filter({ hasText: projectName }).click();
+    await page.locator('.project-card').filter({ hasText: projectName }).getByRole('button', { name: 'Open project', exact: true }).click();
     await projectOptions(page);
     await page.getByRole('button', { name: 'Unarchive project', exact: true }).click();
     await page.getByRole('button', { name: 'Reopen project', exact: true }).click();
@@ -328,8 +326,19 @@ test('two assignees share one task, an independent reviewer approves it, and Inb
     await expect(dialog).toHaveCount(0);
     await expect(memberTask.locator('.task-subtitle')).toContainText('In review');
     await expect(memberTask.getByRole('button', { name: 'Approve task', exact: true })).toHaveCount(0);
+    // Assigned work awaiting someone else's review must never invite self-review.
+    await closeDialog(memberTask);
+    await navigate(collaborator, `/projects/${projectId}/overview`);
+    await expect(collaborator.locator('.work-guidance')).toContainText('Waiting for review');
+    await expect(collaborator.getByRole('button', { name: 'Review task', exact: true })).toHaveCount(0);
+    await collaborator.locator('.work-guidance').getByRole('button', { name: 'Open task', exact: true }).click();
+    await expect(memberTask).toBeVisible();
+    await expect(memberTask.getByRole('button', { name: 'Approve task', exact: true })).toHaveCount(0);
     await fixture.deliverFrontendNotifications();
-    await freshProjects(reviewer); await navigate(reviewer, '/my-work?view=review');
+    await freshProjects(reviewer); await navigate(reviewer, `/projects/${projectId}/overview`);
+    await expect(reviewer.locator('.work-guidance')).toContainText('Ready for your review');
+    await expect(reviewer.locator('.work-guidance').getByRole('button', { name: 'Review task', exact: true })).toBeVisible();
+    await navigate(reviewer, '/my-work?view=review');
     await expect(reviewer.locator('.task-row').filter({ hasText: taskName })).toHaveCount(1);
     await reviewer.getByRole('button', { name: 'Assigned to me', exact: true }).click();
     await expect(reviewer).toHaveURL(/\/my-work\?view=assigned$/);

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Studio North - Welcome pack | Maqbool</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-highest": "#caead9",
+            "surface-container-high": "#d4eee0",
+            "primary-dim": "#005e45",
+            "secondary-dim": "#515451",
+            "on-primary-fixed": "#004934",
+            "on-error": "#fff7f6",
+            "surface-tint": "#176b50",
+            "on-primary": "#e0ffee",
+            "surface-container": "#def3e7",
+            "outline": "#648173",
+            "on-background": "#1d382c",
+            "on-tertiary": "#f0fed5",
+            "inverse-surface": "#191b1f",
+            "secondary-container": "#e1e3df",
+            "on-secondary-container": "#4f5250",
+            "tertiary-dim": "#4b5738",
+            "secondary-fixed-dim": "#d3d5d1",
+            "primary": "#176b50",
+            "secondary-fixed": "#a8adb5",
+            "secondary": "#5d605d",
+            "tertiary-fixed": "#ebf9d0",
+            "surface-variant": "#caead9",
+            "on-tertiary-fixed-variant": "#5e6a4a",
+            "surface": "#191b1f",
+            "on-error-container": "#752121",
+            "outline-variant": "#32363d",
+            "error-dim": "#4e0309",
+            "on-surface": "#f0f1f3",
+            "primary-fixed-dim": "#96e4c2",
+            "surface-container-low": "#101113",
+            "inverse-primary": "#9cd7b9",
+            "surface-dim": "#bee2cf",
+            "tertiary-container": "#ebf9d0",
+            "background": "#101113",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#a8adb5",
+            "tertiary-fixed-dim": "#ddebc2",
+            "on-tertiary-fixed": "#424e30",
+            "on-primary-container": "#005e44",
+            "on-secondary": "#f7f9f6",
+            "error-container": "#fe8983",
+            "tertiary": "#576343",
+            "primary-container": "#a4f3d0",
+            "error": "#9f403d",
+            "inverse-on-surface": "#f0f1f3",
+            "primary-fixed": "#a4f3d0",
+            "on-tertiary-container": "#546040",
+            "surface-bright": "#191b1f",
+            "on-secondary-fixed": "#3d403e",
+            "on-primary-fixed-variant": "#12684d",
+            "on-secondary-fixed-variant": "#595c5a",
+            "brand-canvas": "#101113",
+            "brand-surface": "#191b1f",
+            "brand-input": "#23252a",
+            "brand-border": "#32363d",
+            "brand-text": "#f0f1f3",
+            "brand-muted": "#a8adb5",
+            "brand-mint": "#9cd7b9"
+          },
+          fontFamily: {
+            headline: ["Inter", "sans-serif"],
+            display: ["Inter", "sans-serif"],
+            body: ["Inter", "sans-serif"],
+            label: ["Inter", "sans-serif"]
+          },
+          fontSize: {
+            '2xs': '0.6875rem',
+            'xs': '0.75rem',
+            'sm': '0.8125rem',
+            'base': '0.875rem'
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      background-color: #101113;
+      color: #f0f1f3;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .material-symbols-outlined {
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    .transition-custom {
+      transition-duration: 140ms;
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #101113;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #23252a;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #32363d;
+    }
+  </style>
+</head>
+<body class="bg-[#101113] text-[#f0f1f3] min-h-screen flex antialiased selection:bg-[#9cd7b9] selection:text-[#101113]">
+<!-- Side Navigation Bar (Shared Component Contract: 224px, #191b1f) -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between bg-[#191b1f] border-r border-[#32363d] z-30 select-none">
+<div class="p-3 flex flex-col gap-1 w-full">
+<!-- Brand mark & Title -->
+<div class="flex items-center gap-2.5 px-3 py-3 mb-2">
+<div class="w-6 h-6 rounded flex items-center justify-center relative overflow-hidden flex-shrink-0" title="Colorful geometric brand mark">
+<div class="grid grid-cols-2 grid-rows-2 w-5 h-5 rounded-sm overflow-hidden gap-[1px]">
+<span class="bg-[#f27d52] rounded-[1px]"></span>
+<span class="bg-[#e5b842] rounded-[1px]"></span>
+<span class="bg-[#4895ef] rounded-[1px]"></span>
+<span class="bg-[#9cd7b9] rounded-[1px]"></span>
+</div>
+</div>
+<span class="font-headline text-base font-semibold text-[#f0f1f3] tracking-tight">Maqbool</span>
+</div>
+<!-- Navigation tabs -->
+<nav class="flex flex-col gap-0.5 w-full">
+<!-- Home -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#a8adb5] text-xs font-normal hover:bg-[#23252a] hover:text-[#f0f1f3] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined text-[#a8adb5]" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<!-- Projects (Active) -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#23252a] text-[#f0f1f3] font-medium text-xs transition-colors duration-140" href="#">
+<span class="material-symbols-outlined text-[#9cd7b9]" data-icon="folder" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span class="flex-1">Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#a8adb5] text-xs font-normal hover:bg-[#23252a] hover:text-[#f0f1f3] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined text-[#a8adb5]" data-icon="check_circle">check_circle</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center justify-between px-3 py-1.5 rounded-lg text-[#a8adb5] text-xs font-normal hover:bg-[#23252a] hover:text-[#f0f1f3] transition-colors duration-140" href="#">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[#a8adb5]" data-icon="inbox">inbox</span>
+<span>Inbox</span>
+</div>
+<span class="text-[10px] font-medium px-1.5 py-0.2 rounded-full bg-[#23252a] text-[#a8adb5] border border-[#32363d]/60 leading-tight">3</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer -->
+<div class="p-3 border-t border-[#32363d]/50">
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#a8adb5] text-xs font-normal hover:bg-[#23252a] hover:text-[#f0f1f3] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined text-[#a8adb5]" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas Wrapper -->
+<div class="pl-56 w-full flex flex-col min-h-screen bg-[#101113]">
+<!-- Top Nav Header (70px height, project header) -->
+<header class="sticky top-0 z-20 w-full h-[70px] bg-[#191b1f] border-b border-[#32363d] flex flex-col justify-between px-8 select-none">
+<div class="flex items-center justify-between h-full pt-2">
+<!-- Left: Project Context & Status -->
+<div class="flex items-center gap-3">
+<h1 class="font-headline text-base font-semibold text-[#f0f1f3] tracking-tight">Studio North</h1>
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded text-2xs font-medium bg-[#23252a] text-[#a8adb5] border border-[#32363d]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#d97706]"></span>
+<span>Planned</span>
+</div>
+</div>
+<!-- Right Action Cluster -->
+<div class="flex items-center gap-2.5">
+<button class="h-8 px-2.5 rounded-md bg-transparent hover:bg-[#23252a] text-[#a8adb5] hover:text-[#f0f1f3] text-xs font-normal flex items-center gap-1 transition-colors duration-140" type="button">
+<span>More</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="more_horiz">more_horiz</span>
+</button>
+<button class="h-8 px-3.5 rounded-md bg-[#9cd7b9] hover:bg-[#affedb] text-[#101113] text-xs font-medium flex items-center gap-1.5 transition-colors duration-140 shadow-xs" type="button">
+<span class="material-symbols-outlined text-[15px]" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<span>Start project</span>
+</button>
+</div>
+</div>
+<!-- Navigation Tabs Strip -->
+<nav class="flex items-center gap-6 overflow-x-auto no-scrollbar -mb-[1px]">
+<a class="border-b-2 border-[#9cd7b9] text-[#f0f1f3] font-medium pb-2 text-xs transition-colors duration-140 flex items-center gap-1" href="#">
+<span>Overview</span>
+</a>
+<a class="border-b-2 border-transparent text-[#a8adb5] hover:text-[#f0f1f3] pb-2 text-xs font-normal transition-colors duration-140" href="#">
+<span>Work</span>
+</a>
+<a class="border-b-2 border-transparent text-[#a8adb5] hover:text-[#f0f1f3] pb-2 text-xs font-normal transition-colors duration-140" href="#">
+<span>Timeline</span>
+</a>
+<a class="border-b-2 border-transparent text-[#a8adb5] hover:text-[#f0f1f3] pb-2 text-xs font-normal transition-colors duration-140" href="#">
+<span>Updates</span>
+</a>
+<a class="border-b-2 border-transparent text-[#a8adb5] hover:text-[#f0f1f3] pb-2 text-xs font-normal transition-colors duration-140" href="#">
+<span>Files</span>
+</a>
+<a class="border-b-2 border-transparent text-[#a8adb5] hover:text-[#f0f1f3] pb-2 text-xs font-normal transition-colors duration-140" href="#">
+<span>Delivery</span>
+</a>
+</nav>
+</header>
+<!-- Main Workspace Content (1440 canvas view) -->
+<main class="flex-1 w-full max-w-[1120px] mx-auto px-8 py-7 flex flex-col gap-6">
+<!-- 1. Page Header Area -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<h2 class="text-2xl font-semibold text-[#f0f1f3] tracking-tight">Welcome pack</h2>
+<span class="px-2 py-0.5 rounded text-2xs font-medium bg-[#23252a] text-[#a8adb5] border border-[#32363d]">
+              Planned
+            </span>
+</div>
+<!-- Quick Actions -->
+<div class="flex items-center gap-2">
+<button class="h-7 px-2.5 rounded bg-[#191b1f] hover:bg-[#23252a] text-[#f0f1f3] border border-[#32363d] text-xs font-normal flex items-center gap-1.5 transition-colors duration-140" type="button">
+<span class="material-symbols-outlined text-[14px]" data-icon="add">add</span>
+<span>Add task</span>
+</button>
+<button class="h-7 w-7 rounded bg-[#191b1f] hover:bg-[#23252a] text-[#a8adb5] hover:text-[#f0f1f3] border border-[#32363d] flex items-center justify-center transition-colors duration-140" title="Project options" type="button">
+<span class="material-symbols-outlined text-[15px]" data-icon="tune">tune</span>
+</button>
+</div>
+</div>
+<p class="text-sm text-[#a8adb5] font-normal max-w-2xl leading-relaxed">
+          Bring the first week into focus for Studio North newcomers.
+        </p>
+</section>
+<!-- 2. Slim Helpful Next-Action Strip -->
+<section class="bg-[#191b1f] border border-[#32363d] rounded-lg px-4 py-3 flex items-center justify-between transition-colors duration-140">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-md bg-[#23252a] border border-[#32363d] flex items-center justify-center flex-shrink-0 text-[#9cd7b9]">
+<span class="material-symbols-outlined text-[16px]" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-[#f0f1f3]">Ready when you are</span>
+</div>
+<p class="text-xs text-[#a8adb5] mt-0.5">
+              Start this project to let your team begin. You can keep adding work afterwards.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]/70 animate-pulse"></span>
+<span class="text-2xs text-[#a8adb5] font-normal tracking-wide">Project ready to launch</span>
+</div>
+</section>
+<!-- 3. Compact Project Summary Row -->
+<section class="grid grid-cols-3 gap-3.5">
+<div class="bg-[#191b1f] border border-[#32363d] rounded-lg p-3.5 flex flex-col justify-between">
+<span class="text-2xs uppercase tracking-wider text-[#a8adb5] font-medium">Prepared work</span>
+<div class="mt-2 flex items-baseline justify-between">
+<span class="text-base font-semibold text-[#f0f1f3]">2 tasks prepared</span>
+<span class="text-xs text-[#a8adb5]">0 complete</span>
+</div>
+</div>
+<div class="bg-[#191b1f] border border-[#32363d] rounded-lg p-3.5 flex flex-col justify-between">
+<span class="text-2xs uppercase tracking-wider text-[#a8adb5] font-medium">Work sequence</span>
+<div class="mt-2 flex items-baseline justify-between">
+<span class="text-base font-semibold text-[#f0f1f3]">1 planned wave</span>
+<span class="text-xs text-[#a8adb5]">First essentials</span>
+</div>
+</div>
+<div class="bg-[#191b1f] border border-[#32363d] rounded-lg p-3.5 flex flex-col justify-between">
+<span class="text-2xs uppercase tracking-wider text-[#a8adb5] font-medium">Schedule</span>
+<div class="mt-2 flex items-baseline justify-between">
+<span class="text-base font-semibold text-[#f0f1f3]">Target completion</span>
+<span class="text-xs text-[#a8adb5]">No date set</span>
+</div>
+</div>
+</section>
+<!-- 4. First Wave Section ('First essentials') -->
+<section class="flex flex-col gap-2.5 mt-1">
+<div class="flex items-center justify-between px-0.5">
+<div class="flex items-center gap-2">
+<h3 class="text-xs font-semibold text-[#f0f1f3] uppercase tracking-wider">Work phases</h3>
+<span class="text-xs text-[#a8adb5]">· Sequential grouping</span>
+</div>
+<span class="text-2xs text-[#a8adb5]">Phase 1 of 1</span>
+</div>
+<!-- Wave Card Container -->
+<div class="bg-[#191b1f] border border-[#32363d] rounded-lg overflow-hidden">
+<!-- Wave Card Header -->
+<div class="p-4 border-b border-[#32363d] flex items-start justify-between bg-[#191b1f]">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-[#23252a] text-[#a8adb5] border border-[#32363d]">
+                  Planned
+                </span>
+<h4 class="text-sm font-semibold text-[#f0f1f3]">First essentials</h4>
+<span class="text-xs text-[#a8adb5]">· 2 tasks</span>
+</div>
+<p class="text-xs text-[#a8adb5]">
+                Scheduled for project launch · <span class="text-[#a8adb5]/80">Start the project first to activate this phase</span>
+</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-2xs font-normal text-[#a8adb5] hover:text-[#f0f1f3] px-2 py-1 rounded bg-[#23252a] border border-[#32363d] transition-colors duration-140" type="button">
+                Edit phase
+              </button>
+</div>
+</div>
+<!-- Task Table List -->
+<div class="divide-y divide-[#32363d]">
+<!-- Task Item 1 -->
+<div class="px-4 py-3 flex items-center justify-between hover:bg-[#23252a]/40 transition-colors duration-140 group">
+<div class="flex items-center gap-3.5 flex-1 min-w-0">
+<!-- Checkbox (disabled / planned) -->
+<div class="w-4 h-4 rounded border border-[#32363d] bg-[#23252a] flex items-center justify-center flex-shrink-0 cursor-not-allowed" title="Project is planned">
+<span class="w-1.5 h-1.5 rounded-xs bg-transparent"></span>
+</div>
+<!-- Title & Code -->
+<div class="flex items-center gap-2 truncate">
+<span class="text-2xs text-[#a8adb5] font-mono tracking-tight">HR-001</span>
+<span class="text-xs text-[#f0f1f3] font-normal truncate">Prepare the welcome guide</span>
+</div>
+</div>
+<!-- Task Metadata Columns -->
+<div class="flex items-center gap-6 flex-shrink-0 text-xs">
+<!-- Status Badge -->
+<div class="w-20">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-2xs font-medium bg-[#23252a] text-[#a8adb5] border border-[#32363d]">
+                    To do
+                  </span>
+</div>
+<!-- Assignee -->
+<div class="flex items-center gap-2 w-32">
+<div class="w-5 h-5 rounded-full bg-[#23252a] border border-[#32363d] text-[10px] font-medium text-[#f0f1f3] flex items-center justify-center flex-shrink-0">
+                    SV
+                  </div>
+<span class="text-xs text-[#a8adb5] truncate">Sam Vance</span>
+</div>
+<!-- Target -->
+<div class="flex items-center gap-1.5 text-xs text-[#a8adb5] w-20 justify-end">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>2 days</span>
+</div>
+<!-- Row Quick Menu -->
+<div class="w-6 flex justify-end">
+<button class="text-[#a8adb5] hover:text-[#f0f1f3] opacity-0 group-hover:opacity-100 transition-opacity duration-140" title="More options" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Task Item 2 -->
+<div class="px-4 py-3 flex items-center justify-between hover:bg-[#23252a]/40 transition-colors duration-140 group">
+<div class="flex items-center gap-3.5 flex-1 min-w-0">
+<!-- Checkbox (disabled / planned) -->
+<div class="w-4 h-4 rounded border border-[#32363d] bg-[#23252a] flex items-center justify-center flex-shrink-0 cursor-not-allowed" title="Project is planned">
+<span class="w-1.5 h-1.5 rounded-xs bg-transparent"></span>
+</div>
+<!-- Title & Code -->
+<div class="flex items-center gap-2 truncate">
+<span class="text-2xs text-[#a8adb5] font-mono tracking-tight">HR-002</span>
+<span class="text-xs text-[#f0f1f3] font-normal truncate">Set up workspace accesses &amp; intro pack</span>
+</div>
+</div>
+<!-- Task Metadata Columns -->
+<div class="flex items-center gap-6 flex-shrink-0 text-xs">
+<!-- Status Badge -->
+<div class="w-20">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-2xs font-medium bg-[#23252a] text-[#a8adb5] border border-[#32363d]">
+                    To do
+                  </span>
+</div>
+<!-- Assignee -->
+<div class="flex items-center gap-2 w-32">
+<div class="w-5 h-5 rounded-full bg-[#23252a] border border-[#32363d] text-[10px] font-medium text-[#f0f1f3] flex items-center justify-center flex-shrink-0">
+                    AR
+                  </div>
+<span class="text-xs text-[#a8adb5] truncate">Alex Rivera</span>
+</div>
+<!-- Target -->
+<div class="flex items-center gap-1.5 text-xs text-[#a8adb5] w-20 justify-end">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>1 day</span>
+</div>
+<!-- Row Quick Menu -->
+<div class="w-6 flex justify-end">
+<button class="text-[#a8adb5] hover:text-[#f0f1f3] opacity-0 group-hover:opacity-100 transition-opacity duration-140" title="More options" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Add inside Wave footer -->
+<div class="px-4 py-2 bg-[#191b1f] border-t border-[#32363d] flex items-center">
+<button class="text-2xs text-[#a8adb5] hover:text-[#9cd7b9] flex items-center gap-1.5 py-1 font-normal transition-colors duration-140" type="button">
+<span class="material-symbols-outlined text-[14px]" data-icon="add">add</span>
+<span>Add task to this phase</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 5. Optional Next Steps Section -->
+<section class="bg-[#191b1f] border border-[#32363d] rounded-lg p-4 flex items-center justify-between">
+<div class="flex flex-col gap-1 max-w-xl">
+<h4 class="text-xs font-semibold text-[#f0f1f3]">Organise your next steps</h4>
+<p class="text-xs text-[#a8adb5] leading-relaxed">
+            Waves group tasks into focused sequential phases. They are completely optional — add one whenever your team needs a structured handoff.
+          </p>
+</div>
+<button class="h-8 px-3 rounded-md bg-[#23252a] hover:bg-[#32363d] text-[#f0f1f3] border border-[#32363d] text-xs font-medium flex items-center gap-1.5 transition-colors duration-140 flex-shrink-0" type="button">
+<span class="material-symbols-outlined text-[15px]" data-icon="add">add</span>
+<span>Add wave</span>
+</button>
+</section>
+</main>
+</div>
+<script>
+    // Subtle interactions for tactile feedback
+    document.querySelectorAll('button, a').forEach(el => {
+      el.addEventListener('mouseenter', () => {});
+    });
+  </script>
+</body></html>

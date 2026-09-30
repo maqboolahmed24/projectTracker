@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maqbool - Home (Dark Mode)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400..500,0..1,0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            canvas: '#101113',
+            surface: '#191b1f',
+            'surface-subtle': '#23252a',
+            'surface-hover': '#2a2d33',
+            separator: '#32363d',
+            content: '#f0f1f3',
+            muted: '#a8adb5',
+            'muted-dim': '#6f747d',
+            primary: '#9cd7b9',
+            'primary-hover': '#b4e5cc',
+            'primary-text': '#101113',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #101113;
+      color: #f0f1f3;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    .transition-custom {
+      transition: all 140ms ease-out;
+    }
+  </style>
+</head>
+<body class="bg-canvas text-content text-[13px] flex min-h-screen antialiased selection:bg-[#9cd7b9]/20 selection:text-[#9cd7b9]">
+
+  <!-- Sidebar (224px, fixed) -->
+  <aside class="w-[224px] fixed inset-y-0 left-0 bg-surface border-r border-separator flex flex-col justify-between p-3 select-none z-30">
+    <div class="flex flex-col gap-5">
+      <!-- Logo Branding -->
+      <div class="h-10 flex items-center gap-2.5 px-2">
+        <svg class="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="9" height="9" rx="2.5" fill="#9cd7b9"/>
+          <rect x="13" y="2" width="9" height="9" rx="2.5" fill="#f59e0b"/>
+          <rect x="2" y="13" width="9" height="9" rx="2.5" fill="#60a5fa"/>
+          <rect x="13" y="13" width="9" height="9" rx="2.5" fill="#34d399"/>
+        </svg>
+        <span class="font-semibold text-base tracking-tight text-content">Maqbool</span>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex flex-col gap-0.5">
+        <!-- Home (Active) -->
+        <a href="#home" class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-surface-subtle text-content font-medium text-[13px] transition-custom">
+          <span class="material-symbols-outlined text-primary fill text-[18px]">home</span>
+          <span>Home</span>
+        </a>
+
+        <!-- Projects -->
+        <a href="#projects" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted hover:text-content hover:bg-surface-hover font-normal text-[13px] transition-custom">
+          <span class="material-symbols-outlined text-[18px]">folder</span>
+          <span>Projects</span>
+        </a>
+
+        <!-- My work -->
+        <a href="#mywork" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted hover:text-content hover:bg-surface-hover font-normal text-[13px] transition-custom">
+          <span class="material-symbols-outlined text-[18px]">check_circle</span>
+          <span>My work</span>
+        </a>
+
+        <!-- Inbox -->
+        <a href="#inbox" class="flex items-center justify-between px-3 py-2 rounded-lg text-muted hover:text-content hover:bg-surface-hover font-normal text-[13px] transition-custom">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-[18px]">inbox</span>
+            <span>Inbox</span>
+          </div>
+          <span class="text-[11px] font-medium text-muted-dim bg-surface-subtle px-1.5 py-0.5 rounded">3</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom Sidebar Section -->
+    <div class="border-t border-separator pt-2">
+      <a href="#settings" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted hover:text-content hover:bg-surface-hover font-normal text-[13px] transition-custom">
+        <span class="material-symbols-outlined text-[18px]">settings</span>
+        <span>Settings</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main View Area (ml-[224px]) -->
+  <div class="ml-[224px] flex-1 flex flex-col min-w-0">
+
+    <!-- Top Header (70px height) -->
+    <header class="h-[70px] bg-surface border-b border-separator px-8 flex items-center justify-between sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <span class="text-[13px] font-medium text-muted">Studio North</span>
+        <span class="text-separator">/</span>
+        <span class="text-[13px] font-semibold text-content">Workspace</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Contextual Project Selector or Quick Switcher -->
+        <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-subtle text-muted text-xs border border-separator">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="font-medium text-content">Alex Rivera</span>
+          <span class="text-[11px] text-muted-dim">(Owner)</span>
+        </div>
+
+        <!-- Primary Action: New Project for Owner -->
+        <button type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-hover text-primary-text font-medium text-xs shadow-xs transition-custom">
+          <span class="material-symbols-outlined text-[16px] text-primary-text">add</span>
+          <span>New project</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Canvas -->
+    <main class="max-w-6xl w-full mx-auto px-8 py-8 flex flex-col gap-8">
+
+      <!-- Header Greeting & Status Guidance -->
+      <section class="flex flex-col gap-4">
+        <div>
+          <h1 class="text-[26px] font-semibold tracking-tight text-content leading-tight">Good afternoon, Alex.</h1>
+          <p class="text-[13px] text-muted mt-1">You have 2 tasks to move forward and 1 review waiting.</p>
+        </div>
+
+        <!-- Three Compact Clickable Count Links -->
+        <div class="flex items-center gap-3">
+          <a href="#assigned" class="group inline-flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-surface border border-separator hover:border-muted/40 transition-custom shadow-2xs">
+            <span class="text-muted group-hover:text-content text-xs font-normal">Assigned to me</span>
+            <span class="px-1.5 py-0.5 rounded text-xs font-medium bg-surface-subtle text-content group-hover:bg-content group-hover:text-[#101113] transition-custom">2</span>
+          </a>
+
+          <a href="#review" class="group inline-flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-surface border border-separator hover:border-muted/40 transition-custom shadow-2xs">
+            <span class="text-muted group-hover:text-content text-xs font-normal">For my review</span>
+            <span class="px-1.5 py-0.5 rounded text-xs font-medium bg-purple-950/40 text-purple-300 border border-purple-800/50">1</span>
+          </a>
+
+          <a href="#blockers" class="group inline-flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-surface border border-separator hover:border-muted/40 transition-custom shadow-2xs">
+            <span class="text-muted group-hover:text-content text-xs font-normal">Open blockers</span>
+            <span class="px-1.5 py-0.5 rounded text-xs font-medium bg-amber-950/40 text-amber-300 border border-amber-800/50">1</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Section: Your projects -->
+      <section class="flex flex-col gap-3.5">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-content">Your projects</h2>
+          <a href="#all-projects" class="text-xs font-normal text-muted hover:text-primary transition-custom flex items-center gap-1">
+            <span>View all projects</span>
+            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+          </a>
+        </div>
+
+        <!-- 3 Responsive Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+          <!-- Card 1: Welcome pack (PLANNED) -->
+          <article class="bg-surface rounded-xl border border-separator p-5 flex flex-col justify-between shadow-2xs hover:border-muted/40 transition-custom">
+            <div>
+              <div class="flex items-start justify-between gap-3">
+                <a href="#welcome-pack" class="group flex items-center gap-2 min-w-0">
+                  <span class="font-medium text-[14px] text-content group-hover:text-primary truncate transition-custom">Welcome pack</span>
+                  <span class="material-symbols-outlined text-[15px] text-muted-dim group-hover:text-primary transition-custom opacity-0 group-hover:opacity-100">open_in_new</span>
+                </a>
+                <!-- Semantic Gray Planned Badge -->
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-zinc-800/80 text-zinc-300 border border-zinc-700/60 flex-shrink-0">
+                  Planned
+                </span>
+              </div>
+              <p class="text-xs text-muted mt-1.5 line-clamp-2">Bring the first week into focus</p>
+
+              <!-- State details -->
+              <div class="mt-4 pt-3.5 border-t border-separator flex flex-col gap-1.5">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-content font-medium">3 tasks ready</span>
+                  <span class="text-muted-dim">Not started</span>
+                </div>
+                <p class="text-[11px] text-muted">Planning · Work has not started</p>
+              </div>
+            </div>
+
+            <!-- Footer Action Area -->
+            <div class="mt-5 pt-3.5 border-t border-separator flex flex-col gap-2.5">
+              <p class="text-[11px] text-muted leading-tight">Start this project so the team can begin.</p>
+              <div class="flex items-center justify-between">
+                <button type="button" onclick="const b=this; b.innerHTML='<span class=\'material-symbols-outlined text-[15px] animate-spin\'>progress_activity</span><span>Starting…</span>'; b.disabled=true; setTimeout(()=>{ window.location.href='#projects'; }, 600);" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-hover text-primary-text text-xs font-medium shadow-xs transition-custom">
+                  <span class="material-symbols-outlined text-[16px] text-primary-text fill">play_arrow</span>
+                  <span>Start project</span>
+                </button>
+                <a href="#welcome-pack" class="text-xs text-muted hover:text-content transition-custom">Open project</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Website refresh (ACTIVE) -->
+          <article class="bg-surface rounded-xl border border-separator p-5 flex flex-col justify-between shadow-2xs hover:border-muted/40 transition-custom">
+            <div>
+              <div class="flex items-start justify-between gap-3">
+                <a href="#website-refresh" class="group flex items-center gap-2 min-w-0">
+                  <span class="font-medium text-[14px] text-content group-hover:text-primary truncate transition-custom">Website refresh</span>
+                  <span class="material-symbols-outlined text-[15px] text-muted-dim group-hover:text-primary transition-custom opacity-0 group-hover:opacity-100">open_in_new</span>
+                </a>
+                <!-- Semantic Blue Active Badge -->
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-blue-950/40 text-blue-300 border border-blue-800/60 flex-shrink-0">
+                  Active
+                </span>
+              </div>
+              <p class="text-xs text-muted mt-1.5 line-clamp-2">Studio North core brand assets and marketing release</p>
+
+              <!-- Progress bar & metrics -->
+              <div class="mt-4 pt-3.5 border-t border-separator flex flex-col gap-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-content font-medium">4 of 8 tasks complete</span>
+                  <span class="text-muted font-medium">50%</span>
+                </div>
+                <div class="w-full h-1.5 bg-surface-subtle rounded-full overflow-hidden">
+                  <div class="h-full bg-blue-500 rounded-full w-1/2"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer: Stable metadata & Action -->
+            <div class="mt-5 pt-3.5 border-t border-separator flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <!-- People initials -->
+                <div class="flex -space-x-1.5">
+                  <div class="w-6 h-6 rounded-full bg-emerald-900/60 border border-surface text-emerald-200 text-[10px] font-medium flex items-center justify-center" title="Alex Rivera">AR</div>
+                  <div class="w-6 h-6 rounded-full bg-blue-900/60 border border-surface text-blue-200 text-[10px] font-medium flex items-center justify-center" title="Sam Vance">SV</div>
+                </div>
+                <span class="text-[11px] text-muted">Due Nov 12</span>
+              </div>
+              <a href="#website-refresh" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-surface-subtle hover:bg-surface-hover text-content text-xs font-medium border border-separator transition-custom">
+                <span>Open work</span>
+                <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 3: Quarterly handbook (COMPLETE) -->
+          <article class="bg-surface rounded-xl border border-separator p-5 flex flex-col justify-between shadow-2xs hover:border-muted/40 transition-custom">
+            <div>
+              <div class="flex items-start justify-between gap-3">
+                <a href="#quarterly-handbook" class="group flex items-center gap-2 min-w-0">
+                  <span class="font-medium text-[14px] text-content group-hover:text-primary truncate transition-custom">Quarterly handbook</span>
+                  <span class="material-symbols-outlined text-[15px] text-muted-dim group-hover:text-primary transition-custom opacity-0 group-hover:opacity-100">open_in_new</span>
+                </a>
+                <!-- Semantic Green Complete Badge -->
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 flex-shrink-0">
+                  Complete
+                </span>
+              </div>
+              <p class="text-xs text-muted mt-1.5 line-clamp-2">Internal team operating guidelines and policies</p>
+
+              <!-- Progress status -->
+              <div class="mt-4 pt-3.5 border-t border-separator flex flex-col gap-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-content font-medium">6 of 6 complete</span>
+                  <span class="text-emerald-400 font-medium">100%</span>
+                </div>
+                <div class="w-full h-1.5 bg-surface-subtle rounded-full overflow-hidden">
+                  <div class="h-full bg-emerald-500 rounded-full w-full"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Action Area: Quiet view only, NO start button -->
+            <div class="mt-5 pt-3.5 border-t border-separator flex items-center justify-between">
+              <span class="text-[11px] text-muted">Archived record</span>
+              <a href="#quarterly-handbook" class="inline-flex items-center gap-1 text-xs text-muted hover:text-content font-medium transition-custom">
+                <span>View project</span>
+                <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Section: For your review -->
+      <section class="flex flex-col gap-3.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <h2 class="text-sm font-semibold text-content">For your review</h2>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium bg-purple-950/40 text-purple-300 border border-purple-800/50">1 task</span>
+          </div>
+          <a href="#mywork" class="text-xs font-normal text-muted hover:text-primary transition-custom flex items-center gap-1">
+            <span>View My work</span>
+            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+          </a>
+        </div>
+
+        <!-- Task Row Container -->
+        <div class="bg-surface rounded-xl border border-separator p-4 shadow-2xs hover:border-muted/40 transition-custom">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-start gap-3.5">
+              <!-- Task Icon / Type -->
+              <div class="w-8 h-8 rounded-lg bg-surface-subtle border border-separator flex items-center justify-center text-muted flex-shrink-0 mt-0.5">
+                <span class="material-symbols-outlined text-[18px]">description</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-xs font-semibold text-content">HR-001 Prepare the welcome guide</span>
+                  <!-- Semantic Purple In review Badge -->
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-purple-950/40 text-purple-300 border border-purple-800/60">
+                    In review
+                  </span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-muted flex-wrap">
+                  <span class="font-medium text-content/80">Website refresh</span>
+                  <span>·</span>
+                  <span>Submitted by <strong class="font-normal text-content">Sam Vance</strong></span>
+                  <span>·</span>
+                  <span>2 documents attached</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action: Review task (only for actual assigned reviewer) -->
+            <div class="flex items-center gap-2.5 sm:self-center flex-shrink-0">
+              <span class="text-[11px] text-muted-dim hidden md:inline">Assigned to you</span>
+              <a href="#review-hr-001" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-hover text-primary-text text-xs font-medium shadow-xs transition-custom">
+                <span class="material-symbols-outlined text-[16px] text-primary-text">rate_review</span>
+                <span>Review task</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</body>
+</html>

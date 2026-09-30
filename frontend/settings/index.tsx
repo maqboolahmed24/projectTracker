@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
-import { User, Users, Shield, SlidersHorizontal, Database, RefreshCw, Plug, Laptop, KeyRound, ArrowRight } from 'lucide-react';
+import { User, Users, Shield, SlidersHorizontal, Database, RefreshCw, Laptop, KeyRound, ArrowRight } from 'lucide-react';
 import { useApp } from '../shared/context';
 import { Avatar, Badge, Button, EmptyState, ErrorNotice, Modal, PageHead, Spinner } from '../shared/ui';
 import { PasswordChangePanel, createHandoffLink } from '../identity';
@@ -50,25 +50,11 @@ function InterruptedSaves() {
     {selected&&<SecureConfirm open onClose={()=>setSelected(undefined)} title={`Check ${selected.label.toLowerCase()}?`} description="This may already be saved. Check its result and finish the original change if needed." confirmLabel="Check and finish" perform={async()=>{const result=await selected.resume();const completed=selected.returnsCompletedReceipt||!!result&&typeof result==='object'&&'state'in result&&result.state==='completed';if(completed)notify('The saved change is complete.','success');else if(!isFinishing(result))throw new Error('Saved change completion was not confirmed');return result;}} onDone={async()=>{await reloadDirectory();await reloadProjects();}}/>}
   </Panel>;
 }
-const futureGroups = [
-  ['GitHub','Connect repository activity with project work.'],
-  ['AI assistance','Explore evidence-based summaries and project questions.'],
-  ['Email notifications','Receive workspace updates by email.'],
-  ['Board views','Organise the same tasks as cards on a board.'],
-  ['Mentions and channels','Bring people into focused conversations.'],
-  ['Dependencies and scheduling','Connect dependent tasks and automate scheduling.'],
-  ['Risk register','Track project risks and the actions planned to address them.'],
-  ['Forecasts and workload','Explore capacity, weighted progress, forecasts and planned-versus-actual comparisons.'],
-  ['External connectors','Connect services beyond this workspace.'],
-  ['Customer-hosted processing','Run connected processing in your own environment.'],
-];
-function FutureSettings(){return <><PageHead title="Integrations & future features" description="Planned extensions to your workspace." eyebrow="Settings"/><div className="settings-role-grid">{futureGroups.map(([title,description])=><article className="settings-role-card settings-future" key={title}><Plug size={23}/><h2>{title}</h2><p className="muted">{description}</p><p>Not available in this build.</p><Button disabled variant="secondary">Not available</Button></article>)}</div></>;}
-
 const sections = [
   {id:'account',label:'Your account',icon:User,owner:false}, {id:'workspace',label:'Workspace',icon:SlidersHorizontal,owner:false},
   {id:'people',label:'People',icon:Users,owner:false}, {id:'teams',label:'Teams',icon:Users,owner:false},
   {id:'roles',label:'Roles & permissions',icon:Shield,owner:true}, {id:'data',label:'Data & privacy',icon:Database,owner:false},
-  {id:'maintenance',label:'Workspace updates',icon:RefreshCw,owner:true}, {id:'integrations',label:'Integrations',icon:Plug,owner:false},
+  {id:'maintenance',label:'Workspace updates',icon:RefreshCw,owner:true},
 ];
 export function SettingsArea({section='workspace'}:{section?:string}) {
   const {client,directory,navigate,reloadDirectory}=useApp();const [version,setVersion]=useState(0);
@@ -81,6 +67,6 @@ export function SettingsArea({section='workspace'}:{section?:string}) {
   return <SettingsRefresh.Provider value={refresh}><div className="settings-layout"><nav className="settings-nav" aria-label="Settings sections">{sections.filter(item=>!item.owner||directory.isOwner).map(item=><button type="button" key={item.id} className={item.id===current?'active':''} aria-current={item.id===current?'page':undefined} onClick={()=>navigate({page:'settings',section:item.id})}><item.icon size={18}/>{item.label}</button>)}</nav><div className="settings-content">
     {directory.lifecycle==='pending_deletion'&&<div className="notice notice-warning"><div><strong>Workspace deletion is scheduled</strong><p>Ordinary work is read-only. Deletion is due {dateLabel(directory.deletion?.deleteAfter)}.</p></div><Button variant="secondary" onClick={()=>navigate({page:'settings',section:'data'})}>Review deletion</Button></div>}
     {directory.licenceState!=='active'&&<div className="notice notice-warning">Your workspace licence currently restricts access. You can still review your account and download available work.</div>}
-    {!allowed?<EmptyState title="Settings unavailable" description="Choose a settings section from the menu."/>:current==='account'?<AccountSettings/>:current==='people'?<PeopleSettings/>:current==='teams'?<TeamsSettings/>:current==='roles'?<RolesSettings/>:current==='data'?<DataSettings/>:current==='maintenance'?<MaintenanceSettings/>:current==='integrations'?<FutureSettings/>:<WorkspaceSettings/>}<InterruptedSaves/>
+    {!allowed?<EmptyState title={current==='integrations'?'Integrations are not available':'Settings unavailable'} description="You can manage your workspace using the available settings." action={<Button variant="secondary" onClick={()=>navigate({page:'settings',section:'workspace'})}>Back to workspace settings <ArrowRight size={16}/></Button>}/>:current==='account'?<AccountSettings/>:current==='people'?<PeopleSettings/>:current==='teams'?<TeamsSettings/>:current==='roles'?<RolesSettings/>:current==='data'?<DataSettings/>:current==='maintenance'?<MaintenanceSettings/>:<WorkspaceSettings/>}{allowed&&<InterruptedSaves/>}
   </div></div></SettingsRefresh.Provider>;
 }
