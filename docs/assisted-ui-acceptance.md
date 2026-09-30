@@ -15,8 +15,26 @@ This bounded pass makes Maqbool clearer without replacing its identity, lifecycl
 
 ## Release gates
 
-Production frontend build and main TypeScript build pass. Browser verification is in progress; final results and deployment evidence are recorded after completion. The initial browser pass found and corrected native-dialog autofocus; no initial partial run is claimed as the final gate.
+The production frontend build, main TypeScript build and both TypeScript checks pass. The accepted browser evidence contains **21 distinct passing journey/engine combinations across 11 journeys**, plus one existing intentional WebKit skip. These are targeted runs, not a claim that one uninterrupted run passed 22 tests.
 
-The focused browser gate uses real isolated PostgreSQL-backed fixtures in Chromium and WebKit. It exercises direct project start and a lost committed reply; Owner/member/read-only controls; wave/task start; reviewer versus assignee guidance; global search/keyboard focus; modal and toolbar geometry; file versions/expansion; settings and nested dialogs; shared discussion/review/Inbox; light/dark desktop and mobile layouts. It does not establish testing on every physical browser/device.
+| Journey | Chromium | WebKit |
+| --- | --- | --- |
+| Project cards: direct start, lost reply recovery, read-only access | Pass | Pass |
+| Assisted task steps, prerequisites, wave search and navigation | Pass | Pass |
+| Files: versions, external references, exports and preview expansion | Pass | Pass |
+| Task tabs, internal scrolling and nested editing | Pass | Pass |
+| Account, timezone and person dialogs | Pass | Pass |
+| Priority: pointer/keyboard selection and saved values | Pass | Pass |
+| Roles, teams, timezone and legacy settings links | Pass | Pass |
+| Invitation revocation, export acknowledgement and deletion cancellation | Pass | Pass |
+| Completed workspace update followed by a failed refresh | Pass | Pass |
+| Two assignees, independent review and Inbox navigation | Pass | Intentionally excluded |
+| Project lifecycle through completion, archive and reopening | Pass | Pass |
 
-No database, backend protocol, package dependency, deployment topology or storage limit is changed by this UI pass.
+The three-person journey is explicitly limited to Chromium by the existing test; the core work journey runs in both engines. These checks use real isolated PostgreSQL-backed fixtures, not a separate mock frontend. Geometry and screenshots cover light/dark desktop layouts, the wide Work toolbar, phone layouts, and dialogs down to 320px. Priority was checked at 390px; file expansion at desktop and 390px.
+
+Retained local evidence is in `test-results/assisted-ui-base-results.json`, `assisted-ui-controls-results.json` and `assisted-ui-work-results.json`, with screenshots under `frontend-artifacts`, `assisted-ui-final-artifacts`, `assisted-ui-work-final-artifacts` and `frontend-review/modal-layout`. The deduplicated accepted passes are 6 + 13 + 2. The final lifecycle rerun passed both engines in 99 seconds. Early tests found the native-dialog autofocus bug and stale member eligibility, both corrected; old keyboard-tab and newly duplicated project-action selectors were corrected before passing reruns. Interrupted runs are not counted as passes.
+
+A full repository CI run on runtime commit `f227ddd0dd46077fe9d4dc053ad391ca589c1487` is [run 36654470585](https://github.com/maqboolahmed24/projectTracker/actions/runs/36654470585). It was still running when the release record was written; it is not represented here as passed. This UI change does not modify backend protocol, migrations, dependencies or storage limits. The preceding backend/files release has its own completed full-CI evidence.
+
+See [cloud release](assisted-ui-cloud-release.md) for the deployed frontend, service preservation and public verification. Authenticated workflows were verified against the real local test backend; no customer account was used for a production sign-in test.

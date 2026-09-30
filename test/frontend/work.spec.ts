@@ -222,7 +222,7 @@ test('a project moves through waves, shared work history, completion and archive
     await page.locator('.project-card').filter({ hasText: projectName }).getByRole('button', { name: 'Open project', exact: true }).click();
     await projectOptions(page);
     await page.getByRole('dialog', { name: 'Project options', exact: true }).getByRole('button', { name: 'Unarchive project', exact: true }).click();
-    await page.getByRole('button', { name: 'Reopen project', exact: true }).click();
+    await page.getByRole('dialog', { name: 'Project options', exact: true }).getByRole('button', { name: 'Reopen project', exact: true }).click();
     await expect(page.locator('.page-header')).toContainText('Active');
     await closeDialog(page.getByRole('dialog', { name: 'Project options', exact: true }));
     await navigate(page, '/my-work');
