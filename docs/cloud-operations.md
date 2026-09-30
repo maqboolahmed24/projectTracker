@@ -163,6 +163,8 @@ Recreate the affected containers after replacing file-backed secrets so new bind
 
 ## Evidence boundary
 
+The [project files release record](files-cloud-release.md) records the subsequent encrypted-file release, its immutable image pins, limits and live verification.
+
 The [cloud deployment evidence](cloud-deployment-evidence.md) records the actual HTTPS, encrypted backup, two-store isolated restore, synchronous outage and current-Owner verification results, plus the real application journey. Host bootstrap checks confirmed Docker/Compose, key-only SSH, primary swap, NFSv4 exports and ownership. The first cloud-init run recorded a missing `/run/sshd` error; repaired bootstrap scripts completed successfully, and that original cloud-init status remains as historical evidence.
 
 The broader [local implementation evidence](implementation-evidence.md) and [frontend evidence](frontend-verification.md) are separate from this deployment's acceptance. Keep the cloud release record current when images, configuration or verification results change.

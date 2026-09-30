@@ -91,3 +91,7 @@ Final screenshots were inspected under `test-results/frontend-artifacts/files-pr
 Before the final Files-only pass, the existing remembered-profile sign-in/logout/Forget journey and the existing waves/tasks/comments/completion/archive journey also passed in Chromium (9.5 and 39.8 seconds). Exact submission/acceptance concurrency and bulk assignment/submission are covered by the actual-controller cases above. Preview-format, local publication and actual ONLYOFFICE edit/save checks have separate acceptance evidence; this Files journey does not claim those interactions.
 
 The installed Firefox engine failed before page launch with a temporary-profile folder error on this Mac, including with `TMPDIR=/tmp`. Firefox browser acceptance is therefore unverified. No browser security setting was disabled to bypass this environment failure. The final frontend is frozen after these focused checks.
+
+## Cloud release
+
+The reviewed application was deployed on 30 September 2026. Live encrypted upload/version download, external-reference, companion-download integrity and signed checkpoint inventory checks pass. See the [cloud release record](files-cloud-release.md) for exact images, storage admission, evidence and the separately tracked full CI result. These production smoke checks do not establish a 512-task cloud load capacity.
