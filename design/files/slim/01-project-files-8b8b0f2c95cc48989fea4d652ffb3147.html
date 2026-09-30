@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Studio North - Files - Maqbool</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#5d605d",
+            "inverse-primary": "#affedb",
+            "surface-variant": "#caead9",
+            "on-primary-container": "#005e44",
+            "tertiary": "#576343",
+            "background": "#f2fcf4",
+            "inverse-on-surface": "#959f99",
+            "on-secondary": "#f7f9f6",
+            "primary": "#176b50",
+            "inverse-surface": "#07100c",
+            "on-background": "#1d382c",
+            "on-primary": "#e0ffee",
+            "on-surface": "#1d382c",
+            "tertiary-fixed": "#ebf9d0",
+            "outline-variant": "#9bb9a9",
+            "secondary-fixed": "#e1e3df",
+            "secondary-dim": "#515451",
+            "on-primary-fixed-variant": "#12684d",
+            "outline": "#648173",
+            "on-secondary-fixed-variant": "#595c5a",
+            "surface-dim": "#bee2cf",
+            "on-error": "#fff7f6",
+            "secondary-fixed-dim": "#d3d5d1",
+            "on-tertiary": "#f0fed5",
+            "on-tertiary-fixed": "#424e30",
+            "tertiary-fixed-dim": "#ddebc2",
+            "primary-fixed": "#a4f3d0",
+            "primary-container": "#a4f3d0",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#96e4c2",
+            "secondary-container": "#e1e3df",
+            "on-primary-fixed": "#004934",
+            "error": "#9f403d",
+            "surface-container-low": "#e8f7ed",
+            "on-tertiary-container": "#546040",
+            "tertiary-dim": "#4b5738",
+            "on-surface-variant": "#496558",
+            "on-error-container": "#752121",
+            "tertiary-container": "#ebf9d0",
+            "surface-tint": "#176b50",
+            "on-secondary-fixed": "#3d403e",
+            "on-secondary-container": "#4f5250",
+            "error-dim": "#4e0309",
+            "surface-container": "#def3e7",
+            "error-container": "#fe8983",
+            "surface-container-highest": "#caead9",
+            "surface": "#f2fcf4",
+            "primary-dim": "#005e45",
+            "surface-container-high": "#d4eee0",
+            "surface-bright": "#f2fcf4",
+            "on-tertiary-fixed-variant": "#5e6a4a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Inter", "sans-serif"],
+            "display": ["Inter", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "label": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+      background-color: #f7f8f7;
+      color: #202923;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#f7f8f7] text-[#202923] text-[13px] leading-normal selection:bg-surface-variant selection:text-[#202923]">
+<!-- Side Navigation Bar (Shared Component: SideNavBar) -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between border-r border-black/[0.08] bg-[#f7f8f7] z-30 select-none">
+<div class="p-3 flex flex-col gap-5">
+<!-- Brand Header -->
+<div class="flex items-center gap-2.5 px-3 py-2">
+<div aria-hidden="true" class="w-5 h-5 flex-shrink-0 grid grid-cols-2 gap-0.5 rounded-[4px] overflow-hidden" title="Colorful geometric brand mark">
+<div class="bg-[#f06449] rounded-tl-sm"></div>
+<div class="bg-[#176b50] rounded-tr-full"></div>
+<div class="bg-[#f3b700] rounded-bl-full"></div>
+<div class="bg-[#3e54d3] rounded-br-sm"></div>
+</div>
+<span class="font-headline text-base font-semibold text-[#202923] tracking-tight">Maqbool</span>
+</div>
+<!-- Main Navigation Items -->
+<nav class="flex flex-col gap-0.5">
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-secondary text-xs font-normal transition-colors duration-140 hover:bg-black/[0.04] hover:text-[#202923]" href="#">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-black/[0.05] text-[#202923] font-medium text-xs transition-colors duration-140" href="#">
+<span class="material-symbols-outlined">folder</span>
+<span>Projects</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-secondary text-xs font-normal transition-colors duration-140 hover:bg-black/[0.04] hover:text-[#202923]" href="#">
+<span class="material-symbols-outlined">check_circle</span>
+<span>My work</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-secondary text-xs font-normal transition-colors duration-140 hover:bg-black/[0.04] hover:text-[#202923]" href="#">
+<span class="material-symbols-outlined">inbox</span>
+<span>Inbox</span>
+</a>
+</nav>
+</div>
+<!-- Footer Tab / Settings -->
+<div class="p-3 border-t border-black/[0.06]">
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-secondary text-xs font-normal transition-colors duration-140 hover:bg-black/[0.04] hover:text-[#202923]" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- Top Area & Project Navigation (Shared Component: TopNavBar) -->
+<header class="sticky top-0 w-full pl-56 h-16 flex flex-col justify-between bg-[#f7f8f7] border-b border-black/[0.08] z-20">
+<div class="flex items-center justify-between px-8 h-full w-full">
+<!-- Project Identity & Breadcrumb Indicator -->
+<div class="flex items-center gap-2">
+<span class="font-headline text-lg font-medium text-[#202923] tracking-tight">Studio North</span>
+<span class="text-xs text-secondary px-1.5 py-0.5 rounded bg-black/[0.04] font-normal">Active</span>
+</div>
+<!-- Navigation Links -->
+<nav class="flex items-center gap-6 h-full self-end pt-3">
+<a class="text-secondary pb-2 text-xs font-normal transition-colors duration-140 hover:text-[#202923]" href="#">Overview</a>
+<a class="text-secondary pb-2 text-xs font-normal transition-colors duration-140 hover:text-[#202923]" href="#">Work</a>
+<a class="text-secondary pb-2 text-xs font-normal transition-colors duration-140 hover:text-[#202923]" href="#">Timeline</a>
+<a class="text-secondary pb-2 text-xs font-normal transition-colors duration-140 hover:text-[#202923]" href="#">Updates</a>
+<!-- Active Tab: Files -->
+<a class="border-b-2 border-primary text-[#202923] font-medium pb-2 text-xs transition-colors duration-140" href="#">Files</a>
+<a class="text-secondary pb-2 text-xs font-normal transition-colors duration-140 hover:text-[#202923]" href="#">Delivery</a>
+</nav>
+</div>
+</header>
+<!-- Main Workspace Canvas -->
+<main class="pl-56 min-h-[calc(100vh-64px)] pb-16">
+<div class="max-w-[1216px] mx-auto px-8 pt-8">
+<!-- Header line: Title & Actions -->
+<div class="flex items-center justify-between mb-5">
+<div>
+<h1 class="font-headline text-[18px] font-medium text-[#202923] tracking-tight">Files</h1>
+</div>
+<div class="flex items-center gap-2">
+<!-- Trailing Secondary Action -->
+<button class="border border-black/[0.12] bg-white text-[#202923] text-[13px] px-3 py-1.5 rounded-lg hover:bg-black/[0.03] transition-colors duration-140 flex items-center gap-1 font-normal" type="button">
+<span>More</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<!-- Trailing Primary Action -->
+<button class="bg-[#176b50] hover:bg-[#125540] text-white text-[13px] font-medium px-3.5 py-1.5 rounded-lg transition-colors duration-140 flex items-center gap-1.5 shadow-none" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add files</span>
+</button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="flex items-center gap-3 mb-4">
+<!-- Search Input -->
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-[16px]">search</span>
+<input class="w-full pl-8 pr-3 py-1.5 bg-white border border-black/[0.1] rounded-lg text-[13px] placeholder:text-secondary/70 focus:outline-none focus:border-[#176b50] transition-colors duration-140 text-[#202923]" placeholder="Search files..." type="text"/>
+</div>
+<!-- Filter Pills -->
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black/[0.1] rounded-lg text-xs font-normal text-[#202923] hover:bg-black/[0.02] transition-colors duration-140" type="button">
+<span>All files</span>
+<span class="material-symbols-outlined text-[15px] text-secondary">expand_more</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black/[0.1] rounded-lg text-xs font-normal text-[#202923] hover:bg-black/[0.02] transition-colors duration-140" type="button">
+<span>All locations</span>
+<span class="material-symbols-outlined text-[15px] text-secondary">expand_more</span>
+</button>
+</div>
+</div>
+<!-- File Table Container -->
+<div class="bg-white rounded-lg border border-black/[0.08] overflow-hidden">
+<table class="w-full text-left border-collapse table-fixed">
+<thead>
+<tr class="h-10 border-b border-black/[0.08] bg-[#fbfcfb] text-secondary text-xs font-medium">
+<th class="w-[36%] px-5 font-normal" scope="col">Name</th>
+<th class="w-[12%] px-4 font-normal" scope="col">Reference</th>
+<th class="w-[14%] px-4 font-normal" scope="col">Purpose</th>
+<th class="w-[10%] px-4 font-normal" scope="col">Version</th>
+<th class="w-[14%] px-4 font-normal" scope="col">Linked work</th>
+<th class="w-[14%] px-5 text-right font-normal" scope="col">Updated</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-black/[0.06] text-[#202923]">
+<!-- Row 1: briefing.pdf -->
+<tr class="h-16 hover:bg-black/[0.015] transition-colors duration-140 group">
+<td class="px-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-red-50 text-red-700 flex items-center justify-center flex-shrink-0 border border-red-200/50">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+</div>
+<div class="truncate">
+<div class="font-medium text-[13px] text-[#202923] truncate group-hover:text-primary transition-colors duration-140">briefing.pdf</div>
+</div>
+</div>
+</td>
+<td class="px-4 font-mono text-xs text-secondary tracking-tight">HR-001</td>
+<td class="px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-normal bg-black/[0.04] text-secondary">
+                  Source
+                </span>
+</td>
+<td class="px-4 text-xs text-secondary font-mono">v2</td>
+<td class="px-4 text-xs text-[#202923]">3 tasks</td>
+<td class="px-5 text-right text-xs text-secondary">2 hours ago</td>
+</tr>
+<!-- Row 2: welcome-guide.docx -->
+<tr class="h-16 hover:bg-black/[0.015] transition-colors duration-140 group">
+<td class="px-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0 border border-blue-200/50">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</div>
+<div class="truncate">
+<div class="font-medium text-[13px] text-[#202923] truncate group-hover:text-primary transition-colors duration-140">welcome-guide.docx</div>
+</div>
+</div>
+</td>
+<td class="px-4 font-mono text-xs text-secondary tracking-tight">HR-002</td>
+<td class="px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-normal bg-black/[0.04] text-secondary">
+                  Output
+                </span>
+</td>
+<td class="px-4 text-xs text-secondary font-mono">v1</td>
+<td class="px-4 text-xs text-[#202923]">1 task</td>
+<td class="px-5 text-right text-xs text-secondary">Yesterday</td>
+</tr>
+<!-- Row 3: budget.xlsx -->
+<tr class="h-16 hover:bg-black/[0.015] transition-colors duration-140 group">
+<td class="px-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 border border-emerald-200/50">
+<span class="material-symbols-outlined text-[18px]">table_chart</span>
+</div>
+<div class="truncate">
+<div class="font-medium text-[13px] text-[#202923] truncate group-hover:text-primary transition-colors duration-140">budget.xlsx</div>
+</div>
+</div>
+</td>
+<td class="px-4 font-mono text-xs text-secondary tracking-tight">HR-003</td>
+<td class="px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-normal bg-black/[0.04] text-secondary">
+                  Source
+                </span>
+</td>
+<td class="px-4 text-xs text-secondary font-mono">v3</td>
+<td class="px-4 text-xs text-[#202923]">2 tasks</td>
+<td class="px-5 text-right text-xs text-secondary">3 days ago</td>
+</tr>
+<!-- Row 4: site-survey.pdf (Shared drive) -->
+<tr class="h-16 hover:bg-black/[0.015] transition-colors duration-140 group">
+<td class="px-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-red-50 text-red-700 flex items-center justify-center flex-shrink-0 border border-red-200/50">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+</div>
+<div class="truncate flex items-center gap-2">
+<span class="font-medium text-[13px] text-[#202923] truncate group-hover:text-primary transition-colors duration-140">site-survey.pdf</span>
+<span class="text-[11px] font-normal px-1.5 py-0.2 rounded bg-black/[0.04] text-secondary border border-black/[0.05] leading-none">Shared drive</span>
+</div>
+</div>
+</td>
+<td class="px-4 font-mono text-xs text-secondary tracking-tight">HR-004</td>
+<td class="px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-normal bg-black/[0.04] text-secondary">
+                  Source
+                </span>
+</td>
+<td class="px-4 text-xs text-secondary font-mono">v1</td>
+<td class="px-4 text-xs text-[#202923]">1 task</td>
+<td class="px-5 text-right text-xs text-secondary">Oct 14</td>
+</tr>
+<!-- Row 5: slide-deck.pptx -->
+<tr class="h-16 hover:bg-black/[0.015] transition-colors duration-140 group">
+<td class="px-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-amber-50 text-amber-700 flex items-center justify-center flex-shrink-0 border border-amber-200/50">
+<span class="material-symbols-outlined text-[18px]">slideshow</span>
+</div>
+<div class="truncate">
+<div class="font-medium text-[13px] text-[#202923] truncate group-hover:text-primary transition-colors duration-140">slide-deck.pptx</div>
+</div>
+</div>
+</td>
+<td class="px-4 font-mono text-xs text-secondary tracking-tight">HR-005</td>
+<td class="px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-normal bg-black/[0.04] text-secondary">
+                  Output
+                </span>
+</td>
+<td class="px-4 text-xs text-secondary font-mono">v2</td>
+<td class="px-4 text-xs text-[#202923]">1 task</td>
+<td class="px-5 text-right text-xs text-secondary">Oct 10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer & Status Bar -->
+<div class="mt-4 flex items-center justify-between text-xs text-secondary px-1">
+<!-- Honest Capacity Indication -->
+<div class="flex items-center gap-2">
+<span>620 MiB of 2 GiB used</span>
+<span class="text-black/20">•</span>
+<a class="text-secondary hover:text-[#202923] hover:underline transition-colors duration-140" href="#">View storage</a>
+</div>
+<!-- Quiet Pagination Action -->
+<div>
+<button class="px-3 py-1 rounded border border-black/[0.1] bg-white text-[#202923] text-xs font-normal hover:bg-black/[0.03] transition-colors duration-140" type="button">
+            Load more
+          </button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

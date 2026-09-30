@@ -7,8 +7,8 @@ import { assertAuthoritativeContentWrite,dataTransaction } from '../../persisten
 import { contentEnvelope, type ContentEnvelope } from '../../shared/contracts.js';
 import { base64urlEncode, canonicalJson, digestObject } from '../../shared/crypto.js';
 import { planningBinding, planningContext, planningGraph, planningGraphDigest, planningPayload, planningReceipt, planningReference, planningStatusRequest,
-  canonicalPlanningGraph, planningEligibleAssignees, planningEligibleReviewers, validatePlanningPayload, verifyPlanningContext, PLANNING_MAX_BYTES, PLANNING_MAX_HISTORY, PLANNING_MAX_RECORDS,
-  type PlanningBinding, type PlanningContext, type PlanningPayload, type PlanningReceipt, type PlanningRecord, type PlanningSecurityResolver, type PlanningView } from '../../shared/planning-api.js';
+  canonicalPlanningGraph, planningEligibleAssignees, planningEligibleReviewers, validatePlanningPayload, verifyPlanningContext, PLANNING_MAX_BYTES, PLANNING_MAX_RECORDS, PLANNING_HISTORY_MAX_OPERATIONS, PLANNING_HISTORY_MAX_BYTES, PLANNING_HISTORY_PAGE_SIZE, planningFrame, planningAnchorFor, planningOperationsRequest, planningOperationsPage,
+  type PlanningBinding, type PlanningContext, type PlanningPayload, type PlanningReceipt, type PlanningRecord, type PlanningSecurityResolver, type PlanningView, type PlanningOperationsPage } from '../../shared/planning-api.js';
 import { PlanningError, planningRevisionSnapshot, type PlanningState } from '../../shared/planning.js';
 import { projectCreateTransition } from '../../shared/project-create.js';
 import { verifySecurityHistory, type SecurityHistoryState } from '../../shared/security-history.js';
@@ -21,6 +21,7 @@ import { enqueueNotificationJob, planningNotificationEvents } from '../notificat
 import { readReportingSettings } from './reporting.js';
 import { assertCurrentUpgradeBatch,recordUpgradeBatch } from '../upgrades/ledger.js';
 import type { UpgradeItem } from '../../shared/encrypted-upgrades.js';
+import { assertPlanningFileEvidence } from '../files/evidence-service.js';
 const invalid = () => new AppError('PLANNING_INVALID', 'Invalid encrypted planning operation', 400);
 const changed = () => new AppError('PLANNING_CHANGED', 'Project state changed; reload before preparing this operation', 409);
 const forbidden = () => new AppError('PLANNING_FORBIDDEN', 'Current project access and device keys are required', 403);
@@ -64,7 +65,7 @@ export class PlanningService {
     this.#trusted = new EntitlementOperations(options.databases, options.secrets).publicSigningKey().then((key) => ({ [options.secrets.keyId]: key }));
   }
   async #with<T>(ref: z.infer<typeof planningReference>, cookie: string, csrf: string,
-    action: (application: pg.PoolClient, control: pg.PoolClient, authority: Authority, now: Date) => Promise<T>, write = false): Promise<T> {
+    action: (application: pg.PoolClient, control: pg.PoolClient, authority: Authority, now: Date) => Promise<T>, write = false, applyAccountBudget = true): Promise<T> {
     try {
       const initial = await this.#o.sessions.authenticate(cookie, { csrfToken: csrf, approved: true });
       if (initial.workspaceId !== ref.workspaceId) throw forbidden();
@@ -81,7 +82,7 @@ export class PlanningService {
           const profile = (await control.query<Profile>("SELECT * FROM security.profiles WHERE workspace_id=$1 AND profile_id=$2 AND state='active'", [ref.workspaceId, principal.accountId])).rows[0];
           const device = (await control.query<Device>("SELECT * FROM security.devices WHERE workspace_id=$1 AND device_id=$2 AND state='active'", [ref.workspaceId, principal.deviceId])).rows[0];
           if (!profile || !device || !(await application.query('SELECT 1 FROM app.projects WHERE workspace_id=$1 AND id=$2', [ref.workspaceId, ref.projectId])).rowCount) throw forbidden();
-          await this.#o.requestBudget?.({ workspaceId: ref.workspaceId, accountId: principal.accountId });
+          if(applyAccountBudget)await this.#o.requestBudget?.({ workspaceId: ref.workspaceId, accountId: principal.accountId });
           return action(application, control, { principal, profile, device, scopes }, now);
         });
       }, { write });
@@ -121,8 +122,15 @@ export class PlanningService {
     }
     if (rows.phase.length + rows.milestone.length + rows.task.length + rows.blocker.length + 1 > PLANNING_MAX_RECORDS) throw oversized();
     const assignments = (await application.query<{ task_id: string; member_id: string }>('SELECT task_id,member_id FROM app.task_assignments WHERE workspace_id=$1 AND project_id=$2 ORDER BY task_id,member_id', [ref.workspaceId, ref.projectId])).rows;
-    const operations = (await application.query<Operation>('SELECT * FROM app.planning_operations WHERE workspace_id=$1 AND project_id=$2 ORDER BY planning_version LIMIT $3', [ref.workspaceId, ref.projectId, PLANNING_MAX_HISTORY + 1])).rows;
-    if (operations.length > PLANNING_MAX_HISTORY) throw oversized();
+    const operations:Operation[]=[];let operationVersion='0',historyBytes=0;
+    for(let page=0;page<=Math.ceil(PLANNING_HISTORY_MAX_OPERATIONS/PLANNING_HISTORY_PAGE_SIZE);page++) {
+      const rows=(await application.query<Operation>('SELECT * FROM app.planning_operations WHERE workspace_id=$1 AND project_id=$2 AND planning_version>$3 ORDER BY planning_version LIMIT $4',
+        [ref.workspaceId,ref.projectId,operationVersion,PLANNING_HISTORY_PAGE_SIZE])).rows;
+      if(!rows.length)break;
+      for(const row of rows) {historyBytes+=Buffer.byteLength(canonicalJson({mutation:row.signed_mutation,upgrades:row.upgrade_items}));
+        if(historyBytes>PLANNING_HISTORY_MAX_BYTES||operations.length>=PLANNING_HISTORY_MAX_OPERATIONS)throw oversized();
+        operations.push(row);operationVersion=row.planning_version;}
+    }
     const history = operations.map((row) => row.signed_mutation);
     const auditIds = history.map((m) => m.body.audit.id), outcomeIds = history.flatMap((m) => m.body.outcome ? [m.body.outcome.id] : []);
     const audits = (await application.query<{ id: string; encrypted_envelope: ContentEnvelope }>('SELECT id,encrypted_envelope FROM app.audit_events WHERE workspace_id=$1 AND project_id=$2 AND id=ANY($3::uuid[]) ORDER BY id', [ref.workspaceId, ref.projectId, auditIds])).rows.map((row) => ({ id: row.id, envelope: row.encrypted_envelope }));
@@ -149,7 +157,7 @@ export class PlanningService {
     const beforeVersion = head?.planning_version ?? '0', beforeHead = head?.planning_head ?? await digestObject(creation);
     const upgrades=operations.flatMap(row=>row.upgrade_items?[{operationId:row.operation_id,items:row.upgrade_items}]:[]);
     const loaded = { creation, graph, records, history, audits, outcomes, beforeVersion, beforeHead,upgrades };
-    if (Buffer.byteLength(canonicalJson(loaded)) > PLANNING_MAX_BYTES) throw oversized();
+    if (Buffer.byteLength(canonicalJson(loaded)) > PLANNING_HISTORY_MAX_BYTES) throw oversized();
     return loaded;
   }
   async #materials(control: pg.PoolClient, authority: Authority, security: SecurityHistoryState, projectId: string): Promise<PairingMaterial[]> {
@@ -185,20 +193,57 @@ export class PlanningService {
       issuedAt: times?.issuedAt ?? now.toISOString(), expiresAt: times?.expiresAt ?? new Date(now.getTime() + 600000).toISOString() });
     const context = parse(planningContext, { binding, graph: loaded.graph, records: loaded.records, creation: loaded.creation, history: loaded.history,
       audits: loaded.audits, outcomes: loaded.outcomes,...(loaded.upgrades.length?{upgrades:loaded.upgrades}:{}), materials: await this.#materials(control, authority, security, ref.projectId) });
-    if (Buffer.byteLength(canonicalJson(context)) > PLANNING_MAX_BYTES) throw oversized();
+    if (Buffer.byteLength(canonicalJson(planningFrame(context))) > PLANNING_MAX_BYTES || Buffer.byteLength(canonicalJson(context)) > PLANNING_HISTORY_MAX_BYTES) throw oversized();
     try { return await verifyPlanningContext(context, securityAt); } catch { throw changed(); }
   }
   async context(cookie: string, csrf: string, input: unknown): Promise<PlanningContext> {
     const ref = parse(planningReference, input); return this.#with(ref, cookie, csrf, (a, c, authority, now) => this.#context(a, c, authority, now, ref));
   }
   async snapshot(cookie: string, csrf: string, input: unknown): Promise<PlanningContext> { return this.context(cookie, csrf, input); }
+  async pagedContext(cookie:string,csrf:string,input:unknown) {return planningFrame(await this.context(cookie,csrf,input));}
+  async operationsPage(cookie:string,csrf:string,input:unknown):Promise<PlanningOperationsPage> {
+    const request=parse(planningOperationsRequest,input);
+    return this.#with(request,cookie,csrf,async(application,control,authority)=>{
+      const head=(await application.query<{planning_version:string;planning_head:string}>('SELECT planning_version,planning_head FROM app.project_planning_heads WHERE workspace_id=$1 AND project_id=$2',[request.workspaceId,request.projectId])).rows[0];
+      const p=authority.principal,a=request.anchor;
+      if(a.dataGeneration!==p.dataGeneration||a.securityVersion!==p.securityVersion||a.securityHead!==p.securityHead||
+        a.version!==(head?.planning_version??'0')||head&&a.head!==head.planning_head||BigInt(request.afterVersion)>BigInt(a.version)||BigInt(a.version)>BigInt(PLANNING_HISTORY_MAX_OPERATIONS))throw changed();
+      let previousHead:string;
+      if(request.afterVersion==='0') {
+        const creation=(await control.query<{versioned_object:unknown}>(`SELECT o.versioned_object FROM security.project_creations p JOIN security.staged_objects o
+          ON o.workspace_id=p.workspace_id AND o.object_id=p.operation_id AND o.state='committed' WHERE p.workspace_id=$1 AND p.project_id=$2`,[request.workspaceId,request.projectId])).rows[0];
+        if(!creation)throw changed();previousHead=await digestObject(creation.versioned_object);
+      } else {
+        const previous=(await application.query<Operation>('SELECT * FROM app.planning_operations WHERE workspace_id=$1 AND project_id=$2 AND planning_version=$3',[request.workspaceId,request.projectId,request.afterVersion])).rows[0];
+        if(!previous)throw changed();previousHead=await digestObject(previous.signed_mutation);
+      }
+      if(!head&&a.head!==previousHead)throw changed();
+      const rows=(await application.query<Operation>('SELECT * FROM app.planning_operations WHERE workspace_id=$1 AND project_id=$2 AND planning_version>$3 AND planning_version<=$4 ORDER BY planning_version LIMIT $5',
+        [request.workspaceId,request.projectId,request.afterVersion,a.version,PLANNING_HISTORY_PAGE_SIZE])).rows;
+      const result:PlanningOperationsPage={protocol:1,anchor:a,afterVersion:request.afterVersion,previousHead,nextVersion:request.afterVersion,nextHead:previousHead,complete:false,history:[],audits:[],outcomes:[],upgrades:[]};
+      for(const row of rows) {
+        const mutation=row.signed_mutation,audit=(await application.query<{id:string;encrypted_envelope:ContentEnvelope}>('SELECT id,encrypted_envelope FROM app.audit_events WHERE workspace_id=$1 AND project_id=$2 AND id=$3',[request.workspaceId,request.projectId,mutation.body.audit.id])).rows[0];
+        const outcome=mutation.body.outcome?(await application.query<{id:string;encrypted_envelope:ContentEnvelope}>("SELECT record_id AS id,encrypted_envelope FROM app.record_versions WHERE workspace_id=$1 AND project_id=$2 AND record_type='update' AND record_revision=1 AND record_id=$3",[request.workspaceId,request.projectId,mutation.body.outcome.id])).rows[0]:null;
+        if(!audit||mutation.body.outcome&&!outcome)throw changed();
+        const candidate={...result,history:[...result.history,mutation],audits:[...result.audits,{id:audit.id,envelope:audit.encrypted_envelope}],
+          outcomes:[...result.outcomes,...(outcome?[{id:outcome.id,envelope:outcome.encrypted_envelope}]:[])],upgrades:[...result.upgrades,...(row.upgrade_items?[{operationId:row.operation_id,items:row.upgrade_items}]:[])],
+          nextVersion:row.planning_version,nextHead:await digestObject(mutation)};
+        if(Buffer.byteLength(canonicalJson(candidate))>PLANNING_MAX_BYTES) {if(!result.history.length)throw oversized();break;}
+        Object.assign(result,candidate);
+      }
+      result.complete=result.nextVersion===a.version;
+      if(!result.complete&&!result.history.length)throw changed();
+      return parse(planningOperationsPage,result);
+    });
+  }
+
   /** Collaboration reuses the same locked authority/graph without nesting pool locks. */
   async withCurrentContext<T>(cookie: string, csrf: string, input: unknown,
-    action: (application: pg.PoolClient, context: PlanningContext, principal: SessionPrincipal, now: Date, securityAt: PlanningSecurityResolver) => Promise<T>): Promise<T> {
+    action: (application: pg.PoolClient, context: PlanningContext, principal: SessionPrincipal, now: Date, securityAt: PlanningSecurityResolver) => Promise<T>, options: { write?:boolean;applyAccountBudget?:boolean } = {}): Promise<T> {
     const ref = parse(planningReference, input);
     return this.#with(ref, cookie, csrf, async (application, control, authority, now) =>
       action(application, await this.#context(application, control, authority, now, ref), authority.principal, now,
-        await this.#security(control, authority.principal)));
+        await this.#security(control, authority.principal)),options.write??false,options.applyAccountBudget??false);
   }
   async #receipt(application: pg.PoolClient, ref: z.infer<typeof planningReference>, principal: SessionPrincipal, requestHash: string): Promise<PlanningReceipt | null> {
     const row = (await application.query<Operation>('SELECT * FROM app.planning_operations WHERE workspace_id=$1 AND operation_id=$2', [ref.workspaceId, ref.operationId])).rows[0];
@@ -363,6 +408,7 @@ export class PlanningService {
       let validated: Awaited<ReturnType<typeof validatePlanningPayload>>;
       try { validated = await validatePlanningPayload(payload, binding, context.graph, context.records); }
       catch (error) { if (error instanceof PlanningError) throw error; throw invalid(); }
+      await assertPlanningFileEvidence(application,context,payload,await this.#security(control,authority.principal));
       if (validated.result.snapshot) {
         const stamp = 'closingSettings' in payload.mutation.body ? payload.mutation.body.closingSettings : undefined;
         if (!stamp) throw changed();
@@ -370,11 +416,12 @@ export class PlanningService {
         if (stamp.workspaceId !== binding.workspaceId || stamp.revision !== settings.revision || stamp.head !== settings.head ||
           stamp.initialDigest !== await digestObject(settings.initial) || settings.timezone !== null && stamp.timezone !== settings.timezone) throw changed();
       }
-      if (context.history.length >= PLANNING_MAX_HISTORY || validated.result.state.phases.length + validated.result.state.milestones.length + validated.result.state.tasks.length + (validated.result.state.blockers?.length ?? 0) + 1 > PLANNING_MAX_RECORDS) throw oversized();
+      if (context.history.length >= PLANNING_HISTORY_MAX_OPERATIONS || validated.result.state.phases.length + validated.result.state.milestones.length + validated.result.state.tasks.length + (validated.result.state.blockers?.length ?? 0) + 1 > PLANNING_MAX_RECORDS) throw oversized();
       const nextRecords = new Map(context.records.map((record) => [`${record.kind}:${record.id}`, record]));
       for (const record of payload.records) nextRecords.set(`${record.kind}:${record.id}`, record);
+      if (Buffer.byteLength(canonicalJson(planningFrame({...context,graph:validated.result.state,records:[...nextRecords.values()]})))>PLANNING_MAX_BYTES)throw oversized();
       if (Buffer.byteLength(canonicalJson({ ...context, graph: validated.result.state, records: [...nextRecords.values()], history: [...context.history, payload.mutation],
-        audits: [...context.audits, payload.audit], outcomes: [...context.outcomes, ...(payload.outcome ? [payload.outcome] : [])] })) > PLANNING_MAX_BYTES) throw oversized();
+        audits: [...context.audits, payload.audit], outcomes: [...context.outcomes, ...(payload.outcome ? [payload.outcome] : [])] })) > PLANNING_HISTORY_MAX_BYTES) throw oversized();
       if(!upgrade)await this.#designations(application, context, validated.result, now);
       const outcome = await this.#persist(application, payload, context, validated.result, now);
       if(upgrade)await recordUpgradeBatch(application,authority.principal,binding.operationId,payload,upgrade.proof,upgrade.items,now);

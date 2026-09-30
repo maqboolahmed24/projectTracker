@@ -27,7 +27,7 @@ export async function readUpgradeAuthority(control:pg.PoolClient,workspaceId:str
       start.body.nextDataGeneration!==b.dataGeneration||manifest.body.source.dataGeneration!==b.dataGeneration||b.manifestDigest!==restored.manifest_digest||
       start.body.manifestDigest!==b.manifestDigest||manifest.body.manifestDigest!==b.manifestDigest||await digestObject(manifest)!==b.reconciledDigest||
       canonicalJson(ack)!==canonicalJson(restored.signed_transition)||await digestObject(ack)!==restored.head||
-      !await verifyObject(ack,base64urlDecode(b.signingPublicKey,32),ack.body.purpose))throw new AppError('SECURITY_FENCED','The upgrade restore acknowledgement is incomplete',503);
+      !await verifyObject<import('../../shared/restoration.js').RestoreVerification['body']>(ack,base64urlDecode(b.signingPublicKey,32),ack.body.purpose))throw new AppError('SECURITY_FENCED','The upgrade restore acknowledgement is incomplete',503);
     const active=rows.find(row=>row.migration_id===restored.active_upgrade_id&&row.state==='active'&&row.data_generation===b.dataGeneration);
     if(active)active.restored_generation=b.dataGeneration;
   }

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1440, height=1000">
+  <title>Manage Shared Folder - Dark Mode</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            canvas: '#101113',
+            surface: '#191b1f',
+            input: '#23252a',
+            border: '#32363d',
+            mint: '#9cd7b9',
+            'mint-hover': '#b5e5cd',
+            text: '#eeeeee',
+            'text-muted': '#9ca3af',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #eeeeee;
+      background-color: #101113;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+    }
+    * {
+      transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="w-[1440px] h-[1000px] overflow-hidden flex relative select-none">
+
+  <!-- Left Sidebar (224px / w-56) -->
+  <aside class="w-56 h-full bg-[#191b1f] border-r border-[#32363d] flex flex-col justify-between p-3 z-10 shrink-0">
+    <div>
+      <!-- Brand Logo / Product Name -->
+      <div class="flex items-center gap-2.5 px-3 py-3 mb-4">
+        <!-- Bundled colorful geometric brand mark -->
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" rx="2" fill="#9cd7b9"/>
+          <rect x="11" y="2" width="7" height="7" rx="2" fill="#f59e0b"/>
+          <rect x="2" y="11" width="7" height="7" rx="2" fill="#60a5fa"/>
+          <rect x="11" y="11" width="7" height="7" rx="2" fill="#f87171"/>
+        </svg>
+        <span class="font-semibold text-[15px] tracking-tight text-[#eeeeee]">Maqbool</span>
+      </div>
+
+      <!-- Main Nav Items -->
+      <nav class="space-y-1">
+        <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#9ca3af] hover:text-[#eeeeee] hover:bg-[#23252a] text-[13px] font-normal">
+          <span class="material-symbols-outlined">home</span>
+          <span>Home</span>
+        </a>
+        <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#23252a] text-[#9cd7b9] font-medium text-[13px]">
+          <span class="material-symbols-outlined">folder</span>
+          <span>Projects</span>
+        </a>
+        <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#9ca3af] hover:text-[#eeeeee] hover:bg-[#23252a] text-[13px] font-normal">
+          <span class="material-symbols-outlined">check_circle</span>
+          <span>My work</span>
+        </a>
+        <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#9ca3af] hover:text-[#eeeeee] hover:bg-[#23252a] text-[13px] font-normal">
+          <span class="material-symbols-outlined">inbox</span>
+          <span>Inbox</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom Settings -->
+    <div class="pt-3 border-t border-[#32363d]/60">
+      <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#9ca3af] hover:text-[#eeeeee] hover:bg-[#23252a] text-[13px]">
+        <span class="material-symbols-outlined">settings</span>
+        <span>Settings</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main View Area (Delivery background) -->
+  <main class="flex-1 flex flex-col h-full bg-[#101113] overflow-hidden">
+
+    <!-- Top Header Navigation -->
+    <header class="h-16 bg-[#191b1f] border-b border-[#32363d] px-8 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#9cd7b9]"></span>
+          <span class="font-medium text-[14px] text-[#eeeeee]">Studio North</span>
+        </div>
+
+        <nav class="flex items-center gap-6 text-[13px]">
+          <a href="#" class="text-[#9ca3af] hover:text-[#eeeeee] py-5">Overview</a>
+          <a href="#" class="text-[#9ca3af] hover:text-[#eeeeee] py-5">Work</a>
+          <a href="#" class="text-[#9ca3af] hover:text-[#eeeeee] py-5">Timeline</a>
+          <a href="#" class="text-[#9ca3af] hover:text-[#eeeeee] py-5">Updates</a>
+          <a href="#" class="text-[#9ca3af] hover:text-[#eeeeee] py-5">Files</a>
+          <a href="#" class="text-[#eeeeee] font-medium border-b-2 border-[#9cd7b9] py-5">Delivery</a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#32363d] text-[#eeeeee] hover:bg-[#23252a] text-[13px]">
+          <span>More</span>
+          <span class="material-symbols-outlined text-[16px]">expand_more</span>
+        </button>
+        <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#9cd7b9] hover:bg-[#b5e5cd] text-[#101113] text-[13px] font-medium">
+          <span class="material-symbols-outlined text-[16px]">add</span>
+          <span>New delivery</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Delivery Page Content (Background behind modal) -->
+    <div class="p-8 flex-1 overflow-auto opacity-30 pointer-events-none">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-[18px] font-semibold text-[#eeeeee]">Delivery</h1>
+          <p class="text-[13px] text-[#9ca3af] mt-0.5">Manage delivery batches and official project folder handoffs.</p>
+        </div>
+        <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#32363d] text-[13px] bg-[#191b1f] text-[#eeeeee]">
+          <span class="material-symbols-outlined text-[16px]">folder_shared</span>
+          <span>Manage shared-folder connection</span>
+        </button>
+      </div>
+
+      <!-- Batches Table -->
+      <div class="bg-[#191b1f] rounded-lg border border-[#32363d] overflow-hidden">
+        <div class="grid grid-cols-12 px-5 py-3 border-b border-[#32363d] text-[11px] font-medium text-[#9ca3af] uppercase tracking-wider">
+          <div class="col-span-4">Batch</div>
+          <div class="col-span-2">Files</div>
+          <div class="col-span-3">State</div>
+          <div class="col-span-2">Updated</div>
+          <div class="col-span-1 text-right">Action</div>
+        </div>
+        <div class="divide-y divide-[#32363d]/50 text-[13px]">
+          <div class="grid grid-cols-12 px-5 py-3.5 items-center">
+            <div class="col-span-4 flex items-center gap-2.5 font-medium text-[#eeeeee]">
+              <span class="material-symbols-outlined text-[#9ca3af]">inventory_2</span>
+              Welcome guide
+            </div>
+            <div class="col-span-2 text-[#9ca3af]">3 files</div>
+            <div class="col-span-3">
+              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#3d3215] text-[#fbbf24]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>
+                Ready to confirm
+              </span>
+            </div>
+            <div class="col-span-2 text-[#9ca3af]">Today, 11:20 AM</div>
+            <div class="col-span-1 text-right text-[#9cd7b9] font-medium">Open</div>
+          </div>
+          <div class="grid grid-cols-12 px-5 py-3.5 items-center">
+            <div class="col-span-4 flex items-center gap-2.5 font-medium text-[#eeeeee]">
+              <span class="material-symbols-outlined text-[#9ca3af]">inventory_2</span>
+              October handover
+            </div>
+            <div class="col-span-2 text-[#9ca3af]">8 files</div>
+            <div class="col-span-3">
+              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#1e293b] text-[#60a5fa]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>
+                Confirmed
+              </span>
+            </div>
+            <div class="col-span-2 text-[#9ca3af]">Yesterday, 4:45 PM</div>
+            <div class="col-span-1 text-right text-[#9cd7b9] font-medium">Open</div>
+          </div>
+          <div class="grid grid-cols-12 px-5 py-3.5 items-center">
+            <div class="col-span-4 flex items-center gap-2.5 font-medium text-[#eeeeee]">
+              <span class="material-symbols-outlined text-[#9ca3af]">inventory_2</span>
+              Pilot pack
+            </div>
+            <div class="col-span-2 text-[#9ca3af]">2 files</div>
+            <div class="col-span-3">
+              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#142820] text-[#9cd7b9]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+                Published
+              </span>
+            </div>
+            <div class="col-span-2 text-[#9ca3af]">Oct 22, 2024</div>
+            <div class="col-span-1 text-right text-[#9cd7b9] font-medium">Open</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Backdrop (Quiet, non-crowded) -->
+  <div class="absolute inset-0 bg-[#101113]/70 backdrop-blur-[2px] flex items-center justify-center z-50">
+
+    <!-- Fixed Footprint Modal: 860x760 px -->
+    <div class="w-[860px] h-[760px] bg-[#191b1f] rounded-lg border border-[#32363d] shadow-2xl flex flex-col overflow-hidden">
+
+      <!-- Fixed Header -->
+      <div class="h-16 px-8 border-b border-[#32363d] flex items-center justify-between shrink-0 bg-[#191b1f]">
+        <div>
+          <h2 class="text-[16px] font-semibold text-[#eeeeee]">Shared folder</h2>
+          <p class="text-[12px] text-[#9ca3af] mt-0.5">Connect your organisation’s file service to publish approved work.</p>
+        </div>
+        <button class="w-8 h-8 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-[#eeeeee] hover:bg-[#23252a] border border-transparent hover:border-[#32363d]">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Body (Scrollable, Generous breathing room) -->
+      <div class="flex-1 overflow-y-auto p-8 space-y-8">
+
+        <!-- Active Connection Row (Configured single clear organisation-controlled option) -->
+        <section>
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-[11px] font-medium uppercase tracking-wider text-[#9ca3af]">Active organisation service</span>
+            <span class="text-[12px] text-[#9ca3af]">1 configured</span>
+          </div>
+
+          <div class="border border-[#32363d] rounded-lg p-5 bg-[#141619]">
+            <div class="flex items-start justify-between">
+              <div class="flex items-start gap-3.5">
+                <div class="w-9 h-9 rounded-lg bg-[#23252a] border border-[#32363d] flex items-center justify-center text-[#9cd7b9] shrink-0 mt-0.5">
+                  <span class="material-symbols-outlined text-[20px]">folder_shared</span>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2.5">
+                    <span class="font-medium text-[14px] text-[#eeeeee]">Studio North shared folder</span>
+                    <!-- Connected muted green-dot text -->
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#142820] text-[#9cd7b9] border border-[#9cd7b9]/20">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+                      Connected
+                    </span>
+                  </div>
+
+                  <!-- Details & Root Label -->
+                  <div class="mt-2.5 space-y-1.5 text-[12px] text-[#9ca3af]">
+                    <div class="flex items-center gap-2">
+                      <span class="text-[#6b7280]">Root directory:</span>
+                      <span class="px-2 py-0.5 rounded bg-[#23252a] border border-[#32363d] text-[#eeeeee] font-medium">Project handover</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-[#6b7280]">Target service:</span>
+                      <span class="text-[#eeeeee]">Local team repository (Studio North storage)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quiet Disconnect secondary -->
+              <button class="px-3 py-1.5 rounded-lg border border-[#32363d] text-[#9ca3af] hover:text-[#f87171] hover:border-[#7f1d1d] hover:bg-[#23252a] text-[12px] font-normal transition-colors">
+                Disconnect
+              </button>
+            </div>
+
+            <!-- Contextual note regarding ONLYOFFICE -->
+            <div class="mt-4 pt-3 border-t border-[#32363d]/60 flex items-center justify-between text-[12px] text-[#9ca3af]">
+              <span>ONLYOFFICE editing uses this organisation-verified service for in-place updates.</span>
+              <span class="text-[11px] text-[#6b7280]">Ready for publication</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Collapsed / Controlled 'Connect another folder' section -->
+        <section class="border border-[#32363d] rounded-lg overflow-hidden bg-[#191b1f]">
+          <div class="px-5 py-4 flex items-center justify-between cursor-pointer hover:bg-[#23252a]/60 border-b border-[#32363d]/60">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-[#9ca3af] text-[18px]">add_circle_outline</span>
+              <span class="font-medium text-[13px] text-[#eeeeee]">Connect another folder</span>
+            </div>
+            <span class="text-[12px] text-[#9ca3af] flex items-center gap-1">
+              Optional local connection
+              <span class="material-symbols-outlined text-[16px]">expand_less</span>
+            </span>
+          </div>
+
+          <!-- Expanded configuration form -->
+          <div class="p-5 space-y-4 bg-[#191b1f]">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[12px] font-medium text-[#eeeeee] mb-1.5">Service address</label>
+                <input type="text" value="https://files.internal.studionorth.org" readonly class="w-full px-3 py-2 rounded-lg border border-[#32363d] bg-[#23252a] text-[13px] text-[#eeeeee] focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-[12px] font-medium text-[#eeeeee] mb-1.5">Local setup key</label>
+                <input type="password" value="••••••••••••••••••••" readonly class="w-full px-3 py-2 rounded-lg border border-[#32363d] bg-[#23252a] text-[13px] text-[#eeeeee] focus:outline-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[12px] font-medium text-[#eeeeee] mb-1.5">Display name</label>
+                <input type="text" placeholder="e.g. Studio North archives" class="w-full px-3 py-2 rounded-lg border border-[#32363d] bg-[#141619] text-[13px] text-[#eeeeee] placeholder-[#6b7280] focus:outline-none focus:border-[#9cd7b9]">
+              </div>
+              <div>
+                <label class="block text-[12px] font-medium text-[#eeeeee] mb-1.5">Chosen-root label</label>
+                <input type="text" placeholder="e.g. Client distribution" class="w-full px-3 py-2 rounded-lg border border-[#32363d] bg-[#141619] text-[13px] text-[#eeeeee] placeholder-[#6b7280] focus:outline-none focus:border-[#9cd7b9]">
+              </div>
+            </div>
+
+            <!-- Single short inline privacy line -->
+            <div class="pt-2 flex items-center gap-2 text-[12px] text-[#9ca3af]">
+              <span class="material-symbols-outlined text-[16px] text-[#6b7280]">lock</span>
+              <span>Publishing stays within the folder your organisation selected.</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Fixed Footer -->
+      <div class="h-16 px-8 border-t border-[#32363d] flex items-center justify-between shrink-0 bg-[#191b1f]">
+        <button class="px-3.5 py-1.5 rounded-lg border border-[#32363d] text-[#eeeeee] hover:bg-[#23252a] text-[13px] font-normal transition-colors">
+          Check connection
+        </button>
+
+        <div class="flex items-center gap-3">
+          <button class="px-4 py-1.5 rounded-lg bg-[#9cd7b9] hover:bg-[#b5e5cd] text-[#101113] text-[13px] font-medium transition-colors">
+            Close
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

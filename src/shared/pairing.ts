@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { binary, capabilities, counter, digest, identifier, positiveCounter } from './contracts.js';
+import { binary, permissionCapabilities, counter, digest, identifier, positiveCounter } from './contracts.js';
 import { recipientEnvelope, type RecipientHeader } from './crypto.js';
 
 export const pairingPublicDevice = z.strictObject({ id: identifier, keyGeneration: positiveCounter,
@@ -19,7 +19,7 @@ export const pairingSource = z.strictObject({ grantId: identifier, generation: p
   manifestId: identifier, manifestDigest: digest });
 export const pairingScope = z.strictObject({ scope: z.enum(['workspace', 'project']), scopeId: identifier,
   mode: z.enum(['custody', 'content']), keyEpoch: positiveCounter, expiresAt: z.iso.datetime().nullable(),
-  permissions: z.array(z.enum(capabilities)).max(capabilities.length), sources: z.array(pairingSource).min(1).max(256) });
+  permissions: z.array(z.enum(permissionCapabilities)).max(permissionCapabilities.length), sources: z.array(pairingSource).min(1).max(256) });
 export type PairingScope = z.infer<typeof pairingScope>;
 export const pairingTranscript = z.strictObject({
   version: z.literal(1), purpose: z.literal('ukda.device-pair-transcript.v1'), origin: z.string().url(),

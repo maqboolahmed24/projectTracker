@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1440, initial-scale=1.0">
+  <title>Project Delivery - Light Mode</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            canvas: '#f7f8f7',
+            surface: '#ffffff',
+            primary: '#176b50',
+            textMain: '#202923',
+            textMuted: '#68736c',
+            borderSubtle: '#e4e7e5',
+            borderRow: '#edf0ee',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7f8f7;
+      color: #202923;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      width: 1440px;
+      height: 1000px;
+      overflow: hidden;
+    }
+    .material-symbols-outlined {
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    * {
+      transition: background-color 140ms ease-out, border-color 140ms ease-out, color 140ms ease-out;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="flex h-[1000px] w-[1440px] select-none text-[13px] bg-[#f7f8f7]">
+
+  <!-- Left Sidebar (224px / w-56) -->
+  <aside class="w-56 h-full flex flex-col justify-between bg-white border-r border-[#e4e7e5] p-3 z-30 shrink-0">
+    <div>
+      <!-- Brand Header -->
+      <div class="flex items-center gap-2.5 px-3 py-3 mb-3">
+        <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="9" height="9" rx="2" fill="#176b50"/>
+          <rect x="13" y="2" width="9" height="9" rx="2" fill="#e07a5f"/>
+          <rect x="2" y="13" width="9" height="9" rx="2" fill="#3d85c6"/>
+          <rect x="13" y="13" width="9" height="9" rx="2" fill="#f4a261"/>
+        </svg>
+        <span class="font-semibold text-[15px] tracking-tight text-[#202923]">Maqbool</span>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="space-y-0.5">
+        <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#68736c] hover:bg-[#f0f3f1] hover:text-[#202923]">
+          <span class="material-symbols-outlined">home</span>
+          <span>Home</span>
+        </a>
+        <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#edf3f0] text-[#176b50] font-medium">
+          <span class="material-symbols-outlined text-[#176b50]">folder</span>
+          <span>Projects</span>
+        </a>
+        <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#68736c] hover:bg-[#f0f3f1] hover:text-[#202923]">
+          <span class="material-symbols-outlined">check_circle</span>
+          <span>My work</span>
+        </a>
+        <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#68736c] hover:bg-[#f0f3f1] hover:text-[#202923]">
+          <span class="material-symbols-outlined">inbox</span>
+          <span>Inbox</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom Settings -->
+    <div>
+      <div class="pt-2 border-t border-[#edf0ee]">
+        <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#68736c] hover:bg-[#f0f3f1] hover:text-[#202923]">
+          <span class="material-symbols-outlined">settings</span>
+          <span>Settings</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden bg-[#f7f8f7]">
+
+    <!-- Top Project Header (70px / h-[70px]) -->
+    <header class="h-[70px] bg-white border-b border-[#e4e7e5] px-8 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-8">
+        <!-- Project Identifier -->
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#176b50]"></span>
+          <span class="font-medium text-[14px] text-[#202923]">Studio North</span>
+          <span class="text-[11px] px-1.5 py-0.5 rounded bg-[#e8f3ee] text-[#176b50] font-medium">Active</span>
+        </div>
+
+        <!-- Project Navigation Tabs -->
+        <nav class="flex items-center gap-6 text-[13px] pt-1">
+          <a href="#" class="text-[#68736c] hover:text-[#202923] py-5">Overview</a>
+          <a href="#" class="text-[#68736c] hover:text-[#202923] py-5">Work</a>
+          <a href="#" class="text-[#68736c] hover:text-[#202923] py-5">Timeline</a>
+          <a href="#" class="text-[#68736c] hover:text-[#202923] py-5">Updates</a>
+          <a href="#" class="text-[#68736c] hover:text-[#202923] py-5">Files</a>
+          <a href="#" class="text-[#176b50] font-medium border-b-2 border-[#176b50] py-5 -mb-[1px]">Delivery</a>
+        </nav>
+      </div>
+
+      <!-- Header Secondary & Primary Actions -->
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1.5 text-[12px] font-medium text-[#202923] bg-white border border-[#e4e7e5] rounded-lg hover:bg-[#f7f8f7] flex items-center gap-1.5">
+          <span>More</span>
+          <span class="material-symbols-outlined text-[16px] text-[#68736c]">expand_more</span>
+        </button>
+        <button class="px-3.5 py-1.5 text-[12px] font-medium text-white bg-[#176b50] rounded-lg hover:bg-[#135942] flex items-center gap-1.5 shadow-sm">
+          <span class="material-symbols-outlined text-[16px]">add</span>
+          <span>New delivery</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace Body -->
+    <main class="flex-1 overflow-y-auto px-8 py-7 flex flex-col">
+      <!-- Title & Context Row -->
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h1 class="text-[18px] font-medium text-[#202923] tracking-tight">Delivery</h1>
+          <p class="text-[12px] text-[#68736c] mt-0.5">Manage delivery batches and official project folder handoffs.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="text-[12px] text-[#68736c] hover:text-[#202923] flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#e4e7e5] bg-white hover:bg-[#f7f8f7]">
+            <span class="material-symbols-outlined text-[16px]">folder_shared</span>
+            <span>Manage shared-folder connection</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Batches Table Surface -->
+      <div class="bg-white border border-[#e4e7e5] rounded-lg shadow-none overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-[#e4e7e5] bg-[#fafbfa] text-[11px] font-medium text-[#68736c] uppercase tracking-wider">
+              <th class="py-3 px-5">Batch</th>
+              <th class="py-3 px-5">Files</th>
+              <th class="py-3 px-5">State</th>
+              <th class="py-3 px-5">Updated</th>
+              <th class="py-3 px-5 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#edf0ee] text-[13px] text-[#202923]">
+            <!-- Batch 1: Welcome guide -->
+            <tr class="hover:bg-[#fcfdfc]">
+              <td class="py-3.5 px-5 font-medium text-[#202923]">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#68736c]">inventory_2</span>
+                  <span>Welcome guide</span>
+                </div>
+              </td>
+              <td class="py-3.5 px-5 text-[#68736c]">
+                3 files
+              </td>
+              <td class="py-3.5 px-5">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#fef7ee] text-[#b45309] border border-[#fde3c7]">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>
+                  Ready to confirm
+                </span>
+              </td>
+              <td class="py-3.5 px-5 text-[#68736c] text-[12px]">
+                Today, 11:20 AM
+              </td>
+              <td class="py-3.5 px-5 text-right">
+                <button class="px-2.5 py-1 text-[12px] font-medium text-[#176b50] hover:bg-[#eef5f2] rounded border border-transparent hover:border-[#d4e4dc]">
+                  Open
+                </button>
+              </td>
+            </tr>
+
+            <!-- Batch 2: October handover -->
+            <tr class="hover:bg-[#fcfdfc]">
+              <td class="py-3.5 px-5 font-medium text-[#202923]">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#68736c]">inventory_2</span>
+                  <span>October handover</span>
+                </div>
+              </td>
+              <td class="py-3.5 px-5 text-[#68736c]">
+                8 files
+              </td>
+              <td class="py-3.5 px-5">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#eef7ff] text-[#1d4ed8] border border-[#d6e7ff]">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>
+                  Confirmed
+                </span>
+              </td>
+              <td class="py-3.5 px-5 text-[#68736c] text-[12px]">
+                Yesterday, 4:45 PM
+              </td>
+              <td class="py-3.5 px-5 text-right">
+                <button class="px-2.5 py-1 text-[12px] font-medium text-[#176b50] hover:bg-[#eef5f2] rounded border border-transparent hover:border-[#d4e4dc]">
+                  Open
+                </button>
+              </td>
+            </tr>
+
+            <!-- Batch 3: Pilot pack -->
+            <tr class="hover:bg-[#fcfdfc]">
+              <td class="py-3.5 px-5 font-medium text-[#202923]">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#68736c]">inventory_2</span>
+                  <span>Pilot pack</span>
+                </div>
+              </td>
+              <td class="py-3.5 px-5 text-[#68736c]">
+                2 files
+              </td>
+              <td class="py-3.5 px-5">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#eaf5ef] text-[#176b50] border border-[#cbe6d7]">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#176b50]"></span>
+                  Published
+                </span>
+              </td>
+              <td class="py-3.5 px-5 text-[#68736c] text-[12px]">
+                Oct 22, 2024
+              </td>
+              <td class="py-3.5 px-5 text-right">
+                <button class="px-2.5 py-1 text-[12px] font-medium text-[#176b50] hover:bg-[#eef5f2] rounded border border-transparent hover:border-[#d4e4dc]">
+                  Open
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quiet Note Below Table -->
+      <div class="mt-4 px-1">
+        <p class="text-[12px] text-[#68736c]">
+          Downloading a package does not publish it to your official folder.
+        </p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

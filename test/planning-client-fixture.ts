@@ -21,7 +21,7 @@ export async function planningClientFixture(options: { version?: 1 | 2 | 3; seco
   const upgrades: NonNullable<PlanningContext['upgrades']> = [];
   const history: PlanningContext['history'] = [], audits: PlanningContext['audits'] = [], outcomes: PlanningContext['outcomes'] = [],
     records = new Map<string, PlanningRecord>([[`project:${request.projectId}`, { kind: 'project', ...created.project }]]), receipts = new Map<string, PlanningReceipt>();
-  const context = async (operationId: string = randomUUID(), actor: Actor = f.owner) => {
+  const context = async (operationId: string = randomUUID(), actor: Actor = f.owner, validate = true):Promise<PlanningContext> => {
     const state = f.state, profile = state.profiles[actor.accountId]!, device = state.devices[actor.deviceId]!, role = state.roles[profile.projectRoles[request.projectId]!.id]!, now = Date.now();
     const binding = planningBinding.parse({ version: protocolVersion, ...(protocolVersion===3?{writeSchema:2}:{}), workspaceId: f.workspaceId, projectId: request.projectId, operationId, origin,
       accountId: actor.accountId, deviceId: actor.deviceId, credentialGeneration: profile.credentialGeneration, sessionGeneration: profile.sessionGeneration,
@@ -33,7 +33,8 @@ export async function planningClientFixture(options: { version?: 1 | 2 | 3; seco
       ...(protocolVersion !== 1 ? { eligibleReviewerIds: planningEligibleReviewers(state, request.projectId, new Date(now).toISOString()) } : {}),
       beforeVersion: version, beforeHead: head, beforeGraphDigest: await planningGraphDigest(graph), before: planningRevisionSnapshot(graph),
       issuedAt: new Date(now).toISOString(), expiresAt: new Date(now + 600000).toISOString() });
-    return planningContext.parse({ binding, graph, records: [...records.values()], creation: created.transition, history, materials: f.materials, audits, outcomes, ...(upgrades.length?{upgrades}:{}) });
+    const value={ binding, graph, records: [...records.values()], creation: created.transition, history, materials: f.materials, audits, outcomes, ...(upgrades.length?{upgrades}:{}) };
+    return validate?planningContext.parse(value):value;
   };
   const apply = async (payload: PlanningPayload): Promise<PlanningReceipt> => {
     const b = payload.mutation.body.binding;
@@ -46,7 +47,7 @@ export async function planningClientFixture(options: { version?: 1 | 2 | 3; seco
       requestHash: await digestObject(payload), planningVersion: version, planningHead: head, graphDigest: payload.mutation.body.afterGraphDigest, committedAt: new Date().toISOString(), mutation: payload.mutation };
     receipts.set(b.operationId, receipt); return receipt;
   };
-  return { f, secondOwner, projectId: request.projectId, context, apply, receipts, state: () => graph,
+  return { f, secondOwner, projectId: request.projectId, context, rawContext:(operationId?:string,actor:Actor=f.owner)=>context(operationId,actor,false), apply, receipts, state: () => graph,
     upgrade: (target:2|3=2) => { protocolVersion = target; graph = upgradePlanningGraph(graph); },
     input: async (operationId?: string, actor: Actor = f.owner) => ({ context: await context(operationId, actor), history: f.history,
       accountId: actor.accountId, deviceId: actor.deviceId,

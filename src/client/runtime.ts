@@ -17,6 +17,15 @@ import { TeamsController, HttpTeamsTransport } from './teams-controller.js';
 import { IndexedTeamsStore } from './teams-store.js';
 import { PlanningController, HttpPlanningTransport } from './planning-controller.js';
 import { IndexedPlanningStore } from './planning-store.js';
+import { FilesController, HttpFilesTransport } from './files-controller.js';
+import { FileEditorController } from './file-editor-controller.js';
+import { FileBulkController } from './files-bulk.js';
+import { IndexedFileBulkStore } from './files-bulk-store.js';
+import { IndexedFilesStore } from './files-store.js';
+import { FileEvidenceController, HttpFileEvidenceTransport } from './file-evidence-controller.js';
+import { IndexedFileEvidenceStore } from './file-evidence-store.js';
+import { DeliveryController,HttpDeliveryTransport } from './files-delivery-controller.js';
+import { IndexedDeliveryStore } from './files-delivery-store.js';
 import { CollaborationController, HttpCollaborationTransport } from './collaboration-controller.js';
 import { IndexedCollaborationStore } from './collaboration-store.js';
 import { InboxController, HttpInboxTransport } from './inbox-controller.js';
@@ -53,6 +62,10 @@ export async function openClient(options: { origin?: string; trustedServiceKeys?
     const projectOperations = await IndexedProjectCreateStore.open(origin); stores.push(projectOperations);
     const teamOperations = await IndexedTeamsStore.open(origin); stores.push(teamOperations);
     const planningOperations = await IndexedPlanningStore.open(origin); stores.push(planningOperations);
+    const fileOperations = await IndexedFilesStore.open(origin); stores.push(fileOperations);
+    const fileBulkOperations = await IndexedFileBulkStore.open(origin); stores.push(fileBulkOperations);
+    const fileEvidenceOperations = await IndexedFileEvidenceStore.open(origin); stores.push(fileEvidenceOperations);
+    const deliveryOperations = await IndexedDeliveryStore.open(origin); stores.push(deliveryOperations);
     const collaborationOperations = await IndexedCollaborationStore.open(origin); stores.push(collaborationOperations);
     const reportingOperations = await IndexedReportingStore.open(origin); stores.push(reportingOperations);
     const inboxOperations = await IndexedInboxStore.open(origin); stores.push(inboxOperations);
@@ -99,6 +112,22 @@ export async function openClient(options: { origin?: string; trustedServiceKeys?
     const planning = new PlanningController(auth, new HttpPlanningTransport(origin, () => auth.current()?.session.csrfToken), planningOperations, pairingRecords, accessChanges,
       { closingSettings: () => reporting.settingsProof(), onWrite: () => reporting.relevantWrite(), ...(options.trustedServiceKeys ? { trustedServiceKeys: { ...options.trustedServiceKeys } } : {}) });
     detach.push(planning.attachAuthLifecycle(), () => planning.clear());
+    const files = new FilesController(auth, new HttpFilesTransport(origin, () => auth.current()?.session.csrfToken), fileOperations, pairingRecords, planningOperations, accessChanges,
+      new HttpPlanningTransport(origin, () => auth.current()?.session.csrfToken),
+      { ...(options.trustedServiceKeys ? { trustedServiceKeys: { ...options.trustedServiceKeys } } : {}) });
+    detach.push(files.attachAuthLifecycle(), () => files.clear());
+    const fileEditor=new FileEditorController(auth,files,new HttpFilesTransport(origin,()=>auth.current()?.session.csrfToken));
+    detach.push(fileEditor.attachAuthLifecycle(),()=>fileEditor.clear());
+    const fileEvidence = new FileEvidenceController(auth, new HttpFileEvidenceTransport(origin, () => auth.current()?.session.csrfToken),
+      new HttpFilesTransport(origin, () => auth.current()?.session.csrfToken), fileEvidenceOperations, pairingRecords, planningOperations, accessChanges,
+      new HttpPlanningTransport(origin, () => auth.current()?.session.csrfToken), planning,
+      { onWrite: () => reporting.relevantWrite(), ...(options.trustedServiceKeys ? { trustedServiceKeys: { ...options.trustedServiceKeys } } : {}) });
+    detach.push(fileEvidence.attachAuthLifecycle(), () => fileEvidence.clear());
+    const fileBulk = new FileBulkController(auth,files,planning,fileEvidence,fileBulkOperations);
+    detach.push(fileBulk.attachAuthLifecycle(), () => fileBulk.clear());
+    const deliveries=new DeliveryController(auth,new HttpDeliveryTransport(origin,()=>auth.current()?.session.csrfToken),
+      new HttpFilesTransport(origin,()=>auth.current()?.session.csrfToken),files,deliveryOperations);
+    detach.push(deliveries.attachAuthLifecycle(),()=>deliveries.clear());
     const collaboration = new CollaborationController(auth, new HttpCollaborationTransport(origin, () => auth.current()?.session.csrfToken), collaborationOperations,
       pairingRecords, planningOperations, accessChanges, new HttpPlanningTransport(origin, () => auth.current()?.session.csrfToken),
       { ...(options.trustedServiceKeys ? { trustedServiceKeys: { ...options.trustedServiceKeys } } : {}) });
@@ -127,15 +156,17 @@ export async function openClient(options: { origin?: string; trustedServiceKeys?
     detach.push(recoveries.attachAuthLifecycle(), () => recoveries.clear());
     detach.push(enrolments.attachAuthLifecycle(), () => enrolments.clear());
     // onClear locks immediately, including failed sign-out and refresh. Confirmed
-    // sign-out clears pending business requests. Security ceremonies retain their
+    // sign-out clears ordinary business requests. Encrypted file/bulk/delivery and
+    // evidence records survive for interrupted-work recovery until explicit Forget.
+    // Security ceremonies retain their
     // exact drafts/capabilities for ambiguous-commit recovery until explicit Forget.
     detach.push(auth.onSignedOut(async reference => {
-      const results = await Promise.allSettled([planning, collaboration, reporting, inbox, teams, projectCreation, accessChanges, roles, upgrades, restoration, lifecycle]
+      const results = await Promise.allSettled([planning, files, fileEvidence, deliveries, collaboration, reporting, inbox, teams, projectCreation, accessChanges, roles, upgrades, restoration, lifecycle]
         .map(controller => controller.forgetDevice(reference)));
       if (results.some(result => result.status === 'rejected')) throw new Error('Pending request cleanup failed');
     }));
     let closing: Promise<void> | undefined;
-    return { auth, activation, passwordChanges, pairing, recoveries, enrolments, roles, accessChanges, projectCreation, teams, planning, collaboration, inbox, reporting, receipts, upgrades, exports, restoration, lifecycle, profiles, directory, remembered,
+    return { auth, activation, passwordChanges, pairing, recoveries, enrolments, roles, accessChanges, projectCreation, teams, planning, files, fileEditor, fileEvidence, fileBulk, deliveries, collaboration, inbox, reporting, receipts, upgrades, exports, restoration, lifecycle, profiles, directory, remembered,
       /** Revokes this browser session and closes local handles; failure is reported after local cleanup. */
       close(): Promise<void> {
         closing ??= (async () => {

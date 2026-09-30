@@ -8,6 +8,7 @@ import { AuthWorkerClient } from './auth-worker-client.js';
 import { IndexedDeviceStore } from './device-store.js';
 import type { RememberedProfiles, RememberedProfileReference } from './remembered-profiles.js';
 import { WriteError } from './write-state.js';
+import { hydratePlanningWireValue, planningOperationsPage, PLANNING_MAX_BYTES, PLANNING_HISTORY_MAX_BYTES, type PlanningOperationsPage, type planningOperationsRequest } from '../shared/planning-api.js';
 
 export const authSessionSnapshot = authSessionResult.extend({ securityHead: digest, securityVersion: positiveCounter });
 export type AuthSessionSnapshot = z.infer<typeof authSessionSnapshot>;
@@ -16,7 +17,7 @@ export type AuthStartResult = z.infer<typeof startResult>;
 const referenceSchema = z.strictObject({ workspaceId: identifier, accountId: identifier, deviceId: identifier.optional() });
 export type LoginReference = z.infer<typeof referenceSchema>;
 export type AuthErrorCode = 'AUTH_REQUIRED' | 'PROOF_REQUIRED' | 'RATE_LIMITED' | 'UNAVAILABLE' | 'TRANSPORT' | 'CANCELLED'
-  | 'REAUTH_REQUIRED' | 'FORBIDDEN' | 'CONTEXT_MISMATCH' | 'LOCAL_DEVICE_UNAVAILABLE' | 'BUSY' | 'LOCAL_CLEANUP' | 'CONFLICT' | 'EXPIRED';
+  | 'REAUTH_REQUIRED' | 'FORBIDDEN' | 'CONTEXT_MISMATCH' | 'LOCAL_DEVICE_UNAVAILABLE' | 'BUSY' | 'LOCAL_CLEANUP' | 'CONFLICT' | 'EXPIRED' | 'NOT_FOUND';
 export class AuthClientError extends Error {
   constructor(readonly code: AuthErrorCode) { super(`Authentication operation failed (${code})`); this.name = 'AuthClientError'; }
 }
@@ -46,12 +47,34 @@ export function authOrigin(value: string): string {
 /** Same-origin HTTPS cookies; only exact loopback HTTP is accepted for local development. */
 export class AuthenticatedHttp {
   readonly origin: string;
+  private planningCacheScope:string|undefined;
+  private readonly planningPageCache=new Map<string,{page:PlanningOperationsPage;bytes:number}>();
+  private planningCacheBytes=0;
   constructor(origin: string, private readonly fetcher: typeof fetch = globalThis.fetch) { this.origin = authOrigin(origin); }
   protected responseLimit(_path: string): number { return 1_048_576; }
+  private async planningPage(request:z.infer<typeof planningOperationsRequest>,options:AuthRequestOptions&{csrfToken?:string}):Promise<PlanningOperationsPage> {
+    if(!options.csrfToken)throw new AuthClientError('AUTH_REQUIRED');
+    if(options.signal?.aborted)throw new AuthClientError('CANCELLED');
+    const scope=`${options.csrfToken}:${request.workspaceId}:${request.projectId}:${request.anchor.dataGeneration}:${request.anchor.securityHead}`;
+    if(this.planningCacheScope!==scope){this.planningPageCache.clear();this.planningCacheBytes=0;this.planningCacheScope=scope;}
+    const cached=this.planningPageCache.get(request.afterVersion);
+    if(cached&&BigInt(cached.page.nextVersion)<=BigInt(request.anchor.version)) {
+      // Cached bytes retain their original signatures. Only the unsigned transport
+      // anchor/completion marker changes; assembly still checks every chain link.
+      return {...cached.page,anchor:request.anchor,complete:cached.page.nextVersion===request.anchor.version};
+    }
+    const page=await this.post('/v1/work/planning/operations-page',request,planningOperationsPage,options),bytes=new TextEncoder().encode(canonicalJson(page)).byteLength;
+    if(options.signal?.aborted)throw new AuthClientError('CANCELLED');
+    if(cached)this.planningCacheBytes-=cached.bytes;
+    this.planningPageCache.delete(request.afterVersion);
+    while(this.planningCacheBytes+bytes>PLANNING_HISTORY_MAX_BYTES&&this.planningPageCache.size){const key=this.planningPageCache.keys().next().value!,old=this.planningPageCache.get(key)!;this.planningPageCache.delete(key);this.planningCacheBytes-=old.bytes;}
+    this.planningPageCache.set(request.afterVersion,{page,bytes});this.planningCacheBytes+=bytes;return page;
+  }
+
   async post<T>(path: string, body: unknown, schema: z.ZodType<T>, options: AuthRequestOptions & { csrfToken?: string } = {}): Promise<T> {
     if (!/^\/v1\/[a-z0-9/-]+$/.test(path)) throw new AuthClientError('TRANSPORT');
     const url = `${this.origin}${path}`;
-    const headers: Record<string, string> = { 'Content-Type': 'application/json', Accept: 'application/json' };
+    const headers: Record<string, string> = { 'Content-Type': 'application/json', Accept: 'application/json', 'X-Planning-History':'paged-v1' };
     if (options.csrfToken !== undefined) headers['X-CSRF-Token'] = parse(binary(32), options.csrfToken);
     let response: Response; let value: unknown;
     try {
@@ -59,7 +82,8 @@ export class AuthenticatedHttp {
         credentials: 'same-origin', mode: 'same-origin', redirect: 'error', cache: 'no-store', referrerPolicy: 'strict-origin',
         ...(options.signal ? { signal: options.signal } : {}) });
       if (response.url !== url || response.redirected || !response.headers.get('content-type')?.startsWith('application/json')) throw new Error();
-      const text = await response.text(); if (text.length > this.responseLimit(path) || new TextEncoder().encode(text).length > this.responseLimit(path)) throw new Error(); value = parseJsonStrict(text);
+      const limit=path==='/v1/work/planning/operations-page'?PLANNING_MAX_BYTES:this.responseLimit(path);
+      const text = await response.text(); if (text.length > limit || new TextEncoder().encode(text).length > limit) throw new Error(); value = parseJsonStrict(text);
     } catch { throw new AuthClientError(options.signal?.aborted ? 'CANCELLED' : 'TRANSPORT'); }
     if (!response.ok) {
       const error = z.object({ error: z.object({ code: z.string().max(128) }) }).safeParse(value);
@@ -76,10 +100,30 @@ export class AuthenticatedHttp {
       if (response.status === 409 && ['REVISION_CONFLICT', 'PLANNING_CHANGED', 'COLLABORATION_CHANGED', 'REPORTING_CHANGED', 'RECORD_CONFLICT', 'STALE_GENERATION'].includes(code ?? '')) throw new WriteError('CONFLICT', code);
       if (response.status === 409 && code === 'UNSUPPORTED_SCHEMA') throw new WriteError('UPDATE_REQUIRED', code);
       if (response.status === 409 && code === 'RETRY_REQUIRED') throw new WriteError('RETRY_REQUIRED', code);
+      if (code?.startsWith('FILES_')||code?.startsWith('FILE_EVIDENCE_')||code?.startsWith('DELIVERY_')) {
+        if(response.status===403)throw new AuthClientError('FORBIDDEN');
+        if(response.status===503)throw new AuthClientError('UNAVAILABLE');
+        if(response.status===429)throw new AuthClientError('BUSY');
+        if(response.status===413)throw new WriteError('STORAGE',code);
+        if(response.status===409)throw new WriteError(code==='FILES_READ_ONLY'?'RESTRICTED':'CONFLICT',code);
+        if(response.status===404)throw new AuthClientError(code==='FILES_NOT_FOUND'?'NOT_FOUND':'UNAVAILABLE');
+        if(response.status===400)throw new AuthClientError('CONTEXT_MISMATCH');
+      }
       if (response.status === 423) throw new WriteError('RESTRICTED', code);
       throw new AuthClientError('TRANSPORT');
     }
-    return parse(schema, value);
+    try {
+      if(path!=='/v1/work/planning/operations-page')value=await hydratePlanningWireValue(value,request=>{
+        if(!options.csrfToken)throw new AuthClientError('AUTH_REQUIRED');
+        return this.planningPage(request,options);
+      });
+      // The original wire JSON was already strictly parsed. Hydrated native history
+      // is also schema-checked page by page; avoid a second enormous stringify.
+      return schema.parse(value);
+    } catch(error) {
+      if(error instanceof AuthClientError||error instanceof WriteError)throw error;
+      throw new AuthClientError('CONTEXT_MISMATCH');
+    }
   }
 }
 export class HttpAuthTransport extends AuthenticatedHttp implements AuthTransport {

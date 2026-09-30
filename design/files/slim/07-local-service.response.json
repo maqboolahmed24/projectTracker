@@ -1,0 +1,232 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"projectId\":\"5855422246659088288\",\"sessionId\":\"8059642922826208027\",\"outputComponents\":[{\"design\":{\"screens\":[{\"screenshot\":{\"name\":\"projects/5855422246659088288/files/ecc53893cea7400983338e5fd93bd356\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/AEtjO1XiHN9MUp3JPvzcoolfoB6niLf-z9tL5n9L47rc8PjX8JKukdZ_Z_8p8giFQYsPNgEB1PIRxRhFVyMUifeVC4MDzu8Ofxdqt98bPXCLp6L-sgVrAmI-m5GQAUuQsPuf-dvLsx4AIqxNpJil1fKG2ua4sWB1KQ96cWgBgkzOk7hClZ6Xm57lEjqClZc5WCL1Ca84xQxGPPGrRnA2KR-YFTUBCmfEAhjsTce5xPTWv-qeKRtDpnAP4xIZ8a8\"},\"htmlCode\":{\"name\":\"projects/5855422246659088288/files/f2847f662ef542b3b83fba41e768bb02\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzBmZThiNTE2ZjUzODQ4MmFiZDQ1MzFjMjNhMzUyZDNkEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242\",\"mimeType\":\"text/html\"},\"id\":\"5be39bcd51254e1691aa547bf6f04016\",\"generatedBy\":\"create_datastore_entry\",\"width\":\"2880\",\"height\":\"2048\",\"title\":\"Shared Folder Modal - Dark Mode\",\"name\":\"projects/5855422246659088288/screens/5be39bcd51254e1691aa547bf6f04016\",\"theme\":{},\"deviceType\":\"DESKTOP\",\"screenType\":\"DESIGN\",\"screenMetadata\":{\"agentType\":\"PRO_AGENT\",\"status\":\"COMPLETE\"},\"designSystem\":{\"name\":\"assets/12527623825984102001\",\"designSystem\":{\"displayName\":\"Maqbool Essential\",\"theme\":{\"colorMode\":\"LIGHT\",\"font\":\"INTER\",\"roundness\":\"ROUND_EIGHT\",\"customColor\":\"#176b50\",\"headlineFont\":\"INTER\",\"bodyFont\":\"INTER\",\"labelFont\":\"INTER\",\"namedColors\":{\"surface_tint\":\"#176b50\",\"on_surface_variant\":\"#496558\",\"inverse_primary\":\"#affedb\",\"on_primary\":\"#e0ffee\",\"tertiary_container\":\"#ebf9d0\",\"primary_fixed\":\"#a4f3d0\",\"surface_container_lowest\":\"#ffffff\",\"tertiary_fixed_dim\":\"#ddebc2\",\"on_secondary_container\":\"#4f5250\",\"on_primary_fixed\":\"#004934\",\"inverse_on_surface\":\"#959f99\",\"on_tertiary_container\":\"#546040\",\"primary_container\":\"#a4f3d0\",\"tertiary\":\"#576343\",\"secondary_fixed_dim\":\"#d3d5d1\",\"secondary_fixed\":\"#e1e3df\",\"inverse_surface\":\"#07100c\",\"on_error\":\"#fff7f6\",\"outline_variant\":\"#9bb9a9\",\"outline\":\"#648173\",\"surface_bright\":\"#f2fcf4\",\"primary\":\"#176b50\",\"surface_container_high\":\"#d4eee0\",\"secondary_dim\":\"#515451\",\"tertiary_fixed\":\"#ebf9d0\",\"on_secondary\":\"#f7f9f6\",\"surface_dim\":\"#bee2cf\",\"error_container\":\"#fe8983\",\"on_secondary_fixed_variant\":\"#595c5a\",\"on_secondary_fixed\":\"#3d403e\",\"on_tertiary_fixed_variant\":\"#5e6a4a\",\"on_tertiary_fixed\":\"#424e30\",\"on_background\":\"#1d382c\",\"error\":\"#9f403d\",\"secondary\":\"#5d605d\",\"primary_dim\":\"#005e45\",\"on_primary_fixed_variant\":\"#12684d\",\"on_primary_container\":\"#005e44\",\"error_dim\":\"#4e0309\",\"tertiary_dim\":\"#4b5738\",\"surface_container_low\":\"#e8f7ed\",\"primary_fixed_dim\":\"#96e4c2\",\"on_error_container\":\"#752121\",\"surface_container\":\"#def3e7\",\"on_tertiary\":\"#f0fed5\",\"on_surface\":\"#1d382c\",\"background\":\"#f2fcf4\",\"surface_container_highest\":\"#caead9\",\"surface_variant\":\"#caead9\",\"secondary_container\":\"#e1e3df\",\"surface\":\"#f2fcf4\"},\"designMd\":\"# Maqbool Essential\\nUse disciplined, slim product UI like Apple Files and Google Drive. Existing 224px sidebar, 70px header, bundled colorful geometric brand and Maqbool wordmark. Inter 13px body, 12px controls, 22px headings. Light #f7f8f7 canvas white surface #202923 text #e2e8e3 fine dividers. Dark #101113 canvas #191b1f surfaces #23252a inputs #32363d dividers #9cd7b9 action; never dark green. White space is intentional, not oversized. Compact rows, 8px corners, no nested card forests, no giant hero/status cards, no decorative illustrations. One main action and one quiet secondary per surface; less frequent actions in a More menu. Stable 860x760 dialogs: fixed header/tabs/footer, scrolling body. No technical implementation terms. Warnings only at the decision they affect. Do not add fake billing, nav, stats, activity sidebars, avatars or fabricated data policies. Purposeful line icons only, 140ms transitions and reduced-motion support.\",\"colorVariant\":\"NEUTRAL\",\"overridePrimaryColor\":\"#176b50\",\"overrideNeutralColor\":\"#69736d\",\"spacingScale\":2,\"headlineFontFamily\":\"Inter\",\"bodyFontFamily\":\"Inter\",\"labelFontFamily\":\"Inter\"}},\"version\":\"2\"}},{\"screenshot\":{\"name\":\"projects/5855422246659088288/files/3ebf66f11f30444492ab13a2fa6934bb\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/AEtjO1XQmb8IkNKxDqw2j_CDoJey_lXtlRRbF9nZcrKZ9UxfzO4TBHDt4l3pUL-2nMSJ_q--7Bd9RbNZTxp-b2ITfulhjrI5AsqfmDSbJhkMESDvG43T5hvx2rZvWxAuQUbNAunNmd-ntXTeKe2wGwab--AUhuMueZJ4d00ZDi1GLBpuTDyZY28-3imMO3p1XzJ3XlHq-CtqGeCLboS_kKu1lh-n51kT3v1jA0Fm29NsYBemHPvs-7hmgNEf9ZQ\"},\"htmlCode\":{\"name\":\"projects/5855422246659088288/files/6a292436651c49068ebf2fa474cd3f9b\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzA4NzRjNzJkZmM3YjQ3N2FhMGVkNDUzM2Y4YTU1YTdjEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242\",\"mimeType\":\"text/html\"},\"id\":\"96cff09796234383a0d75f4cd9054bd9\",\"generatedBy\":\"create_datastore_entry\",\"width\":\"2880\",\"height\":\"2048\",\"title\":\"Shared Folder Modal - Light Mode\",\"name\":\"projects/5855422246659088288/screens/96cff09796234383a0d75f4cd9054bd9\",\"theme\":{},\"deviceType\":\"DESKTOP\",\"screenType\":\"DESIGN\",\"screenMetadata\":{\"agentType\":\"PRO_AGENT\",\"status\":\"COMPLETE\"},\"designSystem\":{\"name\":\"assets/12527623825984102001\",\"designSystem\":{\"displayName\":\"Maqbool Essential\",\"theme\":{\"colorMode\":\"LIGHT\",\"font\":\"INTER\",\"roundness\":\"ROUND_EIGHT\",\"customColor\":\"#176b50\",\"headlineFont\":\"INTER\",\"bodyFont\":\"INTER\",\"labelFont\":\"INTER\",\"namedColors\":{\"secondary_fixed_dim\":\"#d3d5d1\",\"surface_container_highest\":\"#caead9\",\"outline\":\"#648173\",\"surface_tint\":\"#176b50\",\"on_secondary_fixed_variant\":\"#595c5a\",\"on_error\":\"#fff7f6\",\"background\":\"#f2fcf4\",\"primary_container\":\"#a4f3d0\",\"surface_variant\":\"#caead9\",\"surface_container_high\":\"#d4eee0\",\"on_surface\":\"#1d382c\",\"surface_container_low\":\"#e8f7ed\",\"primary\":\"#176b50\",\"error\":\"#9f403d\",\"inverse_on_surface\":\"#959f99\",\"on_background\":\"#1d382c\",\"on_surface_variant\":\"#496558\",\"on_secondary_container\":\"#4f5250\",\"error_container\":\"#fe8983\",\"on_secondary\":\"#f7f9f6\",\"surface_dim\":\"#bee2cf\",\"on_primary_fixed_variant\":\"#12684d\",\"tertiary_container\":\"#ebf9d0\",\"on_tertiary_fixed_variant\":\"#5e6a4a\",\"on_primary_container\":\"#005e44\",\"tertiary\":\"#576343\",\"tertiary_fixed_dim\":\"#ddebc2\",\"tertiary_fixed\":\"#ebf9d0\",\"primary_dim\":\"#005e45\",\"error_dim\":\"#4e0309\",\"secondary_dim\":\"#515451\",\"on_primary_fixed\":\"#004934\",\"outline_variant\":\"#9bb9a9\",\"on_tertiary_fixed\":\"#424e30\",\"secondary_fixed\":\"#e1e3df\",\"inverse_surface\":\"#07100c\",\"surface\":\"#f2fcf4\",\"secondary\":\"#5d605d\",\"surface_bright\":\"#f2fcf4\",\"on_error_container\":\"#752121\",\"secondary_container\":\"#e1e3df\",\"tertiary_dim\":\"#4b5738\",\"on_tertiary_container\":\"#546040\",\"inverse_primary\":\"#affedb\",\"primary_fixed_dim\":\"#96e4c2\",\"primary_fixed\":\"#a4f3d0\",\"on_secondary_fixed\":\"#3d403e\",\"on_primary\":\"#e0ffee\",\"on_tertiary\":\"#f0fed5\",\"surface_container_lowest\":\"#ffffff\",\"surface_container\":\"#def3e7\"},\"designMd\":\"# Maqbool Essential\\nUse disciplined, slim product UI like Apple Files and Google Drive. Existing 224px sidebar, 70px header, bundled colorful geometric brand and Maqbool wordmark. Inter 13px body, 12px controls, 22px headings. Light #f7f8f7 canvas white surface #202923 text #e2e8e3 fine dividers. Dark #101113 canvas #191b1f surfaces #23252a inputs #32363d dividers #9cd7b9 action; never dark green. White space is intentional, not oversized. Compact rows, 8px corners, no nested card forests, no giant hero/status cards, no decorative illustrations. One main action and one quiet secondary per surface; less frequent actions in a More menu. Stable 860x760 dialogs: fixed header/tabs/footer, scrolling body. No technical implementation terms. Warnings only at the decision they affect. Do not add fake billing, nav, stats, activity sidebars, avatars or fabricated data policies. Purposeful line icons only, 140ms transitions and reduced-motion support.\",\"colorVariant\":\"NEUTRAL\",\"overridePrimaryColor\":\"#176b50\",\"overrideNeutralColor\":\"#69736d\",\"spacingScale\":2,\"headlineFontFamily\":\"Inter\",\"bodyFontFamily\":\"Inter\",\"labelFontFamily\":\"Inter\"}},\"version\":\"2\"}}],\"theme\":{}}},{\"text\":\"I have designed exactly two separate 1440 × 1000 desktop screens—one in Light Mode and one in Dark Mode—displaying the **Shared folder** connection management modal overlaid on the Delivery view.\\n\\n### Design Details & Specifications Followed:\\n1. **Visual Hierarchy & Calm Utility**:\\n   - **Maqbool Essential standards**: Inter 13px body, quiet 1px separators, clean 8px rounded corners, and disciplined whitespace rather than loud visual widgets or gradients.\\n   - **Strict color palettes**:\\n     - *Light Mode*: Canvas `#f7f8f7`, white surfaces, text `#202923`, and primary `#176b50`.\\n     - *Dark Mode*: Canvas `#101113`, surface `#191b1f`, input fields `#23252a`, border `#32363d`, text `#eeeeee`, and mint `#9cd7b9` action buttons (strictly avoiding dark-green backgrounds).\\n   - **No clutter**: Excluded hero cards, gradients, mascots, tip banners, diagnostic logs, and technical metrics.\\n\\n2. **Modal Structure**:\\n   - **Fixed footprint**: Standard 860 × 760 px modal with fixed header, body scroll with generous breathing room, and fixed footer.\\n   - **Active Connection**: Displays the single configured organisation-controlled option (`Studio North shared folder`) with a muted green-dot `Connected` badge, root label tag (`Project handover`), target service context, quiet `Disconnect` secondary action, and a contextual note on ONLYOFFICE editing using this verified service.\\n   - **Connect another folder**: Controlled section showing clean input fields for service address, local setup key, display name, and chosen-root label, accompanied by the inline privacy guarantee: *\\\"Publishing stays within the folder your organisation selected.\\\"*\\n   - **Footer**: Single primary `Close` action alongside the quiet `Check connection` secondary button.\"},{\"suggestion\":\"Would you like to see the 'Unavailable' state with the Download package fallback?\"},{\"suggestion\":\"Should we test a collapsed view of the 'Connect another folder' accordion?\"}]}"
+    }
+  ],
+  "structuredContent": {
+    "outputComponents": [
+      {
+        "design": {
+          "screens": [
+            {
+              "designSystem": {
+                "designSystem": {
+                  "displayName": "Maqbool Essential",
+                  "theme": {
+                    "bodyFont": "INTER",
+                    "bodyFontFamily": "Inter",
+                    "colorMode": "LIGHT",
+                    "colorVariant": "NEUTRAL",
+                    "customColor": "#176b50",
+                    "designMd": "# Maqbool Essential\nUse disciplined, slim product UI like Apple Files and Google Drive. Existing 224px sidebar, 70px header, bundled colorful geometric brand and Maqbool wordmark. Inter 13px body, 12px controls, 22px headings. Light #f7f8f7 canvas white surface #202923 text #e2e8e3 fine dividers. Dark #101113 canvas #191b1f surfaces #23252a inputs #32363d dividers #9cd7b9 action; never dark green. White space is intentional, not oversized. Compact rows, 8px corners, no nested card forests, no giant hero/status cards, no decorative illustrations. One main action and one quiet secondary per surface; less frequent actions in a More menu. Stable 860x760 dialogs: fixed header/tabs/footer, scrolling body. No technical implementation terms. Warnings only at the decision they affect. Do not add fake billing, nav, stats, activity sidebars, avatars or fabricated data policies. Purposeful line icons only, 140ms transitions and reduced-motion support.",
+                    "font": "INTER",
+                    "headlineFont": "INTER",
+                    "headlineFontFamily": "Inter",
+                    "labelFont": "INTER",
+                    "labelFontFamily": "Inter",
+                    "namedColors": {
+                      "background": "#f2fcf4",
+                      "error": "#9f403d",
+                      "error_container": "#fe8983",
+                      "error_dim": "#4e0309",
+                      "inverse_on_surface": "#959f99",
+                      "inverse_primary": "#affedb",
+                      "inverse_surface": "#07100c",
+                      "on_background": "#1d382c",
+                      "on_error": "#fff7f6",
+                      "on_error_container": "#752121",
+                      "on_primary": "#e0ffee",
+                      "on_primary_container": "#005e44",
+                      "on_primary_fixed": "#004934",
+                      "on_primary_fixed_variant": "#12684d",
+                      "on_secondary": "#f7f9f6",
+                      "on_secondary_container": "#4f5250",
+                      "on_secondary_fixed": "#3d403e",
+                      "on_secondary_fixed_variant": "#595c5a",
+                      "on_surface": "#1d382c",
+                      "on_surface_variant": "#496558",
+                      "on_tertiary": "#f0fed5",
+                      "on_tertiary_container": "#546040",
+                      "on_tertiary_fixed": "#424e30",
+                      "on_tertiary_fixed_variant": "#5e6a4a",
+                      "outline": "#648173",
+                      "outline_variant": "#9bb9a9",
+                      "primary": "#176b50",
+                      "primary_container": "#a4f3d0",
+                      "primary_dim": "#005e45",
+                      "primary_fixed": "#a4f3d0",
+                      "primary_fixed_dim": "#96e4c2",
+                      "secondary": "#5d605d",
+                      "secondary_container": "#e1e3df",
+                      "secondary_dim": "#515451",
+                      "secondary_fixed": "#e1e3df",
+                      "secondary_fixed_dim": "#d3d5d1",
+                      "surface": "#f2fcf4",
+                      "surface_bright": "#f2fcf4",
+                      "surface_container": "#def3e7",
+                      "surface_container_high": "#d4eee0",
+                      "surface_container_highest": "#caead9",
+                      "surface_container_low": "#e8f7ed",
+                      "surface_container_lowest": "#ffffff",
+                      "surface_dim": "#bee2cf",
+                      "surface_tint": "#176b50",
+                      "surface_variant": "#caead9",
+                      "tertiary": "#576343",
+                      "tertiary_container": "#ebf9d0",
+                      "tertiary_dim": "#4b5738",
+                      "tertiary_fixed": "#ebf9d0",
+                      "tertiary_fixed_dim": "#ddebc2"
+                    },
+                    "overrideNeutralColor": "#69736d",
+                    "overridePrimaryColor": "#176b50",
+                    "roundness": "ROUND_EIGHT",
+                    "spacingScale": 2
+                  }
+                },
+                "name": "assets/12527623825984102001",
+                "version": "2"
+              },
+              "deviceType": "DESKTOP",
+              "generatedBy": "create_datastore_entry",
+              "height": "2048",
+              "htmlCode": {
+                "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzBmZThiNTE2ZjUzODQ4MmFiZDQ1MzFjMjNhMzUyZDNkEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242",
+                "mimeType": "text/html",
+                "name": "projects/5855422246659088288/files/f2847f662ef542b3b83fba41e768bb02"
+              },
+              "id": "5be39bcd51254e1691aa547bf6f04016",
+              "name": "projects/5855422246659088288/screens/5be39bcd51254e1691aa547bf6f04016",
+              "screenMetadata": {
+                "agentType": "PRO_AGENT",
+                "status": "COMPLETE"
+              },
+              "screenType": "DESIGN",
+              "screenshot": {
+                "downloadUrl": "https://lh3.googleusercontent.com/aida/AEtjO1XiHN9MUp3JPvzcoolfoB6niLf-z9tL5n9L47rc8PjX8JKukdZ_Z_8p8giFQYsPNgEB1PIRxRhFVyMUifeVC4MDzu8Ofxdqt98bPXCLp6L-sgVrAmI-m5GQAUuQsPuf-dvLsx4AIqxNpJil1fKG2ua4sWB1KQ96cWgBgkzOk7hClZ6Xm57lEjqClZc5WCL1Ca84xQxGPPGrRnA2KR-YFTUBCmfEAhjsTce5xPTWv-qeKRtDpnAP4xIZ8a8",
+                "name": "projects/5855422246659088288/files/ecc53893cea7400983338e5fd93bd356"
+              },
+              "theme": {},
+              "title": "Shared Folder Modal - Dark Mode",
+              "width": "2880"
+            },
+            {
+              "designSystem": {
+                "designSystem": {
+                  "displayName": "Maqbool Essential",
+                  "theme": {
+                    "bodyFont": "INTER",
+                    "bodyFontFamily": "Inter",
+                    "colorMode": "LIGHT",
+                    "colorVariant": "NEUTRAL",
+                    "customColor": "#176b50",
+                    "designMd": "# Maqbool Essential\nUse disciplined, slim product UI like Apple Files and Google Drive. Existing 224px sidebar, 70px header, bundled colorful geometric brand and Maqbool wordmark. Inter 13px body, 12px controls, 22px headings. Light #f7f8f7 canvas white surface #202923 text #e2e8e3 fine dividers. Dark #101113 canvas #191b1f surfaces #23252a inputs #32363d dividers #9cd7b9 action; never dark green. White space is intentional, not oversized. Compact rows, 8px corners, no nested card forests, no giant hero/status cards, no decorative illustrations. One main action and one quiet secondary per surface; less frequent actions in a More menu. Stable 860x760 dialogs: fixed header/tabs/footer, scrolling body. No technical implementation terms. Warnings only at the decision they affect. Do not add fake billing, nav, stats, activity sidebars, avatars or fabricated data policies. Purposeful line icons only, 140ms transitions and reduced-motion support.",
+                    "font": "INTER",
+                    "headlineFont": "INTER",
+                    "headlineFontFamily": "Inter",
+                    "labelFont": "INTER",
+                    "labelFontFamily": "Inter",
+                    "namedColors": {
+                      "background": "#f2fcf4",
+                      "error": "#9f403d",
+                      "error_container": "#fe8983",
+                      "error_dim": "#4e0309",
+                      "inverse_on_surface": "#959f99",
+                      "inverse_primary": "#affedb",
+                      "inverse_surface": "#07100c",
+                      "on_background": "#1d382c",
+                      "on_error": "#fff7f6",
+                      "on_error_container": "#752121",
+                      "on_primary": "#e0ffee",
+                      "on_primary_container": "#005e44",
+                      "on_primary_fixed": "#004934",
+                      "on_primary_fixed_variant": "#12684d",
+                      "on_secondary": "#f7f9f6",
+                      "on_secondary_container": "#4f5250",
+                      "on_secondary_fixed": "#3d403e",
+                      "on_secondary_fixed_variant": "#595c5a",
+                      "on_surface": "#1d382c",
+                      "on_surface_variant": "#496558",
+                      "on_tertiary": "#f0fed5",
+                      "on_tertiary_container": "#546040",
+                      "on_tertiary_fixed": "#424e30",
+                      "on_tertiary_fixed_variant": "#5e6a4a",
+                      "outline": "#648173",
+                      "outline_variant": "#9bb9a9",
+                      "primary": "#176b50",
+                      "primary_container": "#a4f3d0",
+                      "primary_dim": "#005e45",
+                      "primary_fixed": "#a4f3d0",
+                      "primary_fixed_dim": "#96e4c2",
+                      "secondary": "#5d605d",
+                      "secondary_container": "#e1e3df",
+                      "secondary_dim": "#515451",
+                      "secondary_fixed": "#e1e3df",
+                      "secondary_fixed_dim": "#d3d5d1",
+                      "surface": "#f2fcf4",
+                      "surface_bright": "#f2fcf4",
+                      "surface_container": "#def3e7",
+                      "surface_container_high": "#d4eee0",
+                      "surface_container_highest": "#caead9",
+                      "surface_container_low": "#e8f7ed",
+                      "surface_container_lowest": "#ffffff",
+                      "surface_dim": "#bee2cf",
+                      "surface_tint": "#176b50",
+                      "surface_variant": "#caead9",
+                      "tertiary": "#576343",
+                      "tertiary_container": "#ebf9d0",
+                      "tertiary_dim": "#4b5738",
+                      "tertiary_fixed": "#ebf9d0",
+                      "tertiary_fixed_dim": "#ddebc2"
+                    },
+                    "overrideNeutralColor": "#69736d",
+                    "overridePrimaryColor": "#176b50",
+                    "roundness": "ROUND_EIGHT",
+                    "spacingScale": 2
+                  }
+                },
+                "name": "assets/12527623825984102001",
+                "version": "2"
+              },
+              "deviceType": "DESKTOP",
+              "generatedBy": "create_datastore_entry",
+              "height": "2048",
+              "htmlCode": {
+                "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzA4NzRjNzJkZmM3YjQ3N2FhMGVkNDUzM2Y4YTU1YTdjEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242",
+                "mimeType": "text/html",
+                "name": "projects/5855422246659088288/files/6a292436651c49068ebf2fa474cd3f9b"
+              },
+              "id": "96cff09796234383a0d75f4cd9054bd9",
+              "name": "projects/5855422246659088288/screens/96cff09796234383a0d75f4cd9054bd9",
+              "screenMetadata": {
+                "agentType": "PRO_AGENT",
+                "status": "COMPLETE"
+              },
+              "screenType": "DESIGN",
+              "screenshot": {
+                "downloadUrl": "https://lh3.googleusercontent.com/aida/AEtjO1XQmb8IkNKxDqw2j_CDoJey_lXtlRRbF9nZcrKZ9UxfzO4TBHDt4l3pUL-2nMSJ_q--7Bd9RbNZTxp-b2ITfulhjrI5AsqfmDSbJhkMESDvG43T5hvx2rZvWxAuQUbNAunNmd-ntXTeKe2wGwab--AUhuMueZJ4d00ZDi1GLBpuTDyZY28-3imMO3p1XzJ3XlHq-CtqGeCLboS_kKu1lh-n51kT3v1jA0Fm29NsYBemHPvs-7hmgNEf9ZQ",
+                "name": "projects/5855422246659088288/files/3ebf66f11f30444492ab13a2fa6934bb"
+              },
+              "theme": {},
+              "title": "Shared Folder Modal - Light Mode",
+              "width": "2880"
+            }
+          ],
+          "theme": {}
+        }
+      },
+      {
+        "text": "I have designed exactly two separate 1440 × 1000 desktop screens—one in Light Mode and one in Dark Mode—displaying the **Shared folder** connection management modal overlaid on the Delivery view.\n\n### Design Details & Specifications Followed:\n1. **Visual Hierarchy & Calm Utility**:\n   - **Maqbool Essential standards**: Inter 13px body, quiet 1px separators, clean 8px rounded corners, and disciplined whitespace rather than loud visual widgets or gradients.\n   - **Strict color palettes**:\n     - *Light Mode*: Canvas `#f7f8f7`, white surfaces, text `#202923`, and primary `#176b50`.\n     - *Dark Mode*: Canvas `#101113`, surface `#191b1f`, input fields `#23252a`, border `#32363d`, text `#eeeeee`, and mint `#9cd7b9` action buttons (strictly avoiding dark-green backgrounds).\n   - **No clutter**: Excluded hero cards, gradients, mascots, tip banners, diagnostic logs, and technical metrics.\n\n2. **Modal Structure**:\n   - **Fixed footprint**: Standard 860 × 760 px modal with fixed header, body scroll with generous breathing room, and fixed footer.\n   - **Active Connection**: Displays the single configured organisation-controlled option (`Studio North shared folder`) with a muted green-dot `Connected` badge, root label tag (`Project handover`), target service context, quiet `Disconnect` secondary action, and a contextual note on ONLYOFFICE editing using this verified service.\n   - **Connect another folder**: Controlled section showing clean input fields for service address, local setup key, display name, and chosen-root label, accompanied by the inline privacy guarantee: *\"Publishing stays within the folder your organisation selected.\"*\n   - **Footer**: Single primary `Close` action alongside the quiet `Check connection` secondary button."
+      },
+      {
+        "suggestion": "Would you like to see the 'Unavailable' state with the Download package fallback?"
+      },
+      {
+        "suggestion": "Should we test a collapsed view of the 'Connect another folder' accordion?"
+      }
+    ],
+    "projectId": "5855422246659088288",
+    "sessionId": "8059642922826208027"
+  }
+}

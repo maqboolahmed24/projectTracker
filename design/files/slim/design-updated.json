@@ -1,0 +1,26 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"name\":\"projects/5855422246659088288/sessions/13158866395673457942\",\"designSystem\":{\"displayName\":\"Maqbool Essential\",\"theme\":{\"colorMode\":\"LIGHT\",\"roundness\":\"ROUND_EIGHT\",\"customColor\":\"#176b50\",\"headlineFont\":\"INTER\",\"bodyFont\":\"INTER\",\"labelFont\":\"INTER\",\"designMd\":\"# Maqbool Essential\\nUse disciplined, slim product UI like Apple Files and Google Drive. Existing 224px sidebar, 70px header, bundled colorful geometric brand and Maqbool wordmark. Inter 13px body, 12px controls, 22px headings. Light #f7f8f7 canvas white surface #202923 text #e2e8e3 fine dividers. Dark #101113 canvas #191b1f surfaces #23252a inputs #32363d dividers #9cd7b9 action; never dark green. White space is intentional, not oversized. Compact rows, 8px corners, no nested card forests, no giant hero/status cards, no decorative illustrations. One main action and one quiet secondary per surface; less frequent actions in a More menu. Stable 860x760 dialogs: fixed header/tabs/footer, scrolling body. No technical implementation terms. Warnings only at the decision they affect. Do not add fake billing, nav, stats, activity sidebars, avatars or fabricated data policies. Purposeful line icons only, 140ms transitions and reduced-motion support.\",\"colorVariant\":\"NEUTRAL\",\"overridePrimaryColor\":\"#176b50\",\"overrideNeutralColor\":\"#69736d\"}}}"
+    }
+  ],
+  "structuredContent": {
+    "designSystem": {
+      "displayName": "Maqbool Essential",
+      "theme": {
+        "bodyFont": "INTER",
+        "colorMode": "LIGHT",
+        "colorVariant": "NEUTRAL",
+        "customColor": "#176b50",
+        "designMd": "# Maqbool Essential\nUse disciplined, slim product UI like Apple Files and Google Drive. Existing 224px sidebar, 70px header, bundled colorful geometric brand and Maqbool wordmark. Inter 13px body, 12px controls, 22px headings. Light #f7f8f7 canvas white surface #202923 text #e2e8e3 fine dividers. Dark #101113 canvas #191b1f surfaces #23252a inputs #32363d dividers #9cd7b9 action; never dark green. White space is intentional, not oversized. Compact rows, 8px corners, no nested card forests, no giant hero/status cards, no decorative illustrations. One main action and one quiet secondary per surface; less frequent actions in a More menu. Stable 860x760 dialogs: fixed header/tabs/footer, scrolling body. No technical implementation terms. Warnings only at the decision they affect. Do not add fake billing, nav, stats, activity sidebars, avatars or fabricated data policies. Purposeful line icons only, 140ms transitions and reduced-motion support.",
+        "headlineFont": "INTER",
+        "labelFont": "INTER",
+        "overrideNeutralColor": "#69736d",
+        "overridePrimaryColor": "#176b50",
+        "roundness": "ROUND_EIGHT"
+      }
+    },
+    "name": "projects/5855422246659088288/sessions/13158866395673457942"
+  }
+}

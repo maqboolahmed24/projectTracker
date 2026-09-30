@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Evidence Dark</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-fixed": "#a4f3d0",
+            "primary": "#00513b",
+            "primary-fixed-dim": "#89d6b5",
+            "on-secondary-fixed-variant": "#3f4944",
+            "on-primary-fixed-variant": "#00513b",
+            "tertiary-fixed-dim": "#b4c5ff",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#5b655f",
+            "outline-variant": "#bec9c2",
+            "on-tertiary-fixed": "#00174b",
+            "surface-bright": "#f2fcf2",
+            "on-secondary-fixed": "#141d19",
+            "surface-variant": "#dbe5dc",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#ced8ff",
+            "inverse-primary": "#89d6b5",
+            "surface-dim": "#d3ddd3",
+            "outline": "#6f7973",
+            "tertiary-fixed": "#dbe1ff",
+            "on-surface": "#151e18",
+            "primary-container": "#176b50",
+            "surface-container": "#e6f1e7",
+            "secondary-fixed": "#dbe5de",
+            "inverse-on-surface": "#e9f3ea",
+            "surface-tint": "#176b50",
+            "on-background": "#151e18",
+            "on-tertiary-fixed-variant": "#003ea8",
+            "on-primary-container": "#9be9c6",
+            "background": "#f2fcf2",
+            "error-container": "#ffdad6",
+            "tertiary-container": "#0053db",
+            "secondary": "#57615b",
+            "secondary-container": "#d8e2db",
+            "on-primary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#ecf6ed",
+            "on-surface-variant": "#3f4944",
+            "surface": "#f2fcf2",
+            "error": "#ba1a1a",
+            "tertiary": "#003ea8",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#002116",
+            "on-error": "#ffffff",
+            "inverse-surface": "#29332c",
+            "surface-container-high": "#e1ebe1",
+            "surface-container-highest": "#dbe5dc",
+            "secondary-fixed-dim": "#bfc9c2",
+            /* Strict dark token palette overrides */
+            "dark-canvas": "#101113",
+            "dark-surface": "#191b1f",
+            "dark-subtle": "#23252a",
+            "dark-hover": "#2c2f34",
+            "dark-text": "#f0f1f3",
+            "dark-muted": "#a8adb5",
+            "dark-border": "#32363d",
+            "mint-accent": "#9cd7b9",
+            "mint-dark": "#101113"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "2xl": "1rem",
+            "full": "0.75rem"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "0.875rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "gutter": "1.25rem",
+            "margin": "2rem"
+          },
+          fontFamily: {
+            "headline-sm": ["Hanken Grotesk", "sans-serif"],
+            "headline-md": ["Hanken Grotesk", "sans-serif"],
+            "headline-lg": ["Hanken Grotesk", "sans-serif"],
+            "label-sm": ["Hanken Grotesk", "sans-serif"],
+            "label-md": ["Hanken Grotesk", "sans-serif"],
+            "label-lg": ["Hanken Grotesk", "sans-serif"],
+            "body-sm": ["Hanken Grotesk", "sans-serif"],
+            "body-md": ["Hanken Grotesk", "sans-serif"],
+            "body-lg": ["Hanken Grotesk", "sans-serif"],
+            "code-sm": ["JetBrains Mono", "monospace"],
+            "code-md": ["JetBrains Mono", "monospace"],
+            "sans": ["Inter", "Hanken Grotesk", "sans-serif"]
+          },
+          fontSize: {
+            "code-sm": ["11px", { lineHeight: "16px", letterSpacing: "0em", fontWeight: "400" }],
+            "code-md": ["12px", { lineHeight: "18px", letterSpacing: "-0.01em", fontWeight: "400" }],
+            "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.025em", fontWeight: "500" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "500" }],
+            "body-sm": ["13px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "400" }],
+            "body-md": ["14px", { lineHeight: "22px", letterSpacing: "0em", fontWeight: "400" }],
+            "body-lg": ["16px", { lineHeight: "26px", letterSpacing: "-0.005em", fontWeight: "400" }],
+            "headline-sm": ["16px", { lineHeight: "24px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "headline-md": ["20px", { lineHeight: "28px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #191b1f;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #32363d;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #464c55;
+    }
+  </style>
+</head>
+<body class="bg-[#101113] text-[#f0f1f3] font-body-md antialiased overflow-hidden select-none">
+<!-- Main Dark Shell Layout -->
+<div class="flex h-screen w-screen overflow-hidden">
+<!-- Left Persistent Navigation Sidebar (224px / w-56) -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between p-space-sm bg-[#191b1f] border-r border-[#32363d] z-20">
+<div class="flex flex-col gap-y-6">
+<!-- Logo and Workspace Anchor -->
+<div class="px-space-sm pt-2 flex items-center gap-2.5">
+<div class="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+<svg fill="none" height="22" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2L2 22H22L12 2Z" fill="url(#tri-grad)"></path>
+<path d="M12 8L6.5 19H17.5L12 8Z" fill="#191b1f" fill-opacity="0.85"></path>
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="tri-grad" x1="2" x2="22" y1="2" y2="22">
+<stop stop-color="#9cd7b9"></stop>
+<stop offset="0.5" stop-color="#38bdf8"></stop>
+<stop offset="1" stop-color="#818cf8"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-semibold text-[#f0f1f3] tracking-tight leading-none">Maqbool</span>
+<span class="font-label-sm text-[10px] text-[#a8adb5] tracking-normal mt-0.5">Private Workspace</span>
+</div>
+</div>
+<!-- Shared Component Nav Items -->
+<nav class="flex flex-col space-y-1">
+<!-- Home -->
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a8adb5] font-medium font-label-md text-label-md hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<!-- Projects (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#9cd7b9] font-semibold font-label-md text-label-md bg-[#23252a] border border-[#32363d] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span>Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a8adb5] font-medium font-label-md text-label-md hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center justify-between px-3 py-2 rounded text-[#a8adb5] font-medium font-label-md text-label-md hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+<span>Inbox</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a8adb5] font-medium font-label-md text-label-md hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<!-- A little guidance -->
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a8adb5] font-medium font-label-md text-label-md hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>A little guidance</span>
+</a>
+</nav>
+</div>
+<!-- User Account Anchor in Sidebar -->
+<div class="pt-3 border-t border-[#32363d]">
+<div class="flex items-center gap-2.5 px-2 py-1.5 rounded hover:bg-[#2c2f34] cursor-pointer transition-colors duration-150">
+<div class="w-7 h-7 rounded-full bg-[#23252a] border border-[#32363d] flex items-center justify-center text-[#9cd7b9]">
+<span class="material-symbols-outlined text-[16px]" data-icon="account_circle">account_circle</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-medium text-[#f0f1f3] truncate">Alex Morgan</span>
+<span class="font-code-sm text-[10px] text-[#a8adb5] truncate">Lead Architect</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Topbar (70px docked) + Background Canvas Underlay -->
+<div class="flex-1 flex flex-col pl-56 h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="flex items-center justify-between w-full h-[70px] px-space-lg bg-[#191b1f] border-b border-[#32363d] flex-shrink-0 z-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-medium text-[#f0f1f3]">Studio North / Projects / Harbour renewal</span>
+<span class="font-code-sm text-code-sm px-1.5 py-0.5 rounded bg-[#23252a] text-[#a8adb5] border border-[#32363d]">HR-2024</span>
+</div>
+<!-- Navigation Tabs -->
+<nav class="hidden lg:flex items-center space-x-6 text-label-md font-label-md pt-2">
+<a class="text-[#a8adb5] hover:text-[#f0f1f3] pb-space-sm font-medium transition-colors" href="#">Overview</a>
+<a class="text-[#9cd7b9] font-semibold border-b-2 border-[#9cd7b9] pb-space-sm transition-colors" href="#">Work</a>
+<a class="text-[#a8adb5] hover:text-[#f0f1f3] pb-space-sm font-medium transition-colors" href="#">Timeline</a>
+<a class="text-[#a8adb5] hover:text-[#f0f1f3] pb-space-sm font-medium transition-colors" href="#">Updates</a>
+<a class="text-[#a8adb5] hover:text-[#f0f1f3] pb-space-sm font-medium transition-colors" href="#">Files</a>
+<a class="text-[#a8adb5] hover:text-[#f0f1f3] pb-space-sm font-medium transition-colors" href="#">Delivery</a>
+</nav>
+</div>
+<!-- Trailing action bar -->
+<div class="flex items-center gap-3">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[#a8adb5] text-[16px]" data-icon="search">search</span>
+<input class="bg-[#23252a] text-[#f0f1f3] placeholder-[#a8adb5] text-body-sm font-body-sm pl-8 pr-3 py-1.5 rounded-lg border border-[#32363d] focus:outline-none focus:border-[#9cd7b9] w-52 transition-all" placeholder="Search project records..." type="text"/>
+</div>
+<button class="p-2 text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] rounded-lg border border-transparent hover:border-[#32363d] transition-colors" title="Notifications">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] rounded-lg border border-transparent hover:border-[#32363d] transition-colors" title="Filter list">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+<button class="bg-[#9cd7b9] hover:bg-[#89d6b5] text-[#101113] font-label-md text-label-md font-semibold px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ml-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+<span>Create</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Backdrop Content (Simulating Project Workspace behind dialog) -->
+<main class="flex-1 bg-[#101113] p-8 overflow-hidden relative flex items-center justify-center">
+<!-- Background ghost UI layout demonstrating underneath workspace -->
+<div class="w-full max-w-6xl h-full opacity-20 pointer-events-none filter blur-[1px] flex flex-col gap-6">
+<div class="flex items-center justify-between border-b border-[#32363d] pb-4">
+<div class="h-8 w-64 bg-[#23252a] rounded"></div>
+<div class="flex gap-2">
+<div class="h-8 w-24 bg-[#23252a] rounded"></div>
+<div class="h-8 w-24 bg-[#23252a] rounded"></div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="h-44 bg-[#191b1f] border border-[#32363d] rounded-xl p-4"></div>
+<div class="h-44 bg-[#191b1f] border border-[#32363d] rounded-xl p-4"></div>
+<div class="h-44 bg-[#191b1f] border border-[#32363d] rounded-xl p-4"></div>
+</div>
+<div class="flex-1 bg-[#191b1f] border border-[#32363d] rounded-xl"></div>
+</div>
+<!-- Muted Backdrop Overlay for Task Context -->
+<div class="absolute inset-0 bg-black/60 backdrop-blur-[2px] z-30"></div>
+<!-- CENTERED EXACT-VERSION PREVIEW MODAL DIALOG (960px x 740px, rounded-2xl / 16px, background #191b1f) -->
+<div class="absolute z-40 w-[960px] h-[740px] bg-[#191b1f] border border-[#32363d] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in duration-200">
+<!-- 1. FIXED HEADER -->
+<div class="flex flex-col border-b border-[#32363d] bg-[#191b1f] px-6 pt-4 pb-3 flex-shrink-0">
+<!-- Top Navigation Row: Back to files + Task Anchor + Close -->
+<div class="flex items-center justify-between mb-3">
+<button class="inline-flex items-center gap-1.5 text-label-md font-label-md text-[#a8adb5] hover:text-[#f0f1f3] px-2 py-1 -ml-2 rounded hover:bg-[#2c2f34] transition-colors group">
+<span class="material-symbols-outlined text-[16px] group-hover:-translate-x-0.5 transition-transform" data-icon="arrow_back">arrow_back</span>
+<span>Back to files and evidence</span>
+</button>
+<div class="flex items-center gap-3">
+<span class="font-label-md text-label-md text-[#a8adb5] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+                  Review waterfront layout · <span class="font-code-sm text-code-sm text-[#f0f1f3]">Task #HR-104</span>
+</span>
+<span class="text-[#32363d]">|</span>
+<button class="p-1 rounded text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors" title="Close dialog">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<!-- Title & Metadata Row -->
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[#f97316] text-[22px]" data-icon="slideshow">slideshow</span>
+<h2 class="font-headline-md text-headline-md font-semibold text-[#f0f1f3] tracking-tight">Waterfront layout.pptx</h2>
+<!-- Exact Version Badge -->
+<span class="font-code-sm text-[11px] px-2 py-0.5 rounded bg-[#23252a] text-[#9cd7b9] border border-[#32363d] flex items-center gap-1 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+                    Exact version v2 (Submitted)
+                  </span>
+<!-- Deliverable Type Badge -->
+<span class="font-label-sm text-[11px] px-2 py-0.5 rounded bg-[#23252a] text-[#a8adb5] border border-[#32363d]">
+                    Output deliverable
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-[#a8adb5] pl-8">
+                  Submitted by <span class="text-[#f0f1f3] font-medium">Sam Lee</span> on 24 October · 14.2 MiB · <span class="text-[#9cd7b9] font-medium">Matches submission evidence</span>
+</p>
+</div>
+<!-- Status Badge (In review: neutral charcoal modestly tinted purple) -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#2a2238] text-[#c084fc] border border-[#4c3569] font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#c084fc] animate-pulse"></span>
+<span class="font-medium">In review</span>
+</div>
+</div>
+</div>
+<!-- 2. DOCUMENT PREVIEW CANVAS & BODY (Scrollable viewport inside 740px dialog) -->
+<div class="flex-1 flex overflow-hidden bg-[#101113]">
+<!-- Main Document Presentation Viewer -->
+<div class="flex-1 flex flex-col overflow-y-auto custom-scrollbar p-5">
+<!-- Safe Preview Notice Banner -->
+<div class="flex items-center justify-between px-3.5 py-2 rounded-lg bg-[#23252a] border border-[#32363d] mb-4 text-[#a8adb5] text-label-sm font-label-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-[#9cd7b9]" data-icon="verified_user">verified_user</span>
+<span>Safe in-browser preview · Preview may differ from the original Office layout · No macros or external connections executed</span>
+</div>
+<span class="font-code-sm text-code-sm text-[#f0f1f3] bg-[#191b1f] px-2 py-0.5 rounded border border-[#32363d]">Slide 1 of 12</span>
+</div>
+<!-- Presentation Slide Canvas Container (16:9 aspect ratio presentation sheet) -->
+<div class="w-full bg-[#191b1f] border border-[#32363d] rounded-xl shadow-lg relative p-8 flex flex-col justify-between aspect-[16/10] min-h-[410px] select-text">
+<!-- Watermark Stamp -->
+<div class="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#23252a]/90 backdrop-blur-sm border border-[#32363d] text-[#9cd7b9] font-code-sm text-[10px]">
+<span class="material-symbols-outlined text-[13px]" data-icon="lock">lock</span>
+<span>Exact Version v2 · Pinned for Review</span>
+</div>
+<!-- Slide Header -->
+<div class="border-b border-[#32363d]/80 pb-3">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-[#9cd7b9] uppercase tracking-wider mb-1">
+<span>Harbour Renewal Project</span>
+<span>•</span>
+<span>Executive Masterplan Brief</span>
+</div>
+<h3 class="font-headline-lg text-[22px] leading-tight font-semibold text-[#f0f1f3]">
+                    Waterfront Renewal Phase 2 — Public Promenade &amp; Marina Masterplan
+                  </h3>
+<p class="font-body-sm text-body-sm text-[#a8adb5] mt-1">
+                    Integrated architectural zoning, tidal buffers, and pedestrian circulation matrix.
+                  </p>
+</div>
+<!-- Architectural Diagram Mock Area -->
+<div class="my-4 flex-1 bg-[#101113] rounded-lg border border-[#32363d] p-4 flex flex-col justify-between relative overflow-hidden">
+<!-- Grid Pattern Backdrop -->
+<div class="absolute inset-0 opacity-[0.07]" style="background-size: 20px 20px; background-image: linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px);"></div>
+<!-- Diagram Schematic Layout -->
+<div class="relative z-10 grid grid-cols-3 gap-3 h-full">
+<!-- Zone A -->
+<div class="border border-[#32363d] bg-[#23252a]/60 rounded p-3 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-sm text-code-sm font-semibold text-[#9cd7b9]">Zone A: Esplanade Walkway</span>
+<span class="font-code-sm text-[10px] text-[#a8adb5]">1,400 m²</span>
+</div>
+<p class="font-body-sm text-[12px] text-[#a8adb5] leading-relaxed">
+                          Hardwood decking with permeable runoff trenches and low-voltage path illumination.
+                        </p>
+</div>
+<div class="flex items-center gap-2 pt-2 border-t border-[#32363d]/50 text-[11px] text-[#9cd7b9]">
+<span class="material-symbols-outlined text-[13px]" data-icon="check_circle">check_circle</span>
+<span>Seismic joints verified</span>
+</div>
+</div>
+<!-- Zone B -->
+<div class="border border-[#32363d] bg-[#23252a]/60 rounded p-3 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-sm text-code-sm font-semibold text-[#38bdf8]">Zone B: Tidal Basin &amp; Pontoon</span>
+<span class="font-code-sm text-[10px] text-[#a8adb5]">48 Berths</span>
+</div>
+<p class="font-body-sm text-[12px] text-[#a8adb5] leading-relaxed">
+                          Self-leveling articulated gangways with storm surge clearance rated to +4.5m chart datum.
+                        </p>
+</div>
+<div class="flex items-center gap-2 pt-2 border-t border-[#32363d]/50 text-[11px] text-[#38bdf8]">
+<span class="material-symbols-outlined text-[13px]" data-icon="waves">waves</span>
+<span>Hydrodynamic cleared</span>
+</div>
+</div>
+<!-- Zone C -->
+<div class="border border-[#32363d] bg-[#23252a]/60 rounded p-3 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-sm text-code-sm font-semibold text-[#c084fc]">Zone C: Community Plaza</span>
+<span class="font-code-sm text-[10px] text-[#a8adb5]">Cap. 850</span>
+</div>
+<p class="font-body-sm text-[12px] text-[#a8adb5] leading-relaxed">
+                          Sheltered amphitheatre pavilion, civic event lawn, and pop-up food kiosk utility grid.
+                        </p>
+</div>
+<div class="flex items-center gap-2 pt-2 border-t border-[#32363d]/50 text-[11px] text-[#c084fc]">
+<span class="material-symbols-outlined text-[13px]" data-icon="groups">groups</span>
+<span>Acoustic baseline met</span>
+</div>
+</div>
+</div>
+<!-- Diagram Footer Legend & Scale -->
+<div class="relative z-10 flex items-center justify-between pt-2 border-t border-[#32363d] text-[11px] text-[#a8adb5] mt-2">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5">
+<span class="w-2.5 h-1.5 bg-[#9cd7b9] rounded-sm"></span> Permeable ground
+                      </span>
+<span class="flex items-center gap-1.5">
+<span class="w-2.5 h-1.5 bg-[#38bdf8] rounded-sm"></span> Marine floating pontoon
+                      </span>
+<span class="flex items-center gap-1.5">
+<span class="w-2.5 h-1.5 bg-[#c084fc] rounded-sm"></span> Mixed civic surface
+                      </span>
+</div>
+<div class="flex items-center gap-2 font-code-sm text-code-sm text-[#f0f1f3]">
+<span>SCALE: 1:500</span>
+<span class="text-[#32363d]">|</span>
+<span>GRID: 10m x 10m</span>
+</div>
+</div>
+</div>
+<!-- Slide Footer Meta -->
+<div class="flex items-center justify-between pt-2 border-t border-[#32363d]/60 text-[11px] text-[#a8adb5]">
+<span>Studio North Architecture &amp; Planning • Ref: HR-2024-WFL-v2</span>
+<span>Confidential — Internal Team Review Only</span>
+</div>
+</div>
+</div>
+<!-- Preview Sidebar / Inspection Sidecar (Compact 260px right pane) -->
+<div class="w-[260px] bg-[#191b1f] border-l border-[#32363d] flex flex-col p-4 flex-shrink-0">
+<h4 class="font-label-md text-label-md font-semibold text-[#f0f1f3] uppercase tracking-wider mb-4 pb-2 border-b border-[#32363d]">
+                File Information
+              </h4>
+<div class="flex flex-col gap-4 font-body-sm text-body-sm">
+<!-- Document Ref -->
+<div class="flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm text-[#a8adb5]">Document ref</span>
+<span class="font-code-md text-code-md text-[#f0f1f3]">HR-003</span>
+</div>
+<!-- Exact submission -->
+<div class="flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm text-[#a8adb5]">Exact submission</span>
+<div class="flex items-center gap-1.5">
+<span class="font-medium text-[#f0f1f3]">Version 2 of 2</span>
+<span class="font-code-sm text-[10px] bg-[#23252a] text-[#a8adb5] px-1 rounded border border-[#32363d]">Final</span>
+</div>
+</div>
+<!-- Review status -->
+<div class="flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm text-[#a8adb5]">Review status</span>
+<span class="font-medium text-[#f0f1f3]">Pending review by Taylor Reed</span>
+</div>
+<!-- Integrity Check -->
+<div class="flex flex-col gap-0.5 p-2 rounded bg-[#23252a] border border-[#32363d]">
+<span class="font-label-sm text-label-sm text-[#a8adb5]">Integrity</span>
+<div class="flex items-center gap-1.5 text-[#9cd7b9] font-medium mt-0.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+<span>Matches this version</span>
+</div>
+</div>
+<!-- Permissions -->
+<div class="flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm text-[#a8adb5]">Permissions</span>
+<div class="flex items-center gap-1.5 text-[#a8adb5]">
+<span class="material-symbols-outlined text-[15px]" data-icon="group">group</span>
+<span class="text-xs">Download permitted for project members</span>
+</div>
+</div>
+</div>
+<!-- Contextual Revision Notes -->
+<div class="mt-auto pt-4 border-t border-[#32363d]">
+<span class="font-label-sm text-label-sm text-[#a8adb5] block mb-1">Author comment:</span>
+<p class="font-body-sm text-[12px] text-[#f0f1f3] italic bg-[#23252a] p-2.5 rounded border border-[#32363d]">
+                  "Updated gangway pontoon width to 3.2m per harbourmaster feedback from Tuesday."
+                </p>
+</div>
+</div>
+</div>
+<!-- 3. FIXED FOOTER (Actions strictly conforming to guidance) -->
+<div class="h-[68px] px-6 bg-[#191b1f] border-t border-[#32363d] flex items-center justify-between flex-shrink-0">
+<!-- Left Utility Actions: Download & Open -->
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#23252a] text-[#f0f1f3] hover:bg-[#2c2f34] border border-[#32363d] font-label-md text-label-md transition-colors">
+<span class="material-symbols-outlined text-[16px] text-[#9cd7b9]" data-icon="file_download">file_download</span>
+<span>Download original (.pptx)</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#23252a] text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] border border-[#32363d] font-label-md text-label-md transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="open_in_new">open_in_new</span>
+<span>Open externally</span>
+</button>
+</div>
+<!-- Right Review Decision Actions for Taylor Reed -->
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-lg bg-[#23252a] text-[#f0f1f3] hover:bg-[#2c2f34] border border-[#32363d] font-label-md text-label-md font-medium transition-colors">
+                Request changes
+              </button>
+<button class="px-5 py-2 rounded-lg bg-[#9cd7b9] hover:bg-[#89d6b5] text-[#101113] font-label-md text-label-md font-semibold transition-colors flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+<span>Accept submission</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool — Task Review</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container": "#def3e7",
+            "surface-container-lowest": "#ffffff",
+            "error-container": "#fe8983",
+            "on-surface-variant": "#496558",
+            "error-dim": "#4e0309",
+            "on-surface": "#1d382c",
+            "on-tertiary-container": "#546040",
+            "surface-tint": "#176b50",
+            "on-error": "#fff7f6",
+            "primary-dim": "#005e45",
+            "tertiary-dim": "#4b5738",
+            "primary-fixed": "#a4f3d0",
+            "surface": "#f2fcf4",
+            "on-primary": "#e0ffee",
+            "primary-container": "#a4f3d0",
+            "surface-container-high": "#d4eee0",
+            "tertiary-fixed": "#ebf9d0",
+            "surface-container-low": "#e8f7ed",
+            "on-primary-fixed-variant": "#12684d",
+            "surface-dim": "#bee2cf",
+            "error": "#9f403d",
+            "outline": "#648173",
+            "on-tertiary-fixed-variant": "#5e6a4a",
+            "tertiary-container": "#ebf9d0",
+            "on-background": "#1d382c",
+            "inverse-surface": "#07100c",
+            "on-primary-fixed": "#004934",
+            "on-secondary-fixed": "#3d403e",
+            "on-secondary-fixed-variant": "#595c5a",
+            "tertiary-fixed-dim": "#ddebc2",
+            "surface-variant": "#caead9",
+            "primary": "#176b50",
+            "on-primary-container": "#005e44",
+            "inverse-on-surface": "#959f99",
+            "on-error-container": "#752121",
+            "secondary-dim": "#515451",
+            "on-secondary": "#f7f9f6",
+            "surface-bright": "#f2fcf4",
+            "secondary-fixed": "#e1e3df",
+            "on-tertiary": "#f0fed5",
+            "secondary-fixed-dim": "#d3d5d1",
+            "on-tertiary-fixed": "#424e30",
+            "on-secondary-container": "#4f5250",
+            "secondary-container": "#e1e3df",
+            "tertiary": "#576343",
+            "surface-container-highest": "#caead9",
+            "secondary": "#5d605d",
+            "primary-fixed-dim": "#96e4c2",
+            "outline-variant": "#9bb9a9",
+            "background": "#f2fcf4",
+            "inverse-primary": "#affedb"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            headline: ["Inter", "sans-serif"],
+            display: ["Inter", "sans-serif"],
+            body: ["Inter", "sans-serif"],
+            label: ["Inter", "sans-serif"]
+          },
+          fontSize: {
+            "2xs": "0.6875rem", // 11px
+            "xs": "0.75rem",     // 12px
+            "sm": "0.8125rem",   // 13px
+            "base": "0.875rem"   // 14px
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #202923;
+      background-color: #f7f8f7;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="w-[1440px] h-[1000px] overflow-hidden relative select-none bg-[#f7f8f7]">
+<!-- BACKGROUND APPLICATION SHELL -->
+<div class="w-full h-full flex flex-col">
+<!-- SIDEBAR (from Shared Components JSON: SideNavBar) -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between border-r border-[#e2e8e5] bg-white z-20">
+<div class="p-3 flex flex-col gap-4">
+<!-- Logo & Brand -->
+<div class="flex items-center gap-2.5 px-2 py-1.5">
+<!-- Colorful geometric brand mark -->
+<div class="w-5 h-5 rounded flex items-center justify-center bg-[#176b50] text-white">
+<span class="w-2.5 h-2.5 bg-[#a4f3d0] rounded-sm transform rotate-45"></span>
+</div>
+<span class="font-headline text-base font-semibold text-[#202923] tracking-tight">Maqbool</span>
+</div>
+<!-- Navigation items -->
+<nav class="flex flex-col gap-0.5">
+<!-- Home -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#637067] text-xs font-normal hover:bg-[#e8f7ed]/60 hover:text-[#202923] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined text-[17px]">home</span>
+<span>Home</span>
+</a>
+<!-- Projects (Active) -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#def3e7] text-[#1d382c] font-medium text-xs" href="#">
+<span class="material-symbols-outlined text-[17px] text-[#176b50]">folder</span>
+<span>Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#637067] text-xs font-normal hover:bg-[#e8f7ed]/60 hover:text-[#202923] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined text-[17px]">check_circle</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#637067] text-xs font-normal hover:bg-[#e8f7ed]/60 hover:text-[#202923] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined text-[17px]">inbox</span>
+<span>Inbox</span>
+</a>
+</nav>
+</div>
+<!-- Footer navigation -->
+<div class="p-3 border-t border-[#e2e8e5]">
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#637067] text-xs font-normal hover:bg-[#e8f7ed]/60 hover:text-[#202923] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined text-[17px]">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- MAIN APP CANVAS (Behind modal) -->
+<div class="pl-56 w-full flex-1 flex flex-col">
+<!-- TOP NAV BAR (from Shared Components JSON: TopNavBar) -->
+<header class="sticky top-0 w-full h-14 bg-white border-b border-[#e2e8e5] flex items-center justify-between px-6 z-10">
+<div class="flex items-center gap-6 h-full">
+<div class="flex items-center gap-2">
+<h1 class="font-headline text-sm font-semibold text-[#202923]">Studio North</h1>
+<span class="bg-[#def3e7] text-[#176b50] text-[10px] font-medium px-1.5 py-0.5 rounded">Active</span>
+</div>
+<!-- Secondary Links Tabs -->
+<div class="flex items-center gap-6 h-full text-xs">
+<span class="text-[#637067] hover:text-[#202923] cursor-pointer">Overview</span>
+<span class="text-[#176b50] font-medium border-b-2 border-[#176b50] h-full flex items-center pt-0.5">Work</span>
+<span class="text-[#637067] hover:text-[#202923] cursor-pointer">Timeline</span>
+<span class="text-[#637067] hover:text-[#202923] cursor-pointer">Updates</span>
+<span class="text-[#637067] hover:text-[#202923] cursor-pointer">Files</span>
+<span class="text-[#637067] hover:text-[#202923] cursor-pointer">Delivery</span>
+</div>
+</div>
+<div class="flex items-center gap-2.5">
+<button class="px-2.5 py-1 text-xs text-[#637067] border border-[#e2e8e5] rounded-lg hover:bg-stone-50 flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">more_horiz</span>
+<span>More</span>
+</button>
+<button class="px-3 py-1 text-xs font-medium text-white bg-[#176b50] rounded-lg hover:bg-[#135741] flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">add</span>
+<span>Add files</span>
+</button>
+</div>
+</header>
+<!-- SIMULATED BOARD CANVAS CONTENT (Background) -->
+<main class="flex-1 p-6 flex flex-col gap-4 opacity-40 pointer-events-none">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="font-medium text-xs text-[#202923]">All tasks</span>
+<span class="text-xs text-[#637067]">· 14 items</span>
+</div>
+</div>
+<!-- Simple mockup grid behind modal -->
+<div class="grid grid-cols-3 gap-4">
+<div class="p-3.5 bg-white border border-[#e2e8e5] rounded-lg space-y-2">
+<div class="text-[11px] font-mono text-[#637067]">HR-001</div>
+<div class="text-xs font-medium text-[#202923]">Prepare the welcome guide</div>
+<div class="text-[11px] text-[#637067]">In review · Marcus Vance</div>
+</div>
+<div class="p-3.5 bg-white border border-[#e2e8e5] rounded-lg space-y-2">
+<div class="text-[11px] font-mono text-[#637067]">DES-014</div>
+<div class="text-xs font-medium text-[#202923]">Identity typography specimens</div>
+<div class="text-[11px] text-[#637067]">Completed · Elena R.</div>
+</div>
+<div class="p-3.5 bg-white border border-[#e2e8e5] rounded-lg space-y-2">
+<div class="text-[11px] font-mono text-[#637067]">ENG-108</div>
+<div class="text-xs font-medium text-[#202923]">Accessibility review wave 2</div>
+<div class="text-[11px] text-[#637067]">Ready · Nathan C.</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<!-- MODAL BACKDROP OVERLAY -->
+<div class="fixed inset-0 bg-black/25 z-40 flex items-center justify-center">
+<!-- TASK DETAIL MODAL: EXACTLY 860px x 760px -->
+<div class="w-[860px] h-[760px] bg-white border border-[#e2e8e5] rounded-xl shadow-xl flex flex-col overflow-hidden relative">
+<!-- MODAL HEADER (Fixed) -->
+<div class="h-14 px-6 border-b border-[#e2e8e5] flex items-center justify-between bg-white shrink-0">
+<div class="flex items-center">
+<!-- Reference Code Badge -->
+<span class="bg-[#f2f4f2] text-[#3d4540] border border-[#e2e8e5] px-2 py-0.5 rounded text-xs font-mono font-medium">HR-001</span>
+<!-- Task Title -->
+<h2 class="text-sm font-semibold text-[#202923] ml-3 tracking-tight">Prepare the welcome guide</h2>
+<!-- Status Pill -->
+<span class="bg-amber-50 text-amber-800 border border-amber-200/70 px-2.5 py-0.5 rounded-full text-xs font-medium ml-3 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+            In review
+          </span>
+</div>
+<!-- Header Actions -->
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-[#637067] hover:text-[#202923] hover:bg-[#f7f8f7] transition-colors" title="More">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-[#637067] hover:text-[#202923] hover:bg-[#f7f8f7] transition-colors" title="Close">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<!-- MODAL TABS / SUBHEADER (Fixed) -->
+<div class="px-6 border-b border-[#e2e8e5] flex gap-6 text-xs bg-white shrink-0">
+<button class="text-[#637067] hover:text-[#202923] py-2.5 transition-colors">Details</button>
+<button class="text-[#637067] hover:text-[#202923] py-2.5 transition-colors">Discussion</button>
+<!-- Active Tab -->
+<button class="text-[#176b50] font-medium border-b-2 border-[#176b50] py-2.5 -mb-px">Files and evidence</button>
+<button class="text-[#637067] hover:text-[#202923] py-2.5 transition-colors">Activity</button>
+</div>
+<!-- MODAL BODY (Scrolling Body) -->
+<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-white">
+<!-- Context explanation line -->
+<div class="text-xs text-[#637067]">
+          Review uses these exact versions.
+        </div>
+<!-- Submitted Versions Section -->
+<div class="flex flex-col gap-2.5">
+<div class="flex items-center justify-between">
+<h3 class="text-[11px] font-semibold uppercase tracking-wider text-[#637067]">Submitted versions</h3>
+<span class="text-[11px] text-[#86948a]">2 files attached</span>
+</div>
+<!-- Submitted Versions List Table -->
+<div class="border border-[#e2e8e5] rounded-lg divide-y divide-[#e2e8e5] overflow-hidden bg-[#fafbfa]">
+<!-- Row 1: Source Document -->
+<div class="px-4 py-3 flex items-center justify-between hover:bg-white transition-colors duration-140">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded border border-[#e2e8e5] bg-red-50/60 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-red-600 text-[18px]">picture_as_pdf</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-[#202923]">briefing.pdf</span>
+<span class="bg-[#f0f2f0] text-[#4d5952] border border-[#e2e8e5] text-[10px] font-medium px-1.5 py-0.5 rounded">Source</span>
+<span class="bg-[#def3e7] text-[#176b50] text-[10px] font-mono font-medium px-1.5 py-0.5 rounded">v2</span>
+</div>
+<div class="text-[11px] text-[#637067]">2.4 MiB · Uploaded yesterday</div>
+</div>
+</div>
+<div>
+<a class="text-[#176b50] font-medium text-xs hover:text-[#135741] flex items-center gap-1 group py-1 px-2 rounded hover:bg-[#def3e7]/50" href="#">
+<span>Open</span>
+<span class="material-symbols-outlined text-[14px] group-hover:translate-x-0.5 transition-transform duration-140">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Row 2: Output Document -->
+<div class="px-4 py-3 flex items-center justify-between hover:bg-white transition-colors duration-140">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded border border-[#e2e8e5] bg-sky-50/60 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sky-700 text-[18px]">description</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-[#202923]">welcome-guide.docx</span>
+<span class="bg-[#f0f2f0] text-[#4d5952] border border-[#e2e8e5] text-[10px] font-medium px-1.5 py-0.5 rounded">Output</span>
+<span class="bg-[#def3e7] text-[#176b50] text-[10px] font-mono font-medium px-1.5 py-0.5 rounded">v1</span>
+</div>
+<div class="text-[11px] text-[#637067]">1.1 MiB · Uploaded 3 hours ago</div>
+</div>
+</div>
+<div>
+<a class="text-[#176b50] font-medium text-xs hover:text-[#135741] flex items-center gap-1 group py-1 px-2 rounded hover:bg-[#def3e7]/50" href="#">
+<span>Open</span>
+<span class="material-symbols-outlined text-[14px] group-hover:translate-x-0.5 transition-transform duration-140">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Independent Reviewer Verification Section -->
+<div class="p-4 rounded-lg bg-white border border-[#e2e8e5] flex flex-col">
+<label class="flex items-start gap-3 cursor-pointer select-none">
+<input checked="" class="mt-0.5 rounded border-[#c2ccc5] text-[#176b50] focus:ring-0 focus:ring-offset-0 cursor-pointer w-4 h-4" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-xs text-[#202923] font-medium leading-tight">These versions meet the task’s acceptance criteria.</span>
+<span class="text-[11px] text-[#718076] mt-1 leading-normal">
+                Independent reviewer sign-off. Approving locks the reviewed versions to task HR-001.
+              </span>
+</div>
+</label>
+</div>
+<!-- Assigned reviewer info line -->
+<div class="text-xs text-[#637067] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-[#86948a]">verified_user</span>
+<span>Assigned reviewer: Marcus Vance · Submitted by: Sarah Jenkins</span>
+</div>
+</div>
+<!-- MODAL FOOTER (Fixed) -->
+<div class="h-16 px-6 border-t border-[#e2e8e5] bg-[#fafbfa] flex items-center justify-between shrink-0">
+<!-- Left: More actions -->
+<div>
+<button class="text-xs text-[#637067] hover:text-[#202923] font-normal transition-colors duration-140 flex items-center gap-1 py-1.5 px-2 -ml-2 rounded-lg hover:bg-[#f0f2f0]">
+<span class="material-symbols-outlined text-[16px]">more_horiz</span>
+<span>More actions</span>
+</button>
+</div>
+<!-- Right: Action Buttons -->
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-xs font-medium text-[#202923] bg-white border border-[#d2dcd6] rounded-lg hover:bg-stone-50 active:bg-stone-100 transition-colors duration-140">
+            Request changes
+          </button>
+<button class="px-4 py-2 text-xs font-medium text-white bg-[#176b50] rounded-lg hover:bg-[#135741] active:bg-[#0f4634] transition-colors duration-140 shadow-sm">
+            Accept versions
+          </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

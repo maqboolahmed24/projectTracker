@@ -5,17 +5,18 @@ import { planningContext, type PlanningContext } from './planning-api.js';
 import { teamHistoryPage } from './teams.js';
 import { collaborationHistory, type CollaborationHistory } from './collaboration.js';
 import { reportingSettings } from './reporting.js';
+import {fileManifest} from './files.js';
 
 export const EXPORT_MAX_REFERENCES = 20_000, EXPORT_MAX_PAGES = 4_096;
 export const EXPORT_PAGE_BYTES = 16 * 1024 * 1024, EXPORT_TOTAL_BYTES = 64 * 1024 * 1024;
-export const EXPORT_NOTICE = 'This file contains plaintext project data. Store it privately. It is a data-exit export, not a key backup or a restorable workspace backup.';
+export const EXPORT_NOTICE = 'This file contains readable workspace data and file version metadata. Download managed file contents separately. Shared-drive references include metadata only. Store exports privately; they are not a recovery kit or a backup you can restore.';
 export const exportReference = z.strictObject({ workspaceId: identifier, exportId: identifier });
 export const exportStartRequest = exportReference.extend({ acknowledgePlaintext: z.literal(true) });
-export const exportManifestRecord = z.strictObject({ kind: z.enum(['workspace','profile','team','project','phase','milestone','task','blocker','comment','update','planning_change','team_change','collaboration_change','settings_change','settings']),
+export const exportManifestRecord = z.strictObject({ kind: z.enum(['workspace','profile','team','project','phase','milestone','task','blocker','comment','update','planning_change','team_change','collaboration_change','settings_change','settings','file_version']),
   id: identifier, projectId: identifier.nullable(), revision: counter, digest });
 export type ExportManifestRecord = z.infer<typeof exportManifestRecord>;
-export const exportManifestKey = (r: Pick<ExportManifestRecord,'kind'|'id'>) => `${r.kind}:${r.id}`;
-export const exportSourceReference = z.strictObject({ kind: z.enum(['workspace','team','project','comment','update']), id: identifier, projectId: identifier.nullable() });
+export const exportManifestKey = (r: {kind:string;id:string}) => `${r.kind}:${r.id}`;
+export const exportSourceReference = z.strictObject({ kind: z.enum(['workspace','team','project','comment','update','file_versions']), id: identifier, projectId: identifier.nullable() });
 export type ExportSourceReference = z.infer<typeof exportSourceReference>;
 export const exportBinding = exportReference.extend({ version: z.literal(1), origin: z.string().url(), accountId: identifier, deviceId: identifier,
   credentialGeneration: positiveCounter, sessionGeneration: positiveCounter, keyGeneration: positiveCounter, signingPublicKey: binary(32),
@@ -31,6 +32,7 @@ export const exportSource = z.discriminatedUnion('kind', [
   z.strictObject({ kind: z.literal('project'), context: planningContext }),
   z.strictObject({ kind: z.literal('team'), pages: z.array(teamHistoryPage).min(1).max(512) }),
   z.strictObject({ kind: z.literal('entry'), history: collaborationHistory }),
+  z.strictObject({ kind:z.literal('file_versions'),manifests:z.array(fileManifest).min(1).max(100) }),
 ]);
 export type ExportSource = Exclude<z.infer<typeof exportSource>,{kind:'project'|'entry'}> | {kind:'project';context:PlanningContext} | {kind:'entry';history:CollaborationHistory};
 export const exportPageRequest = exportReference.extend({ manifestDigest: digest, after: z.string().min(1).max(80).nullable() });
@@ -44,7 +46,10 @@ export const exportReceipt = z.strictObject({ version: z.literal(1), workspaceId
 export type ExportReceipt = z.infer<typeof exportReceipt>;
 export const sortedExportManifest = (records: ExportManifestRecord[]) => records.sort((a,b) => exportManifestKey(a) < exportManifestKey(b) ? -1 : exportManifestKey(a) > exportManifestKey(b) ? 1 : 0);
 export function exportSources(manifest: ExportManifestRecord[]): ExportSourceReference[] {
-  return manifest.filter(r => ['workspace','project','team','comment','update'].includes(r.kind)).map(r => exportSourceReference.parse({kind:r.kind,id:r.id,projectId:r.projectId}));
+  const sources=manifest.filter(r => ['workspace','project','team','comment','update'].includes(r.kind)).map(r => exportSourceReference.parse({kind:r.kind,id:r.id,projectId:r.projectId}));
+  const projects=[...new Set(manifest.filter(r=>r.kind==='file_version').map(r=>r.projectId!))].sort();
+  for(const projectId of projects){const versions=manifest.filter(r=>r.kind==='file_version'&&r.projectId===projectId);for(let i=0;i<versions.length;i+=100)sources.push({kind:'file_versions',id:versions[i]!.id,projectId});}
+  return sources;
 }
 export async function exportRecord(kind:ExportManifestRecord['kind'],id:string,projectId:string|null,revision:string,value:unknown):Promise<ExportManifestRecord> {
   return exportManifestRecord.parse({kind,id,projectId,revision,digest:await digestObject(value)});
@@ -63,6 +68,8 @@ export async function exportSourceManifest(source:ExportSource):Promise<ExportMa
     for(const r of c.records) {const row=r.kind==='project'?c.graph.project:r.kind==='phase'?c.graph.phases.find(x=>x.id===r.id):r.kind==='milestone'?c.graph.milestones.find(x=>x.id===r.id):r.kind==='task'?c.graph.tasks.find(x=>x.id===r.id):c.graph.blockers?.find(x=>x.id===r.id);
       if(!row)throw new Error('Incomplete export project');refs.push(await exportRecord(r.kind,r.id,p,row.revision,r.envelope));}
     for(const m of c.history)refs.push(await exportRecord('planning_change',m.body.binding.operationId,p,m.body.nextVersion,m));
+  } else if(source.kind==='file_versions') {
+    for(const manifest of source.manifests){const b=manifest.body;refs.push(await exportRecord('file_version',b.versionId,b.binding.projectId,b.version,manifest));}
   } else if(source.kind==='team') {
     const changes=source.pages.flatMap(p=>p.records),last=changes.at(-1)!.payload,b=last.mutation.body.binding;
     refs.push(await exportRecord('team',b.teamId,null,last.envelope.header.revision,last.envelope));

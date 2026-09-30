@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Studio North — Register documents</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-low": "#e8f7ed",
+            "on-primary-container": "#005e44",
+            "on-secondary-fixed-variant": "#595c5a",
+            "outline": "#648173",
+            "on-tertiary-fixed": "#424e30",
+            "on-surface-variant": "#496558",
+            "error-dim": "#4e0309",
+            "secondary-fixed-dim": "#d3d5d1",
+            "outline-variant": "#9bb9a9",
+            "on-secondary-container": "#4f5250",
+            "on-tertiary": "#f0fed5",
+            "inverse-primary": "#affedb",
+            "background": "#f2fcf4",
+            "primary-container": "#a4f3d0",
+            "secondary-dim": "#515451",
+            "on-background": "#1d382c",
+            "primary": "#176b50",
+            "on-secondary-fixed": "#3d403e",
+            "surface-bright": "#f2fcf4",
+            "on-error-container": "#752121",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary": "#f7f9f6",
+            "tertiary-container": "#ebf9d0",
+            "on-primary-fixed": "#004934",
+            "primary-dim": "#005e45",
+            "tertiary-fixed-dim": "#ddebc2",
+            "tertiary-dim": "#4b5738",
+            "on-tertiary-fixed-variant": "#5e6a4a",
+            "secondary-fixed": "#e1e3df",
+            "secondary-container": "#e1e3df",
+            "primary-fixed-dim": "#96e4c2",
+            "primary-fixed": "#a4f3d0",
+            "tertiary": "#576343",
+            "on-primary-fixed-variant": "#12684d",
+            "error-container": "#fe8983",
+            "inverse-on-surface": "#959f99",
+            "surface-container": "#def3e7",
+            "surface-variant": "#caead9",
+            "surface": "#f2fcf4",
+            "surface-dim": "#bee2cf",
+            "surface-container-highest": "#caead9",
+            "on-primary": "#e0ffee",
+            "secondary": "#5d605d",
+            "on-error": "#fff7f6",
+            "on-surface": "#1d382c",
+            "error": "#9f403d",
+            "tertiary-fixed": "#ebf9d0",
+            "surface-container-high": "#d4eee0",
+            "on-tertiary-container": "#546040",
+            "inverse-surface": "#07100c",
+            "surface-tint": "#176b50"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            headline: ["Inter", "sans-serif"],
+            display: ["Inter", "sans-serif"],
+            body: ["Inter", "sans-serif"],
+            label: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #101113;
+      color: #eeeeee;
+      -webkit-font-smoothing: antialiased;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    input::placeholder {
+      color: #9ca3af;
+    }
+    /* Custom discipline scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #32363d;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4b525c;
+    }
+  </style>
+</head>
+<body class="w-[1440px] h-[1000px] relative select-none bg-[#101113] overflow-hidden text-[13px]">
+<!-- BACKGROUND: STUDIO NORTH FILES VIEW (Dimmed underneath) -->
+<div class="w-full h-full flex flex-col pointer-events-none filter blur-[0.4px]">
+<!-- SHARED COMPONENT: SideNavBar (Strict implementation from JSON & Design System) -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between bg-[#191b1f] border-r border-[#32363d] p-3 z-20">
+<div class="flex flex-col gap-5">
+<!-- Brand Header -->
+<div class="flex items-center gap-2.5 px-2 pt-1 pb-1">
+<svg aria-label="Colorful geometric brand mark" class="w-5 h-5 flex-shrink-0" fill="none" viewbox="0 0 24 24">
+<rect fill="#9cd7b9" height="9" rx="2" width="9" x="2" y="2"></rect>
+<rect fill="#5eead4" height="9" rx="2" width="9" x="13" y="2"></rect>
+<rect fill="#fcd34d" height="9" rx="2" width="9" x="2" y="13"></rect>
+<rect fill="#60a5fa" height="9" rx="2" width="9" x="13" y="13"></rect>
+</svg>
+<span class="font-semibold text-base tracking-tight text-[#eeeeee]">Maqbool</span>
+</div>
+<!-- Main Navigation Links -->
+<nav class="flex flex-col space-y-0.5">
+<!-- Home -->
+<div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#9ca3af] text-xs font-normal">
+<span class="material-symbols-outlined text-[17px]">home</span>
+<span>Home</span>
+</div>
+<!-- Projects (Active per context) -->
+<div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#23252a] text-[#eeeeee] font-medium text-xs">
+<span class="material-symbols-outlined text-[17px] text-[#9cd7b9]">folder</span>
+<span>Projects</span>
+</div>
+<!-- My work -->
+<div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#9ca3af] text-xs font-normal">
+<span class="material-symbols-outlined text-[17px]">check_circle</span>
+<span>My work</span>
+</div>
+<!-- Inbox -->
+<div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#9ca3af] text-xs font-normal">
+<span class="material-symbols-outlined text-[17px]">inbox</span>
+<span>Inbox</span>
+</div>
+</nav>
+</div>
+<!-- Footer Action -->
+<div class="pt-3 border-t border-[#32363d]">
+<div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#9ca3af] text-xs font-normal">
+<span class="material-symbols-outlined text-[17px]">settings</span>
+<span>Settings</span>
+</div>
+</div>
+</aside>
+<!-- MAIN APP CANVAS WITH TOPBAR -->
+<div class="pl-56 flex-1 flex flex-col bg-[#101113] h-full">
+<!-- SHARED COMPONENT: TopNavBar -->
+<header class="w-full h-16 flex flex-col justify-between bg-[#191b1f] border-b border-[#32363d] px-6">
+<div class="flex items-center justify-between h-11 pt-2.5">
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium text-[#eeeeee]">Studio North</span>
+<span class="text-xs text-[#9ca3af] font-normal">/ Q4 Corporate Expansion</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="px-2.5 py-1 text-xs border border-[#32363d] text-[#eeeeee] rounded-md flex items-center gap-1">
+<span>More</span>
+<span class="material-symbols-outlined text-[15px]">more_horiz</span>
+</div>
+<div class="px-3 py-1 text-xs bg-[#23252a] border border-[#32363d] text-[#9cd7b9] font-medium rounded-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">add</span>
+<span>Add files</span>
+</div>
+</div>
+</div>
+<!-- Navigation Tabs: Files is active -->
+<div class="flex items-center gap-6 text-xs -mb-[1px]">
+<span class="pb-2 text-[#9ca3af] font-normal">Overview</span>
+<span class="pb-2 text-[#9ca3af] font-normal">Work</span>
+<span class="pb-2 text-[#9ca3af] font-normal">Timeline</span>
+<span class="pb-2 text-[#9ca3af] font-normal">Updates</span>
+<span class="pb-2 border-b-2 border-[#9cd7b9] text-[#eeeeee] font-medium">Files</span>
+<span class="pb-2 text-[#9ca3af] font-normal">Delivery</span>
+</div>
+</header>
+<!-- Dimmed File Directory Table Placeholder -->
+<div class="p-6 flex-1 overflow-hidden space-y-4">
+<div class="flex items-center justify-between text-xs text-[#9ca3af] border-b border-[#32363d] pb-2 px-3">
+<span class="w-2/5">Name</span>
+<span class="w-1/5">Type</span>
+<span class="w-1/5">Modified</span>
+<span class="w-1/5 text-right">Size</span>
+</div>
+<div class="space-y-1 text-xs opacity-40">
+<div class="flex items-center justify-between p-2.5 rounded hover:bg-[#191b1f] border border-transparent">
+<span class="w-2/5 flex items-center gap-2 text-[#eeeeee]"><span class="material-symbols-outlined text-[16px] text-gray-400">description</span>brand-identity-v2.pdf</span>
+<span class="w-1/5 text-gray-400">PDF Document</span>
+<span class="w-1/5 text-gray-400">Yesterday, 14:18</span>
+<span class="w-1/5 text-right text-gray-400">4.8 MiB</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded hover:bg-[#191b1f] border border-transparent">
+<span class="w-2/5 flex items-center gap-2 text-[#eeeeee]"><span class="material-symbols-outlined text-[16px] text-gray-400">folder</span>Assets Archive</span>
+<span class="w-1/5 text-gray-400">Folder</span>
+<span class="w-1/5 text-gray-400">Oct 24, 2024</span>
+<span class="w-1/5 text-right text-gray-400">18.2 MiB</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded hover:bg-[#191b1f] border border-transparent">
+<span class="w-2/5 flex items-center gap-2 text-[#eeeeee]"><span class="material-symbols-outlined text-[16px] text-gray-400">table_chart</span>q4_budget_allocation.xlsx</span>
+<span class="w-1/5 text-gray-400">Spreadsheet</span>
+<span class="w-1/5 text-gray-400">Oct 19, 2024</span>
+<span class="w-1/5 text-right text-gray-400">840 KiB</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- MODAL BACKDROP OVERLAY -->
+<div class="fixed inset-0 bg-black/60 z-40 transition-opacity duration-140"></div>
+<!-- CENTER MODAL CONTAINER (Fixed footprint 860px x 760px) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+<div class="w-[860px] h-[760px] bg-[#191b1f] border border-[#32363d] rounded-lg shadow-2xl flex flex-col overflow-hidden text-[13px] text-[#eeeeee]">
+<!-- MODAL FIXED HEADER -->
+<div class="px-6 pt-5 pb-4 border-b border-[#32363d] flex-shrink-0 bg-[#191b1f]">
+<!-- Title and Close action -->
+<div class="flex items-center justify-between pb-3">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[#9cd7b9] text-[20px]">assignment_turned_in</span>
+<h2 class="text-base font-medium tracking-tight text-[#eeeeee]">Register documents</h2>
+</div>
+<button aria-label="Close dialog" class="w-7 h-7 flex items-center justify-center rounded-md text-[#9ca3af] hover:text-[#eeeeee] hover:bg-[#23252a] transition-colors duration-140" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Disciplined Minimal Inline Stepper -->
+<div class="flex items-center gap-6 pt-1 text-xs">
+<!-- Step 1: Choose -->
+<div class="flex items-center gap-1.5 text-gray-500 font-normal">
+<span>Choose</span>
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+</div>
+<!-- Step 2: Match (ACTIVE) -->
+<div class="flex items-center gap-1.5 text-[#9cd7b9] font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+<span>Match</span>
+<span class="material-symbols-outlined text-[13px] text-gray-500">chevron_right</span>
+</div>
+<!-- Step 3: Review -->
+<div class="flex items-center gap-1.5 text-gray-500 font-normal">
+<span>Review</span>
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+</div>
+<!-- Step 4: Results -->
+<div class="flex items-center gap-1.5 text-gray-500 font-normal">
+<span>Results</span>
+</div>
+</div>
+</div>
+<!-- MODAL SCROLLABLE BODY -->
+<div class="flex-1 p-6 space-y-4 overflow-y-auto bg-[#191b1f]">
+<!-- Helper hint -->
+<div class="flex items-center justify-between pb-1">
+<p class="text-xs text-[#9ca3af]">Assign references and project tasks to the imported files below before final verification.</p>
+<span class="text-xs text-gray-400 font-normal">Auto-matched 3 of 3</span>
+</div>
+<!-- Table Column Headers -->
+<div class="grid grid-cols-12 gap-3 px-3 text-xs text-gray-400 font-medium">
+<div class="col-span-4">Document</div>
+<div class="col-span-3">Reference</div>
+<div class="col-span-5">Target Task</div>
+</div>
+<!-- DOCUMENT ROW 1 -->
+<div class="bg-[#23252a]/40 border border-[#32363d] rounded-md p-3.5 flex flex-col gap-2 transition-colors duration-140 hover:border-[#424750]">
+<div class="grid grid-cols-12 gap-3 items-center">
+<!-- Col 1: Document info -->
+<div class="col-span-4 flex items-center gap-2.5 truncate">
+<span class="material-symbols-outlined text-[20px] text-[#9cd7b9] flex-shrink-0">description</span>
+<div class="truncate">
+<div class="font-medium text-[#eeeeee] truncate text-[13px]">briefing.pdf</div>
+<div class="text-[11px] text-[#9ca3af]">2.4 MiB · PDF</div>
+</div>
+</div>
+<!-- Col 2: Editable Reference Input -->
+<div class="col-span-3">
+<div class="relative">
+<input class="w-full bg-[#23252a] border border-[#32363d] rounded text-[13px] text-[#eeeeee] px-2.5 py-1.5 focus:outline-none focus:border-[#9cd7b9] transition-colors duration-140 font-mono text-xs" placeholder="e.g. REF-01" type="text" value="HR-001"/>
+</div>
+</div>
+<!-- Col 3: Task Input -->
+<div class="col-span-5 flex items-center gap-2">
+<input class="w-full bg-[#23252a] border border-[#32363d] rounded text-[13px] text-[#eeeeee] px-2.5 py-1.5 focus:outline-none focus:border-[#9cd7b9] transition-colors duration-140" placeholder="Assign to task..." type="text" value="Update project scope"/>
+<button class="text-gray-500 hover:text-gray-300 p-1 flex-shrink-0" title="Remove row" type="button">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- DOCUMENT ROW 2 -->
+<div class="bg-[#23252a]/40 border border-[#32363d] rounded-md p-3.5 flex flex-col gap-2 transition-colors duration-140 hover:border-[#424750]">
+<div class="grid grid-cols-12 gap-3 items-center">
+<!-- Col 1: Document info -->
+<div class="col-span-4 flex items-center gap-2.5 truncate">
+<span class="material-symbols-outlined text-[20px] text-blue-400 flex-shrink-0">article</span>
+<div class="truncate">
+<div class="font-medium text-[#eeeeee] truncate text-[13px]">welcome-guide.docx</div>
+<div class="text-[11px] text-[#9ca3af]">1.1 MiB · Word Document</div>
+</div>
+</div>
+<!-- Col 2: Editable Reference Input -->
+<div class="col-span-3">
+<div class="relative">
+<input class="w-full bg-[#23252a] border border-[#32363d] rounded text-[13px] text-[#eeeeee] px-2.5 py-1.5 focus:outline-none focus:border-[#9cd7b9] transition-colors duration-140 font-mono text-xs" placeholder="e.g. REF-02" type="text" value="HR-002"/>
+</div>
+</div>
+<!-- Col 3: Task Input -->
+<div class="col-span-5 flex items-center gap-2">
+<input class="w-full bg-[#23252a] border border-[#32363d] rounded text-[13px] text-[#eeeeee] px-2.5 py-1.5 focus:outline-none focus:border-[#9cd7b9] transition-colors duration-140" placeholder="Assign to task..." type="text" value="Onboard new leads"/>
+<button class="text-gray-500 hover:text-gray-300 p-1 flex-shrink-0" title="Remove row" type="button">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- DOCUMENT ROW 3 -->
+<div class="bg-[#23252a]/40 border border-[#32363d] rounded-md p-3.5 flex flex-col gap-3 transition-colors duration-140 hover:border-[#424750]">
+<div class="grid grid-cols-12 gap-3 items-center">
+<!-- Col 1: Document info -->
+<div class="col-span-4 flex items-center gap-2.5 truncate">
+<span class="material-symbols-outlined text-[20px] text-emerald-400 flex-shrink-0">table_chart</span>
+<div class="truncate">
+<div class="font-medium text-[#eeeeee] truncate text-[13px]">budget.xlsx</div>
+<div class="text-[11px] text-[#9ca3af]">840 KiB · Excel Sheet</div>
+</div>
+</div>
+<!-- Col 2: Editable Reference Input -->
+<div class="col-span-3">
+<div class="relative">
+<input class="w-full bg-[#23252a] border border-[#32363d] rounded text-[13px] text-[#eeeeee] px-2.5 py-1.5 focus:outline-none focus:border-[#9cd7b9] transition-colors duration-140 font-mono text-xs" placeholder="e.g. REF-03" type="text" value="HR-003"/>
+</div>
+</div>
+<!-- Col 3: Task Input -->
+<div class="col-span-5 flex items-center gap-2">
+<input class="w-full bg-[#23252a] border border-[#32363d] rounded text-[13px] text-[#eeeeee] px-2.5 py-1.5 focus:outline-none focus:border-[#9cd7b9] transition-colors duration-140" placeholder="Assign to task..." type="text" value="Review Q4 allocation"/>
+<button class="text-gray-500 hover:text-gray-300 p-1 flex-shrink-0" title="Remove row" type="button">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Calm, muted amber warning / external source notice -->
+<div class="flex items-center gap-2 px-3 py-2 rounded bg-[#d97706]/15 border border-[#d97706]/30 text-[#fcd34d] text-xs">
+<span class="material-symbols-outlined text-[15px] flex-shrink-0 text-[#fcd34d]">info</span>
+<span class="truncate">Shared drive location: <span class="font-mono text-[11px]">/Operations/Finance</span>. External source backup advised.</span>
+</div>
+</div>
+<!-- BATCH & TEAM ASSIGNMENT SECTION (Disciplined 1-row layout) -->
+<div class="pt-4 border-t border-[#32363d]">
+<div class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2.5">Batch Assignment</div>
+<div class="grid grid-cols-12 gap-3">
+<!-- Assignees Pill Input -->
+<div class="col-span-5 flex flex-col gap-1">
+<label class="text-xs text-[#9ca3af]">Assignees</label>
+<div class="flex items-center bg-[#23252a] border border-[#32363d] rounded-md px-2.5 py-1.5 h-8">
+<span class="material-symbols-outlined text-[15px] text-gray-400 mr-1.5">group</span>
+<span class="text-xs text-[#eeeeee] truncate">Sarah Jenkins, Alex Rivera</span>
+</div>
+</div>
+<!-- Reviewer Dropdown -->
+<div class="col-span-4 flex flex-col gap-1">
+<label class="text-xs text-[#9ca3af]">Reviewer</label>
+<div class="flex items-center justify-between bg-[#23252a] border border-[#32363d] rounded-md px-2.5 py-1.5 h-8">
+<div class="flex items-center gap-1.5 truncate">
+<span class="w-4 h-4 rounded-full bg-slate-600 text-[9px] flex items-center justify-center font-bold text-white">MV</span>
+<span class="text-xs text-[#eeeeee] truncate">Marcus Vance</span>
+</div>
+<span class="material-symbols-outlined text-[15px] text-gray-400">expand_more</span>
+</div>
+</div>
+<!-- Wave Selector -->
+<div class="col-span-3 flex flex-col gap-1">
+<label class="text-xs text-[#9ca3af]">Wave</label>
+<div class="flex items-center justify-between bg-[#23252a] border border-[#32363d] rounded-md px-2.5 py-1.5 h-8">
+<span class="text-xs text-[#eeeeee] truncate">Wave 1 - Initial intake</span>
+<span class="material-symbols-outlined text-[15px] text-gray-400">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Subtle Capacity Footnote -->
+<div class="pt-3 text-[12px] text-gray-400 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">storage</span>
+<span>3 items (4.3 MiB) · Project limit: 64 items or 250 MiB, 512 tasks</span>
+</div>
+</div>
+</div>
+<!-- MODAL FIXED FOOTER -->
+<div class="bg-[#191b1f] border-t border-[#32363d] px-6 py-4 flex items-center justify-between flex-shrink-0">
+<!-- Left: Selected Count -->
+<div class="text-[13px] text-gray-400 flex items-center gap-2">
+<span class="inline-block w-2 h-2 rounded-full bg-[#9cd7b9]"></span>
+<span>3 selected</span>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-2.5">
+<!-- Quiet Secondary Action -->
+<button class="border border-[#32363d] text-[#eeeeee] px-4 py-2 rounded-lg text-sm font-normal hover:bg-[#23252a] transition-colors duration-140" type="button">
+            Cancel
+          </button>
+<!-- Mint Primary Action (STRICTLY NO DARK GREEN) -->
+<button class="bg-[#9cd7b9] text-[#101113] font-semibold px-5 py-2 rounded-lg text-sm hover:bg-[#8bc5a7] active:bg-[#7db496] transition-colors duration-140 flex items-center gap-1.5 shadow-sm" type="button">
+<span>Review batch</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

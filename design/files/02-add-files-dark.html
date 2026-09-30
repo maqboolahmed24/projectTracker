@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool — Files &amp; Shared Drive Reference</title>
+<!-- Inter Font Family -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "canvas-dark": "#101113",
+            "surface-dark": "#191b1f",
+            "subtle-dark": "#23252a",
+            "hover-dark": "#2c2f34",
+            "text-primary-dark": "#f0f1f3",
+            "text-muted-dark": "#a8adb5",
+            "border-dark": "#32363d",
+            "mint-accent": "#9cd7b9",
+            "mint-text": "#101113",
+            "mint-hover": "#b2e3cb",
+
+            // Design system semantic tokens
+            "surface": "#191b1f",
+            "background": "#101113",
+            "on-surface": "#f0f1f3",
+            "on-surface-variant": "#a8adb5",
+            "outline": "#32363d",
+            "outline-variant": "#32363d",
+            "surface-container": "#23252a",
+            "surface-container-high": "#2c2f34",
+            "surface-container-lowest": "#191b1f",
+            "primary": "#9cd7b9",
+            "on-primary": "#101113",
+            "inverse-surface": "#191b1f",
+            "inverse-primary": "#9cd7b9",
+            "inverse-on-surface": "#f0f1f3"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "code": ["Inter", "sans-serif"],
+            "headline-md": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "headline-lg": ["Inter", "sans-serif"],
+            "display": ["Inter", "sans-serif"]
+          },
+          fontSize: {
+            "code": ["12px", { lineHeight: "16px", letterSpacing: "0em", fontWeight: "400" }],
+            "headline-md": ["20px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "body-sm": ["13px", { lineHeight: "18px", letterSpacing: "0.005em", fontWeight: "400" }],
+            "body-lg": ["16px", { lineHeight: "24px", letterSpacing: "0em", fontWeight: "400" }],
+            "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.03em", fontWeight: "600" }],
+            "label-md": ["13px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "500" }],
+            "headline-sm": ["16px", { lineHeight: "24px", letterSpacing: "-0.005em", fontWeight: "600" }],
+            "body-md": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }],
+            "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "display": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+
+    /* Custom thin scrollbar for modal body adhering to dark palette */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #191b1f;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #32363d;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #454a54;
+    }
+  </style>
+</head>
+<body class="bg-canvas-dark text-text-primary-dark font-body-md antialiased h-screen w-screen overflow-hidden flex selection:bg-mint-accent selection:text-mint-text">
+<!-- ========================================================================= -->
+<!-- BACKGROUND APP SHELL (Desktop Files View)                                -->
+<!-- ========================================================================= -->
+<!-- Left Sidebar (224px / w-56) -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between p-4 z-20 bg-surface-dark border-r border-border-dark select-none">
+<div class="flex flex-col gap-6">
+<!-- Workspace Brand Header -->
+<div class="flex items-center gap-3 px-2 py-1">
+<div aria-label="Maqbool multicolour triangular logo" class="w-7 h-7 rounded-lg bg-subtle-dark border border-border-dark flex items-center justify-center relative overflow-hidden">
+<!-- Multicolour geometric triangular glyph -->
+<svg class="w-4 h-4" fill="none" viewbox="0 0 24 24">
+<path d="M12 3L21 19H3L12 3Z" stroke="#9cd7b9" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M12 8L17 17H7L12 8Z" fill="#ffb3ae" fill-opacity="0.7"></path>
+<circle cx="12" cy="14" fill="#9cd7b9" r="2"></circle>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-semibold text-text-primary-dark tracking-tight leading-none">Maqbool</span>
+<span class="text-[11px] font-label-sm text-text-muted-dark tracking-normal mt-0.5">Workspace</span>
+</div>
+</div>
+<!-- Main Navigation Menu -->
+<nav aria-label="Primary navigation" class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-muted-dark hover:bg-subtle-dark hover:text-text-primary-dark text-body-sm font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">home</span>
+<span>Home</span>
+</a>
+<!-- Active: Projects with subtle container and mint indicator -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg bg-subtle-dark text-text-primary-dark font-medium text-body-sm font-body-sm transition-colors duration-150 relative" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px] text-mint-accent">folder</span>
+<span class="text-text-primary-dark">Projects</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-mint-accent"></span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-muted-dark hover:bg-subtle-dark hover:text-text-primary-dark text-body-sm font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">assignment</span>
+<span>My work</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-muted-dark hover:bg-subtle-dark hover:text-text-primary-dark text-body-sm font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">inbox</span>
+<span>Inbox</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Utility Links -->
+<div class="flex flex-col gap-1 border-t border-border-dark pt-3">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-muted-dark hover:bg-subtle-dark hover:text-text-primary-dark text-body-sm font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-muted-dark hover:bg-subtle-dark hover:text-text-primary-dark text-body-sm font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span>A little guidance</span>
+</a>
+</div>
+</aside>
+<!-- Content Wrap Area -->
+<div class="ml-56 flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Topbar (70px height) -->
+<header class="h-[70px] bg-surface-dark border-b border-border-dark px-6 flex items-center justify-between z-10 select-none">
+<!-- Breadcrumb Context & Tabs -->
+<div class="flex items-center gap-8 h-full">
+<div class="flex items-center gap-2">
+<span class="text-text-muted-dark text-body-md font-body-md">Projects</span>
+<span class="text-text-muted-dark text-body-sm">/</span>
+<span class="text-text-primary-dark font-medium text-body-md font-body-md tracking-tight">Harbour renewal HR-2024</span>
+</div>
+<!-- Project Sub-Navigation Tabs -->
+<nav class="flex items-center gap-6 h-full text-body-sm font-body-sm">
+<a class="text-text-muted-dark hover:text-text-primary-dark h-full flex items-center transition-colors" href="#">Overview</a>
+<a class="text-text-muted-dark hover:text-text-primary-dark h-full flex items-center transition-colors" href="#">Work</a>
+<a class="text-text-muted-dark hover:text-text-primary-dark h-full flex items-center transition-colors" href="#">Timeline</a>
+<a class="text-text-muted-dark hover:text-text-primary-dark h-full flex items-center transition-colors" href="#">Updates</a>
+<!-- Active Files Tab -->
+<a class="text-mint-accent border-b-2 border-mint-accent h-full flex items-center font-medium transition-colors" href="#">Files</a>
+<a class="text-text-muted-dark hover:text-text-primary-dark h-full flex items-center transition-colors" href="#">Delivery</a>
+</nav>
+</div>
+<!-- Action Items & User Profile -->
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-text-muted-dark">search</span>
+<input class="w-64 h-9 bg-subtle-dark border border-border-dark rounded-lg pl-9 pr-3 text-body-sm font-body-sm text-text-primary-dark placeholder-text-muted-dark focus:outline-none focus:border-mint-accent" placeholder="Search project files..." type="text"/>
+</div>
+<button class="h-9 px-3 rounded-lg border border-border-dark bg-subtle-dark text-text-primary-dark text-body-sm font-body-sm hover:bg-hover-dark flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">file_open</span>
+<span>Register documents</span>
+</button>
+<button class="h-9 px-3.5 rounded-lg bg-mint-accent text-mint-text text-body-sm font-body-sm font-medium hover:bg-mint-hover flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add files</span>
+</button>
+<div class="w-px h-6 bg-border-dark mx-1"></div>
+<button class="w-9 h-9 rounded-lg border border-border-dark flex items-center justify-center text-text-muted-dark hover:text-text-primary-dark hover:bg-subtle-dark transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div aria-label="User avatar" class="w-8 h-8 rounded-full bg-subtle-dark border border-border-dark flex items-center justify-center font-medium text-[12px] text-mint-accent">
+          SN
+        </div>
+</div>
+</header>
+<!-- Main Workspace Background (Files Table behind overlay) -->
+<main class="flex-1 bg-canvas-dark p-6 overflow-hidden flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h1 class="text-headline-md font-headline-md font-semibold text-text-primary-dark tracking-tight">Project Files</h1>
+<p class="text-body-sm font-body-sm text-text-muted-dark mt-0.5">24 total assets linked to this workspace repository.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full bg-subtle-dark border border-border-dark text-[11px] font-label-sm text-text-muted-dark">4 shared drive references</span>
+<span class="px-2.5 py-1 rounded-full bg-subtle-dark border border-border-dark text-[11px] font-label-sm text-text-muted-dark">20 Maqbool uploads</span>
+</div>
+</div>
+<!-- File Table Mockup -->
+<div class="flex-1 rounded-xl border border-border-dark bg-surface-dark overflow-hidden flex flex-col opacity-60">
+<div class="grid grid-cols-12 px-5 py-3 border-b border-border-dark bg-subtle-dark text-[12px] font-label-md text-text-muted-dark">
+<div class="col-span-5">Name</div>
+<div class="col-span-2">Reference</div>
+<div class="col-span-2">Storage Mode</div>
+<div class="col-span-2">Last verified</div>
+<div class="col-span-1 text-right">Size</div>
+</div>
+<div class="divide-y divide-border-dark text-body-sm font-body-sm">
+<div class="grid grid-cols-12 px-5 py-3.5 items-center">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-mint-accent text-[20px]">picture_as_pdf</span>
+<span class="text-text-primary-dark font-medium">Environmental_impact_summary_v3.pdf</span>
+</div>
+<div class="col-span-2 font-code text-code text-text-muted-dark">HR-DOC-099</div>
+<div class="col-span-2"><span class="px-2 py-0.5 rounded text-[11px] font-label-sm bg-subtle-dark border border-border-dark text-text-muted-dark">Cloud upload</span></div>
+<div class="col-span-2 text-text-muted-dark">Today, 09:24</div>
+<div class="col-span-1 text-right font-code text-code text-text-muted-dark">14.2 MB</div>
+</div>
+<div class="grid grid-cols-12 px-5 py-3.5 items-center bg-subtle-dark/40">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-text-muted-dark text-[20px]">link</span>
+<span class="text-text-primary-dark font-medium">Bathymetry_Pointcloud_Raw.las</span>
+</div>
+<div class="col-span-2 font-code text-code text-text-muted-dark">HR-GEO-441</div>
+<div class="col-span-2"><span class="px-2 py-0.5 rounded text-[11px] font-label-sm bg-subtle-dark border border-mint-accent/40 text-mint-accent">Shared Drive</span></div>
+<div class="col-span-2 text-text-muted-dark">Yesterday, 16:40</div>
+<div class="col-span-1 text-right font-code text-code text-text-muted-dark">1.84 GB</div>
+</div>
+<div class="grid grid-cols-12 px-5 py-3.5 items-center">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-mint-accent text-[20px]">table_chart</span>
+<span class="text-text-primary-dark font-medium">Concrete_Piling_Quotations_Q3.xlsx</span>
+</div>
+<div class="col-span-2 font-code text-code text-text-muted-dark">HR-FIN-012</div>
+<div class="col-span-2"><span class="px-2 py-0.5 rounded text-[11px] font-label-sm bg-subtle-dark border border-border-dark text-text-muted-dark">Cloud upload</span></div>
+<div class="col-span-2 text-text-muted-dark">Sep 18, 2024</div>
+<div class="col-span-1 text-right font-code text-code text-text-muted-dark">480 KB</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- ========================================================================= -->
+<!-- MODAL DIALOG OVERLAY (EXACT DIMENSIONS 760px x 660px, DARK THEME)        -->
+<!-- ========================================================================= -->
+<div aria-labelledby="modal-title" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-[3px] p-4 animate-fade-in" role="dialog">
+<!-- Modal Container: Exactly 760px x 660px -->
+<div class="w-[760px] max-w-[calc(100vw-32px)] h-[660px] max-h-[calc(100vh-48px)] bg-surface-dark border border-border-dark rounded-2xl shadow-[0_24px_48px_-12px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden relative">
+<!-- ===================================================================== -->
+<!-- 1. FIXED MODAL HEADER (Pinned, Height 64px, Border-b #32363d)         -->
+<!-- ===================================================================== -->
+<header class="h-16 px-6 border-b border-border-dark bg-surface-dark flex items-center justify-between shrink-0 select-none">
+<div class="flex items-center gap-6">
+<h2 class="text-headline-sm font-headline-sm text-text-primary-dark font-semibold tracking-tight" id="modal-title">
+            Add files to project
+          </h2>
+<!-- Tab Switcher -->
+<div class="flex items-center p-1 bg-subtle-dark border border-border-dark rounded-lg">
+<!-- Inactive tab -->
+<button class="h-8 px-3.5 rounded-md text-text-muted-dark text-body-sm font-body-sm hover:text-text-primary-dark transition-colors duration-150" type="button">
+              Upload files
+            </button>
+<!-- Active tab: Keep on shared drive -->
+<button class="h-8 px-3.5 rounded-md bg-surface-dark border border-border-dark text-text-primary-dark font-medium text-body-sm font-body-sm shadow-sm transition-all duration-150 flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] text-mint-accent">share_location</span>
+<span>Keep on shared drive</span>
+</button>
+</div>
+</div>
+<!-- Close Action (44px target) -->
+<button aria-label="Close dialog" class="w-11 h-11 -mr-2 rounded-lg text-text-muted-dark hover:text-text-primary-dark hover:bg-hover-dark flex items-center justify-center transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</header>
+<!-- ===================================================================== -->
+<!-- 2. SCROLLABLE MODAL BODY (Strictly maintains height, Overflow-y auto) -->
+<!-- ===================================================================== -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scroll bg-surface-dark">
+<!-- Honest "Stored Outside Maqbool" Advisory Card -->
+<section class="bg-subtle-dark border border-amber-900/40 rounded-xl p-4 flex gap-3.5 items-start">
+<div class="w-9 h-9 rounded-lg bg-surface-dark border border-amber-800/40 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-amber-300 text-[20px]">hard_drive</span>
+</div>
+<div class="flex-1">
+<div class="text-body-sm font-body-sm font-medium text-text-primary-dark leading-snug">
+              Stored outside Maqbool. File contents are not included in cloud backups. Other people need access to this drive.
+            </div>
+<p class="text-body-sm font-body-sm text-text-muted-dark mt-1">
+              The cloud never opens this path. Selected bytes are checked locally on this device without upload.
+            </p>
+</div>
+</section>
+<!-- Form Fields for Shared Drive Reference -->
+<div class="space-y-4">
+<!-- Two-column row: File name & Document reference -->
+<div class="grid grid-cols-2 gap-4">
+<!-- File Name Field -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center">
+<label class="text-label-md font-label-md text-text-primary-dark" for="file-name">File name</label>
+<span class="text-[11px] font-label-sm text-text-muted-dark">From upload tab</span>
+</div>
+<div class="relative">
+<input class="w-full h-10 px-3 rounded-lg bg-subtle-dark border border-border-dark text-text-primary-dark font-body-md text-body-md focus:outline-none focus:border-mint-accent focus:ring-1 focus:ring-mint-accent/20 transition-all" id="file-name" type="text" value="Survey drawings.pdf"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-muted-dark text-[18px] pointer-events-none">description</span>
+</div>
+</div>
+<!-- Document Reference Field -->
+<div class="space-y-1.5">
+<label class="text-label-md font-label-md text-text-primary-dark" for="doc-ref">Document reference</label>
+<div class="relative">
+<input class="w-full h-10 px-3 rounded-lg bg-subtle-dark border border-border-dark text-text-primary-dark font-code text-code focus:outline-none focus:border-mint-accent focus:ring-1 focus:ring-mint-accent/20 transition-all uppercase tracking-wider" id="doc-ref" type="text" value="HR-DOC-102"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-muted-dark text-[18px] pointer-events-none">tag</span>
+</div>
+</div>
+</div>
+<!-- Purpose Selection: Source document vs Output / Deliverable -->
+<div class="space-y-2">
+<span class="text-label-md font-label-md text-text-primary-dark block">Purpose classification</span>
+<div aria-label="Document Purpose" class="grid grid-cols-2 gap-3" role="radiogroup">
+<!-- Selected Option: Source document -->
+<label class="flex items-center gap-3 p-3 rounded-lg bg-subtle-dark border border-mint-accent/40 cursor-pointer hover:bg-hover-dark transition-colors">
+<input checked="" class="w-4 h-4 text-mint-accent border-border-dark bg-surface-dark focus:ring-mint-accent focus:ring-offset-surface-dark" name="purpose" type="radio"/>
+<div class="flex flex-col">
+<span class="text-body-sm font-body-sm font-medium text-text-primary-dark">Source document</span>
+<span class="text-[11px] font-label-sm text-text-muted-dark">Incoming external material used as input</span>
+</div>
+</label>
+<!-- Unselected Option: Output / Deliverable -->
+<label class="flex items-center gap-3 p-3 rounded-lg bg-subtle-dark border border-border-dark cursor-pointer hover:bg-hover-dark transition-colors">
+<input class="w-4 h-4 text-mint-accent border-border-dark bg-surface-dark focus:ring-mint-accent focus:ring-offset-surface-dark" name="purpose" type="radio"/>
+<div class="flex flex-col">
+<span class="text-body-sm font-body-sm font-medium text-text-primary-dark">Output / Deliverable</span>
+<span class="text-[11px] font-label-sm text-text-muted-dark">Generated work item for client review</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Location (Plain text shared drive path) -->
+<div class="space-y-1.5">
+<label class="text-label-md font-label-md text-text-primary-dark" for="drive-path">Shared drive location</label>
+<div class="flex gap-2">
+<div class="relative flex-1">
+<input class="w-full h-10 px-3 rounded-lg bg-subtle-dark border border-border-dark text-text-primary-dark font-code text-code focus:outline-none focus:border-mint-accent focus:ring-1 focus:ring-mint-accent/20 transition-all" id="drive-path" type="text" value="Volumes/HarbourProject/Surveys/2024/Survey_drawings.pdf"/>
+</div>
+<button class="h-10 min-h-[40px] px-3.5 rounded-lg bg-hover-dark border border-border-dark text-text-primary-dark text-body-sm font-body-sm hover:bg-border-dark flex items-center gap-1.5 transition-colors shrink-0" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span>Copy location</span>
+</button>
+</div>
+<p class="text-[12px] font-body-sm text-text-muted-dark pt-0.5">
+              Never automatically verified across devices. Each collaborator verifies the local file directly.
+            </p>
+</div>
+</div>
+<!-- =================================================================== -->
+<!-- LOCAL CHECK VERIFICATION SECTION (Active Verified State)           -->
+<!-- =================================================================== -->
+<section class="bg-subtle-dark border border-border-dark rounded-xl p-4 space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md text-text-primary-dark font-medium">Local file verification</span>
+<span class="text-[11px] font-label-sm text-text-muted-dark">(This device)</span>
+</div>
+<!-- Charcoal badge with mint indicator -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-dark border border-mint-accent/40 text-[12px] font-label-md text-text-primary-dark">
+<span class="material-symbols-outlined text-mint-accent text-[15px]">check_circle</span>
+<span class="font-medium">Matches this version · 86 MiB</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<p class="text-body-sm font-body-sm text-text-muted-dark max-w-[420px]">
+              The selected file is checked on this device. It is not uploaded.
+            </p>
+<!-- 44px Interactive Touch Target Button -->
+<button class="h-11 px-4 rounded-lg bg-hover-dark border border-border-dark text-text-primary-dark text-body-sm font-body-sm font-medium hover:bg-border-dark flex items-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-mint-accent">sync_saved_locally</span>
+<span>Choose file to check</span>
+</button>
+</div>
+</section>
+<!-- =================================================================== -->
+<!-- ALTERNATIVE VERIFICATION STATES (Educational / State Reference)     -->
+<!-- =================================================================== -->
+<div class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-label-sm uppercase tracking-wider text-text-muted-dark">Verification Reference States</span>
+<span class="text-[11px] font-label-sm text-text-muted-dark">System safeguards</span>
+</div>
+<!-- 1. Unverified state preview -->
+<div class="p-3.5 rounded-xl bg-subtle-dark border border-border-dark flex items-start gap-3">
+<span class="material-symbols-outlined text-text-muted-dark text-[18px] mt-0.5">help_outline</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm font-medium text-text-primary-dark">Location saved · File has not been checked</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-label-sm bg-surface-dark border border-border-dark text-text-muted-dark">Pending verification</span>
+</div>
+<p class="text-[12px] font-body-sm text-text-muted-dark mt-0.5">
+                Can be saved, but cannot be used as reviewed evidence until checked locally.
+              </p>
+</div>
+</div>
+<!-- 2. Changed file alert row -->
+<div class="p-3.5 rounded-xl bg-subtle-dark border border-amber-900/40 flex items-start gap-3">
+<span class="material-symbols-outlined text-amber-400 text-[18px] mt-0.5">warning</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm font-medium text-text-primary-dark">This file does not match the saved version</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-label-sm bg-amber-950/40 border border-amber-800/40 text-amber-200">Mismatch</span>
+</div>
+<p class="text-[12px] font-body-sm text-text-muted-dark mt-0.5 mb-2.5">
+                The checksum on your local path differs from what was logged by the survey lead.
+              </p>
+<div class="flex items-center gap-2">
+<button class="h-8 px-3 rounded-md bg-hover-dark border border-border-dark text-text-primary-dark text-[12px] font-label-md hover:bg-border-dark transition-colors" type="button">
+                  Choose expected file
+                </button>
+<button class="h-8 px-3 rounded-md bg-surface-dark border border-border-dark text-text-primary-dark text-[12px] font-label-md hover:bg-hover-dark transition-colors" type="button">
+                  Save as new version
+                </button>
+</div>
+</div>
+</div>
+<!-- 3. Size limit warning row -->
+<div class="p-3 rounded-xl bg-subtle-dark/70 border border-border-dark flex items-center gap-3">
+<span class="material-symbols-outlined text-text-muted-dark text-[18px]">info</span>
+<div class="text-[12px] font-body-sm text-text-muted-dark leading-relaxed">
+              Files larger than 2 GiB cannot be verified in this build. Choose a smaller file or save an unverified reference.
+            </div>
+</div>
+</div>
+</div>
+<!-- ===================================================================== -->
+<!-- 3. FIXED MODAL FOOTER (Pinned, Height 64px, Border-t #32363d)         -->
+<!-- ===================================================================== -->
+<footer class="h-16 px-6 border-t border-border-dark bg-surface-dark flex justify-between items-center shrink-0 select-none">
+<!-- Left info indicator -->
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-text-muted-dark">
+<span class="w-2 h-2 rounded-full bg-mint-accent"></span>
+<span>Local check verified · Ready to save</span>
+</div>
+<!-- Right action buttons -->
+<div class="flex items-center gap-3">
+<!-- Cancel Button (44px target) -->
+<button class="h-11 px-5 rounded-lg bg-subtle-dark border border-border-dark text-text-primary-dark text-body-sm font-body-sm font-medium hover:bg-hover-dark transition-colors duration-150" type="button">
+            Cancel
+          </button>
+<!-- Primary Save Reference Button (44px target, Mint accent) -->
+<button class="h-11 px-5 rounded-lg bg-mint-accent text-mint-text text-body-sm font-body-sm font-semibold hover:bg-mint-hover transition-colors duration-150 shadow-sm flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Save reference</span>
+</button>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

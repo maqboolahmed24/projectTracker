@@ -8,6 +8,9 @@ export const positiveCounter = counter.refine((n) => n !== '0');
 export const digest = z.string().regex(/^[a-f0-9]{64}$/);
 export const recordTypes = ['workspace', 'custody', 'profile', 'role', 'team', 'project', 'phase', 'milestone', 'task', 'blocker', 'comment', 'update', 'summary', 'audit'] as const;
 export const capabilities = ['read_project', 'comment', 'create_tasks', 'edit_assigned_tasks', 'manage_tasks', 'approve_tasks', 'plan_projects'] as const;
+/** Genesis and built-in roles retain their original catalogue. New permissions
+ * enter only through an explicit, signed custom-role definition. */
+export const permissionCapabilities = [...capabilities, 'download_files'] as const;
 
 /** Canonical unpadded base64url, including zero unused tail bits. */
 export function binary(minBytes: number, maxBytes = minBytes) {

@@ -1,0 +1,15 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"name\":\"projects/5855422246659088288\",\"title\":\"Maqbool · Essential document work\",\"visibility\":\"PRIVATE\",\"projectType\":\"PROJECT_DESIGN\",\"origin\":\"STITCH\"}"
+    }
+  ],
+  "structuredContent": {
+    "name": "projects/5855422246659088288",
+    "origin": "STITCH",
+    "projectType": "PROJECT_DESIGN",
+    "title": "Maqbool · Essential document work",
+    "visibility": "PRIVATE"
+  }
+}

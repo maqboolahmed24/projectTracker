@@ -9,6 +9,8 @@ import { IndexedPairingStore } from './pairing.js';
 import type { AccessChangeController, AccessChangeTransport } from './access-change-controller.js';
 import { ExportClientError, type PrepareExportInput } from './export-crypto.js';
 import { assertOnline } from './write-state.js';
+import { planningWireValue } from '../shared/planning-api.js';
+import { PlanningHistoryPool } from './planning-history-pool.js';
 
 export interface ExportTransport {
   readonly origin:string;
@@ -54,11 +56,11 @@ export class ExportController {
       const profile=state.profiles[s.accountId];if(!profile?.active||!profile.owner||profile.credentialGeneration!==s.credentialGeneration||profile.sessionGeneration!==s.sessionGeneration||state.dataGeneration!==s.dataGeneration)throw new ExportClientError('CONFLICT');
       const start=exportStart.parse(await this.transport.start({...reference,workspaceId:s.workspaceId,acknowledgePlaintext:true},{signal}));this.check(epoch,signal);
       const b=start.binding;if(b.exportId!==reference.exportId||b.workspaceId!==s.workspaceId||b.accountId!==s.accountId||b.deviceId!==s.deviceId||b.securityHead!==state.securityHead||b.dataGeneration!==state.dataGeneration)throw new ExportClientError('CONFLICT');
-      const pages:ExportPage[]=[];let after:string|null=null,total=new TextEncoder().encode(canonicalJson(start)).byteLength;
+      const pages:ExportPage[]=[],planningHistories=new PlanningHistoryPool();let after:string|null=null,total=new TextEncoder().encode(canonicalJson(start)).byteLength;
       for(let i=0;i<start.sources.length&&i<EXPORT_MAX_PAGES;i++) {
         const page=exportPage.parse(await this.transport.page({...reference,workspaceId:s.workspaceId,manifestDigest:b.manifestDigest,after},{signal})) as ExportPage;this.check(epoch,signal);
         if(canonicalJson(page.binding)!==canonicalJson(b)||canonicalJson(page.source)!==canonicalJson(start.sources[i])||page.nextCursor!==(i+1<start.sources.length?exportManifestKey(page.source):null))throw new ExportClientError('CONFLICT');
-        total+=new TextEncoder().encode(canonicalJson(page)).byteLength;if(total>EXPORT_TOTAL_BYTES)throw new ExportClientError('TOO_LARGE');pages.push(page);after=page.nextCursor;
+        total+=new TextEncoder().encode(canonicalJson(planningWireValue(page))).byteLength;if(total>EXPORT_TOTAL_BYTES)throw new ExportClientError('TOO_LARGE');try{if(page.data.kind==='project')planningHistories.retain(page.data.context);else if(page.data.kind==='entry')planningHistories.retain(page.data.history.planning);}catch{throw new ExportClientError('TOO_LARGE');}pages.push(page);after=page.nextCursor;
       }
       if(pages.length!==start.sources.length||after!==null)throw new ExportClientError('INVALID_EXPORT');
       const prepared=await this.auth.worker.prepareExport({start,pages,history,materials:delivery.materials,accountId:s.accountId,deviceId:s.deviceId,acknowledgePlaintext:true} satisfies PrepareExportInput,{signal});this.check(epoch,signal);

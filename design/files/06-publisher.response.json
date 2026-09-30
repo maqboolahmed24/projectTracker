@@ -1,0 +1,687 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"projectId\":\"2504438657315916160\",\"sessionId\":\"14848853058433567226\",\"outputComponents\":[{\"design\":{\"screens\":[{\"screenshot\":{\"name\":\"projects/2504438657315916160/files/637dc98ddbf24df4b85e62ff17d7bc1a\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/AEtjO1UA0Ju-on3kWtdnP_wtu5ndvzP4cyEhzb7N6ArpPHRpzleAyqctNEtxXpdKaU-A6c0s9uGFjI7Z4dv2zPcnaJ3-ettG-eG5x1mmUsermpMq6Vs89f-kMPv6e7bv5Ub0sQiagzadWdqnyzvMKUieYt0aGSgsdSjXZ_MhDIv2l9zfbkYBGdC2z5TsJwt07mKEODix1N3Mhl7jZU1rYabmCaLirQnLEzyjG3AJaNOCoxjXQzursLIpZO7-tEA\"},\"htmlCode\":{\"name\":\"projects/2504438657315916160/files/ae7a0077a77d49218c8f0f60859d12a5\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzVlZTUwM2YyOTM3ZTQ3ZmQ4MGEwNmE4MGQ2Zjc2NzdjEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhMyNTA0NDM4NjU3MzE1OTE2MTYw&filename=&opi=96797242\",\"mimeType\":\"text/html\"},\"id\":\"30635c0d03624808bf2480db54afeefe\",\"generatedBy\":\"figaro_agent\",\"width\":\"2560\",\"height\":\"2048\",\"title\":\"Maqbool · Shared-folder publishing (Light)\",\"prompt\":\"Create a desktop screen for Maqbool titled \\\"Maqbool · Shared-folder publishing (Light)\\\" adhering strictly to the Maqbool design system and shell specifications:\\n- Shell: 224px left sidebar with Maqbool wordmark and small multicolour triangular icon, nav tabs (Home, Projects [selected], My work, Inbox, Settings, A little guidance), user profile at bottom left (Alex Morgan, Owner / Lead Arch.).\\n- Top bar: 70px height, breadcrumb \\\"Studio North \\u003e Projects \\u003e Harbour renewal (HR-2024)\\\", project navigation links: Overview, Work, Timeline, Updates, Files, Delivery (active tab with green underline). Trailing buttons: search icon, notification bell, \\\"+ Create delivery batch\\\" primary button.\\n- Content backdrop: Delivery section underlying canvas (#f7f8f7) with subtle deliverable cards blurred or dimmed underneath the centered modal.\\n- Centered Modal Overlay: True centered dialog strictly sized 760px wide by 680px height, 16px corner radius, background #ffffff, border #e2e8e3, subtle elevation shadow, fixed header and footer with scrollable body area.\\n- Modal Header:\\n  - Title: \\\"Shared-folder publishing\\\"\\n  - Subtitle: \\\"Send approved files to a folder managed by your organisation.\\\"\\n  - Close button '✕' on top right.\\n- Workflow State: Setup & Connected Companion Management (Light version).\\n  - Setup instructions card / Pairing approval flow:\\n    - Step indicators or structured guide:\\n      1. \\\"Open the Maqbool publishing companion on your Mac\\\"\\n      2. \\\"Choose the official folder there\\\"\\n      3. \\\"Connect this workspace\\\"\\n    - Pairing code box: clean 6-character short code pill (e.g. \\\"MQ-8492\\\") with \\\"Enter this one-time pairing code in your companion app\\\".\\n    - Pending authorization card (Owner view):\\n      - Card with border #e2e8e3, background #f0f3f0:\\n      - Title / device: \\\"Connection request from Studio Mac\\\"\\n      - Selected folder line: \\\"Destination folder: /Volumes/Shared/Harbour delivery\\\"\\n      - Security note: \\\"Only this folder can receive published files. Browser cannot access other machine paths.\\\"\\n      - Actions: \\\"Allow connection\\\" (primary button #176b50, text white) and \\\"Decline\\\" (outline).\\n    - Connected Mac status card:\\n      - Title: \\\"Studio Mac · Connected\\\" (with small green dot status)\\n      - Detail rows:\\n        - \\\"Selected folder\\\": \\\"/Volumes/Shared/Harbour delivery\\\"\\n        - \\\"Connected since\\\": \\\"Today, 14:15\\\"\\n        - \\\"Status\\\": \\\"Ready to receive deliveries\\\"\\n      - Helpful notice box: \\\"Other project work is available even when this Mac is offline.\\\"\\n      - Actions in card: \\\"Check connection\\\" and \\\"Disconnect\\\" (Owner action).\\n    - Expandable help text / link: \\\"Show setup instructions\\\" with a clear bounded guide if companion is not installed (no fake download links).\\n- Modal Footer:\\n  - Fixed at bottom: \\\"Close\\\" button on the left/secondary, and \\\"Done\\\" on right. All controls 8px radius, 44px touch targets.\\n- Exact Light color tokens: canvas #f7f8f7, surface #ffffff, subtle #f0f3f0, text #202923, muted #69736d, border #e2e8e3, primary #176b50. No technical developer jargon (no API, daemon, daemon worker, root directory, etc.). Precise Inter typography, clean line icons.\",\"name\":\"projects/2504438657315916160/screens/30635c0d03624808bf2480db54afeefe\",\"theme\":{\"colorMode\":\"LIGHT\",\"font\":\"INTER\",\"roundness\":\"ROUND_EIGHT\",\"customColor\":\"#176b50\",\"headlineFont\":\"INTER\",\"bodyFont\":\"INTER\",\"labelFont\":\"INTER\",\"namedColors\":{\"on_tertiary_fixed_variant\":\"#5e6a4a\",\"tertiary\":\"#576343\",\"surface_container_lowest\":\"#ffffff\",\"secondary_fixed_dim\":\"#cdd7d2\",\"surface_bright\":\"#f9f9f8\",\"inverse_surface\":\"#0c0f0e\",\"secondary_fixed\":\"#dbe5e0\",\"surface_container_low\":\"#f1f4f3\",\"outline_variant\":\"#abb4b3\",\"on_secondary_fixed\":\"#39413e\",\"primary_dim\":\"#005e45\",\"tertiary_fixed\":\"#ebf9d0\",\"surface_container_high\":\"#e3e9e8\",\"secondary_dim\":\"#4c5551\",\"surface\":\"#f9f9f8\",\"error_dim\":\"#4e0309\",\"inverse_primary\":\"#affedb\",\"primary_fixed\":\"#a4f3d0\",\"on_tertiary\":\"#f0fed5\",\"on_secondary_container\":\"#4b5450\",\"primary_container\":\"#a4f3d0\",\"secondary\":\"#58615d\",\"background\":\"#f9f9f8\",\"on_error_container\":\"#752121\",\"error\":\"#9f403d\",\"tertiary_dim\":\"#4b5738\",\"on_surface\":\"#2c3433\",\"on_error\":\"#fff7f6\",\"surface_container_highest\":\"#dce4e3\",\"on_primary\":\"#e0ffee\",\"surface_container\":\"#eaefee\",\"on_primary_fixed_variant\":\"#12684d\",\"inverse_on_surface\":\"#9b9d9d\",\"primary_fixed_dim\":\"#96e4c2\",\"on_primary_fixed\":\"#004934\",\"on_surface_variant\":\"#586160\",\"surface_variant\":\"#dce4e3\",\"tertiary_container\":\"#ebf9d0\",\"on_secondary_fixed_variant\":\"#555d5a\",\"secondary_container\":\"#dbe5e0\",\"tertiary_fixed_dim\":\"#ddebc2\",\"surface_tint\":\"#176b50\",\"on_secondary\":\"#f2fbf6\",\"surface_dim\":\"#d2dcdb\",\"on_background\":\"#2c3433\",\"error_container\":\"#fe8983\",\"on_tertiary_fixed\":\"#424e30\",\"primary\":\"#176b50\",\"on_tertiary_container\":\"#546040\",\"on_primary_container\":\"#005e44\",\"outline\":\"#747c7c\"},\"colorVariant\":\"NEUTRAL\",\"overridePrimaryColor\":\"#176b50\",\"overrideSecondaryColor\":\"#69726e\",\"overrideNeutralColor\":\"#f7f8f7\",\"spacingScale\":2,\"typography\":{\"headline-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"1.75rem\",\"fontWeight\":\"600\",\"lineHeight\":\"2.25rem\"},\"body-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"0.875rem\",\"fontWeight\":\"400\",\"lineHeight\":\"1.375rem\"},\"body-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"0.8125rem\",\"fontWeight\":\"400\",\"lineHeight\":\"1.25rem\"},\"headline-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"1.375rem\",\"fontWeight\":\"600\",\"lineHeight\":\"1.875rem\"},\"headline-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"1.125rem\",\"fontWeight\":\"600\",\"lineHeight\":\"1.5rem\"},\"label-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"0.75rem\",\"fontWeight\":\"500\",\"lineHeight\":\"0.875rem\"},\"label-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"0.8125rem\",\"fontWeight\":\"500\",\"lineHeight\":\"1rem\"},\"body-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"1rem\",\"fontWeight\":\"400\",\"lineHeight\":\"1.5rem\"}},\"spacing\":{\"margin\":\"2rem\",\"space-md\":\"1rem\",\"space-xs\":\"0.25rem\",\"space-sm\":\"0.5rem\",\"space-xl\":\"2rem\",\"space-lg\":\"1.5rem\",\"gutter\":\"1rem\"},\"headlineFontFamily\":\"Inter\",\"bodyFontFamily\":\"Inter\",\"labelFontFamily\":\"Inter\"},\"deviceType\":\"DESKTOP\",\"screenType\":\"DESIGN\",\"screenMetadata\":{\"agentType\":\"PRO_AGENT\",\"status\":\"COMPLETE\"},\"designSystem\":{\"name\":\"assets/18248857475683212615\",\"designSystem\":{\"displayName\":\"UKDA — Quiet Clarity\",\"styleGuidelines\":\"## Brand & Style\\n\\nUKDA is a premium private project workspace designed with the calm restraint and meticulous precision of an Apple productivity application. It strictly prioritizes customer-facing, human-centred language, avoiding all technical jargon, cryptography vocabulary, and developer metaphors.\\n\\nThe emotional signature is quiet, unhurried focus. Interactions are deliberate, clean, and distraction-free:\\n- No glossy gradients, faux-glass blurs, or tech-bro dashboards.\\n- Free of decorative clutter, speculative graphs, and marketing hype.\\n- Brand mark is a restrained, multicolour geometric triangular bar used deliberately at entry points and in the persistent sidebar.\\n- Lucide-style thin iconography, generous breathable spacing, and crisp structural alignment.\\n\\n## Layout & Spacing\\n\\nLayout geometry follows a disciplined desktop-first model that scales gracefully to mobile devices:\\n\\n- **Desktop Shell:** Persistent 224px fixed left sidebar, 64px header topbar, and a centered content container capped at `max-width: 1280px` with 32px (`2rem`) horizontal margins.\\n- **Mobile Adaptation:** Collapses the left sidebar into an accessible off-canvas drawer or clean bottom sheet, preserving continuous, explicit `Back` navigation and full-height touch targets (minimum 44px).\\n- **Navigation Structure:** Exactly four primary navigation destinations in the sidebar:\\n  1. `Home`\\n  2. `Projects`\\n  3. `My work`\\n  4. `Inbox`\\n- **Settings & Administrative Hub:** Positioned docked at the bottom of the sidebar. Houses people, teams, roles, integrations, permissions, device approvals, recovery words, and export/deletion.\\n- **Project Structure:** Projects are divided into four dedicated tabs:\\n  - `Overview`\\n  - `Work` (Strictly list view for the current release; board view is marked for future releases)\\n  - `Timeline` (Displays exclusively phase/wave date spans and milestone markers)\\n  - `Updates`\\n\\n## Elevation & Depth\\n\\nUKDA replaces skeuomorphic and heavy drop shadows with structural surface-tier containment and low-contrast borders:\\n\\n- **Surface Tiers:** White (`#FFFFFF`) card containers rest directly upon the `#F7F8F7` canvas, producing crisp optical separation without blurred diffusion.\\n- **Ghost Outlines:** Containers, table headers, and form inputs utilize 1px solid borders using `#E5E9E6` (light) or `#303A32` (dark).\\n- **Overlays & Modals:** Modals and bottom sheets use a 12% translucent dark tint overlay with an ultra-subtle, directional elevation shadow (`0 8px 24px rgba(0, 0, 0, 0.06)`).\\n- **Transitions:** State transitions and page fades use snappy 160–220ms durations with tiny vertical translation (2–4px), honoring `prefers-reduced-motion`.\\n\\n## Components\\n\\n### Buttons\\n- **Primary:** Solid forest green background (`#176B50`), crisp white text, 8px radius, 44px height for interactive targets.\\n- **Secondary / Ghost:** Outlined with `#E5E9E6` or transparent fill with `#202722` ink.\\n- **Destructive:** Subtle muted red text and border; filled red reserved solely for final modal confirmations.\\n\\n### Project Waves & Task Lists\\n- Tasks are presented in structured list rows with checkboxes, inline multi-assignee creature avatar clusters, milestone tags, and blocking status chips.\\n- Task boards (Kanban) are disabled for the current release.\\n\\n### Timeline\\n- Restrained visual Gantt-style track displaying wave date spans, milestone flags, and dependencies. Eliminates micro-task clutter.\\n\\n### Settings & Future Features\\n- Settings sections house team members, invitations, equal owner management, and key recovery workflows.\\n- Contains a discrete disabled **Future features** section containing:\\n  - *Email updates*\\n  - *Integrations*\\n  - *Customer-hosted processing*\\n  Each item is greyed out with the static caption *\\\"Not available in this build.\\\"* and has no active links or mock actions.\\n\\n### Feedback & System States\\n- Every form provides clear Cancel and Back actions, inline validation, and explicit next steps.\\n- Empty states, offline notices, and access-denied pages include actionable recovery paths.\",\"theme\":{\"colorMode\":\"LIGHT\",\"font\":\"INTER\",\"roundness\":\"ROUND_EIGHT\",\"customColor\":\"#176b50\",\"headlineFont\":\"INTER\",\"bodyFont\":\"INTER\",\"labelFont\":\"INTER\",\"namedColors\":{\"primary_fixed\":\"#a4f3d0\",\"tertiary_fixed\":\"#ebf9d0\",\"on_primary\":\"#e0ffee\",\"surface_container_highest\":\"#dce4e3\",\"inverse_on_surface\":\"#9b9d9d\",\"error\":\"#9f403d\",\"surface_variant\":\"#dce4e3\",\"tertiary_fixed_dim\":\"#ddebc2\",\"tertiary_dim\":\"#4b5738\",\"tertiary_container\":\"#ebf9d0\",\"secondary_fixed_dim\":\"#cdd7d2\",\"on_surface_variant\":\"#586160\",\"on_tertiary_fixed\":\"#424e30\",\"surface_bright\":\"#f9f9f8\",\"on_tertiary_container\":\"#546040\",\"on_primary_fixed\":\"#004934\",\"outline\":\"#747c7c\",\"secondary\":\"#58615d\",\"error_container\":\"#fe8983\",\"on_primary_fixed_variant\":\"#12684d\",\"error_dim\":\"#4e0309\",\"surface_container\":\"#eaefee\",\"secondary_dim\":\"#4c5551\",\"on_tertiary_fixed_variant\":\"#5e6a4a\",\"surface_dim\":\"#d2dcdb\",\"primary_fixed_dim\":\"#96e4c2\",\"on_secondary_fixed_variant\":\"#555d5a\",\"primary\":\"#176b50\",\"on_primary_container\":\"#005e44\",\"secondary_container\":\"#dbe5e0\",\"on_background\":\"#2c3433\",\"primary_container\":\"#a4f3d0\",\"on_secondary_container\":\"#4b5450\",\"outline_variant\":\"#abb4b3\",\"primary_dim\":\"#005e45\",\"on_secondary\":\"#f2fbf6\",\"secondary_fixed\":\"#dbe5e0\",\"inverse_surface\":\"#0c0f0e\",\"on_error\":\"#fff7f6\",\"surface_container_low\":\"#f1f4f3\",\"on_secondary_fixed\":\"#39413e\",\"inverse_primary\":\"#affedb\",\"tertiary\":\"#576343\",\"surface_container_lowest\":\"#ffffff\",\"surface\":\"#f9f9f8\",\"surface_container_high\":\"#e3e9e8\",\"background\":\"#f9f9f8\",\"surface_tint\":\"#176b50\",\"on_error_container\":\"#752121\",\"on_tertiary\":\"#f0fed5\",\"on_surface\":\"#2c3433\"},\"designMd\":\"---\\nname: UKDA — Quiet Clarity\\ncolors:\\n  surface: '#f9f9f8'\\n  surface-dim: '#d2dcdb'\\n  surface-bright: '#f9f9f8'\\n  surface-container-lowest: '#ffffff'\\n  surface-container-low: '#f1f4f3'\\n  surface-container: '#eaefee'\\n  surface-container-high: '#e3e9e8'\\n  surface-container-highest: '#dce4e3'\\n  on-surface: '#2c3433'\\n  on-surface-variant: '#586160'\\n  inverse-surface: '#0c0f0e'\\n  inverse-on-surface: '#9b9d9d'\\n  outline: '#747c7c'\\n  outline-variant: '#abb4b3'\\n  surface-tint: '#176b50'\\n  primary: '#176b50'\\n  primary-dim: '#005e45'\\n  on-primary: '#e0ffee'\\n  primary-container: '#a4f3d0'\\n  on-primary-container: '#005e44'\\n  inverse-primary: '#affedb'\\n  secondary: '#58615d'\\n  secondary-dim: '#4c5551'\\n  on-secondary: '#f2fbf6'\\n  secondary-container: '#dbe5e0'\\n  on-secondary-container: '#4b5450'\\n  tertiary: '#576343'\\n  tertiary-dim: '#4b5738'\\n  on-tertiary: '#f0fed5'\\n  tertiary-container: '#ebf9d0'\\n  on-tertiary-container: '#546040'\\n  error: '#9f403d'\\n  error-dim: '#4e0309'\\n  on-error: '#fff7f6'\\n  error-container: '#fe8983'\\n  on-error-container: '#752121'\\n  primary-fixed: '#a4f3d0'\\n  primary-fixed-dim: '#96e4c2'\\n  on-primary-fixed: '#004934'\\n  on-primary-fixed-variant: '#12684d'\\n  secondary-fixed: '#dbe5e0'\\n  secondary-fixed-dim: '#cdd7d2'\\n  on-secondary-fixed: '#39413e'\\n  on-secondary-fixed-variant: '#555d5a'\\n  tertiary-fixed: '#ebf9d0'\\n  tertiary-fixed-dim: '#ddebc2'\\n  on-tertiary-fixed: '#424e30'\\n  on-tertiary-fixed-variant: '#5e6a4a'\\n  background: '#f9f9f8'\\n  on-background: '#2c3433'\\n  surface-variant: '#dce4e3'\\ntypography:\\n  headline-lg:\\n    fontFamily: Inter\\n    fontSize: 1.75rem\\n    fontWeight: '600'\\n    lineHeight: 2.25rem\\n  headline-md:\\n    fontFamily: Inter\\n    fontSize: 1.375rem\\n    fontWeight: '600'\\n    lineHeight: 1.875rem\\n  headline-sm:\\n    fontFamily: Inter\\n    fontSize: 1.125rem\\n    fontWeight: '600'\\n    lineHeight: 1.5rem\\n  body-lg:\\n    fontFamily: Inter\\n    fontSize: 1rem\\n    fontWeight: '400'\\n    lineHeight: 1.5rem\\n  body-md:\\n    fontFamily: Inter\\n    fontSize: 0.875rem\\n    fontWeight: '400'\\n    lineHeight: 1.375rem\\n  body-sm:\\n    fontFamily: Inter\\n    fontSize: 0.8125rem\\n    fontWeight: '400'\\n    lineHeight: 1.25rem\\n  label-md:\\n    fontFamily: Inter\\n    fontSize: 0.8125rem\\n    fontWeight: '500'\\n    lineHeight: 1rem\\n  label-sm:\\n    fontFamily: Inter\\n    fontSize: 0.75rem\\n    fontWeight: '500'\\n    lineHeight: 0.875rem\\nrounded:\\n  sm: 0.25rem\\n  DEFAULT: 0.5rem\\n  md: 0.75rem\\n  lg: 1rem\\n  xl: 1.5rem\\n  full: 9999px\\nspacing:\\n  gutter: 1rem\\n  margin: 2rem\\n  space-xs: 0.25rem\\n  space-sm: 0.5rem\\n  space-md: 1rem\\n  space-lg: 1.5rem\\n  space-xl: 2rem\\n---\\n\\n# UKDA — Quiet clarity\\n\\nA premium private project workspace, as thoughtful and calm as an Apple productivity app. Customer-facing language only. Spacious but useful, precise typography, thin lucide-style icons, restrained green actions, a small multicolour geometric triangular bar brand mark. No gradients, glass, glossy cards, tech dashboards, giant marketing headings, fake charts or decorative clutter. Light: off-white #F7F8F7 canvas, white surfaces, ink #202722, muted #69726E, subtle #E5E9E6 outlines, primary forest #176B50. Dark: #111613 canvas, #19201B surfaces, ink #ECF1ED, muted #9AA89D, outline #303A32, primary #9CD7B9 with dark ink. 12px cards, 8px controls, 44px touch targets. Inter with tabular numbers. Desktop 224px sidebar, 64px topbar, content max1280 with32px margins; mobile collapses sidebar and keeps clear Back actions. States accessible AA with strong focus and reduced-motion support. 160–220ms fades and tiny translate; never impede work.\\n\\nNavigation: exactly four primary items Home, Projects, My work, Inbox. People, teams, roles, integrations and permissions are within Settings at bottom. Project tabs are Overview, Work, Timeline, Updates. Current release task list only; board is future. Timeline displays only phase/wave date ranges and milestone markers. Customer workflows: licence activation, Owner recovery words, password confirmation, name and illustrated avatar choice; invited people join through private invitation; remembered profile name plus one password input; forgot-password recovery or ask an Owner; device approval; projects with phases called Waves, collaborative tasks with multiple assignees, milestones, blockers, reviews, discussion, progress; project archive/reopen; people/roles/invites/equal Owners; preferences/timezone/password/devices/recovery/export/deletion. Explain decisions plainly. Never show backend terms, IDs, API, keys/epochs/generations/ciphertext/OPAQUE/WASM/receipts/migrations. Invitation codes and recovery words are user-facing necessities, explain safely and briefly. Every form has Cancel/Back, validation, clear success and next action. Loading, empty, offline/retry, access-denied and unavailable destinations have useful recovery actions. No email login or photo uploads. Twenty illustrated geometric creature avatars with twelve independent colours. Add a discrete disabled Future features section under Settings: Email updates, Integrations, Customer-hosted processing, each greyed out with 'Not available in this build.' These have no fake action or broken link.\\n\\nA supplied local animated brand mark is used ONCE at startup, not a fabricated spinner; reuse its static multicolour bars in sidebar and entry pages. Generate actual product screens, not a marketing landing page. Use realistic but clearly design-only example content. UI must be translatable to semantic HTML and keyboard navigation.\",\"colorVariant\":\"NEUTRAL\",\"overridePrimaryColor\":\"#176b50\",\"overrideSecondaryColor\":\"#69726e\",\"overrideNeutralColor\":\"#f7f8f7\",\"spacingScale\":2,\"typography\":{\"body-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"0.8125rem\",\"fontWeight\":\"400\",\"lineHeight\":\"1.25rem\"},\"body-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"0.875rem\",\"fontWeight\":\"400\",\"lineHeight\":\"1.375rem\"},\"label-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"0.75rem\",\"fontWeight\":\"500\",\"lineHeight\":\"0.875rem\"},\"headline-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"1.125rem\",\"fontWeight\":\"600\",\"lineHeight\":\"1.5rem\"},\"headline-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"1.375rem\",\"fontWeight\":\"600\",\"lineHeight\":\"1.875rem\"},\"body-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"1rem\",\"fontWeight\":\"400\",\"lineHeight\":\"1.5rem\"},\"headline-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"1.75rem\",\"fontWeight\":\"600\",\"lineHeight\":\"2.25rem\"},\"label-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"0.8125rem\",\"fontWeight\":\"500\",\"lineHeight\":\"1rem\"}},\"spacing\":{\"margin\":\"2rem\",\"space-md\":\"1rem\",\"space-lg\":\"1.5rem\",\"space-xl\":\"2rem\",\"gutter\":\"1rem\",\"space-sm\":\"0.5rem\",\"space-xs\":\"0.25rem\"},\"headlineFontFamily\":\"Inter\",\"bodyFontFamily\":\"Inter\",\"labelFontFamily\":\"Inter\"}},\"version\":\"3\"}},{\"screenshot\":{\"name\":\"projects/2504438657315916160/files/b78fa15f3083438f85eb7f9ab8ab0fd6\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/AEtjO1UekKZAsBKqD6fPdD6dgIlxTMGdHPwGLccCbSfHyXTe4riLKyKte19LslnHOHKmIRuCC4hXMlNwwHbC1fzqGKkT5X7U1c_-ErRNSsuFy4UHeYnpk3hlYPS6lUwvT-WtZPo9OqERrPGKhQdOC-tpqO77PAd6AMJcSLAeB_LhyoR1JEIA3PIXH4oeVTcjdYdat_QPAzmv9aSRCk-yB7IIoNRDKdA7o4ZE4HpEfX4i_4H8mriDwyrQQTTTaYQ\"},\"htmlCode\":{\"name\":\"projects/2504438657315916160/files/d0f67beec1224647a08727b1607e0390\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2U1Y2UyMDBlNzgwNTQwN2ZiMzI2NGVjNzljMGFhNGE4EgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhMyNTA0NDM4NjU3MzE1OTE2MTYw&filename=&opi=96797242\",\"mimeType\":\"text/html\"},\"id\":\"5184fbe911f44c09bcb74b33c54a4d58\",\"generatedBy\":\"figaro_agent\",\"width\":\"2560\",\"height\":\"2048\",\"title\":\"Maqbool · Shared-folder publishing (Dark)\",\"prompt\":\"Create a desktop screen for Maqbool titled \\\"Maqbool · Shared-folder publishing (Dark)\\\" adhering strictly to the dark mode specifications and exact color tokens:\\n- Dark tokens: canvas #101113, surface #191b1f, subtle #23252a, hover #2c2f34, text #f0f1f3, muted #a8adb5, border #32363d, primary mint #9cd7b9, primary text #101113. NEVER use dark green as a background or panel fill. Charcoal surfaces with neutral or slight tint.\\n- Shell: 224px left sidebar with Maqbool wordmark and small multicolour triangular icon, nav tabs (Home, Projects [selected], My work, Inbox, Settings, A little guidance), user profile at bottom (Alex Morgan, Owner / Lead Architect).\\n- Top bar: 70px height, breadcrumb \\\"Studio North / Projects / Harbour renewal (HR-2024)\\\", project nav tabs (Overview, Work, Timeline, Updates, Files, Delivery [active with mint indicator]).\\n- Background delivery canvas dimmed behind modal.\\n- Centered Modal Dialog: 760px wide by 680px height, 16px corner radius, background #191b1f, border #32363d, fixed header and footer with scrollable body area.\\n- Modal Header:\\n  - Title: \\\"Shared-folder publishing\\\"\\n  - Subtitle: \\\"Send approved files to a folder managed by your organisation.\\\"\\n  - Close button '✕' top right.\\n- Modal Body: Frozen batch delivery validation, conflict detection & recovery workflow:\\n  - Batch header pill: \\\"Waterfront review package · 8 files\\\" with destination badge \\\"/Volumes/Shared/Harbour delivery/Phase-2/\\\".\\n  - Delivery verification & conflict table (fixed columns: File name & ref, Requested action, Result & status, Row action):\\n    1. \\\"Waterfront layout.pptx (v2)\\\" -\\u003e Replace -\\u003e \\\"Ready to write\\\" (status chip neutral/green tint).\\n    2. Conflict Row: \\\"Budget sheet.xlsx\\\" -\\u003e \\\"Budget sheet.xlsx has changed in the destination folder\\\" -\\u003e Status badge: amber \\\"Conflict detected\\\" -\\u003e Notice: \\\"Your existing file has been kept. Nothing was overwritten.\\\" Actions: \\\"View details\\\", \\\"Choose another destination\\\".\\n    3. Collision row: \\\"Seawall structural notes.pdf\\\" -\\u003e \\\"Two files use the same destination\\\" -\\u003e Status badge: amber \\\"Collision\\\" -\\u003e Action: \\\"Fix destination\\\".\\n    4. Queued / lock row: \\\"Survey drawings.pdf\\\" -\\u003e \\\"Another delivery is using this location\\\" -\\u003e Status badge: neutral \\\"Waiting for lock release\\\".\\n    5. Partial transfer recovery row: \\\"Tide variance log.csv\\\" -\\u003e \\\"3 files placed · 5 waiting\\\" -\\u003e Status: \\\"Interrupted\\\" -\\u003e Action: \\\"Check progress\\\".\\n  - Informational banners:\\n    - Integrity reassurance: \\\"Companion journals and verifies all changes. Approved versions are verified against exact resulting bytes before marking completed.\\\"\\n    - Interrupted / Resumption note: \\\"Check progress inspects destination folder before continuing. 'Resume remaining' unlocks only after current approval is re-verified.\\\"\\n- Modal Footer:\\n  - Fixed bottom bar: \\\"Back to batch\\\" secondary button, \\\"Check progress\\\" button, and \\\"Prepare new batch\\\" / \\\"Resume remaining\\\" action (styled with primary mint #9cd7b9, text #101113).\\n- Strictly obey constraints: No Force Overwrite button. Clear cancel/back paths. All spacing and typography crisp and legible. Inter font. Chevrons inset 12px. No technical developer jargon (no daemon, API, worker, database, sha256). Fixed 760x680 modal geometry.\",\"name\":\"projects/2504438657315916160/screens/5184fbe911f44c09bcb74b33c54a4d58\",\"theme\":{\"colorMode\":\"DARK\",\"font\":\"INTER\",\"roundness\":\"ROUND_EIGHT\",\"customColor\":\"#9cd7b9\",\"headlineFont\":\"INTER\",\"bodyFont\":\"INTER\",\"labelFont\":\"INTER\",\"namedColors\":{\"on_tertiary\":\"#27332b\",\"on_tertiary_fixed_variant\":\"#3d4a41\",\"on_primary_fixed_variant\":\"#14503a\",\"surface_container_lowest\":\"#0a0f0c\",\"on_secondary_container\":\"#87c6a5\",\"outline\":\"#8a938c\",\"on_secondary_fixed_variant\":\"#0e5138\",\"primary_container\":\"#9cd7b9\",\"tertiary_fixed\":\"#d8e6da\",\"on_error\":\"#690005\",\"on_secondary\":\"#003824\",\"surface_dim\":\"#0f1412\",\"on_primary_fixed\":\"#002114\",\"surface_bright\":\"#353a37\",\"surface\":\"#0f1412\",\"on_surface\":\"#dfe4de\",\"inverse_primary\":\"#306950\",\"on_tertiary_container\":\"#4b584f\",\"on_error_container\":\"#ffdad6\",\"primary\":\"#b7f4d4\",\"error_container\":\"#93000a\",\"error\":\"#ffb4ab\",\"on_tertiary_fixed\":\"#121e17\",\"background\":\"#0f1412\",\"surface_container_low\":\"#181d1a\",\"surface_variant\":\"#313632\",\"on_primary_container\":\"#265f47\",\"inverse_on_surface\":\"#2c322e\",\"secondary\":\"#95d4b3\",\"secondary_fixed_dim\":\"#95d4b3\",\"on_primary\":\"#003826\",\"on_secondary_fixed\":\"#002114\",\"secondary_container\":\"#12533a\",\"tertiary\":\"#dceade\",\"on_background\":\"#dfe4de\",\"primary_fixed\":\"#b4f0d1\",\"on_surface_variant\":\"#c0c9c2\",\"surface_tint\":\"#98d3b5\",\"surface_container\":\"#1c211e\",\"outline_variant\":\"#404943\",\"surface_container_high\":\"#262b28\",\"tertiary_fixed_dim\":\"#bccabe\",\"tertiary_container\":\"#c0cec2\",\"inverse_surface\":\"#dfe4de\",\"secondary_fixed\":\"#b1f0ce\",\"surface_container_highest\":\"#313632\",\"primary_fixed_dim\":\"#98d3b5\"},\"colorVariant\":\"FIDELITY\",\"overridePrimaryColor\":\"#9cd7b9\",\"overrideSecondaryColor\":\"#2d6a4f\",\"overrideTertiaryColor\":\"#9aa89d\",\"overrideNeutralColor\":\"#111613\",\"spacingScale\":2,\"typography\":{\"headline-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"18px\",\"fontWeight\":\"500\",\"lineHeight\":\"24px\",\"letterSpacing\":\"-0.01em\"},\"headline-lg-mobile\":{\"fontFamily\":\"Inter\",\"fontSize\":\"24px\",\"fontWeight\":\"600\",\"lineHeight\":\"32px\",\"letterSpacing\":\"-0.015em\"},\"body-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"16px\",\"fontWeight\":\"400\",\"lineHeight\":\"24px\",\"letterSpacing\":\"-0.005em\"},\"headline-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"30px\",\"fontWeight\":\"600\",\"lineHeight\":\"38px\",\"letterSpacing\":\"-0.02em\"},\"label-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"12px\",\"fontWeight\":\"500\",\"lineHeight\":\"16px\",\"letterSpacing\":\"0.02em\"},\"body-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"14px\",\"fontWeight\":\"400\",\"lineHeight\":\"20px\",\"letterSpacing\":\"0em\"},\"label-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"10px\",\"fontWeight\":\"600\",\"lineHeight\":\"14px\",\"letterSpacing\":\"0.04em\"},\"headline-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"22px\",\"fontWeight\":\"500\",\"lineHeight\":\"28px\",\"letterSpacing\":\"-0.015em\"},\"body-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"12px\",\"fontWeight\":\"400\",\"lineHeight\":\"16px\",\"letterSpacing\":\"0.005em\"},\"display\":{\"fontFamily\":\"Inter\",\"fontSize\":\"40px\",\"fontWeight\":\"600\",\"lineHeight\":\"48px\",\"letterSpacing\":\"-0.03em\"},\"label-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"14px\",\"fontWeight\":\"500\",\"lineHeight\":\"20px\",\"letterSpacing\":\"0.01em\"},\"display-mobile\":{\"fontFamily\":\"Inter\",\"fontSize\":\"32px\",\"fontWeight\":\"600\",\"lineHeight\":\"40px\",\"letterSpacing\":\"-0.025em\"}},\"spacing\":{\"gutter-mobile\":\"1rem\",\"gutter\":\"1.5rem\",\"space-xs\":\"0.25rem\",\"space-lg\":\"1.5rem\",\"space-xl\":\"2.5rem\",\"margin-tablet\":\"1.5rem\",\"space-sm\":\"0.5rem\",\"margin-mobile\":\"1rem\",\"space-md\":\"1rem\",\"margin\":\"2rem\"},\"headlineFontFamily\":\"Inter\",\"bodyFontFamily\":\"Inter\",\"labelFontFamily\":\"Inter\"},\"deviceType\":\"DESKTOP\",\"screenType\":\"DESIGN\",\"screenMetadata\":{\"agentType\":\"PRO_AGENT\",\"status\":\"COMPLETE\"},\"designSystem\":{\"name\":\"assets/e52f5ca41a6e4d6dbb8a6869d73d6c13\",\"designSystem\":{\"displayName\":\"Quiet Clarity\",\"styleGuidelines\":\"## Brand & Style\\nThe design system embodies deep focus, organic precision, and tranquil utility. Built for high-cognitive workflows and analytical environments, it rejects sensory overload in favor of structured composure and deliberate contrast.\\n\\nThe aesthetic fuses architectural minimalism with technical functionalism:\\n- **Atmosphere:** Deep, muted charcoal and forest tones evoke a focused, nocturnal studio.\\n- **Tone:** Methodical, measured, and understated. Confidence expressed through restraint.\\n- **Visual Stance:** Zero gratuitous decoration. Hierarchy is articulated via subtle surface shifts, precision-engineered hairline dividers, and deliberate, desaturated mint illuminations.\\n\\n## Layout & Spacing\\nThe layout adheres to an orderly 8pt modular grid, scaling to 4pt for micro-adjustments within dense component assemblies.\\n\\n### Grid & Breakpoints\\n- **Desktop (1200px+):** 12-column fluid grid, `2rem` outer margins, `1.5rem` gutters. Max-width content boundaries lock at 1440px to preserve comfortable scan lines.\\n- **Tablet (768px – 1199px):** 8-column fluid grid, `1.5rem` outer margins, `1rem` gutters.\\n- **Mobile (0px – 767px):** 4-column fluid grid, `1rem` outer margins, `1rem` gutters. Toolbars, controls, and multi-metric grids fold into single-column vertical stacks.\\n\\n### Rhythm & Alignment\\nComponent padding relies strictly on `space-*` tokens. Outer frame offsets must consistently match canvas `margin` rules. Keep structural whitespace stable across screen transitions to minimize cognitive friction.\\n\\n## Elevation & Depth\\nDepth is created through subtle luminance staging and muted boundary lines—avoiding drop shadows or muddy blurs.\\n\\n### Tonal Stratification\\n- **Base Canvas:** `#111613` anchors the deepest visual plane.\\n- **Container Level:** `#19201B` separates discrete modules from the backdrop.\\n- **Overlays & Modals:** `#1E2721` lifts interacting layers forward cleanly.\\n\\n### Boundary Lines\\n- Structural hierarchy relies on `1px` solid outlines tinted with `#242F28`.\\n- Higher layer transitions (modals, active dropdown menus) introduce a dual outline effect: an inner `1px` border of `#242F28` coupled with an exterior ambient border of `#334339`.\\n- **No drop shadows:** Shadows are replaced by crisp tonal contrast between surfaces. Modals use a pure dark overlay (`#0A0D0B` at 70% opacity) to mute background noise.\\n\\n## Components\\n\\n### Buttons\\n- **Primary:** Background `#9CD7B9`, text `#111613` (bold weight), zero border. On hover, background shifts to `#B2E3CA`. On active press, scale translates slightly down (`scale(0.98)`).\\n- **Secondary:** Background `#19201B`, border `1px solid #242F28`, text `#ECF1ED`. Hover shifts border to `#334339` and text to `#9CD7B9`.\\n- **Tertiary / Ghost:** Background transparent, text `#9AA89D`. Hover introduces `#19201B` background and `#ECF1ED` text.\\n\\n### Chips & Badges\\n- **Status / Indicator Badges:** Background `#16261E` (rich deep forest), border `1px solid #2D6A4F`, text `#9CD7B9`. Compact padding (`0.25rem 0.625rem`), radius `9999px`, font `label-sm`.\\n- **Filter Chips:** Background `#19201B`, border `1px solid #242F28`, text `#9AA89D`. When active, fill switches to `#2D6A4F` with `#ECF1ED` text.\\n\\n### Input Fields\\n- **Container:** Background `#19201B`, border `1px solid #242F28`, height `40px`, border radius `0.5rem`.\\n- **Text:** `#ECF1ED`, placeholder `#57645B`.\\n- **Focus State:** Border transitions to `#9CD7B9` (no glowing spread or ambient ring), accompanied by a subtle `1px` inset guide.\\n\\n### Checkboxes & Radio Controls\\n- **Unchecked:** `18px x 18px` container, background `#111613`, border `1.5px solid #242F28`. Rounded corners for checkboxes (`4px`), full circle for radios.\\n- **Checked:** Background `#9CD7B9`, border `#9CD7B9`, inner checkmark or radial dot colored `#111613`.\\n\\n### Cards & Panels\\n- **Structure:** Background `#19201B`, border `1px solid #242F28`, border radius `1rem` (`rounded-lg`), padding `1.5rem`.\\n- **Interactive State:** Hover elevates outline to `#334339`; surface tint adjusts subtly to `#1D2520`.\\n\\n### Data Tables & Lists\\n- **Header:** Background `#111613`, text `#9AA89D`, uppercase `label-sm`, bottom border `1px solid #242F28`.\\n- **Rows:** Alternating transparent and `#19201B` backgrounds. Bottom separator `1px solid #1E2721`. Hover state highlights entire row with `#243029`.\",\"theme\":{\"colorMode\":\"DARK\",\"font\":\"INTER\",\"roundness\":\"ROUND_EIGHT\",\"customColor\":\"#9cd7b9\",\"headlineFont\":\"INTER\",\"bodyFont\":\"INTER\",\"labelFont\":\"INTER\",\"namedColors\":{\"tertiary_fixed_dim\":\"#bccabe\",\"on_surface\":\"#dfe4de\",\"tertiary_container\":\"#c0cec2\",\"surface\":\"#0f1412\",\"surface_container\":\"#1c211e\",\"on_secondary_container\":\"#87c6a5\",\"outline_variant\":\"#404943\",\"primary\":\"#b7f4d4\",\"secondary_fixed_dim\":\"#95d4b3\",\"background\":\"#0f1412\",\"on_secondary_fixed\":\"#002114\",\"primary_fixed_dim\":\"#98d3b5\",\"surface_container_highest\":\"#313632\",\"on_surface_variant\":\"#c0c9c2\",\"secondary_fixed\":\"#b1f0ce\",\"inverse_surface\":\"#dfe4de\",\"on_primary_fixed_variant\":\"#14503a\",\"surface_container_lowest\":\"#0a0f0c\",\"outline\":\"#8a938c\",\"surface_variant\":\"#313632\",\"surface_tint\":\"#98d3b5\",\"secondary_container\":\"#12533a\",\"on_primary_container\":\"#265f47\",\"tertiary\":\"#dceade\",\"on_secondary_fixed_variant\":\"#0e5138\",\"surface_container_low\":\"#181d1a\",\"inverse_on_surface\":\"#2c322e\",\"on_primary_fixed\":\"#002114\",\"on_tertiary_container\":\"#4b584f\",\"on_error\":\"#690005\",\"on_error_container\":\"#ffdad6\",\"tertiary_fixed\":\"#d8e6da\",\"inverse_primary\":\"#306950\",\"secondary\":\"#95d4b3\",\"primary_fixed\":\"#b4f0d1\",\"error_container\":\"#93000a\",\"on_tertiary_fixed\":\"#121e17\",\"on_background\":\"#dfe4de\",\"on_secondary\":\"#003824\",\"on_tertiary_fixed_variant\":\"#3d4a41\",\"on_tertiary\":\"#27332b\",\"surface_bright\":\"#353a37\",\"error\":\"#ffb4ab\",\"primary_container\":\"#9cd7b9\",\"on_primary\":\"#003826\",\"surface_container_high\":\"#262b28\",\"surface_dim\":\"#0f1412\"},\"designMd\":\"---\\nname: Quiet Clarity\\ncolors:\\n  surface: '#0f1412'\\n  surface-dim: '#0f1412'\\n  surface-bright: '#353a37'\\n  surface-container-lowest: '#0a0f0c'\\n  surface-container-low: '#181d1a'\\n  surface-container: '#1c211e'\\n  surface-container-high: '#262b28'\\n  surface-container-highest: '#313632'\\n  on-surface: '#dfe4de'\\n  on-surface-variant: '#c0c9c2'\\n  inverse-surface: '#dfe4de'\\n  inverse-on-surface: '#2c322e'\\n  outline: '#8a938c'\\n  outline-variant: '#404943'\\n  surface-tint: '#98d3b5'\\n  primary: '#b7f4d4'\\n  on-primary: '#003826'\\n  primary-container: '#9cd7b9'\\n  on-primary-container: '#265f47'\\n  inverse-primary: '#306950'\\n  secondary: '#95d4b3'\\n  on-secondary: '#003824'\\n  secondary-container: '#12533a'\\n  on-secondary-container: '#87c6a5'\\n  tertiary: '#dceade'\\n  on-tertiary: '#27332b'\\n  tertiary-container: '#c0cec2'\\n  on-tertiary-container: '#4b584f'\\n  error: '#ffb4ab'\\n  on-error: '#690005'\\n  error-container: '#93000a'\\n  on-error-container: '#ffdad6'\\n  primary-fixed: '#b4f0d1'\\n  primary-fixed-dim: '#98d3b5'\\n  on-primary-fixed: '#002114'\\n  on-primary-fixed-variant: '#14503a'\\n  secondary-fixed: '#b1f0ce'\\n  secondary-fixed-dim: '#95d4b3'\\n  on-secondary-fixed: '#002114'\\n  on-secondary-fixed-variant: '#0e5138'\\n  tertiary-fixed: '#d8e6da'\\n  tertiary-fixed-dim: '#bccabe'\\n  on-tertiary-fixed: '#121e17'\\n  on-tertiary-fixed-variant: '#3d4a41'\\n  background: '#0f1412'\\n  on-background: '#dfe4de'\\n  surface-variant: '#313632'\\ntypography:\\n  display:\\n    fontFamily: Inter\\n    fontSize: 40px\\n    fontWeight: '600'\\n    lineHeight: 48px\\n    letterSpacing: -0.03em\\n  display-mobile:\\n    fontFamily: Inter\\n    fontSize: 32px\\n    fontWeight: '600'\\n    lineHeight: 40px\\n    letterSpacing: -0.025em\\n  headline-lg:\\n    fontFamily: Inter\\n    fontSize: 30px\\n    fontWeight: '600'\\n    lineHeight: 38px\\n    letterSpacing: -0.02em\\n  headline-lg-mobile:\\n    fontFamily: Inter\\n    fontSize: 24px\\n    fontWeight: '600'\\n    lineHeight: 32px\\n    letterSpacing: -0.015em\\n  headline-md:\\n    fontFamily: Inter\\n    fontSize: 22px\\n    fontWeight: '500'\\n    lineHeight: 28px\\n    letterSpacing: -0.015em\\n  headline-sm:\\n    fontFamily: Inter\\n    fontSize: 18px\\n    fontWeight: '500'\\n    lineHeight: 24px\\n    letterSpacing: -0.01em\\n  body-lg:\\n    fontFamily: Inter\\n    fontSize: 16px\\n    fontWeight: '400'\\n    lineHeight: 24px\\n    letterSpacing: -0.005em\\n  body-md:\\n    fontFamily: Inter\\n    fontSize: 14px\\n    fontWeight: '400'\\n    lineHeight: 20px\\n    letterSpacing: 0em\\n  body-sm:\\n    fontFamily: Inter\\n    fontSize: 12px\\n    fontWeight: '400'\\n    lineHeight: 16px\\n    letterSpacing: 0.005em\\n  label-lg:\\n    fontFamily: Inter\\n    fontSize: 14px\\n    fontWeight: '500'\\n    lineHeight: 20px\\n    letterSpacing: 0.01em\\n  label-md:\\n    fontFamily: Inter\\n    fontSize: 12px\\n    fontWeight: '500'\\n    lineHeight: 16px\\n    letterSpacing: 0.02em\\n  label-sm:\\n    fontFamily: Inter\\n    fontSize: 10px\\n    fontWeight: '600'\\n    lineHeight: 14px\\n    letterSpacing: 0.04em\\nrounded:\\n  sm: 0.25rem\\n  DEFAULT: 0.5rem\\n  md: 0.75rem\\n  lg: 1rem\\n  xl: 1.5rem\\n  full: 9999px\\nspacing:\\n  gutter: 1.5rem\\n  gutter-mobile: 1rem\\n  margin: 2rem\\n  margin-mobile: 1rem\\n  margin-tablet: 1.5rem\\n  space-xs: 0.25rem\\n  space-sm: 0.5rem\\n  space-md: 1rem\\n  space-lg: 1.5rem\\n  space-xl: 2.5rem\\n---\\n\\n## Brand & Style\\nThe design system embodies deep focus, organic precision, and tranquil utility. Built for high-cognitive workflows and analytical environments, it rejects sensory overload in favor of structured composure and deliberate contrast.\\n\\nThe aesthetic fuses architectural minimalism with technical functionalism:\\n- **Atmosphere:** Deep, muted charcoal and forest tones evoke a focused, nocturnal studio.\\n- **Tone:** Methodical, measured, and understated. Confidence expressed through restraint.\\n- **Visual Stance:** Zero gratuitous decoration. Hierarchy is articulated via subtle surface shifts, precision-engineered hairline dividers, and deliberate, desaturated mint illuminations.\\n\\n## Colors\\nThe palette is rooted in balanced dark values with a botanical undertone, avoiding pure blacks or harsh stark-white contrasts.\\n\\n### Palette Architecture\\n- **Canvas / Background (`#111613`):** Foundational deep charcoal with faint organic warmth. Conserves visual energy across long viewing sessions.\\n- **Surfaces & Tiers:**\\n  - `Surface-01` (`#19201B`): Primary elevation for cards, modular panels, and input fields.\\n  - `Surface-02` (`#1E2721`): Raised elements, popovers, hovering states, and floating navigation bars.\\n  - `Surface-03` (`#243029`): Active states, pressed states, or selected table cell fills.\\n- **Borders & Outlines (`#242F28`):** Clean, crisp structural delineation. For focused or higher-prominence dividing edges, step up to `#334339`.\\n- **Accents:**\\n  - **Primary Mint (`#9CD7B9`):** Soft, luminous mint used selectively for focal interactive triggers, verified statuses, and primary indicator lights.\\n  - **Forest Shade (`#2D6A4F`):** Deep emerald support for container fills behind mint elements, subtle active badge fills, and hover backdrops.\\n- **Typography & Iconography:**\\n  - **High-Contrast Text (`#ECF1ED`):** Off-white base for headings, primary data points, and active labels.\\n  - **Secondary Text (`#9AA89D`):** Balanced neutral sage for descriptions, supporting metadata, and inactive icons.\\n  - **Disabled / Muted Text (`#57645B`):** Ghost elements, placeholder text, and non-actionable signals.\\n\\n## Typography\\nTypography relies exclusively on Inter, configured for clinical clarity and rapid scannability across dense user interfaces.\\n\\n### Application Rules\\n- Use tabular numerals (`tnum`) for metrics, financial data, and table layouts.\\n- Reserve `display` and `headline-lg` strictly for primary section anchors and top-level metric readouts.\\n- Track letter spacing tightly on larger headings (`-0.03em` to `-0.015em`) to ensure optical cohesiveness in dense dark environments.\\n- Use uppercase styling exclusively with `label-sm` alongside widened letter spacing (`0.04em`) for category tags, input hints, and table headers.\\n\\n## Layout & Spacing\\nThe layout adheres to an orderly 8pt modular grid, scaling to 4pt for micro-adjustments within dense component assemblies.\\n\\n### Grid & Breakpoints\\n- **Desktop (1200px+):** 12-column fluid grid, `2rem` outer margins, `1.5rem` gutters. Max-width content boundaries lock at 1440px to preserve comfortable scan lines.\\n- **Tablet (768px – 1199px):** 8-column fluid grid, `1.5rem` outer margins, `1rem` gutters.\\n- **Mobile (0px – 767px):** 4-column fluid grid, `1rem` outer margins, `1rem` gutters. Toolbars, controls, and multi-metric grids fold into single-column vertical stacks.\\n\\n### Rhythm & Alignment\\nComponent padding relies strictly on `space-*` tokens. Outer frame offsets must consistently match canvas `margin` rules. Keep structural whitespace stable across screen transitions to minimize cognitive friction.\\n\\n## Elevation & Depth\\nDepth is created through subtle luminance staging and muted boundary lines—avoiding drop shadows or muddy blurs.\\n\\n### Tonal Stratification\\n- **Base Canvas:** `#111613` anchors the deepest visual plane.\\n- **Container Level:** `#19201B` separates discrete modules from the backdrop.\\n- **Overlays & Modals:** `#1E2721` lifts interacting layers forward cleanly.\\n\\n### Boundary Lines\\n- Structural hierarchy relies on `1px` solid outlines tinted with `#242F28`.\\n- Higher layer transitions (modals, active dropdown menus) introduce a dual outline effect: an inner `1px` border of `#242F28` coupled with an exterior ambient border of `#334339`.\\n- **No drop shadows:** Shadows are replaced by crisp tonal contrast between surfaces. Modals use a pure dark overlay (`#0A0D0B` at 70% opacity) to mute background noise.\\n\\n## Shapes\\nGeometry is disciplined, architectural, and restrained. Surfaces avoid both severe, brutalist corners and overly round, playful silhouettes.\\n\\n- **Base Radius (`0.5rem` / `rounded`):** Default for smaller controls including input fields, standard buttons, tabs, dropdown items, and table action triggers.\\n- **Containers (`1rem` / `rounded-lg`):** Cards, primary dashboards, modals, flyouts, and floating trays.\\n- **Large Contextual Panels (`1.5rem` / `rounded-xl`):** Screen-split layouts and prominent hero wrappers.\\n- **Pills (`9999px`):** Reserved strictly for compact metadata tags, status pills, and system badges.\\n\\n## Components\\n\\n### Buttons\\n- **Primary:** Background `#9CD7B9`, text `#111613` (bold weight), zero border. On hover, background shifts to `#B2E3CA`. On active press, scale translates slightly down (`scale(0.98)`).\\n- **Secondary:** Background `#19201B`, border `1px solid #242F28`, text `#ECF1ED`. Hover shifts border to `#334339` and text to `#9CD7B9`.\\n- **Tertiary / Ghost:** Background transparent, text `#9AA89D`. Hover introduces `#19201B` background and `#ECF1ED` text.\\n\\n### Chips & Badges\\n- **Status / Indicator Badges:** Background `#16261E` (rich deep forest), border `1px solid #2D6A4F`, text `#9CD7B9`. Compact padding (`0.25rem 0.625rem`), radius `9999px`, font `label-sm`.\\n- **Filter Chips:** Background `#19201B`, border `1px solid #242F28`, text `#9AA89D`. When active, fill switches to `#2D6A4F` with `#ECF1ED` text.\\n\\n### Input Fields\\n- **Container:** Background `#19201B`, border `1px solid #242F28`, height `40px`, border radius `0.5rem`.\\n- **Text:** `#ECF1ED`, placeholder `#57645B`.\\n- **Focus State:** Border transitions to `#9CD7B9` (no glowing spread or ambient ring), accompanied by a subtle `1px` inset guide.\\n\\n### Checkboxes & Radio Controls\\n- **Unchecked:** `18px x 18px` container, background `#111613`, border `1.5px solid #242F28`. Rounded corners for checkboxes (`4px`), full circle for radios.\\n- **Checked:** Background `#9CD7B9`, border `#9CD7B9`, inner checkmark or radial dot colored `#111613`.\\n\\n### Cards & Panels\\n- **Structure:** Background `#19201B`, border `1px solid #242F28`, border radius `1rem` (`rounded-lg`), padding `1.5rem`.\\n- **Interactive State:** Hover elevates outline to `#334339`; surface tint adjusts subtly to `#1D2520`.\\n\\n### Data Tables & Lists\\n- **Header:** Background `#111613`, text `#9AA89D`, uppercase `label-sm`, bottom border `1px solid #242F28`.\\n- **Rows:** Alternating transparent and `#19201B` backgrounds. Bottom separator `1px solid #1E2721`. Hover state highlights entire row with `#243029`.\",\"colorVariant\":\"FIDELITY\",\"overridePrimaryColor\":\"#9cd7b9\",\"overrideSecondaryColor\":\"#2d6a4f\",\"overrideTertiaryColor\":\"#9aa89d\",\"overrideNeutralColor\":\"#111613\",\"spacingScale\":2,\"typography\":{\"display-mobile\":{\"fontFamily\":\"Inter\",\"fontSize\":\"32px\",\"fontWeight\":\"600\",\"lineHeight\":\"40px\",\"letterSpacing\":\"-0.025em\"},\"headline-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"22px\",\"fontWeight\":\"500\",\"lineHeight\":\"28px\",\"letterSpacing\":\"-0.015em\"},\"label-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"14px\",\"fontWeight\":\"500\",\"lineHeight\":\"20px\",\"letterSpacing\":\"0.01em\"},\"display\":{\"fontFamily\":\"Inter\",\"fontSize\":\"40px\",\"fontWeight\":\"600\",\"lineHeight\":\"48px\",\"letterSpacing\":\"-0.03em\"},\"body-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"12px\",\"fontWeight\":\"400\",\"lineHeight\":\"16px\",\"letterSpacing\":\"0.005em\"},\"label-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"12px\",\"fontWeight\":\"500\",\"lineHeight\":\"16px\",\"letterSpacing\":\"0.02em\"},\"headline-lg-mobile\":{\"fontFamily\":\"Inter\",\"fontSize\":\"24px\",\"fontWeight\":\"600\",\"lineHeight\":\"32px\",\"letterSpacing\":\"-0.015em\"},\"headline-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"18px\",\"fontWeight\":\"500\",\"lineHeight\":\"24px\",\"letterSpacing\":\"-0.01em\"},\"label-sm\":{\"fontFamily\":\"Inter\",\"fontSize\":\"10px\",\"fontWeight\":\"600\",\"lineHeight\":\"14px\",\"letterSpacing\":\"0.04em\"},\"headline-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"30px\",\"fontWeight\":\"600\",\"lineHeight\":\"38px\",\"letterSpacing\":\"-0.02em\"},\"body-lg\":{\"fontFamily\":\"Inter\",\"fontSize\":\"16px\",\"fontWeight\":\"400\",\"lineHeight\":\"24px\",\"letterSpacing\":\"-0.005em\"},\"body-md\":{\"fontFamily\":\"Inter\",\"fontSize\":\"14px\",\"fontWeight\":\"400\",\"lineHeight\":\"20px\",\"letterSpacing\":\"0em\"}},\"spacing\":{\"margin\":\"2rem\",\"space-lg\":\"1.5rem\",\"space-xl\":\"2.5rem\",\"margin-mobile\":\"1rem\",\"space-xs\":\"0.25rem\",\"margin-tablet\":\"1.5rem\",\"space-sm\":\"0.5rem\",\"gutter-mobile\":\"1rem\",\"space-md\":\"1rem\",\"gutter\":\"1.5rem\"},\"headlineFontFamily\":\"Inter\",\"bodyFontFamily\":\"Inter\",\"labelFontFamily\":\"Inter\"}},\"version\":\"1\"}}],\"theme\":{}}},{\"text\":\"I have generated the paired Light and Dark screens for **Maqbool · Shared-folder publishing**, implementing the companion setup, connection authorization, conflict resolution, and recovery workflows according to your design specifications.\\n\\n### Key Highlights & Workflows\\n\\n1. **Light Mode (`Maqbool · Shared-folder publishing (Light)`) — Mac Companion Setup & Pairing Authorization**:\\n   - **Dialog Dimensions & Shell**: A true centered 760×680px dialog with 16px corner radius, 8px controls, and 44px touch targets. Preserves the full 224px sidebar (`Studio North` / `Alex Morgan, Owner / Lead Arch.`) and 70px topbar with `Delivery` active.\\n   - **Human, Customer-Focused Copy**: Direct instructions (\\\"Open the Maqbool publishing companion on your Mac\\\", \\\"Choose the official folder there\\\", \\\"Connect this workspace\\\") free of technical jargon like daemons, APIs, runtimes, or client/server infrastructure.\\n   - **Pairing & Security Bounds**: Pairing uses an in-companion handshake with explicit Owner review. Shows destination folder `/Volumes/Shared/Harbour delivery` with clear boundaries: *\\\"Only this folder can receive published files. Browser cannot access other machine paths.\\\"*\\n   - **Connected Companion Card**: Highlights connection status, folder location, connection time, and verification actions (`Check connection`, `Disconnect`), accompanied by the reassurance: *\\\"Other project work is available even when this Mac is offline.\\\"*\\n\\n2. **Dark Mode (`Maqbool · Shared-folder publishing (Dark)`) — Frozen Batch Delivery, Conflict Handling & Resumption**:\\n   - **Design Tokens**: Exact palette applied (canvas `#101113`, surface `#191b1f`, subtle `#23252a`, border `#32363d`, primary mint `#9cd7b9` with `#101113` text). Dark green is strictly avoided as background or panel fills.\\n   - **Batch Pre-Verification & Integrity**: Displays the frozen batch (`Waterfront review package · 8 files`) targeted at `/Volumes/Shared/Harbour delivery/Phase-2/`. Highlights companion journaling and exact byte verification.\\n   - **Conflict Protection**: Includes explicit conflict states without a casual \\\"force overwrite\\\":\\n     - *\\\"Budget sheet.xlsx has changed in the destination folder\\\"* with an amber status chip and clear reassurance: *\\\"Your existing file has been kept. Nothing was overwritten.\\\"*\\n     - Clear actions: `View details`, `Choose another destination`, or `Prepare new batch`.\\n     - Collision warnings (*\\\"Two files use the same destination\\\"*) with `Fix destination`.\\n     - Location lock coordination (*\\\"Another delivery is using this location\\\"*).\\n   - **Transfer Recovery**: Handles interrupted writing with `Check progress` and verified resumption (`Resume remaining`).\"},{\"suggestion\":\"Show the 'View details' conflict resolution popover for Budget sheet.xlsx\"},{\"suggestion\":\"Design the non-Owner view with the 'Ask an Owner to connect a publishing Mac' state\"},{\"suggestion\":\"Explore the Companion Offline error state with the Retry Connection and Download Package actions\"}]}"
+    }
+  ],
+  "structuredContent": {
+    "outputComponents": [
+      {
+        "design": {
+          "screens": [
+            {
+              "designSystem": {
+                "designSystem": {
+                  "displayName": "UKDA — Quiet Clarity",
+                  "styleGuidelines": "## Brand & Style\n\nUKDA is a premium private project workspace designed with the calm restraint and meticulous precision of an Apple productivity application. It strictly prioritizes customer-facing, human-centred language, avoiding all technical jargon, cryptography vocabulary, and developer metaphors.\n\nThe emotional signature is quiet, unhurried focus. Interactions are deliberate, clean, and distraction-free:\n- No glossy gradients, faux-glass blurs, or tech-bro dashboards.\n- Free of decorative clutter, speculative graphs, and marketing hype.\n- Brand mark is a restrained, multicolour geometric triangular bar used deliberately at entry points and in the persistent sidebar.\n- Lucide-style thin iconography, generous breathable spacing, and crisp structural alignment.\n\n## Layout & Spacing\n\nLayout geometry follows a disciplined desktop-first model that scales gracefully to mobile devices:\n\n- **Desktop Shell:** Persistent 224px fixed left sidebar, 64px header topbar, and a centered content container capped at `max-width: 1280px` with 32px (`2rem`) horizontal margins.\n- **Mobile Adaptation:** Collapses the left sidebar into an accessible off-canvas drawer or clean bottom sheet, preserving continuous, explicit `Back` navigation and full-height touch targets (minimum 44px).\n- **Navigation Structure:** Exactly four primary navigation destinations in the sidebar:\n  1. `Home`\n  2. `Projects`\n  3. `My work`\n  4. `Inbox`\n- **Settings & Administrative Hub:** Positioned docked at the bottom of the sidebar. Houses people, teams, roles, integrations, permissions, device approvals, recovery words, and export/deletion.\n- **Project Structure:** Projects are divided into four dedicated tabs:\n  - `Overview`\n  - `Work` (Strictly list view for the current release; board view is marked for future releases)\n  - `Timeline` (Displays exclusively phase/wave date spans and milestone markers)\n  - `Updates`\n\n## Elevation & Depth\n\nUKDA replaces skeuomorphic and heavy drop shadows with structural surface-tier containment and low-contrast borders:\n\n- **Surface Tiers:** White (`#FFFFFF`) card containers rest directly upon the `#F7F8F7` canvas, producing crisp optical separation without blurred diffusion.\n- **Ghost Outlines:** Containers, table headers, and form inputs utilize 1px solid borders using `#E5E9E6` (light) or `#303A32` (dark).\n- **Overlays & Modals:** Modals and bottom sheets use a 12% translucent dark tint overlay with an ultra-subtle, directional elevation shadow (`0 8px 24px rgba(0, 0, 0, 0.06)`).\n- **Transitions:** State transitions and page fades use snappy 160–220ms durations with tiny vertical translation (2–4px), honoring `prefers-reduced-motion`.\n\n## Components\n\n### Buttons\n- **Primary:** Solid forest green background (`#176B50`), crisp white text, 8px radius, 44px height for interactive targets.\n- **Secondary / Ghost:** Outlined with `#E5E9E6` or transparent fill with `#202722` ink.\n- **Destructive:** Subtle muted red text and border; filled red reserved solely for final modal confirmations.\n\n### Project Waves & Task Lists\n- Tasks are presented in structured list rows with checkboxes, inline multi-assignee creature avatar clusters, milestone tags, and blocking status chips.\n- Task boards (Kanban) are disabled for the current release.\n\n### Timeline\n- Restrained visual Gantt-style track displaying wave date spans, milestone flags, and dependencies. Eliminates micro-task clutter.\n\n### Settings & Future Features\n- Settings sections house team members, invitations, equal owner management, and key recovery workflows.\n- Contains a discrete disabled **Future features** section containing:\n  - *Email updates*\n  - *Integrations*\n  - *Customer-hosted processing*\n  Each item is greyed out with the static caption *\"Not available in this build.\"* and has no active links or mock actions.\n\n### Feedback & System States\n- Every form provides clear Cancel and Back actions, inline validation, and explicit next steps.\n- Empty states, offline notices, and access-denied pages include actionable recovery paths.",
+                  "theme": {
+                    "bodyFont": "INTER",
+                    "bodyFontFamily": "Inter",
+                    "colorMode": "LIGHT",
+                    "colorVariant": "NEUTRAL",
+                    "customColor": "#176b50",
+                    "designMd": "---\nname: UKDA — Quiet Clarity\ncolors:\n  surface: '#f9f9f8'\n  surface-dim: '#d2dcdb'\n  surface-bright: '#f9f9f8'\n  surface-container-lowest: '#ffffff'\n  surface-container-low: '#f1f4f3'\n  surface-container: '#eaefee'\n  surface-container-high: '#e3e9e8'\n  surface-container-highest: '#dce4e3'\n  on-surface: '#2c3433'\n  on-surface-variant: '#586160'\n  inverse-surface: '#0c0f0e'\n  inverse-on-surface: '#9b9d9d'\n  outline: '#747c7c'\n  outline-variant: '#abb4b3'\n  surface-tint: '#176b50'\n  primary: '#176b50'\n  primary-dim: '#005e45'\n  on-primary: '#e0ffee'\n  primary-container: '#a4f3d0'\n  on-primary-container: '#005e44'\n  inverse-primary: '#affedb'\n  secondary: '#58615d'\n  secondary-dim: '#4c5551'\n  on-secondary: '#f2fbf6'\n  secondary-container: '#dbe5e0'\n  on-secondary-container: '#4b5450'\n  tertiary: '#576343'\n  tertiary-dim: '#4b5738'\n  on-tertiary: '#f0fed5'\n  tertiary-container: '#ebf9d0'\n  on-tertiary-container: '#546040'\n  error: '#9f403d'\n  error-dim: '#4e0309'\n  on-error: '#fff7f6'\n  error-container: '#fe8983'\n  on-error-container: '#752121'\n  primary-fixed: '#a4f3d0'\n  primary-fixed-dim: '#96e4c2'\n  on-primary-fixed: '#004934'\n  on-primary-fixed-variant: '#12684d'\n  secondary-fixed: '#dbe5e0'\n  secondary-fixed-dim: '#cdd7d2'\n  on-secondary-fixed: '#39413e'\n  on-secondary-fixed-variant: '#555d5a'\n  tertiary-fixed: '#ebf9d0'\n  tertiary-fixed-dim: '#ddebc2'\n  on-tertiary-fixed: '#424e30'\n  on-tertiary-fixed-variant: '#5e6a4a'\n  background: '#f9f9f8'\n  on-background: '#2c3433'\n  surface-variant: '#dce4e3'\ntypography:\n  headline-lg:\n    fontFamily: Inter\n    fontSize: 1.75rem\n    fontWeight: '600'\n    lineHeight: 2.25rem\n  headline-md:\n    fontFamily: Inter\n    fontSize: 1.375rem\n    fontWeight: '600'\n    lineHeight: 1.875rem\n  headline-sm:\n    fontFamily: Inter\n    fontSize: 1.125rem\n    fontWeight: '600'\n    lineHeight: 1.5rem\n  body-lg:\n    fontFamily: Inter\n    fontSize: 1rem\n    fontWeight: '400'\n    lineHeight: 1.5rem\n  body-md:\n    fontFamily: Inter\n    fontSize: 0.875rem\n    fontWeight: '400'\n    lineHeight: 1.375rem\n  body-sm:\n    fontFamily: Inter\n    fontSize: 0.8125rem\n    fontWeight: '400'\n    lineHeight: 1.25rem\n  label-md:\n    fontFamily: Inter\n    fontSize: 0.8125rem\n    fontWeight: '500'\n    lineHeight: 1rem\n  label-sm:\n    fontFamily: Inter\n    fontSize: 0.75rem\n    fontWeight: '500'\n    lineHeight: 0.875rem\nrounded:\n  sm: 0.25rem\n  DEFAULT: 0.5rem\n  md: 0.75rem\n  lg: 1rem\n  xl: 1.5rem\n  full: 9999px\nspacing:\n  gutter: 1rem\n  margin: 2rem\n  space-xs: 0.25rem\n  space-sm: 0.5rem\n  space-md: 1rem\n  space-lg: 1.5rem\n  space-xl: 2rem\n---\n\n# UKDA — Quiet clarity\n\nA premium private project workspace, as thoughtful and calm as an Apple productivity app. Customer-facing language only. Spacious but useful, precise typography, thin lucide-style icons, restrained green actions, a small multicolour geometric triangular bar brand mark. No gradients, glass, glossy cards, tech dashboards, giant marketing headings, fake charts or decorative clutter. Light: off-white #F7F8F7 canvas, white surfaces, ink #202722, muted #69726E, subtle #E5E9E6 outlines, primary forest #176B50. Dark: #111613 canvas, #19201B surfaces, ink #ECF1ED, muted #9AA89D, outline #303A32, primary #9CD7B9 with dark ink. 12px cards, 8px controls, 44px touch targets. Inter with tabular numbers. Desktop 224px sidebar, 64px topbar, content max1280 with32px margins; mobile collapses sidebar and keeps clear Back actions. States accessible AA with strong focus and reduced-motion support. 160–220ms fades and tiny translate; never impede work.\n\nNavigation: exactly four primary items Home, Projects, My work, Inbox. People, teams, roles, integrations and permissions are within Settings at bottom. Project tabs are Overview, Work, Timeline, Updates. Current release task list only; board is future. Timeline displays only phase/wave date ranges and milestone markers. Customer workflows: licence activation, Owner recovery words, password confirmation, name and illustrated avatar choice; invited people join through private invitation; remembered profile name plus one password input; forgot-password recovery or ask an Owner; device approval; projects with phases called Waves, collaborative tasks with multiple assignees, milestones, blockers, reviews, discussion, progress; project archive/reopen; people/roles/invites/equal Owners; preferences/timezone/password/devices/recovery/export/deletion. Explain decisions plainly. Never show backend terms, IDs, API, keys/epochs/generations/ciphertext/OPAQUE/WASM/receipts/migrations. Invitation codes and recovery words are user-facing necessities, explain safely and briefly. Every form has Cancel/Back, validation, clear success and next action. Loading, empty, offline/retry, access-denied and unavailable destinations have useful recovery actions. No email login or photo uploads. Twenty illustrated geometric creature avatars with twelve independent colours. Add a discrete disabled Future features section under Settings: Email updates, Integrations, Customer-hosted processing, each greyed out with 'Not available in this build.' These have no fake action or broken link.\n\nA supplied local animated brand mark is used ONCE at startup, not a fabricated spinner; reuse its static multicolour bars in sidebar and entry pages. Generate actual product screens, not a marketing landing page. Use realistic but clearly design-only example content. UI must be translatable to semantic HTML and keyboard navigation.",
+                    "font": "INTER",
+                    "headlineFont": "INTER",
+                    "headlineFontFamily": "Inter",
+                    "labelFont": "INTER",
+                    "labelFontFamily": "Inter",
+                    "namedColors": {
+                      "background": "#f9f9f8",
+                      "error": "#9f403d",
+                      "error_container": "#fe8983",
+                      "error_dim": "#4e0309",
+                      "inverse_on_surface": "#9b9d9d",
+                      "inverse_primary": "#affedb",
+                      "inverse_surface": "#0c0f0e",
+                      "on_background": "#2c3433",
+                      "on_error": "#fff7f6",
+                      "on_error_container": "#752121",
+                      "on_primary": "#e0ffee",
+                      "on_primary_container": "#005e44",
+                      "on_primary_fixed": "#004934",
+                      "on_primary_fixed_variant": "#12684d",
+                      "on_secondary": "#f2fbf6",
+                      "on_secondary_container": "#4b5450",
+                      "on_secondary_fixed": "#39413e",
+                      "on_secondary_fixed_variant": "#555d5a",
+                      "on_surface": "#2c3433",
+                      "on_surface_variant": "#586160",
+                      "on_tertiary": "#f0fed5",
+                      "on_tertiary_container": "#546040",
+                      "on_tertiary_fixed": "#424e30",
+                      "on_tertiary_fixed_variant": "#5e6a4a",
+                      "outline": "#747c7c",
+                      "outline_variant": "#abb4b3",
+                      "primary": "#176b50",
+                      "primary_container": "#a4f3d0",
+                      "primary_dim": "#005e45",
+                      "primary_fixed": "#a4f3d0",
+                      "primary_fixed_dim": "#96e4c2",
+                      "secondary": "#58615d",
+                      "secondary_container": "#dbe5e0",
+                      "secondary_dim": "#4c5551",
+                      "secondary_fixed": "#dbe5e0",
+                      "secondary_fixed_dim": "#cdd7d2",
+                      "surface": "#f9f9f8",
+                      "surface_bright": "#f9f9f8",
+                      "surface_container": "#eaefee",
+                      "surface_container_high": "#e3e9e8",
+                      "surface_container_highest": "#dce4e3",
+                      "surface_container_low": "#f1f4f3",
+                      "surface_container_lowest": "#ffffff",
+                      "surface_dim": "#d2dcdb",
+                      "surface_tint": "#176b50",
+                      "surface_variant": "#dce4e3",
+                      "tertiary": "#576343",
+                      "tertiary_container": "#ebf9d0",
+                      "tertiary_dim": "#4b5738",
+                      "tertiary_fixed": "#ebf9d0",
+                      "tertiary_fixed_dim": "#ddebc2"
+                    },
+                    "overrideNeutralColor": "#f7f8f7",
+                    "overridePrimaryColor": "#176b50",
+                    "overrideSecondaryColor": "#69726e",
+                    "roundness": "ROUND_EIGHT",
+                    "spacing": {
+                      "gutter": "1rem",
+                      "margin": "2rem",
+                      "space-lg": "1.5rem",
+                      "space-md": "1rem",
+                      "space-sm": "0.5rem",
+                      "space-xl": "2rem",
+                      "space-xs": "0.25rem"
+                    },
+                    "spacingScale": 2,
+                    "typography": {
+                      "body-lg": {
+                        "fontFamily": "Inter",
+                        "fontSize": "1rem",
+                        "fontWeight": "400",
+                        "lineHeight": "1.5rem"
+                      },
+                      "body-md": {
+                        "fontFamily": "Inter",
+                        "fontSize": "0.875rem",
+                        "fontWeight": "400",
+                        "lineHeight": "1.375rem"
+                      },
+                      "body-sm": {
+                        "fontFamily": "Inter",
+                        "fontSize": "0.8125rem",
+                        "fontWeight": "400",
+                        "lineHeight": "1.25rem"
+                      },
+                      "headline-lg": {
+                        "fontFamily": "Inter",
+                        "fontSize": "1.75rem",
+                        "fontWeight": "600",
+                        "lineHeight": "2.25rem"
+                      },
+                      "headline-md": {
+                        "fontFamily": "Inter",
+                        "fontSize": "1.375rem",
+                        "fontWeight": "600",
+                        "lineHeight": "1.875rem"
+                      },
+                      "headline-sm": {
+                        "fontFamily": "Inter",
+                        "fontSize": "1.125rem",
+                        "fontWeight": "600",
+                        "lineHeight": "1.5rem"
+                      },
+                      "label-md": {
+                        "fontFamily": "Inter",
+                        "fontSize": "0.8125rem",
+                        "fontWeight": "500",
+                        "lineHeight": "1rem"
+                      },
+                      "label-sm": {
+                        "fontFamily": "Inter",
+                        "fontSize": "0.75rem",
+                        "fontWeight": "500",
+                        "lineHeight": "0.875rem"
+                      }
+                    }
+                  }
+                },
+                "name": "assets/18248857475683212615",
+                "version": "3"
+              },
+              "deviceType": "DESKTOP",
+              "generatedBy": "figaro_agent",
+              "height": "2048",
+              "htmlCode": {
+                "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzVlZTUwM2YyOTM3ZTQ3ZmQ4MGEwNmE4MGQ2Zjc2NzdjEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhMyNTA0NDM4NjU3MzE1OTE2MTYw&filename=&opi=96797242",
+                "mimeType": "text/html",
+                "name": "projects/2504438657315916160/files/ae7a0077a77d49218c8f0f60859d12a5"
+              },
+              "id": "30635c0d03624808bf2480db54afeefe",
+              "name": "projects/2504438657315916160/screens/30635c0d03624808bf2480db54afeefe",
+              "prompt": "Create a desktop screen for Maqbool titled \"Maqbool · Shared-folder publishing (Light)\" adhering strictly to the Maqbool design system and shell specifications:\n- Shell: 224px left sidebar with Maqbool wordmark and small multicolour triangular icon, nav tabs (Home, Projects [selected], My work, Inbox, Settings, A little guidance), user profile at bottom left (Alex Morgan, Owner / Lead Arch.).\n- Top bar: 70px height, breadcrumb \"Studio North > Projects > Harbour renewal (HR-2024)\", project navigation links: Overview, Work, Timeline, Updates, Files, Delivery (active tab with green underline). Trailing buttons: search icon, notification bell, \"+ Create delivery batch\" primary button.\n- Content backdrop: Delivery section underlying canvas (#f7f8f7) with subtle deliverable cards blurred or dimmed underneath the centered modal.\n- Centered Modal Overlay: True centered dialog strictly sized 760px wide by 680px height, 16px corner radius, background #ffffff, border #e2e8e3, subtle elevation shadow, fixed header and footer with scrollable body area.\n- Modal Header:\n  - Title: \"Shared-folder publishing\"\n  - Subtitle: \"Send approved files to a folder managed by your organisation.\"\n  - Close button '✕' on top right.\n- Workflow State: Setup & Connected Companion Management (Light version).\n  - Setup instructions card / Pairing approval flow:\n    - Step indicators or structured guide:\n      1. \"Open the Maqbool publishing companion on your Mac\"\n      2. \"Choose the official folder there\"\n      3. \"Connect this workspace\"\n    - Pairing code box: clean 6-character short code pill (e.g. \"MQ-8492\") with \"Enter this one-time pairing code in your companion app\".\n    - Pending authorization card (Owner view):\n      - Card with border #e2e8e3, background #f0f3f0:\n      - Title / device: \"Connection request from Studio Mac\"\n      - Selected folder line: \"Destination folder: /Volumes/Shared/Harbour delivery\"\n      - Security note: \"Only this folder can receive published files. Browser cannot access other machine paths.\"\n      - Actions: \"Allow connection\" (primary button #176b50, text white) and \"Decline\" (outline).\n    - Connected Mac status card:\n      - Title: \"Studio Mac · Connected\" (with small green dot status)\n      - Detail rows:\n        - \"Selected folder\": \"/Volumes/Shared/Harbour delivery\"\n        - \"Connected since\": \"Today, 14:15\"\n        - \"Status\": \"Ready to receive deliveries\"\n      - Helpful notice box: \"Other project work is available even when this Mac is offline.\"\n      - Actions in card: \"Check connection\" and \"Disconnect\" (Owner action).\n    - Expandable help text / link: \"Show setup instructions\" with a clear bounded guide if companion is not installed (no fake download links).\n- Modal Footer:\n  - Fixed at bottom: \"Close\" button on the left/secondary, and \"Done\" on right. All controls 8px radius, 44px touch targets.\n- Exact Light color tokens: canvas #f7f8f7, surface #ffffff, subtle #f0f3f0, text #202923, muted #69736d, border #e2e8e3, primary #176b50. No technical developer jargon (no API, daemon, daemon worker, root directory, etc.). Precise Inter typography, clean line icons.",
+              "screenMetadata": {
+                "agentType": "PRO_AGENT",
+                "status": "COMPLETE"
+              },
+              "screenType": "DESIGN",
+              "screenshot": {
+                "downloadUrl": "https://lh3.googleusercontent.com/aida/AEtjO1UA0Ju-on3kWtdnP_wtu5ndvzP4cyEhzb7N6ArpPHRpzleAyqctNEtxXpdKaU-A6c0s9uGFjI7Z4dv2zPcnaJ3-ettG-eG5x1mmUsermpMq6Vs89f-kMPv6e7bv5Ub0sQiagzadWdqnyzvMKUieYt0aGSgsdSjXZ_MhDIv2l9zfbkYBGdC2z5TsJwt07mKEODix1N3Mhl7jZU1rYabmCaLirQnLEzyjG3AJaNOCoxjXQzursLIpZO7-tEA",
+                "name": "projects/2504438657315916160/files/637dc98ddbf24df4b85e62ff17d7bc1a"
+              },
+              "theme": {
+                "bodyFont": "INTER",
+                "bodyFontFamily": "Inter",
+                "colorMode": "LIGHT",
+                "colorVariant": "NEUTRAL",
+                "customColor": "#176b50",
+                "font": "INTER",
+                "headlineFont": "INTER",
+                "headlineFontFamily": "Inter",
+                "labelFont": "INTER",
+                "labelFontFamily": "Inter",
+                "namedColors": {
+                  "background": "#f9f9f8",
+                  "error": "#9f403d",
+                  "error_container": "#fe8983",
+                  "error_dim": "#4e0309",
+                  "inverse_on_surface": "#9b9d9d",
+                  "inverse_primary": "#affedb",
+                  "inverse_surface": "#0c0f0e",
+                  "on_background": "#2c3433",
+                  "on_error": "#fff7f6",
+                  "on_error_container": "#752121",
+                  "on_primary": "#e0ffee",
+                  "on_primary_container": "#005e44",
+                  "on_primary_fixed": "#004934",
+                  "on_primary_fixed_variant": "#12684d",
+                  "on_secondary": "#f2fbf6",
+                  "on_secondary_container": "#4b5450",
+                  "on_secondary_fixed": "#39413e",
+                  "on_secondary_fixed_variant": "#555d5a",
+                  "on_surface": "#2c3433",
+                  "on_surface_variant": "#586160",
+                  "on_tertiary": "#f0fed5",
+                  "on_tertiary_container": "#546040",
+                  "on_tertiary_fixed": "#424e30",
+                  "on_tertiary_fixed_variant": "#5e6a4a",
+                  "outline": "#747c7c",
+                  "outline_variant": "#abb4b3",
+                  "primary": "#176b50",
+                  "primary_container": "#a4f3d0",
+                  "primary_dim": "#005e45",
+                  "primary_fixed": "#a4f3d0",
+                  "primary_fixed_dim": "#96e4c2",
+                  "secondary": "#58615d",
+                  "secondary_container": "#dbe5e0",
+                  "secondary_dim": "#4c5551",
+                  "secondary_fixed": "#dbe5e0",
+                  "secondary_fixed_dim": "#cdd7d2",
+                  "surface": "#f9f9f8",
+                  "surface_bright": "#f9f9f8",
+                  "surface_container": "#eaefee",
+                  "surface_container_high": "#e3e9e8",
+                  "surface_container_highest": "#dce4e3",
+                  "surface_container_low": "#f1f4f3",
+                  "surface_container_lowest": "#ffffff",
+                  "surface_dim": "#d2dcdb",
+                  "surface_tint": "#176b50",
+                  "surface_variant": "#dce4e3",
+                  "tertiary": "#576343",
+                  "tertiary_container": "#ebf9d0",
+                  "tertiary_dim": "#4b5738",
+                  "tertiary_fixed": "#ebf9d0",
+                  "tertiary_fixed_dim": "#ddebc2"
+                },
+                "overrideNeutralColor": "#f7f8f7",
+                "overridePrimaryColor": "#176b50",
+                "overrideSecondaryColor": "#69726e",
+                "roundness": "ROUND_EIGHT",
+                "spacing": {
+                  "gutter": "1rem",
+                  "margin": "2rem",
+                  "space-lg": "1.5rem",
+                  "space-md": "1rem",
+                  "space-sm": "0.5rem",
+                  "space-xl": "2rem",
+                  "space-xs": "0.25rem"
+                },
+                "spacingScale": 2,
+                "typography": {
+                  "body-lg": {
+                    "fontFamily": "Inter",
+                    "fontSize": "1rem",
+                    "fontWeight": "400",
+                    "lineHeight": "1.5rem"
+                  },
+                  "body-md": {
+                    "fontFamily": "Inter",
+                    "fontSize": "0.875rem",
+                    "fontWeight": "400",
+                    "lineHeight": "1.375rem"
+                  },
+                  "body-sm": {
+                    "fontFamily": "Inter",
+                    "fontSize": "0.8125rem",
+                    "fontWeight": "400",
+                    "lineHeight": "1.25rem"
+                  },
+                  "headline-lg": {
+                    "fontFamily": "Inter",
+                    "fontSize": "1.75rem",
+                    "fontWeight": "600",
+                    "lineHeight": "2.25rem"
+                  },
+                  "headline-md": {
+                    "fontFamily": "Inter",
+                    "fontSize": "1.375rem",
+                    "fontWeight": "600",
+                    "lineHeight": "1.875rem"
+                  },
+                  "headline-sm": {
+                    "fontFamily": "Inter",
+                    "fontSize": "1.125rem",
+                    "fontWeight": "600",
+                    "lineHeight": "1.5rem"
+                  },
+                  "label-md": {
+                    "fontFamily": "Inter",
+                    "fontSize": "0.8125rem",
+                    "fontWeight": "500",
+                    "lineHeight": "1rem"
+                  },
+                  "label-sm": {
+                    "fontFamily": "Inter",
+                    "fontSize": "0.75rem",
+                    "fontWeight": "500",
+                    "lineHeight": "0.875rem"
+                  }
+                }
+              },
+              "title": "Maqbool · Shared-folder publishing (Light)",
+              "width": "2560"
+            },
+            {
+              "designSystem": {
+                "designSystem": {
+                  "displayName": "Quiet Clarity",
+                  "styleGuidelines": "## Brand & Style\nThe design system embodies deep focus, organic precision, and tranquil utility. Built for high-cognitive workflows and analytical environments, it rejects sensory overload in favor of structured composure and deliberate contrast.\n\nThe aesthetic fuses architectural minimalism with technical functionalism:\n- **Atmosphere:** Deep, muted charcoal and forest tones evoke a focused, nocturnal studio.\n- **Tone:** Methodical, measured, and understated. Confidence expressed through restraint.\n- **Visual Stance:** Zero gratuitous decoration. Hierarchy is articulated via subtle surface shifts, precision-engineered hairline dividers, and deliberate, desaturated mint illuminations.\n\n## Layout & Spacing\nThe layout adheres to an orderly 8pt modular grid, scaling to 4pt for micro-adjustments within dense component assemblies.\n\n### Grid & Breakpoints\n- **Desktop (1200px+):** 12-column fluid grid, `2rem` outer margins, `1.5rem` gutters. Max-width content boundaries lock at 1440px to preserve comfortable scan lines.\n- **Tablet (768px – 1199px):** 8-column fluid grid, `1.5rem` outer margins, `1rem` gutters.\n- **Mobile (0px – 767px):** 4-column fluid grid, `1rem` outer margins, `1rem` gutters. Toolbars, controls, and multi-metric grids fold into single-column vertical stacks.\n\n### Rhythm & Alignment\nComponent padding relies strictly on `space-*` tokens. Outer frame offsets must consistently match canvas `margin` rules. Keep structural whitespace stable across screen transitions to minimize cognitive friction.\n\n## Elevation & Depth\nDepth is created through subtle luminance staging and muted boundary lines—avoiding drop shadows or muddy blurs.\n\n### Tonal Stratification\n- **Base Canvas:** `#111613` anchors the deepest visual plane.\n- **Container Level:** `#19201B` separates discrete modules from the backdrop.\n- **Overlays & Modals:** `#1E2721` lifts interacting layers forward cleanly.\n\n### Boundary Lines\n- Structural hierarchy relies on `1px` solid outlines tinted with `#242F28`.\n- Higher layer transitions (modals, active dropdown menus) introduce a dual outline effect: an inner `1px` border of `#242F28` coupled with an exterior ambient border of `#334339`.\n- **No drop shadows:** Shadows are replaced by crisp tonal contrast between surfaces. Modals use a pure dark overlay (`#0A0D0B` at 70% opacity) to mute background noise.\n\n## Components\n\n### Buttons\n- **Primary:** Background `#9CD7B9`, text `#111613` (bold weight), zero border. On hover, background shifts to `#B2E3CA`. On active press, scale translates slightly down (`scale(0.98)`).\n- **Secondary:** Background `#19201B`, border `1px solid #242F28`, text `#ECF1ED`. Hover shifts border to `#334339` and text to `#9CD7B9`.\n- **Tertiary / Ghost:** Background transparent, text `#9AA89D`. Hover introduces `#19201B` background and `#ECF1ED` text.\n\n### Chips & Badges\n- **Status / Indicator Badges:** Background `#16261E` (rich deep forest), border `1px solid #2D6A4F`, text `#9CD7B9`. Compact padding (`0.25rem 0.625rem`), radius `9999px`, font `label-sm`.\n- **Filter Chips:** Background `#19201B`, border `1px solid #242F28`, text `#9AA89D`. When active, fill switches to `#2D6A4F` with `#ECF1ED` text.\n\n### Input Fields\n- **Container:** Background `#19201B`, border `1px solid #242F28`, height `40px`, border radius `0.5rem`.\n- **Text:** `#ECF1ED`, placeholder `#57645B`.\n- **Focus State:** Border transitions to `#9CD7B9` (no glowing spread or ambient ring), accompanied by a subtle `1px` inset guide.\n\n### Checkboxes & Radio Controls\n- **Unchecked:** `18px x 18px` container, background `#111613`, border `1.5px solid #242F28`. Rounded corners for checkboxes (`4px`), full circle for radios.\n- **Checked:** Background `#9CD7B9`, border `#9CD7B9`, inner checkmark or radial dot colored `#111613`.\n\n### Cards & Panels\n- **Structure:** Background `#19201B`, border `1px solid #242F28`, border radius `1rem` (`rounded-lg`), padding `1.5rem`.\n- **Interactive State:** Hover elevates outline to `#334339`; surface tint adjusts subtly to `#1D2520`.\n\n### Data Tables & Lists\n- **Header:** Background `#111613`, text `#9AA89D`, uppercase `label-sm`, bottom border `1px solid #242F28`.\n- **Rows:** Alternating transparent and `#19201B` backgrounds. Bottom separator `1px solid #1E2721`. Hover state highlights entire row with `#243029`.",
+                  "theme": {
+                    "bodyFont": "INTER",
+                    "bodyFontFamily": "Inter",
+                    "colorMode": "DARK",
+                    "colorVariant": "FIDELITY",
+                    "customColor": "#9cd7b9",
+                    "designMd": "---\nname: Quiet Clarity\ncolors:\n  surface: '#0f1412'\n  surface-dim: '#0f1412'\n  surface-bright: '#353a37'\n  surface-container-lowest: '#0a0f0c'\n  surface-container-low: '#181d1a'\n  surface-container: '#1c211e'\n  surface-container-high: '#262b28'\n  surface-container-highest: '#313632'\n  on-surface: '#dfe4de'\n  on-surface-variant: '#c0c9c2'\n  inverse-surface: '#dfe4de'\n  inverse-on-surface: '#2c322e'\n  outline: '#8a938c'\n  outline-variant: '#404943'\n  surface-tint: '#98d3b5'\n  primary: '#b7f4d4'\n  on-primary: '#003826'\n  primary-container: '#9cd7b9'\n  on-primary-container: '#265f47'\n  inverse-primary: '#306950'\n  secondary: '#95d4b3'\n  on-secondary: '#003824'\n  secondary-container: '#12533a'\n  on-secondary-container: '#87c6a5'\n  tertiary: '#dceade'\n  on-tertiary: '#27332b'\n  tertiary-container: '#c0cec2'\n  on-tertiary-container: '#4b584f'\n  error: '#ffb4ab'\n  on-error: '#690005'\n  error-container: '#93000a'\n  on-error-container: '#ffdad6'\n  primary-fixed: '#b4f0d1'\n  primary-fixed-dim: '#98d3b5'\n  on-primary-fixed: '#002114'\n  on-primary-fixed-variant: '#14503a'\n  secondary-fixed: '#b1f0ce'\n  secondary-fixed-dim: '#95d4b3'\n  on-secondary-fixed: '#002114'\n  on-secondary-fixed-variant: '#0e5138'\n  tertiary-fixed: '#d8e6da'\n  tertiary-fixed-dim: '#bccabe'\n  on-tertiary-fixed: '#121e17'\n  on-tertiary-fixed-variant: '#3d4a41'\n  background: '#0f1412'\n  on-background: '#dfe4de'\n  surface-variant: '#313632'\ntypography:\n  display:\n    fontFamily: Inter\n    fontSize: 40px\n    fontWeight: '600'\n    lineHeight: 48px\n    letterSpacing: -0.03em\n  display-mobile:\n    fontFamily: Inter\n    fontSize: 32px\n    fontWeight: '600'\n    lineHeight: 40px\n    letterSpacing: -0.025em\n  headline-lg:\n    fontFamily: Inter\n    fontSize: 30px\n    fontWeight: '600'\n    lineHeight: 38px\n    letterSpacing: -0.02em\n  headline-lg-mobile:\n    fontFamily: Inter\n    fontSize: 24px\n    fontWeight: '600'\n    lineHeight: 32px\n    letterSpacing: -0.015em\n  headline-md:\n    fontFamily: Inter\n    fontSize: 22px\n    fontWeight: '500'\n    lineHeight: 28px\n    letterSpacing: -0.015em\n  headline-sm:\n    fontFamily: Inter\n    fontSize: 18px\n    fontWeight: '500'\n    lineHeight: 24px\n    letterSpacing: -0.01em\n  body-lg:\n    fontFamily: Inter\n    fontSize: 16px\n    fontWeight: '400'\n    lineHeight: 24px\n    letterSpacing: -0.005em\n  body-md:\n    fontFamily: Inter\n    fontSize: 14px\n    fontWeight: '400'\n    lineHeight: 20px\n    letterSpacing: 0em\n  body-sm:\n    fontFamily: Inter\n    fontSize: 12px\n    fontWeight: '400'\n    lineHeight: 16px\n    letterSpacing: 0.005em\n  label-lg:\n    fontFamily: Inter\n    fontSize: 14px\n    fontWeight: '500'\n    lineHeight: 20px\n    letterSpacing: 0.01em\n  label-md:\n    fontFamily: Inter\n    fontSize: 12px\n    fontWeight: '500'\n    lineHeight: 16px\n    letterSpacing: 0.02em\n  label-sm:\n    fontFamily: Inter\n    fontSize: 10px\n    fontWeight: '600'\n    lineHeight: 14px\n    letterSpacing: 0.04em\nrounded:\n  sm: 0.25rem\n  DEFAULT: 0.5rem\n  md: 0.75rem\n  lg: 1rem\n  xl: 1.5rem\n  full: 9999px\nspacing:\n  gutter: 1.5rem\n  gutter-mobile: 1rem\n  margin: 2rem\n  margin-mobile: 1rem\n  margin-tablet: 1.5rem\n  space-xs: 0.25rem\n  space-sm: 0.5rem\n  space-md: 1rem\n  space-lg: 1.5rem\n  space-xl: 2.5rem\n---\n\n## Brand & Style\nThe design system embodies deep focus, organic precision, and tranquil utility. Built for high-cognitive workflows and analytical environments, it rejects sensory overload in favor of structured composure and deliberate contrast.\n\nThe aesthetic fuses architectural minimalism with technical functionalism:\n- **Atmosphere:** Deep, muted charcoal and forest tones evoke a focused, nocturnal studio.\n- **Tone:** Methodical, measured, and understated. Confidence expressed through restraint.\n- **Visual Stance:** Zero gratuitous decoration. Hierarchy is articulated via subtle surface shifts, precision-engineered hairline dividers, and deliberate, desaturated mint illuminations.\n\n## Colors\nThe palette is rooted in balanced dark values with a botanical undertone, avoiding pure blacks or harsh stark-white contrasts.\n\n### Palette Architecture\n- **Canvas / Background (`#111613`):** Foundational deep charcoal with faint organic warmth. Conserves visual energy across long viewing sessions.\n- **Surfaces & Tiers:**\n  - `Surface-01` (`#19201B`): Primary elevation for cards, modular panels, and input fields.\n  - `Surface-02` (`#1E2721`): Raised elements, popovers, hovering states, and floating navigation bars.\n  - `Surface-03` (`#243029`): Active states, pressed states, or selected table cell fills.\n- **Borders & Outlines (`#242F28`):** Clean, crisp structural delineation. For focused or higher-prominence dividing edges, step up to `#334339`.\n- **Accents:**\n  - **Primary Mint (`#9CD7B9`):** Soft, luminous mint used selectively for focal interactive triggers, verified statuses, and primary indicator lights.\n  - **Forest Shade (`#2D6A4F`):** Deep emerald support for container fills behind mint elements, subtle active badge fills, and hover backdrops.\n- **Typography & Iconography:**\n  - **High-Contrast Text (`#ECF1ED`):** Off-white base for headings, primary data points, and active labels.\n  - **Secondary Text (`#9AA89D`):** Balanced neutral sage for descriptions, supporting metadata, and inactive icons.\n  - **Disabled / Muted Text (`#57645B`):** Ghost elements, placeholder text, and non-actionable signals.\n\n## Typography\nTypography relies exclusively on Inter, configured for clinical clarity and rapid scannability across dense user interfaces.\n\n### Application Rules\n- Use tabular numerals (`tnum`) for metrics, financial data, and table layouts.\n- Reserve `display` and `headline-lg` strictly for primary section anchors and top-level metric readouts.\n- Track letter spacing tightly on larger headings (`-0.03em` to `-0.015em`) to ensure optical cohesiveness in dense dark environments.\n- Use uppercase styling exclusively with `label-sm` alongside widened letter spacing (`0.04em`) for category tags, input hints, and table headers.\n\n## Layout & Spacing\nThe layout adheres to an orderly 8pt modular grid, scaling to 4pt for micro-adjustments within dense component assemblies.\n\n### Grid & Breakpoints\n- **Desktop (1200px+):** 12-column fluid grid, `2rem` outer margins, `1.5rem` gutters. Max-width content boundaries lock at 1440px to preserve comfortable scan lines.\n- **Tablet (768px – 1199px):** 8-column fluid grid, `1.5rem` outer margins, `1rem` gutters.\n- **Mobile (0px – 767px):** 4-column fluid grid, `1rem` outer margins, `1rem` gutters. Toolbars, controls, and multi-metric grids fold into single-column vertical stacks.\n\n### Rhythm & Alignment\nComponent padding relies strictly on `space-*` tokens. Outer frame offsets must consistently match canvas `margin` rules. Keep structural whitespace stable across screen transitions to minimize cognitive friction.\n\n## Elevation & Depth\nDepth is created through subtle luminance staging and muted boundary lines—avoiding drop shadows or muddy blurs.\n\n### Tonal Stratification\n- **Base Canvas:** `#111613` anchors the deepest visual plane.\n- **Container Level:** `#19201B` separates discrete modules from the backdrop.\n- **Overlays & Modals:** `#1E2721` lifts interacting layers forward cleanly.\n\n### Boundary Lines\n- Structural hierarchy relies on `1px` solid outlines tinted with `#242F28`.\n- Higher layer transitions (modals, active dropdown menus) introduce a dual outline effect: an inner `1px` border of `#242F28` coupled with an exterior ambient border of `#334339`.\n- **No drop shadows:** Shadows are replaced by crisp tonal contrast between surfaces. Modals use a pure dark overlay (`#0A0D0B` at 70% opacity) to mute background noise.\n\n## Shapes\nGeometry is disciplined, architectural, and restrained. Surfaces avoid both severe, brutalist corners and overly round, playful silhouettes.\n\n- **Base Radius (`0.5rem` / `rounded`):** Default for smaller controls including input fields, standard buttons, tabs, dropdown items, and table action triggers.\n- **Containers (`1rem` / `rounded-lg`):** Cards, primary dashboards, modals, flyouts, and floating trays.\n- **Large Contextual Panels (`1.5rem` / `rounded-xl`):** Screen-split layouts and prominent hero wrappers.\n- **Pills (`9999px`):** Reserved strictly for compact metadata tags, status pills, and system badges.\n\n## Components\n\n### Buttons\n- **Primary:** Background `#9CD7B9`, text `#111613` (bold weight), zero border. On hover, background shifts to `#B2E3CA`. On active press, scale translates slightly down (`scale(0.98)`).\n- **Secondary:** Background `#19201B`, border `1px solid #242F28`, text `#ECF1ED`. Hover shifts border to `#334339` and text to `#9CD7B9`.\n- **Tertiary / Ghost:** Background transparent, text `#9AA89D`. Hover introduces `#19201B` background and `#ECF1ED` text.\n\n### Chips & Badges\n- **Status / Indicator Badges:** Background `#16261E` (rich deep forest), border `1px solid #2D6A4F`, text `#9CD7B9`. Compact padding (`0.25rem 0.625rem`), radius `9999px`, font `label-sm`.\n- **Filter Chips:** Background `#19201B`, border `1px solid #242F28`, text `#9AA89D`. When active, fill switches to `#2D6A4F` with `#ECF1ED` text.\n\n### Input Fields\n- **Container:** Background `#19201B`, border `1px solid #242F28`, height `40px`, border radius `0.5rem`.\n- **Text:** `#ECF1ED`, placeholder `#57645B`.\n- **Focus State:** Border transitions to `#9CD7B9` (no glowing spread or ambient ring), accompanied by a subtle `1px` inset guide.\n\n### Checkboxes & Radio Controls\n- **Unchecked:** `18px x 18px` container, background `#111613`, border `1.5px solid #242F28`. Rounded corners for checkboxes (`4px`), full circle for radios.\n- **Checked:** Background `#9CD7B9`, border `#9CD7B9`, inner checkmark or radial dot colored `#111613`.\n\n### Cards & Panels\n- **Structure:** Background `#19201B`, border `1px solid #242F28`, border radius `1rem` (`rounded-lg`), padding `1.5rem`.\n- **Interactive State:** Hover elevates outline to `#334339`; surface tint adjusts subtly to `#1D2520`.\n\n### Data Tables & Lists\n- **Header:** Background `#111613`, text `#9AA89D`, uppercase `label-sm`, bottom border `1px solid #242F28`.\n- **Rows:** Alternating transparent and `#19201B` backgrounds. Bottom separator `1px solid #1E2721`. Hover state highlights entire row with `#243029`.",
+                    "font": "INTER",
+                    "headlineFont": "INTER",
+                    "headlineFontFamily": "Inter",
+                    "labelFont": "INTER",
+                    "labelFontFamily": "Inter",
+                    "namedColors": {
+                      "background": "#0f1412",
+                      "error": "#ffb4ab",
+                      "error_container": "#93000a",
+                      "inverse_on_surface": "#2c322e",
+                      "inverse_primary": "#306950",
+                      "inverse_surface": "#dfe4de",
+                      "on_background": "#dfe4de",
+                      "on_error": "#690005",
+                      "on_error_container": "#ffdad6",
+                      "on_primary": "#003826",
+                      "on_primary_container": "#265f47",
+                      "on_primary_fixed": "#002114",
+                      "on_primary_fixed_variant": "#14503a",
+                      "on_secondary": "#003824",
+                      "on_secondary_container": "#87c6a5",
+                      "on_secondary_fixed": "#002114",
+                      "on_secondary_fixed_variant": "#0e5138",
+                      "on_surface": "#dfe4de",
+                      "on_surface_variant": "#c0c9c2",
+                      "on_tertiary": "#27332b",
+                      "on_tertiary_container": "#4b584f",
+                      "on_tertiary_fixed": "#121e17",
+                      "on_tertiary_fixed_variant": "#3d4a41",
+                      "outline": "#8a938c",
+                      "outline_variant": "#404943",
+                      "primary": "#b7f4d4",
+                      "primary_container": "#9cd7b9",
+                      "primary_fixed": "#b4f0d1",
+                      "primary_fixed_dim": "#98d3b5",
+                      "secondary": "#95d4b3",
+                      "secondary_container": "#12533a",
+                      "secondary_fixed": "#b1f0ce",
+                      "secondary_fixed_dim": "#95d4b3",
+                      "surface": "#0f1412",
+                      "surface_bright": "#353a37",
+                      "surface_container": "#1c211e",
+                      "surface_container_high": "#262b28",
+                      "surface_container_highest": "#313632",
+                      "surface_container_low": "#181d1a",
+                      "surface_container_lowest": "#0a0f0c",
+                      "surface_dim": "#0f1412",
+                      "surface_tint": "#98d3b5",
+                      "surface_variant": "#313632",
+                      "tertiary": "#dceade",
+                      "tertiary_container": "#c0cec2",
+                      "tertiary_fixed": "#d8e6da",
+                      "tertiary_fixed_dim": "#bccabe"
+                    },
+                    "overrideNeutralColor": "#111613",
+                    "overridePrimaryColor": "#9cd7b9",
+                    "overrideSecondaryColor": "#2d6a4f",
+                    "overrideTertiaryColor": "#9aa89d",
+                    "roundness": "ROUND_EIGHT",
+                    "spacing": {
+                      "gutter": "1.5rem",
+                      "gutter-mobile": "1rem",
+                      "margin": "2rem",
+                      "margin-mobile": "1rem",
+                      "margin-tablet": "1.5rem",
+                      "space-lg": "1.5rem",
+                      "space-md": "1rem",
+                      "space-sm": "0.5rem",
+                      "space-xl": "2.5rem",
+                      "space-xs": "0.25rem"
+                    },
+                    "spacingScale": 2,
+                    "typography": {
+                      "body-lg": {
+                        "fontFamily": "Inter",
+                        "fontSize": "16px",
+                        "fontWeight": "400",
+                        "letterSpacing": "-0.005em",
+                        "lineHeight": "24px"
+                      },
+                      "body-md": {
+                        "fontFamily": "Inter",
+                        "fontSize": "14px",
+                        "fontWeight": "400",
+                        "letterSpacing": "0em",
+                        "lineHeight": "20px"
+                      },
+                      "body-sm": {
+                        "fontFamily": "Inter",
+                        "fontSize": "12px",
+                        "fontWeight": "400",
+                        "letterSpacing": "0.005em",
+                        "lineHeight": "16px"
+                      },
+                      "display": {
+                        "fontFamily": "Inter",
+                        "fontSize": "40px",
+                        "fontWeight": "600",
+                        "letterSpacing": "-0.03em",
+                        "lineHeight": "48px"
+                      },
+                      "display-mobile": {
+                        "fontFamily": "Inter",
+                        "fontSize": "32px",
+                        "fontWeight": "600",
+                        "letterSpacing": "-0.025em",
+                        "lineHeight": "40px"
+                      },
+                      "headline-lg": {
+                        "fontFamily": "Inter",
+                        "fontSize": "30px",
+                        "fontWeight": "600",
+                        "letterSpacing": "-0.02em",
+                        "lineHeight": "38px"
+                      },
+                      "headline-lg-mobile": {
+                        "fontFamily": "Inter",
+                        "fontSize": "24px",
+                        "fontWeight": "600",
+                        "letterSpacing": "-0.015em",
+                        "lineHeight": "32px"
+                      },
+                      "headline-md": {
+                        "fontFamily": "Inter",
+                        "fontSize": "22px",
+                        "fontWeight": "500",
+                        "letterSpacing": "-0.015em",
+                        "lineHeight": "28px"
+                      },
+                      "headline-sm": {
+                        "fontFamily": "Inter",
+                        "fontSize": "18px",
+                        "fontWeight": "500",
+                        "letterSpacing": "-0.01em",
+                        "lineHeight": "24px"
+                      },
+                      "label-lg": {
+                        "fontFamily": "Inter",
+                        "fontSize": "14px",
+                        "fontWeight": "500",
+                        "letterSpacing": "0.01em",
+                        "lineHeight": "20px"
+                      },
+                      "label-md": {
+                        "fontFamily": "Inter",
+                        "fontSize": "12px",
+                        "fontWeight": "500",
+                        "letterSpacing": "0.02em",
+                        "lineHeight": "16px"
+                      },
+                      "label-sm": {
+                        "fontFamily": "Inter",
+                        "fontSize": "10px",
+                        "fontWeight": "600",
+                        "letterSpacing": "0.04em",
+                        "lineHeight": "14px"
+                      }
+                    }
+                  }
+                },
+                "name": "assets/e52f5ca41a6e4d6dbb8a6869d73d6c13",
+                "version": "1"
+              },
+              "deviceType": "DESKTOP",
+              "generatedBy": "figaro_agent",
+              "height": "2048",
+              "htmlCode": {
+                "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2U1Y2UyMDBlNzgwNTQwN2ZiMzI2NGVjNzljMGFhNGE4EgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhMyNTA0NDM4NjU3MzE1OTE2MTYw&filename=&opi=96797242",
+                "mimeType": "text/html",
+                "name": "projects/2504438657315916160/files/d0f67beec1224647a08727b1607e0390"
+              },
+              "id": "5184fbe911f44c09bcb74b33c54a4d58",
+              "name": "projects/2504438657315916160/screens/5184fbe911f44c09bcb74b33c54a4d58",
+              "prompt": "Create a desktop screen for Maqbool titled \"Maqbool · Shared-folder publishing (Dark)\" adhering strictly to the dark mode specifications and exact color tokens:\n- Dark tokens: canvas #101113, surface #191b1f, subtle #23252a, hover #2c2f34, text #f0f1f3, muted #a8adb5, border #32363d, primary mint #9cd7b9, primary text #101113. NEVER use dark green as a background or panel fill. Charcoal surfaces with neutral or slight tint.\n- Shell: 224px left sidebar with Maqbool wordmark and small multicolour triangular icon, nav tabs (Home, Projects [selected], My work, Inbox, Settings, A little guidance), user profile at bottom (Alex Morgan, Owner / Lead Architect).\n- Top bar: 70px height, breadcrumb \"Studio North / Projects / Harbour renewal (HR-2024)\", project nav tabs (Overview, Work, Timeline, Updates, Files, Delivery [active with mint indicator]).\n- Background delivery canvas dimmed behind modal.\n- Centered Modal Dialog: 760px wide by 680px height, 16px corner radius, background #191b1f, border #32363d, fixed header and footer with scrollable body area.\n- Modal Header:\n  - Title: \"Shared-folder publishing\"\n  - Subtitle: \"Send approved files to a folder managed by your organisation.\"\n  - Close button '✕' top right.\n- Modal Body: Frozen batch delivery validation, conflict detection & recovery workflow:\n  - Batch header pill: \"Waterfront review package · 8 files\" with destination badge \"/Volumes/Shared/Harbour delivery/Phase-2/\".\n  - Delivery verification & conflict table (fixed columns: File name & ref, Requested action, Result & status, Row action):\n    1. \"Waterfront layout.pptx (v2)\" -> Replace -> \"Ready to write\" (status chip neutral/green tint).\n    2. Conflict Row: \"Budget sheet.xlsx\" -> \"Budget sheet.xlsx has changed in the destination folder\" -> Status badge: amber \"Conflict detected\" -> Notice: \"Your existing file has been kept. Nothing was overwritten.\" Actions: \"View details\", \"Choose another destination\".\n    3. Collision row: \"Seawall structural notes.pdf\" -> \"Two files use the same destination\" -> Status badge: amber \"Collision\" -> Action: \"Fix destination\".\n    4. Queued / lock row: \"Survey drawings.pdf\" -> \"Another delivery is using this location\" -> Status badge: neutral \"Waiting for lock release\".\n    5. Partial transfer recovery row: \"Tide variance log.csv\" -> \"3 files placed · 5 waiting\" -> Status: \"Interrupted\" -> Action: \"Check progress\".\n  - Informational banners:\n    - Integrity reassurance: \"Companion journals and verifies all changes. Approved versions are verified against exact resulting bytes before marking completed.\"\n    - Interrupted / Resumption note: \"Check progress inspects destination folder before continuing. 'Resume remaining' unlocks only after current approval is re-verified.\"\n- Modal Footer:\n  - Fixed bottom bar: \"Back to batch\" secondary button, \"Check progress\" button, and \"Prepare new batch\" / \"Resume remaining\" action (styled with primary mint #9cd7b9, text #101113).\n- Strictly obey constraints: No Force Overwrite button. Clear cancel/back paths. All spacing and typography crisp and legible. Inter font. Chevrons inset 12px. No technical developer jargon (no daemon, API, worker, database, sha256). Fixed 760x680 modal geometry.",
+              "screenMetadata": {
+                "agentType": "PRO_AGENT",
+                "status": "COMPLETE"
+              },
+              "screenType": "DESIGN",
+              "screenshot": {
+                "downloadUrl": "https://lh3.googleusercontent.com/aida/AEtjO1UekKZAsBKqD6fPdD6dgIlxTMGdHPwGLccCbSfHyXTe4riLKyKte19LslnHOHKmIRuCC4hXMlNwwHbC1fzqGKkT5X7U1c_-ErRNSsuFy4UHeYnpk3hlYPS6lUwvT-WtZPo9OqERrPGKhQdOC-tpqO77PAd6AMJcSLAeB_LhyoR1JEIA3PIXH4oeVTcjdYdat_QPAzmv9aSRCk-yB7IIoNRDKdA7o4ZE4HpEfX4i_4H8mriDwyrQQTTTaYQ",
+                "name": "projects/2504438657315916160/files/b78fa15f3083438f85eb7f9ab8ab0fd6"
+              },
+              "theme": {
+                "bodyFont": "INTER",
+                "bodyFontFamily": "Inter",
+                "colorMode": "DARK",
+                "colorVariant": "FIDELITY",
+                "customColor": "#9cd7b9",
+                "font": "INTER",
+                "headlineFont": "INTER",
+                "headlineFontFamily": "Inter",
+                "labelFont": "INTER",
+                "labelFontFamily": "Inter",
+                "namedColors": {
+                  "background": "#0f1412",
+                  "error": "#ffb4ab",
+                  "error_container": "#93000a",
+                  "inverse_on_surface": "#2c322e",
+                  "inverse_primary": "#306950",
+                  "inverse_surface": "#dfe4de",
+                  "on_background": "#dfe4de",
+                  "on_error": "#690005",
+                  "on_error_container": "#ffdad6",
+                  "on_primary": "#003826",
+                  "on_primary_container": "#265f47",
+                  "on_primary_fixed": "#002114",
+                  "on_primary_fixed_variant": "#14503a",
+                  "on_secondary": "#003824",
+                  "on_secondary_container": "#87c6a5",
+                  "on_secondary_fixed": "#002114",
+                  "on_secondary_fixed_variant": "#0e5138",
+                  "on_surface": "#dfe4de",
+                  "on_surface_variant": "#c0c9c2",
+                  "on_tertiary": "#27332b",
+                  "on_tertiary_container": "#4b584f",
+                  "on_tertiary_fixed": "#121e17",
+                  "on_tertiary_fixed_variant": "#3d4a41",
+                  "outline": "#8a938c",
+                  "outline_variant": "#404943",
+                  "primary": "#b7f4d4",
+                  "primary_container": "#9cd7b9",
+                  "primary_fixed": "#b4f0d1",
+                  "primary_fixed_dim": "#98d3b5",
+                  "secondary": "#95d4b3",
+                  "secondary_container": "#12533a",
+                  "secondary_fixed": "#b1f0ce",
+                  "secondary_fixed_dim": "#95d4b3",
+                  "surface": "#0f1412",
+                  "surface_bright": "#353a37",
+                  "surface_container": "#1c211e",
+                  "surface_container_high": "#262b28",
+                  "surface_container_highest": "#313632",
+                  "surface_container_low": "#181d1a",
+                  "surface_container_lowest": "#0a0f0c",
+                  "surface_dim": "#0f1412",
+                  "surface_tint": "#98d3b5",
+                  "surface_variant": "#313632",
+                  "tertiary": "#dceade",
+                  "tertiary_container": "#c0cec2",
+                  "tertiary_fixed": "#d8e6da",
+                  "tertiary_fixed_dim": "#bccabe"
+                },
+                "overrideNeutralColor": "#111613",
+                "overridePrimaryColor": "#9cd7b9",
+                "overrideSecondaryColor": "#2d6a4f",
+                "overrideTertiaryColor": "#9aa89d",
+                "roundness": "ROUND_EIGHT",
+                "spacing": {
+                  "gutter": "1.5rem",
+                  "gutter-mobile": "1rem",
+                  "margin": "2rem",
+                  "margin-mobile": "1rem",
+                  "margin-tablet": "1.5rem",
+                  "space-lg": "1.5rem",
+                  "space-md": "1rem",
+                  "space-sm": "0.5rem",
+                  "space-xl": "2.5rem",
+                  "space-xs": "0.25rem"
+                },
+                "spacingScale": 2,
+                "typography": {
+                  "body-lg": {
+                    "fontFamily": "Inter",
+                    "fontSize": "16px",
+                    "fontWeight": "400",
+                    "letterSpacing": "-0.005em",
+                    "lineHeight": "24px"
+                  },
+                  "body-md": {
+                    "fontFamily": "Inter",
+                    "fontSize": "14px",
+                    "fontWeight": "400",
+                    "letterSpacing": "0em",
+                    "lineHeight": "20px"
+                  },
+                  "body-sm": {
+                    "fontFamily": "Inter",
+                    "fontSize": "12px",
+                    "fontWeight": "400",
+                    "letterSpacing": "0.005em",
+                    "lineHeight": "16px"
+                  },
+                  "display": {
+                    "fontFamily": "Inter",
+                    "fontSize": "40px",
+                    "fontWeight": "600",
+                    "letterSpacing": "-0.03em",
+                    "lineHeight": "48px"
+                  },
+                  "display-mobile": {
+                    "fontFamily": "Inter",
+                    "fontSize": "32px",
+                    "fontWeight": "600",
+                    "letterSpacing": "-0.025em",
+                    "lineHeight": "40px"
+                  },
+                  "headline-lg": {
+                    "fontFamily": "Inter",
+                    "fontSize": "30px",
+                    "fontWeight": "600",
+                    "letterSpacing": "-0.02em",
+                    "lineHeight": "38px"
+                  },
+                  "headline-lg-mobile": {
+                    "fontFamily": "Inter",
+                    "fontSize": "24px",
+                    "fontWeight": "600",
+                    "letterSpacing": "-0.015em",
+                    "lineHeight": "32px"
+                  },
+                  "headline-md": {
+                    "fontFamily": "Inter",
+                    "fontSize": "22px",
+                    "fontWeight": "500",
+                    "letterSpacing": "-0.015em",
+                    "lineHeight": "28px"
+                  },
+                  "headline-sm": {
+                    "fontFamily": "Inter",
+                    "fontSize": "18px",
+                    "fontWeight": "500",
+                    "letterSpacing": "-0.01em",
+                    "lineHeight": "24px"
+                  },
+                  "label-lg": {
+                    "fontFamily": "Inter",
+                    "fontSize": "14px",
+                    "fontWeight": "500",
+                    "letterSpacing": "0.01em",
+                    "lineHeight": "20px"
+                  },
+                  "label-md": {
+                    "fontFamily": "Inter",
+                    "fontSize": "12px",
+                    "fontWeight": "500",
+                    "letterSpacing": "0.02em",
+                    "lineHeight": "16px"
+                  },
+                  "label-sm": {
+                    "fontFamily": "Inter",
+                    "fontSize": "10px",
+                    "fontWeight": "600",
+                    "letterSpacing": "0.04em",
+                    "lineHeight": "14px"
+                  }
+                }
+              },
+              "title": "Maqbool · Shared-folder publishing (Dark)",
+              "width": "2560"
+            }
+          ],
+          "theme": {}
+        }
+      },
+      {
+        "text": "I have generated the paired Light and Dark screens for **Maqbool · Shared-folder publishing**, implementing the companion setup, connection authorization, conflict resolution, and recovery workflows according to your design specifications.\n\n### Key Highlights & Workflows\n\n1. **Light Mode (`Maqbool · Shared-folder publishing (Light)`) — Mac Companion Setup & Pairing Authorization**:\n   - **Dialog Dimensions & Shell**: A true centered 760×680px dialog with 16px corner radius, 8px controls, and 44px touch targets. Preserves the full 224px sidebar (`Studio North` / `Alex Morgan, Owner / Lead Arch.`) and 70px topbar with `Delivery` active.\n   - **Human, Customer-Focused Copy**: Direct instructions (\"Open the Maqbool publishing companion on your Mac\", \"Choose the official folder there\", \"Connect this workspace\") free of technical jargon like daemons, APIs, runtimes, or client/server infrastructure.\n   - **Pairing & Security Bounds**: Pairing uses an in-companion handshake with explicit Owner review. Shows destination folder `/Volumes/Shared/Harbour delivery` with clear boundaries: *\"Only this folder can receive published files. Browser cannot access other machine paths.\"*\n   - **Connected Companion Card**: Highlights connection status, folder location, connection time, and verification actions (`Check connection`, `Disconnect`), accompanied by the reassurance: *\"Other project work is available even when this Mac is offline.\"*\n\n2. **Dark Mode (`Maqbool · Shared-folder publishing (Dark)`) — Frozen Batch Delivery, Conflict Handling & Resumption**:\n   - **Design Tokens**: Exact palette applied (canvas `#101113`, surface `#191b1f`, subtle `#23252a`, border `#32363d`, primary mint `#9cd7b9` with `#101113` text). Dark green is strictly avoided as background or panel fills.\n   - **Batch Pre-Verification & Integrity**: Displays the frozen batch (`Waterfront review package · 8 files`) targeted at `/Volumes/Shared/Harbour delivery/Phase-2/`. Highlights companion journaling and exact byte verification.\n   - **Conflict Protection**: Includes explicit conflict states without a casual \"force overwrite\":\n     - *\"Budget sheet.xlsx has changed in the destination folder\"* with an amber status chip and clear reassurance: *\"Your existing file has been kept. Nothing was overwritten.\"*\n     - Clear actions: `View details`, `Choose another destination`, or `Prepare new batch`.\n     - Collision warnings (*\"Two files use the same destination\"*) with `Fix destination`.\n     - Location lock coordination (*\"Another delivery is using this location\"*).\n   - **Transfer Recovery**: Handles interrupted writing with `Check progress` and verified resumption (`Resume remaining`)."
+      },
+      {
+        "suggestion": "Show the 'View details' conflict resolution popover for Budget sheet.xlsx"
+      },
+      {
+        "suggestion": "Design the non-Owner view with the 'Ask an Owner to connect a publishing Mac' state"
+      },
+      {
+        "suggestion": "Explore the Companion Offline error state with the Retry Connection and Download Package actions"
+      }
+    ],
+    "projectId": "2504438657315916160",
+    "sessionId": "14848853058433567226"
+  }
+}

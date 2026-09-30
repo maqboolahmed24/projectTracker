@@ -2,6 +2,7 @@
 FROM node:24.20.0-bookworm-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
+COPY vendor ./vendor
 RUN npm ci
 COPY . .
 RUN npm run build
@@ -10,6 +11,7 @@ RUN mkdir -p migrations
 FROM node:24.20.0-bookworm-slim AS production-dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
+COPY vendor ./vendor
 RUN npm ci --omit=dev && npm cache clean --force
 
 FROM node:24.20.0-bookworm-slim AS runtime

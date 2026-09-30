@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Studio North - Files | Maqbool</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            canvas: "#101113",
+            surface: "#191b1f",
+            input: "#23252a",
+            divider: "#32363d",
+            "content-primary": "#eeeeee",
+            "content-secondary": "#9da3ae",
+            mint: "#9cd7b9",
+            "mint-hover": "#8bc9ab",
+            "badge-text": "#c0c4cc"
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            headline: ['Inter', 'sans-serif']
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.4;
+      background-color: #101113;
+      color: #eeeeee;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.filled {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+  </style>
+</head>
+<body class="bg-canvas text-content-primary antialiased selection:bg-mint selection:text-canvas">
+<!-- Left Sidebar (224px, fixed, bg-[#191b1f], border-[#32363d]) -->
+<aside class="fixed top-0 left-0 h-screen w-56 bg-surface border-r border-divider flex flex-col justify-between p-3 z-30 select-none">
+<div class="flex flex-col gap-5">
+<!-- Brand Header -->
+<div class="flex items-center gap-2.5 px-2 py-1.5">
+<!-- Interlocking geometric brand mark -->
+<svg class="w-5 h-5 flex-shrink-0" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#9cd7b9" fill-opacity="0.9" height="13" rx="2" width="13" x="2" y="2"></rect>
+<circle cx="15.5" cy="15.5" fill="#588570" fill-opacity="0.9" r="6.5"></circle>
+</svg>
+<span class="font-headline text-base font-semibold text-content-primary tracking-tight">Maqbool</span>
+</div>
+<!-- Main Navigation -->
+<nav class="flex flex-col gap-1">
+<!-- Home -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-content-secondary hover:bg-input hover:text-content-primary transition-colors duration-140 ease-out text-[13px] font-normal" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<!-- Projects (Active) -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-input text-content-primary font-medium text-[13px] transition-colors duration-140 ease-out" href="#">
+<span class="material-symbols-outlined filled text-mint" data-icon="folder" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-content-secondary hover:bg-input hover:text-content-primary transition-colors duration-140 ease-out text-[13px] font-normal" href="#">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-content-secondary hover:bg-input hover:text-content-primary transition-colors duration-140 ease-out text-[13px] font-normal" href="#">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+<span>Inbox</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Navigation: Settings -->
+<div class="pt-2 border-t border-divider">
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-content-secondary hover:bg-input hover:text-content-primary transition-colors duration-140 ease-out text-[13px] font-normal" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- Top Area / Project Navigation (bg-[#191b1f], border-[#32363d]) -->
+<header class="sticky top-0 w-full pl-56 h-16 bg-surface border-b border-divider flex flex-col justify-between z-20">
+<div class="flex items-center justify-between px-8 h-full">
+<!-- Project Identity -->
+<div class="flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-mint"></span>
+<h1 class="font-headline text-base font-semibold text-content-primary tracking-tight">Studio North</h1>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex items-center gap-6 h-full pt-4">
+<a class="text-content-secondary hover:text-content-primary pb-3 text-[13px] font-normal transition-colors duration-140 ease-out" href="#">Overview</a>
+<a class="text-content-secondary hover:text-content-primary pb-3 text-[13px] font-normal transition-colors duration-140 ease-out" href="#">Work</a>
+<a class="text-content-secondary hover:text-content-primary pb-3 text-[13px] font-normal transition-colors duration-140 ease-out" href="#">Timeline</a>
+<a class="text-content-secondary hover:text-content-primary pb-3 text-[13px] font-normal transition-colors duration-140 ease-out" href="#">Updates</a>
+<!-- ACTIVE TAB: Files -->
+<a class="border-b-2 border-mint text-content-primary font-medium pb-3 text-[13px] transition-colors duration-140 ease-out" href="#">Files</a>
+<a class="text-content-secondary hover:text-content-primary pb-3 text-[13px] font-normal transition-colors duration-140 ease-out" href="#">Delivery</a>
+</nav>
+</div>
+</header>
+<!-- Main Workspace Canvas -->
+<main class="pl-56 min-h-[calc(100vh-64px)] bg-canvas">
+<div class="max-w-[1216px] mx-auto px-8 py-8 flex flex-col gap-6">
+<!-- Header Line & Action Bar -->
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-medium text-content-primary tracking-tight">Files</h2>
+<div class="flex items-center gap-2">
+<!-- Secondary Action: More -->
+<button class="border border-divider text-content-primary text-[13px] font-normal px-3 py-1.5 rounded-lg hover:bg-input transition-colors duration-140 ease-out flex items-center gap-1.5" type="button">
+<span>More</span>
+<span class="material-symbols-outlined text-[16px] text-content-secondary" data-icon="more_horiz">more_horiz</span>
+</button>
+<!-- Primary Action: Add files -->
+<button class="bg-mint hover:bg-mint-hover text-canvas text-[13px] font-medium px-3.5 py-1.5 rounded-lg transition-colors duration-140 ease-out flex items-center gap-1.5 shadow-none" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="add" style="font-variation-settings: 'wght' 500;">add</span>
+<span>Add files</span>
+</button>
+</div>
+</div>
+<!-- Filter Controls Bar -->
+<div class="flex items-center justify-between gap-3">
+<!-- Search Field -->
+<div class="relative w-80">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-content-secondary text-[16px] pointer-events-none" data-icon="search">search</span>
+<input class="w-full bg-input border border-divider text-content-primary placeholder-content-secondary rounded-lg pl-8 pr-3 py-1.5 text-[13px] focus:outline-none focus:border-content-secondary/60 focus:ring-0 transition-colors duration-140" placeholder="Search in files..." type="text"/>
+</div>
+<!-- Filter Dropdown Pills -->
+<div class="flex items-center gap-2">
+<button class="bg-input border border-divider text-content-primary text-[13px] px-3 py-1.5 rounded-lg hover:border-content-secondary/40 transition-colors duration-140 flex items-center gap-2" type="button">
+<span>All files</span>
+<span class="material-symbols-outlined text-[16px] text-content-secondary" data-icon="expand_more">expand_more</span>
+</button>
+<button class="bg-input border border-divider text-content-primary text-[13px] px-3 py-1.5 rounded-lg hover:border-content-secondary/40 transition-colors duration-140 flex items-center gap-2" type="button">
+<span>All locations</span>
+<span class="material-symbols-outlined text-[16px] text-content-secondary" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Files Table Surface -->
+<div class="bg-surface border border-divider rounded-lg overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-divider text-[11px] font-medium uppercase tracking-wider text-content-secondary h-10 select-none">
+<th class="pl-5 pr-4 py-2 font-medium" scope="col">Name</th>
+<th class="px-4 py-2 font-medium w-28" scope="col">Reference</th>
+<th class="px-4 py-2 font-medium w-28" scope="col">Purpose</th>
+<th class="px-4 py-2 font-medium w-20" scope="col">Version</th>
+<th class="px-4 py-2 font-medium w-28" scope="col">Linked work</th>
+<th class="pl-4 pr-5 py-2 font-medium text-right w-28" scope="col">Updated</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-divider">
+<!-- Row 1: briefing.pdf -->
+<tr class="h-16 hover:bg-input/60 transition-colors duration-140 ease-out group">
+<td class="pl-5 pr-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-input border border-divider flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-content-secondary group-hover:text-content-primary transition-colors text-[18px]" data-icon="description">description</span>
+</div>
+<span class="text-content-primary font-medium text-[13px]">briefing.pdf</span>
+</div>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px] font-mono">HR-001</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-input text-badge-text border border-divider">Source</span>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">v2</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">3 tasks</td>
+<td class="pl-4 pr-5 py-2 text-content-secondary text-[13px] text-right">2 hours ago</td>
+</tr>
+<!-- Row 2: welcome-guide.docx -->
+<tr class="h-16 hover:bg-input/60 transition-colors duration-140 ease-out group">
+<td class="pl-5 pr-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-input border border-divider flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-content-secondary group-hover:text-content-primary transition-colors text-[18px]" data-icon="article">article</span>
+</div>
+<span class="text-content-primary font-medium text-[13px]">welcome-guide.docx</span>
+</div>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px] font-mono">HR-002</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-input text-badge-text border border-divider">Output</span>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">v1</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">1 task</td>
+<td class="pl-4 pr-5 py-2 text-content-secondary text-[13px] text-right">Yesterday</td>
+</tr>
+<!-- Row 3: budget.xlsx -->
+<tr class="h-16 hover:bg-input/60 transition-colors duration-140 ease-out group">
+<td class="pl-5 pr-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-input border border-divider flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-content-secondary group-hover:text-content-primary transition-colors text-[18px]" data-icon="table_chart">table_chart</span>
+</div>
+<span class="text-content-primary font-medium text-[13px]">budget.xlsx</span>
+</div>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px] font-mono">HR-003</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-input text-badge-text border border-divider">Source</span>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">v3</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">2 tasks</td>
+<td class="pl-4 pr-5 py-2 text-content-secondary text-[13px] text-right">3 days ago</td>
+</tr>
+<!-- Row 4: site-survey.pdf (Shared drive label) -->
+<tr class="h-16 hover:bg-input/60 transition-colors duration-140 ease-out group">
+<td class="pl-5 pr-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-input border border-divider flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-content-secondary group-hover:text-content-primary transition-colors text-[18px]" data-icon="description">description</span>
+</div>
+<div class="flex flex-col">
+<span class="text-content-primary font-medium text-[13px]">site-survey.pdf</span>
+<span class="text-[11px] text-content-secondary font-normal">Shared drive</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px] font-mono">HR-004</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-input text-badge-text border border-divider">Source</span>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">v1</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">1 task</td>
+<td class="pl-4 pr-5 py-2 text-content-secondary text-[13px] text-right">Oct 14</td>
+</tr>
+<!-- Row 5: slide-deck.pptx -->
+<tr class="h-16 hover:bg-input/60 transition-colors duration-140 ease-out group">
+<td class="pl-5 pr-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-input border border-divider flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-content-secondary group-hover:text-content-primary transition-colors text-[18px]" data-icon="slideshow">slideshow</span>
+</div>
+<span class="text-content-primary font-medium text-[13px]">slide-deck.pptx</span>
+</div>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px] font-mono">HR-005</td>
+<td class="px-4 py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-input text-badge-text border border-divider">Output</span>
+</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">v2</td>
+<td class="px-4 py-2 text-content-secondary text-[13px]">1 task</td>
+<td class="pl-4 pr-5 py-2 text-content-secondary text-[13px] text-right">Oct 10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Status & Pagination -->
+<div class="flex items-center justify-between pt-1 pb-10">
+<!-- Honest storage footnote -->
+<div class="flex items-center gap-2 text-[12px] text-content-secondary">
+<span>620 MiB of 2 GiB used</span>
+<span class="text-divider">•</span>
+<a class="hover:text-content-primary hover:underline transition-colors duration-140" href="#">View storage</a>
+</div>
+<!-- Controlled Load more pagination button -->
+<button class="bg-transparent text-content-secondary hover:text-content-primary text-[13px] font-normal border border-divider px-4 py-1.5 rounded-lg hover:bg-input transition-colors duration-140 ease-out" type="button">
+          Load more
+        </button>
+</div>
+</div>
+</main>
+</body></html>

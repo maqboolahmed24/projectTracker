@@ -1,0 +1,76 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"screens\":[{\"name\":\"projects/5855422246659088288/screens/7dfb8df2234f415a91410e25173dd41f\",\"title\":\"Register Documents (Match) - Dark Mode\",\"screenshot\":{\"name\":\"projects/5855422246659088288/files/18c4b52b1e8c4db8b52e5e8e416cac3d\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/AEtjO1Uvb0fckv26su4hvJ1MLHDKRWjT0T5sfAaJaPUF2CZHAz3fzeT-UhZmCzoLEY2foFi1nmc709XwVml5idN7NrUOC0vQdAO4yUErSJ4vbSjo65y4BiIiFuIK4ALFYcY37FS8wDvZkh4pLNYVQhROeSG6uTbtOqyg2o5y51UhO8OJGyF5f7XPmUmJitqCtmDkEcXk4xN_VlqviMxJIYMkzYm80gCEKTbM4at-fENXcTWg-5DQdT1fjerMXw\"},\"htmlCode\":{\"name\":\"projects/5855422246659088288/files/634a25bda7c34134a3c5c0a2db1c4958\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzQ2ODk4MjFmNTE0MDRiMmM4Mjk1ZTA2MjE2MGQ5ODYzEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242\",\"mimeType\":\"text/html\"},\"width\":\"2880\",\"height\":\"2048\",\"deviceType\":\"DESKTOP\"},{\"name\":\"projects/5855422246659088288/screens/8b8b0f2c95cc48989fea4d652ffb3147\",\"title\":\"Project Files - Light Mode\",\"screenshot\":{\"name\":\"projects/5855422246659088288/files/5e9e37e2df8d4da496d3021d505298bc\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/AEtjO1WMzYRkd7FQL2Bwn2K_se2guMbapEJIi8OAblnlEyhes5hZhL4nsZeWJtIdVW3T7iZD_U8mK1nz9ECNG_HDmJHBIx1cVsmUpOO5FStzcQsyxn1ahKXZI6Ei8c2Vsjisi8-8e-6EyAahRLOeNLOqHudFRwzhc-Sjgj-p0a4S-i7toS3RxDDvWzDEiEDqlyCu0DkvCemRHvatPkNOxqaGop0uDUUWxuQZCMvTSG45znQa8kegn3B4DlSXt0A\"},\"htmlCode\":{\"name\":\"projects/5855422246659088288/files/2dc9c0900199473fa0709df68e9c1422\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzkzZGI5ODBmZWFiNTQ2N2RhM2ZiOGNlZmQ5NzY4YzllEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242\",\"mimeType\":\"text/html\"},\"width\":\"2560\",\"height\":\"2048\",\"deviceType\":\"DESKTOP\"},{\"name\":\"projects/5855422246659088288/screens/e4c286f979594eb181923f2424fa1c06\",\"title\":\"Project Files - Dark Mode\",\"screenshot\":{\"name\":\"projects/5855422246659088288/files/73dc3a7c22dd424f8ede4c73172d52d5\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/AEtjO1V3vZO6jqX5VjLZDSEpc0URK2ENB6Vq044tIZbSEpHUwkajeAJIEYrX61hMDF3zJSEBiUX6vV9N8dtk05NA6bCGccqWp5RqPyFV8PvdvwZ1HwSSwQTK2Buh_Px9C0md3KCOAjCh9rsaiI1ddIViXNegOyf4qJoqEuHC6ziAWwjB6K__NvNibWZaeApRezwR925pqnJqnJJDcFxylPA5ZeQbhEkRMuQBsa3qk43Rv9DRElfSTNofnj_t6SA\"},\"htmlCode\":{\"name\":\"projects/5855422246659088288/files/ba29547c4fdc4535af89ce9e7cc1b8b5\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzhhYzBjY2YzNmU5ODQ5NTM5M2U1ZmZkMjM5NWI5NzYzEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242\",\"mimeType\":\"text/html\"},\"width\":\"2560\",\"height\":\"2048\",\"deviceType\":\"DESKTOP\"},{\"name\":\"projects/5855422246659088288/screens/19223da7a8a142eb9c465844952f2460\",\"title\":\"Register Documents (Match) - Light Mode\",\"screenshot\":{\"name\":\"projects/5855422246659088288/files/2b61572285444462be49cb08190b4e67\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/AEtjO1X-irf3unvYFiH87Zbl1bya934zrNP9IDY8_nldV7GTn2VVC18D3antt26n0xj8IDTyk496OarlrOcH5MsL5Tv0iAtvxGYVmSPWO6E2GKOyIj1MLEIEG69nd062T3C_e32UlQm9QswOoGkbz5K20HORWoWrQ0wIgyhLqz0ZjE2_Dz13KehRdnk5BAT-S91DxWBm5KIx3VZ2tvA-VfOqqDBZe89GxISd66zxoPvWL6pxUyVOsFQF-ERJggI\"},\"htmlCode\":{\"name\":\"projects/5855422246659088288/files/9b514f27d75b4f5d810b555ec706ea13\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzFhZDA3MmNmMTNhNzRhYmQ5Yjc3OTY4MzUyYmQzOWFjEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242\",\"mimeType\":\"text/html\"},\"width\":\"2560\",\"height\":\"2048\",\"deviceType\":\"DESKTOP\"}]}"
+    }
+  ],
+  "structuredContent": {
+    "screens": [
+      {
+        "deviceType": "DESKTOP",
+        "height": "2048",
+        "htmlCode": {
+          "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzQ2ODk4MjFmNTE0MDRiMmM4Mjk1ZTA2MjE2MGQ5ODYzEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242",
+          "mimeType": "text/html",
+          "name": "projects/5855422246659088288/files/634a25bda7c34134a3c5c0a2db1c4958"
+        },
+        "name": "projects/5855422246659088288/screens/7dfb8df2234f415a91410e25173dd41f",
+        "screenshot": {
+          "downloadUrl": "https://lh3.googleusercontent.com/aida/AEtjO1Uvb0fckv26su4hvJ1MLHDKRWjT0T5sfAaJaPUF2CZHAz3fzeT-UhZmCzoLEY2foFi1nmc709XwVml5idN7NrUOC0vQdAO4yUErSJ4vbSjo65y4BiIiFuIK4ALFYcY37FS8wDvZkh4pLNYVQhROeSG6uTbtOqyg2o5y51UhO8OJGyF5f7XPmUmJitqCtmDkEcXk4xN_VlqviMxJIYMkzYm80gCEKTbM4at-fENXcTWg-5DQdT1fjerMXw",
+          "name": "projects/5855422246659088288/files/18c4b52b1e8c4db8b52e5e8e416cac3d"
+        },
+        "title": "Register Documents (Match) - Dark Mode",
+        "width": "2880"
+      },
+      {
+        "deviceType": "DESKTOP",
+        "height": "2048",
+        "htmlCode": {
+          "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzkzZGI5ODBmZWFiNTQ2N2RhM2ZiOGNlZmQ5NzY4YzllEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242",
+          "mimeType": "text/html",
+          "name": "projects/5855422246659088288/files/2dc9c0900199473fa0709df68e9c1422"
+        },
+        "name": "projects/5855422246659088288/screens/8b8b0f2c95cc48989fea4d652ffb3147",
+        "screenshot": {
+          "downloadUrl": "https://lh3.googleusercontent.com/aida/AEtjO1WMzYRkd7FQL2Bwn2K_se2guMbapEJIi8OAblnlEyhes5hZhL4nsZeWJtIdVW3T7iZD_U8mK1nz9ECNG_HDmJHBIx1cVsmUpOO5FStzcQsyxn1ahKXZI6Ei8c2Vsjisi8-8e-6EyAahRLOeNLOqHudFRwzhc-Sjgj-p0a4S-i7toS3RxDDvWzDEiEDqlyCu0DkvCemRHvatPkNOxqaGop0uDUUWxuQZCMvTSG45znQa8kegn3B4DlSXt0A",
+          "name": "projects/5855422246659088288/files/5e9e37e2df8d4da496d3021d505298bc"
+        },
+        "title": "Project Files - Light Mode",
+        "width": "2560"
+      },
+      {
+        "deviceType": "DESKTOP",
+        "height": "2048",
+        "htmlCode": {
+          "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzhhYzBjY2YzNmU5ODQ5NTM5M2U1ZmZkMjM5NWI5NzYzEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242",
+          "mimeType": "text/html",
+          "name": "projects/5855422246659088288/files/ba29547c4fdc4535af89ce9e7cc1b8b5"
+        },
+        "name": "projects/5855422246659088288/screens/e4c286f979594eb181923f2424fa1c06",
+        "screenshot": {
+          "downloadUrl": "https://lh3.googleusercontent.com/aida/AEtjO1V3vZO6jqX5VjLZDSEpc0URK2ENB6Vq044tIZbSEpHUwkajeAJIEYrX61hMDF3zJSEBiUX6vV9N8dtk05NA6bCGccqWp5RqPyFV8PvdvwZ1HwSSwQTK2Buh_Px9C0md3KCOAjCh9rsaiI1ddIViXNegOyf4qJoqEuHC6ziAWwjB6K__NvNibWZaeApRezwR925pqnJqnJJDcFxylPA5ZeQbhEkRMuQBsa3qk43Rv9DRElfSTNofnj_t6SA",
+          "name": "projects/5855422246659088288/files/73dc3a7c22dd424f8ede4c73172d52d5"
+        },
+        "title": "Project Files - Dark Mode",
+        "width": "2560"
+      },
+      {
+        "deviceType": "DESKTOP",
+        "height": "2048",
+        "htmlCode": {
+          "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzFhZDA3MmNmMTNhNzRhYmQ5Yjc3OTY4MzUyYmQzOWFjEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhM1ODU1NDIyMjQ2NjU5MDg4Mjg4&filename=&opi=96797242",
+          "mimeType": "text/html",
+          "name": "projects/5855422246659088288/files/9b514f27d75b4f5d810b555ec706ea13"
+        },
+        "name": "projects/5855422246659088288/screens/19223da7a8a142eb9c465844952f2460",
+        "screenshot": {
+          "downloadUrl": "https://lh3.googleusercontent.com/aida/AEtjO1X-irf3unvYFiH87Zbl1bya934zrNP9IDY8_nldV7GTn2VVC18D3antt26n0xj8IDTyk496OarlrOcH5MsL5Tv0iAtvxGYVmSPWO6E2GKOyIj1MLEIEG69nd062T3C_e32UlQm9QswOoGkbz5K20HORWoWrQ0wIgyhLqz0ZjE2_Dz13KehRdnk5BAT-S91DxWBm5KIx3VZ2tvA-VfOqqDBZe89GxISd66zxoPvWL6pxUyVOsFQF-ERJggI",
+          "name": "projects/5855422246659088288/files/2b61572285444462be49cb08190b4e67"
+        },
+        "title": "Register Documents (Match) - Light Mode",
+        "width": "2560"
+      }
+    ]
+  }
+}

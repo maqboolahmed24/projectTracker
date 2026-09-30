@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Storage and export (Dark)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-container": "#87c6a5",
+            "surface-tint": "#98d3b5",
+            "on-surface": "#dfe4de",
+            "error": "#ffb4ab",
+            "surface-dim": "#0f1412",
+            "surface-container-highest": "#313632",
+            "inverse-on-surface": "#2c322e",
+            "surface-container-lowest": "#0a0f0c",
+            "surface": "#0f1412",
+            "on-primary": "#003826",
+            "on-primary-fixed": "#002114",
+            "on-secondary": "#003824",
+            "outline-variant": "#404943",
+            "on-tertiary": "#27332b",
+            "on-tertiary-container": "#4b584f",
+            "inverse-surface": "#dfe4de",
+            "background": "#0f1412",
+            "tertiary": "#dceade",
+            "surface-container-low": "#181d1a",
+            "inverse-primary": "#306950",
+            "surface-variant": "#313632",
+            "tertiary-fixed": "#d8e6da",
+            "tertiary-container": "#c0cec2",
+            "secondary-fixed-dim": "#95d4b3",
+            "tertiary-fixed-dim": "#bccabe",
+            "surface-container": "#1c211e",
+            "secondary": "#95d4b3",
+            "on-tertiary-fixed-variant": "#3d4a41",
+            "on-error": "#690005",
+            "primary": "#b7f4d4",
+            "secondary-fixed": "#b1f0ce",
+            "on-surface-variant": "#c0c9c2",
+            "on-secondary-fixed": "#002114",
+            "surface-bright": "#353a37",
+            "primary-container": "#9cd7b9",
+            "on-error-container": "#ffdad6",
+            "outline": "#8a938c",
+            "on-background": "#dfe4de",
+            "error-container": "#93000a",
+            "on-secondary-fixed-variant": "#0e5138",
+            "surface-container-high": "#262b28",
+            "primary-fixed": "#b4f0d1",
+            "on-primary-fixed-variant": "#14503a",
+            "secondary-container": "#12533a",
+            "primary-fixed-dim": "#98d3b5",
+            "on-primary-container": "#265f47",
+            "on-tertiary-fixed": "#121e17"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "margin": "2rem",
+            "margin-tablet": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2.5rem",
+            "gutter": "1.5rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "label-sm": ["Inter"],
+            "display": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-mobile": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-lg": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+            "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+            "display": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+            "body-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.005em", "fontWeight": "400"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+            "headline-sm": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+            "headline-md": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "500"}],
+            "display-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600"}],
+            "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}],
+            "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-[#101113] text-[#f0f1f3] min-h-screen font-body-md text-body-md overflow-x-hidden selection:bg-[#9cd7b9] selection:text-[#101113]">
+<!-- Global Sidebar (224px fixed width) -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between p-4 z-40 bg-[#191b1f] border-r border-[#32363d] select-none">
+<div class="flex flex-col gap-6">
+<!-- Workspace Brand Header -->
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-8 h-8 rounded-lg bg-[#23252a] border border-[#32363d] flex items-center justify-center p-1.5 shadow-sm">
+<svg class="w-full h-full" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<polygon fill="none" points="12,3 2,21 22,21" stroke="#9cd7b9" stroke-linejoin="round" stroke-width="2.5"></polygon>
+<polygon fill="#32363d" points="12,8 6,18 18,18"></polygon>
+<circle cx="12" cy="14" fill="#9cd7b9" r="2"></circle>
+</svg>
+</div>
+<div class="flex flex-col leading-none">
+<span class="font-headline-sm text-headline-sm font-semibold text-[#f0f1f3] tracking-tight">Maqbool</span>
+<span class="font-label-sm text-label-sm text-[#a8adb5] mt-0.5">Workspace</span>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col gap-1">
+<!-- Home -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] font-body-sm text-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">home</span>
+<span>Home</span>
+</a>
+<!-- Projects -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] font-body-sm text-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">folder</span>
+<span>Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] font-body-sm text-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">assignment</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] font-body-sm text-body-sm transition-colors duration-150 justify-between" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px]">inbox</span>
+<span>Inbox</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+</a>
+<!-- Settings (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#23252a] text-[#9cd7b9] font-medium font-body-sm text-body-sm border border-[#32363d]/60" href="#">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-[#f0f1f3] font-medium">Settings</span>
+</a>
+<!-- A little guidance -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] font-body-sm text-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span>A little guidance</span>
+</a>
+</nav>
+</div>
+<!-- User Profile Footer -->
+<div class="pt-4 border-t border-[#32363d]">
+<div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#2c2f34] transition-colors cursor-pointer">
+<div class="w-8 h-8 rounded-full bg-[#23252a] border border-[#32363d] flex items-center justify-center text-xs font-semibold text-[#9cd7b9]">
+          AM
+        </div>
+<div class="flex flex-col min-w-0">
+<span class="text-[#f0f1f3] text-xs font-medium truncate">Alex Morgan</span>
+<span class="text-[#a8adb5] text-[11px] truncate">Owner / Lead Arch.</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main View Frame -->
+<div class="pl-56 min-h-screen flex flex-col bg-[#101113]">
+<!-- Topbar (70px height) -->
+<header class="h-[70px] sticky top-0 bg-[#191b1f] border-b border-[#32363d] px-8 flex items-center justify-between z-20">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 text-xs font-body-sm">
+<span class="text-[#a8adb5] hover:text-[#f0f1f3] cursor-pointer">Studio North</span>
+<span class="text-[#32363d]">/</span>
+<span class="text-[#a8adb5] hover:text-[#f0f1f3] cursor-pointer">Settings</span>
+<span class="text-[#32363d]">/</span>
+<span class="text-[#f0f1f3] font-medium">Data and privacy</span>
+</div>
+<!-- Actions cluster -->
+<div class="flex items-center gap-3">
+<!-- Search bar -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#a8adb5] text-base pointer-events-none">search</span>
+<input class="w-full h-9 pl-9 pr-3 text-xs bg-[#101113] border border-[#32363d] rounded-lg text-[#f0f1f3] placeholder-[#a8adb5] focus:outline-none focus:border-[#9cd7b9] transition-colors" placeholder="Search settings..." type="text"/>
+</div>
+<!-- Notifications -->
+<button class="w-9 h-9 flex items-center justify-center rounded-lg border border-[#32363d] bg-[#101113] text-[#a8adb5] hover:text-[#f0f1f3] hover:border-[#9cd7b9]/40 transition-colors">
+<span class="material-symbols-outlined text-[18px]">notifications</span>
+</button>
+</div>
+</header>
+<!-- Secondary Nav Tabstrip under Settings -->
+<div class="px-8 bg-[#191b1f] border-b border-[#32363d]">
+<div class="flex gap-6 text-xs font-medium">
+<a class="py-3 text-[#a8adb5] hover:text-[#f0f1f3] transition-colors" href="#">General</a>
+<a class="py-3 text-[#a8adb5] hover:text-[#f0f1f3] transition-colors" href="#">People</a>
+<a class="py-3 text-[#9cd7b9] border-b-2 border-[#9cd7b9] font-semibold" href="#">Data &amp; privacy</a>
+<a class="py-3 text-[#a8adb5] hover:text-[#f0f1f3] transition-colors" href="#">Security</a>
+<a class="py-3 text-[#a8adb5] hover:text-[#f0f1f3] transition-colors" href="#">Billing</a>
+</div>
+</div>
+<!-- Canvas Page Content -->
+<main class="flex-1 p-8 max-w-5xl w-full mx-auto space-y-6">
+<!-- Title & Subtitle -->
+<div class="flex flex-col gap-1 pb-2">
+<h1 class="text-headline-lg font-headline-lg text-[#f0f1f3] tracking-tight">Data and privacy</h1>
+<p class="text-body-md font-body-md text-[#a8adb5]">Understand what is stored, backed up and included when you take your work with you.</p>
+</div>
+<!-- Storage Card (Near Quota State) -->
+<div class="bg-[#191b1f] border border-[#32363d] rounded-xl p-6 flex flex-col gap-6">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-xs uppercase tracking-wider text-[#a8adb5] font-semibold">Workspace Quota</span>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-headline-md font-semibold text-[#f0f1f3]">1.92 GiB</span>
+<span class="text-body-md font-body-md text-[#a8adb5]">of 2 GiB used (96%)</span>
+</div>
+</div>
+<!-- Status Indicator Pill -->
+<div class="px-2.5 py-1 rounded-full bg-[#23252a] border border-[#a8adb5]/30 text-xs font-medium text-[#f0f1f3] flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            Storage nearly full
+          </div>
+</div>
+<!-- Segmented Storage Meter -->
+<div class="space-y-2">
+<div class="w-full h-2.5 bg-[#23252a] rounded-full overflow-hidden flex">
+<div class="bg-[#9cd7b9] h-full" style="width: 71%;"></div>
+<div class="bg-[#32363d] h-full" style="width: 20.7%;"></div>
+<div class="bg-amber-400 h-full" style="width: 4.3%;"></div>
+</div>
+<div class="flex flex-wrap items-center justify-between text-xs text-[#a8adb5] pt-1">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-sm bg-[#9cd7b9]"></span>
+<span>Current files <strong class="text-[#f0f1f3]">1.42 GiB</strong></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-sm bg-[#32363d]"></span>
+<span>Retained versions <strong class="text-[#f0f1f3]">414 MiB</strong></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-sm bg-amber-400"></span>
+<span>Unfinished uploads <strong class="text-[#f0f1f3]">86 MiB</strong></span>
+</div>
+</div>
+<span class="text-[11px] text-[#a8adb5]">80 MiB available</span>
+</div>
+</div>
+<!-- Warning Callout Box -->
+<div class="bg-[#23252a] border border-[#32363d] rounded-lg p-4 flex items-start gap-3.5">
+<span class="material-symbols-outlined text-amber-400 text-xl mt-0.5">warning</span>
+<div class="flex-1 text-xs leading-relaxed text-[#a8adb5]">
+<span class="text-[#f0f1f3] font-medium">Storage nearly full · 86 MiB held in unfinished uploads.</span>
+            Resume or cancel to reclaim space before new document versioning is paused.
+          </div>
+<button class="text-xs font-medium text-[#9cd7b9] hover:underline whitespace-nowrap self-center">
+            Reclaim space
+          </button>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-wrap items-center gap-3 pt-1 border-t border-[#32363d]">
+<button class="h-9 px-4 rounded-lg bg-[#9cd7b9] text-[#101113] font-medium text-xs hover:bg-[#b2e3ca] transition-all active:scale-[0.98]">
+            Manage unfinished uploads
+          </button>
+<button class="h-9 px-4 rounded-lg bg-[#191b1f] border border-[#32363d] text-[#f0f1f3] hover:border-[#9cd7b9] hover:text-[#9cd7b9] font-medium text-xs transition-colors">
+            Keep on shared drive
+          </button>
+<button class="h-9 px-4 rounded-lg text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] font-medium text-xs transition-colors ml-auto">
+            View project files
+          </button>
+</div>
+</div>
+<!-- Two-column Bento Grid for Workspace Export & File Recovery -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Workspace Export Card -->
+<div class="bg-[#191b1f] border border-[#32363d] rounded-xl p-6 flex flex-col justify-between">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-[#9cd7b9] text-2xl">archive</span>
+<span class="text-[11px] font-medium text-[#a8adb5] bg-[#23252a] px-2 py-0.5 rounded border border-[#32363d]">ZIP archive</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm font-semibold text-[#f0f1f3]">Download your workspace</h2>
+<p class="text-xs text-[#a8adb5] mt-1">Export raw project data, active drafts, and version catalogues.</p>
+</div>
+<p class="text-xs text-[#a8adb5] bg-[#23252a] p-3 rounded-lg border border-[#32363d]">
+              Files on a shared drive are listed as references. Their contents are not included.
+            </p>
+</div>
+<div class="pt-6">
+<button class="w-full h-9 rounded-lg bg-[#191b1f] border border-[#32363d] text-[#f0f1f3] hover:border-[#9cd7b9] hover:text-[#9cd7b9] text-xs font-medium transition-colors">
+              Request workspace export
+            </button>
+</div>
+</div>
+<!-- Quota & Recovery Notice Card -->
+<div class="bg-[#191b1f] border border-[#32363d] rounded-xl p-6 flex flex-col justify-between">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-amber-400 text-2xl">sync_problem</span>
+<span class="text-[11px] font-medium text-amber-400 bg-[#23252a] px-2 py-0.5 rounded border border-[#32363d]">Attention required</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm font-semibold text-[#f0f1f3]">Some files could not be restored</h2>
+<p class="text-xs text-[#a8adb5] mt-1">12 documents have inconsistent state after network reconnection.</p>
+</div>
+<div class="text-xs text-[#a8adb5] bg-[#23252a] p-3 rounded-lg border border-[#32363d] flex items-center justify-between">
+<span>Affected repository: <strong>Harbour renewal HR-2024</strong></span>
+<span class="text-[11px] text-[#f0f1f3]">3 files flagged</span>
+</div>
+</div>
+<div class="pt-6 flex gap-3">
+<button class="flex-1 h-9 rounded-lg bg-[#191b1f] border border-[#32363d] text-[#f0f1f3] hover:border-[#9cd7b9] hover:text-[#9cd7b9] text-xs font-medium transition-colors">
+              View affected files
+            </button>
+<button class="h-9 px-4 rounded-lg bg-[#23252a] text-[#a8adb5] hover:text-[#f0f1f3] text-xs font-medium transition-colors">
+              Contact Owner
+            </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- MODAL OVERLAY: Manage Unfinished Uploads (Exact 640px x 560px, Centered, Muted Backdrop #101113 at 70%) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#101113]/70 backdrop-blur-sm">
+<div class="w-[640px] h-[560px] bg-[#191b1f] border border-[#32363d] rounded-2xl flex flex-col overflow-hidden shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+<!-- Fixed Header (64px / h-16) -->
+<div class="h-16 px-6 border-b border-[#32363d] flex items-center justify-between bg-[#191b1f] shrink-0">
+<div>
+<h2 class="text-headline-sm font-headline-sm font-semibold text-[#f0f1f3] tracking-tight">Unfinished uploads</h2>
+<p class="text-xs text-[#a8adb5]">2 files were interrupted before completion.</p>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Scrollable Body (p-6) -->
+<div class="flex-1 overflow-y-auto p-6 space-y-4">
+<!-- Info Banner -->
+<div class="bg-[#23252a] p-3 rounded-lg border border-[#32363d] text-xs text-[#a8adb5] flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#9cd7b9] text-base shrink-0 mt-0.5">info</span>
+<p class="leading-relaxed">
+            Capacity is reclaimed only after cleanup is confirmed. Incomplete files cannot be verified or used as evidence.
+          </p>
+</div>
+<!-- Table of Unfinished Uploads -->
+<div class="border border-[#32363d] rounded-xl overflow-hidden bg-[#101113]/50">
+<table class="w-full text-left text-xs border-collapse">
+<thead>
+<tr class="bg-[#101113] border-b border-[#32363d] text-[#a8adb5] text-[11px] uppercase tracking-wider font-semibold">
+<th class="py-2.5 px-4 font-medium">Filename</th>
+<th class="py-2.5 px-3 font-medium">Last attempt</th>
+<th class="py-2.5 px-3 font-medium">Stored size</th>
+<th class="py-2.5 px-4 font-medium text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#32363d]">
+<!-- Row 1 -->
+<tr class="hover:bg-[#23252a]/60 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[#9cd7b9] text-lg">description</span>
+<div class="min-w-0">
+<div class="font-medium text-[#f0f1f3] truncate max-w-[140px]" title="Harbour_bathymetry_analysis.xlsx">
+                        Harbour_bathymetry_analysis.xlsx
+                      </div>
+<div class="text-[11px] text-[#a8adb5]">Doc ref HR-DOC-104</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-[#a8adb5]">
+<div>Today, 14:18</div>
+<div class="text-[11px] text-amber-400">Interrupted</div>
+</td>
+<td class="py-3 px-3">
+<div class="text-[#f0f1f3] font-medium">52 MiB</div>
+<div class="text-[11px] text-[#a8adb5]">of 84 MiB</div>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-1.5">
+<button class="bg-[#9cd7b9] text-[#101113] text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-[#b2e3ca] transition-all active:scale-[0.98]">
+                      Resume
+                    </button>
+<button class="text-xs text-[#a8adb5] hover:text-[#f0f1f3] px-2 py-1.5 transition-colors">
+                      Cancel
+                    </button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-[#23252a]/60 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[#9cd7b9] text-lg">picture_as_pdf</span>
+<div class="min-w-0">
+<div class="font-medium text-[#f0f1f3] truncate max-w-[140px]" title="Seawall_concrete_spec_v2.pdf">
+                        Seawall_concrete_spec_v2.pdf
+                      </div>
+<div class="text-[11px] text-[#a8adb5]">Doc ref HR-DOC-108</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-[#a8adb5]">
+<div>Yesterday, 17:40</div>
+<div class="text-[11px] text-amber-400">Network dropped</div>
+</td>
+<td class="py-3 px-3">
+<div class="text-[#f0f1f3] font-medium">34 MiB</div>
+<div class="text-[11px] text-[#a8adb5]">Awaiting verification</div>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-1.5">
+<button class="bg-[#9cd7b9] text-[#101113] text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-[#b2e3ca] transition-all active:scale-[0.98]">
+                      Resume
+                    </button>
+<button class="text-xs text-[#a8adb5] hover:text-[#f0f1f3] px-2 py-1.5 transition-colors">
+                      Cancel
+                    </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Quota Recovery Note & Shared Drive Option -->
+<div class="bg-[#23252a]/70 border border-[#32363d] rounded-lg p-3.5 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-xs text-[#f0f1f3]">
+<span class="material-symbols-outlined text-[#9cd7b9] text-base">check_circle</span>
+<span>Cancelling both uploads reclaims <strong>86 MiB</strong> of workspace storage.</span>
+</div>
+<div class="flex items-center justify-between text-xs text-[#a8adb5] pt-2 border-t border-[#32363d]/60">
+<span>Need more room? Move raw asset destination.</span>
+<button class="text-xs font-medium text-[#9cd7b9] hover:underline flex items-center gap-1">
+              Keep on shared drive
+              <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Fixed Footer -->
+<div class="px-6 py-4 border-t border-[#32363d] flex items-center justify-between bg-[#191b1f] shrink-0">
+<div class="flex items-center gap-2 text-xs text-[#a8adb5]">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+<span>2 incomplete transfers</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="h-9 px-4 rounded-lg bg-[#191b1f] border border-[#32363d] text-[#f0f1f3] hover:border-[#9cd7b9] hover:text-[#9cd7b9] text-xs font-medium transition-colors">
+            Close
+          </button>
+<button class="h-9 px-4 rounded-lg bg-[#9cd7b9] text-[#101113] text-xs font-semibold hover:bg-[#b2e3ca] transition-all active:scale-[0.98] shadow-sm">
+            Resume all unfinished
+          </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

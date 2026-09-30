@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Shared-folder publishing (Light)</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error-container": "#752121",
+            "on-tertiary-fixed-variant": "#5e6a4a",
+            "inverse-primary": "#affedb",
+            "outline-variant": "#abb4b3",
+            "secondary": "#58615d",
+            "primary-fixed-dim": "#96e4c2",
+            "inverse-surface": "#0c0f0e",
+            "on-secondary-fixed-variant": "#555d5a",
+            "primary-container": "#a4f3d0",
+            "tertiary": "#576343",
+            "surface-variant": "#dce4e3",
+            "secondary-fixed": "#dbe5e0",
+            "surface-container": "#eaefee",
+            "tertiary-dim": "#4b5738",
+            "secondary-dim": "#4c5551",
+            "surface-container-lowest": "#ffffff",
+            "on-surface": "#2c3433",
+            "on-surface-variant": "#586160",
+            "surface-dim": "#d2dcdb",
+            "on-secondary-container": "#4b5450",
+            "surface-container-high": "#e3e9e8",
+            "primary": "#176b50",
+            "surface-container-highest": "#dce4e3",
+            "error-container": "#fe8983",
+            "outline": "#747c7c",
+            "on-primary": "#e0ffee",
+            "inverse-on-surface": "#9b9d9d",
+            "on-error": "#fff7f6",
+            "on-primary-fixed": "#004934",
+            "tertiary-fixed": "#ebf9d0",
+            "on-primary-fixed-variant": "#12684d",
+            "error": "#9f403d",
+            "surface-tint": "#176b50",
+            "on-tertiary-container": "#546040",
+            "error-dim": "#4e0309",
+            "tertiary-container": "#ebf9d0",
+            "on-tertiary-fixed": "#424e30",
+            "on-secondary": "#f2fbf6",
+            "secondary-fixed-dim": "#cdd7d2",
+            "on-primary-container": "#005e44",
+            "on-tertiary": "#f0fed5",
+            "primary-fixed": "#a4f3d0",
+            "surface-bright": "#f9f9f8",
+            "primary-dim": "#005e45",
+            "secondary-container": "#dbe5e0",
+            "background": "#f9f9f8",
+            "tertiary-fixed-dim": "#ddebc2",
+            "on-secondary-fixed": "#39413e",
+            "surface-container-low": "#f1f4f3",
+            "surface": "#f9f9f8",
+            "on-background": "#2c3433"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "margin": "2rem",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-md": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-lg": ["1.75rem", { lineHeight: "2.25rem", fontWeight: "600" }],
+            "label-sm": ["0.75rem", { lineHeight: "0.875rem", fontWeight: "500" }],
+            "headline-sm": ["1.125rem", { lineHeight: "1.5rem", fontWeight: "600" }],
+            "body-md": ["0.875rem", { lineHeight: "1.375rem", fontWeight: "400" }],
+            "label-md": ["0.8125rem", { lineHeight: "1rem", fontWeight: "500" }],
+            "body-lg": ["1rem", { lineHeight: "1.5rem", fontWeight: "400" }],
+            "headline-md": ["1.375rem", { lineHeight: "1.875rem", fontWeight: "600" }],
+            "body-sm": ["0.8125rem", { lineHeight: "1.25rem", fontWeight: "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #abb4b3;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-background font-body-md text-on-surface antialiased overflow-hidden h-screen w-screen flex">
+<!-- ================= PERSISTENT SHELL: SIDEBAR ================= -->
+<aside class="fixed top-0 left-0 h-screen w-56 bg-surface-container-lowest border-r border-outline-variant flex flex-col justify-between p-space-sm z-20">
+<div class="flex flex-col gap-space-md">
+<!-- Workspace Brand Header -->
+<div class="px-space-sm pt-space-xs flex items-center gap-space-sm">
+<svg aria-label="Maqbool triangular logo" class="w-5 h-5 flex-shrink-0" fill="none" viewbox="0 0 24 24">
+<path d="M12 3L21 19H3L12 3Z" fill="#176B50"></path>
+<path d="M12 3L21 19H14.5L12 9L9.5 19H3L12 3Z" fill="#A4F3D0" opacity="0.65"></path>
+<circle cx="12" cy="14" fill="#F0FED5" r="2.2"></circle>
+</svg>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-semibold text-on-surface tracking-tight leading-none">Maqbool</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-tight mt-0.5">Private Workspace</span>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col gap-0.5 mt-space-sm">
+<!-- 1. Home -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-on-surface transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<!-- 2. Projects (Active) -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-primary font-semibold bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</a>
+<!-- 3. My work -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-on-surface transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="font-label-md text-label-md">My work</span>
+</a>
+<!-- 4. Inbox -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-on-surface transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">inbox</span>
+<span class="font-label-md text-label-md">Inbox</span>
+</a>
+<!-- 5. Settings -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-on-surface transition-colors duration-150 mt-space-sm" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<!-- 6. A little guidance -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-on-surface transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-label-md text-label-md">A little guidance</span>
+</a>
+</nav>
+</div>
+<!-- User Profile Footer -->
+<div class="pt-space-sm border-t border-outline-variant flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-outline">account_circle</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate leading-tight">Alex Morgan</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate leading-tight">Owner / Lead Arch.</span>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded-DEFAULT">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+</aside>
+<!-- ================= TOP NAVIGATION BAR ================= -->
+<header class="fixed top-0 left-56 right-0 h-[70px] bg-surface-container-lowest border-b border-outline-variant px-space-lg flex items-center justify-between z-10">
+<div class="flex items-center gap-space-lg">
+<div class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant">
+<span class="text-on-surface font-medium">Studio North</span>
+<span class="text-outline">/</span>
+<span class="text-on-surface font-medium">Projects</span>
+<span class="text-outline">/</span>
+<span class="text-on-surface font-semibold text-headline-sm">Harbour renewal (HR-2024)</span>
+</div>
+<!-- Project navigation sub-tabs -->
+<nav class="hidden xl:flex items-center gap-space-md ml-space-md">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface pb-space-sm font-medium" href="#">Overview</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface pb-space-sm font-medium" href="#">Work</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface pb-space-sm font-medium" href="#">Timeline</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface pb-space-sm font-medium" href="#">Updates</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface pb-space-sm font-medium" href="#">Files</a>
+<!-- Active Tab -->
+<a class="font-label-md text-label-md text-primary font-semibold border-b-2 border-primary pb-space-sm" href="#">Delivery</a>
+</nav>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-space-sm">
+<button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-DEFAULT transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-DEFAULT transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="h-10 px- space-md bg-primary text-on-primary font-label-md text-label-md font-medium rounded-lg hover:bg-primary-dim transition-colors flex items-center gap-1.5 shadow-sm px-4 ml-space-xs">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Create delivery batch</span>
+</button>
+</div>
+</header>
+<!-- ================= CANVAS BACKDROP (DIMMED/BLURRED) ================= -->
+<main class="ml-56 mt-[70px] w-[calc(100vw-224px)] h-[calc(100vh-70px)] bg-surface p-space-xl overflow-hidden relative select-none">
+<div class="max-w-[1280px] mx-auto filter blur-[2px] opacity-40 pointer-events-none">
+<div class="flex items-center justify-between pb-space-md mb-space-lg border-b border-outline-variant">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-semibold">Delivery Batches</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Directly publish coordinated project packages to local volumes and connected partner hubs.</p>
+</div>
+<div class="flex gap-2">
+<div class="h-10 px-4 bg-surface-container-lowest border border-outline-variant rounded-lg flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined">filter_list</span>
+<span class="font-label-md text-label-md">Filter (4)</span>
+</div>
+</div>
+</div>
+<!-- Mock Deliverables Table / Cards -->
+<div class="grid grid-cols-3 gap-space-lg">
+<div class="bg-surface-container-lowest p-space-lg rounded-xl border border-outline-variant shadow-sm space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-primary font-semibold uppercase tracking-wider bg-surface-container px-2 py-0.5 rounded">Milestone 04</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Yesterday, 17:30</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Structural Deck Refinements</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">14 approved CAD drawings and specification sheets synced to local repository.</p>
+<div class="pt-2 border-t border-outline-variant flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span>Destination: Studio Mac</span>
+<span class="text-primary font-medium">Published</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-lg rounded-xl border border-outline-variant shadow-sm space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider bg-surface-container px-2 py-0.5 rounded">Wave 2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 12, 10:00</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Harbour Basin Environmental Audit</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Complete environmental sensor logs and civil clearance documentation ready.</p>
+<div class="pt-2 border-t border-outline-variant flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span>Destination: Studio Mac</span>
+<span class="text-primary font-medium">Published</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-lg rounded-xl border border-outline-variant shadow-sm space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-outline font-semibold uppercase tracking-wider bg-surface-container px-2 py-0.5 rounded">Wave 3 Draft</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">In Progress</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Pier 7 Timber Load Calculations</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Pending internal validation signature from structural engineering group.</p>
+<div class="pt-2 border-t border-outline-variant flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span>Destination: Not linked</span>
+<span class="text-on-surface-variant">Draft</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ================= CENTERED MODAL OVERLAY ================= -->
+<div class="absolute inset-0 bg-inverse-surface/15 flex items-center justify-center p-4 z-30">
+<!-- Modal Container: Exactly 760px x 680px, 16px radius (#ffffff, border #e2e8e3) -->
+<section aria-labelledby="modal-title" aria-modal="true" class="w-[760px] h-[680px] bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.06)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200" role="dialog">
+<!-- Modal Fixed Header -->
+<header class="px-space-xl pt-6 pb-space-md border-b border-outline-variant flex items-start justify-between bg-surface-container-lowest flex-shrink-0">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight" id="modal-title">Shared-folder publishing</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Send approved files to a folder managed by your organisation.</p>
+</div>
+<button aria-label="Close dialog" class="w-9 h-9 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</header>
+<!-- Modal Scrollable Body Area -->
+<div class="flex-1 overflow-y-auto p-space-xl space-y-space-lg custom-scrollbar">
+<!-- SECTION 1: Connected Mac Status Card -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-space-lg space-y-space-md">
+<div class="flex items-center justify-between pb-space-sm border-b border-outline-variant">
+<div class="flex items-center gap-2.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-primary-container/40"></span>
+<span class="font-headline-sm text-headline-sm font-semibold text-on-surface">Studio Mac · Connected</span>
+</div>
+<span class="font-label-sm text-label-sm font-medium text-primary bg-surface-container-lowest border border-outline-variant px-2.5 py-1 rounded-full">
+                Active workspace link
+              </span>
+</div>
+<div class="grid grid-cols-3 gap-space-md py-1">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Selected folder</span>
+<span class="font-body-sm text-body-sm font-medium text-on-surface font-mono break-all">/Volumes/Shared/Harbour delivery</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Connected since</span>
+<span class="font-body-sm text-body-sm text-on-surface">Today, 14:15</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Status</span>
+<span class="font-body-sm text-body-sm text-primary font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                  Ready to receive deliveries
+                </span>
+</div>
+</div>
+<!-- Helpful Notice Box -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-space-sm px-space-md flex items-center gap-space-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-outline text-[18px]">info</span>
+<p class="font-body-sm text-body-sm">Other project work is available even when this Mac is offline.</p>
+</div>
+<!-- Actions in card -->
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="h-9 px-space-md rounded-lg border border-outline-variant bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md font-medium transition-colors">
+                Check connection
+              </button>
+<button class="h-9 px-space-md rounded-lg border border-outline-variant hover:border-error hover:bg-surface-container-lowest text-error font-label-md text-label-md font-medium transition-colors">
+                Disconnect
+              </button>
+</div>
+</div>
+<!-- SECTION 2: Pending Authorization Card (Owner View) -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-space-lg space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">lock</span>
+<h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Connection request from Studio Mac</h3>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-medium bg-tertiary-container px-2.5 py-0.5 rounded-full">
+                Approval needed
+              </span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-space-md space-y-1.5">
+<div class="font-body-sm text-body-sm text-on-surface font-medium">
+                Destination folder: <span class="font-mono text-on-surface-variant font-normal">/Volumes/Shared/Harbour delivery</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Only this folder can receive published files. Browser cannot access other machine paths.
+              </p>
+</div>
+<!-- Action buttons: 44px min touch height -->
+<div class="flex items-center gap-space-sm pt-1">
+<button class="h-[44px] px-space-lg bg-primary text-on-primary rounded-lg font-label-md text-label-md font-medium hover:bg-primary-dim transition-colors flex items-center justify-center">
+                Allow connection
+              </button>
+<button class="h-[44px] px-space-lg border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-high text-on-surface rounded-lg font-label-md text-label-md font-medium transition-colors flex items-center justify-center">
+                Decline
+              </button>
+</div>
+</div>
+<!-- SECTION 3: Pairing Approval & Structured Guide -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg space-y-space-lg">
+<div>
+<h4 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Connect a new machine</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Use the simple companion flow to synchronize directly with your local studio storage.</p>
+</div>
+<!-- 3-Step Guide -->
+<div class="grid grid-cols-3 gap-space-md pt-1">
+<div class="flex flex-col gap-1.5 p-space-sm bg-surface-container-low rounded-lg border border-outline-variant">
+<span class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-semibold flex items-center justify-center">1</span>
+<span class="font-label-md text-label-md text-on-surface font-medium mt-1">Open the Maqbool publishing companion on your Mac</span>
+</div>
+<div class="flex flex-col gap-1.5 p-space-sm bg-surface-container-low rounded-lg border border-outline-variant">
+<span class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-semibold flex items-center justify-center">2</span>
+<span class="font-label-md text-label-md text-on-surface font-medium mt-1">Choose the official folder there</span>
+</div>
+<div class="flex flex-col gap-1.5 p-space-sm bg-surface-container-low rounded-lg border border-outline-variant">
+<span class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-semibold flex items-center justify-center">3</span>
+<span class="font-label-md text-label-md text-on-surface font-medium mt-1">Connect this workspace</span>
+</div>
+</div>
+<!-- Pairing Code Box -->
+<div class="p-space-md bg-surface-container-low border border-outline-variant rounded-lg flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">One-time security code</span>
+<span class="font-body-sm text-body-sm text-on-surface">Enter this one-time pairing code in your companion app</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="px-4 py-2 bg-surface-container-lowest border border-outline text-primary font-mono font-semibold text-headline-sm rounded-lg tracking-widest select-all">
+                  MQ-8492
+                </span>
+<button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-DEFAULT" title="Copy code">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+</button>
+</div>
+</div>
+<!-- Expandable Guidance Details -->
+<details class="group cursor-pointer">
+<summary class="font-label-md text-label-md text-primary font-medium hover:underline list-none flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] group-open:rotate-90 transition-transform">chevron_right</span>
+<span>Show setup instructions</span>
+</summary>
+<div class="mt-space-sm p-space-md bg-surface-container rounded-lg border border-outline-variant text-on-surface-variant font-body-sm text-body-sm space-y-2">
+<p>Ensure your companion application is placed within your macOS Applications folder. When prompted, select any directory on an attached storage volume where you have standard write permissions.</p>
+<p>This workspace uses isolated sandboxed file transmission. Your system identity remains strictly private and local machine processes are never modified.</p>
+</div>
+</details>
+</div>
+</div>
+<!-- Modal Fixed Footer -->
+<footer class="h-[72px] px-space-xl border-t border-outline-variant bg-surface-container-lowest flex items-center justify-between flex-shrink-0">
+<button class="h-[44px] px-space-lg rounded-lg border border-outline-variant text-on-surface hover:bg-surface-container font-label-md text-label-md font-medium transition-colors">
+            Close
+          </button>
+<button class="h-[44px] px-space-xl rounded-lg bg-primary text-on-primary hover:bg-primary-dim font-label-md text-label-md font-medium transition-colors shadow-sm">
+            Done
+          </button>
+</footer>
+</section>
+</div>
+</main>
+</body></html>

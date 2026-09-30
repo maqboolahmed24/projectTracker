@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool - Studio North | Task Review</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container": "#def3e7",
+            "surface-container-lowest": "#ffffff",
+            "error-container": "#fe8983",
+            "on-surface-variant": "#496558",
+            "error-dim": "#4e0309",
+            "on-surface": "#1d382c",
+            "on-tertiary-container": "#546040",
+            "surface-tint": "#176b50",
+            "on-error": "#fff7f6",
+            "primary-dim": "#005e45",
+            "tertiary-dim": "#4b5738",
+            "primary-fixed": "#a4f3d0",
+            "surface": "#f2fcf4",
+            "on-primary": "#e0ffee",
+            "primary-container": "#a4f3d0",
+            "surface-container-high": "#d4eee0",
+            "tertiary-fixed": "#ebf9d0",
+            "surface-container-low": "#e8f7ed",
+            "on-primary-fixed-variant": "#12684d",
+            "surface-dim": "#bee2cf",
+            "error": "#9f403d",
+            "outline": "#648173",
+            "on-tertiary-fixed-variant": "#5e6a4a",
+            "tertiary-container": "#ebf9d0",
+            "on-background": "#1d382c",
+            "inverse-surface": "#07100c",
+            "on-primary-fixed": "#004934",
+            "on-secondary-fixed": "#3d403e",
+            "on-secondary-fixed-variant": "#595c5a",
+            "tertiary-fixed-dim": "#ddebc2",
+            "surface-variant": "#caead9",
+            "primary": "#176b50",
+            "on-primary-container": "#005e44",
+            "inverse-on-surface": "#959f99",
+            "on-error-container": "#752121",
+            "secondary-dim": "#515451",
+            "on-secondary": "#f7f9f6",
+            "surface-bright": "#f2fcf4",
+            "secondary-fixed": "#e1e3df",
+            "on-tertiary": "#f0fed5",
+            "secondary-fixed-dim": "#d3d5d1",
+            "on-tertiary-fixed": "#424e30",
+            "on-secondary-container": "#4f5250",
+            "secondary-container": "#e1e3df",
+            "tertiary": "#576343",
+            "surface-container-highest": "#caead9",
+            "secondary": "#5d605d",
+            "primary-fixed-dim": "#96e4c2",
+            "outline-variant": "#9bb9a9",
+            "background": "#f2fcf4",
+            "inverse-primary": "#affedb"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Inter", "sans-serif"],
+            "display": ["Inter", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "label": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.4;
+      background-color: #101113;
+      color: #eeeeee;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .material-symbols-outlined {
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #191b1f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #32363d;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #42464f;
+    }
+  </style>
+</head>
+<body class="relative w-[1440px] h-[1000px] overflow-hidden bg-[#101113] text-[#eeeeee] select-none mx-auto">
+<!-- ========================================================================= -->
+<!-- LEFT SIDEBAR (Shared Component: SideNavBar)                              -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between bg-[#191b1f] border-r border-[#32363d] p-3 z-30 select-none">
+<div class="flex flex-col gap-5">
+<!-- Brand Anchor Header -->
+<div class="flex items-center gap-2.5 px-2 py-1.5">
+<div aria-label="Colorful geometric brand mark" class="w-6 h-6 rounded-md bg-gradient-to-tr from-[#9cd7b9] via-[#4682b4] to-[#f5c35c] flex items-center justify-center shadow-sm flex-shrink-0">
+<div class="w-2.5 h-2.5 bg-[#191b1f] rounded-sm transform rotate-45"></div>
+</div>
+<span class="font-headline text-base font-semibold text-[#eeeeee] tracking-tight">Maqbool</span>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1">
+<!-- Home -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#9aa0a6] text-xs font-normal hover:bg-[#23252a] hover:text-[#eeeeee] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<!-- Projects (Active in context of Studio North Workspace) -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#23252a] text-[#eeeeee] font-medium text-xs border border-[#32363d] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined text-[#9cd7b9]" data-icon="folder" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#9aa0a6] text-xs font-normal hover:bg-[#23252a] hover:text-[#eeeeee] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#9aa0a6] text-xs font-normal hover:bg-[#23252a] hover:text-[#eeeeee] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+<span>Inbox</span>
+</a>
+</nav>
+</div>
+<!-- Footer Action -->
+<div class="pt-2 border-t border-[#32363d]">
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[#9aa0a6] text-xs font-normal hover:bg-[#23252a] hover:text-[#eeeeee] transition-colors duration-140" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- TOP APP BAR (Shared Component: TopNavBar)                                -->
+<!-- ========================================================================= -->
+<header class="sticky top-0 w-full pl-56 h-14 bg-[#191b1f] border-b border-[#32363d] flex items-center justify-between px-6 z-20">
+<div class="flex items-center gap-6 h-full">
+<div class="flex items-center gap-2">
+<span class="font-headline text-sm font-semibold text-[#eeeeee]">Studio North</span>
+<span class="text-[11px] px-1.5 py-0.5 rounded bg-[#23252a] text-[#9aa0a6] border border-[#32363d] font-mono">SN-24</span>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex items-center gap-5 h-full pt-1">
+<a class="text-[#9aa0a6] hover:text-[#eeeeee] pb-2 text-xs font-normal transition-colors duration-140 border-b-2 border-transparent" href="#">Overview</a>
+<a class="border-b-2 border-[#9cd7b9] text-[#eeeeee] font-medium pb-2 text-xs transition-colors duration-140" href="#">Work</a>
+<a class="text-[#9aa0a6] hover:text-[#eeeeee] pb-2 text-xs font-normal transition-colors duration-140 border-b-2 border-transparent" href="#">Timeline</a>
+<a class="text-[#9aa0a6] hover:text-[#eeeeee] pb-2 text-xs font-normal transition-colors duration-140 border-b-2 border-transparent" href="#">Updates</a>
+<a class="text-[#9aa0a6] hover:text-[#eeeeee] pb-2 text-xs font-normal transition-colors duration-140 border-b-2 border-transparent" href="#">Files</a>
+<a class="text-[#9aa0a6] hover:text-[#eeeeee] pb-2 text-xs font-normal transition-colors duration-140 border-b-2 border-transparent" href="#">Delivery</a>
+</nav>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-2.5">
+<button class="p-1.5 rounded-lg text-[#9aa0a6] hover:text-[#eeeeee] hover:bg-[#23252a] transition-colors" title="More options" type="button">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 bg-[#23252a] text-[#eeeeee] border border-[#32363d] rounded-lg text-xs font-medium hover:bg-[#2c2f36] transition-colors" type="button">
+<span class="material-symbols-outlined" data-icon="add" style="font-size: 16px;">add</span>
+<span>Add files</span>
+</button>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- BACKGROUND WORKSPACE (Behind modal canvas)                                -->
+<!-- ========================================================================= -->
+<main class="pl-56 w-full h-[calc(1000px-56px)] bg-[#101113] p-8 overflow-hidden select-none opacity-40 filter blur-[1px]">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h1 class="text-lg font-semibold text-[#eeeeee]">Work stream &amp; sprints</h1>
+<p class="text-xs text-[#9aa0a6] mt-0.5">Tasks currently undergoing verification and review</p>
+</div>
+<div class="flex gap-2">
+<div class="px-3 py-1 bg-[#191b1f] border border-[#32363d] rounded-lg text-xs text-[#9aa0a6]">Filter: Active</div>
+<div class="px-3 py-1 bg-[#191b1f] border border-[#32363d] rounded-lg text-xs text-[#9aa0a6]">Sort: Priority</div>
+</div>
+</div>
+<!-- Mock task list rows in background -->
+<div class="border border-[#32363d] rounded-lg bg-[#191b1f] divide-y divide-[#32363d]">
+<div class="p-3.5 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 text-[11px] font-mono rounded bg-[#23252a] border border-[#32363d] text-[#9aa0a6]">HR-001</span>
+<span class="text-xs font-medium text-[#eeeeee]">Prepare the welcome guide</span>
+</div>
+<span class="text-xs text-[#f5c35c]">In review</span>
+</div>
+<div class="p-3.5 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 text-[11px] font-mono rounded bg-[#23252a] border border-[#32363d] text-[#9aa0a6]">HR-002</span>
+<span class="text-xs font-medium text-[#eeeeee]">Brand typography scale documentation</span>
+</div>
+<span class="text-xs text-[#9aa0a6]">Drafting</span>
+</div>
+<div class="p-3.5 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 text-[11px] font-mono rounded bg-[#23252a] border border-[#32363d] text-[#9aa0a6]">HR-003</span>
+<span class="text-xs font-medium text-[#eeeeee]">Onboarding schedule matrix revision</span>
+</div>
+<span class="text-xs text-[#9cd7b9]">Ready</span>
+</div>
+</div>
+</main>
+<!-- ========================================================================= -->
+<!-- MODAL BACKDROP OVERLAY                                                    -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 bg-black/60 z-40 transition-opacity backdrop-blur-[2px]"></div>
+<!-- ========================================================================= -->
+<!-- TASK DETAIL MODAL (Exact Dimensions: 860px x 760px)                      -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+<div class="pointer-events-auto w-[860px] h-[760px] bg-[#191b1f] border border-[#32363d] rounded-xl shadow-2xl flex flex-col overflow-hidden">
+<!-- Modal Header (Fixed, 60px) -->
+<header class="flex-shrink-0 h-[60px] px-6 border-b border-[#32363d] flex items-center justify-between bg-[#191b1f]">
+<!-- Left: Badge, Title, Status -->
+<div class="flex items-center">
+<span class="bg-[#23252a] text-[#eeeeee] border border-[#32363d] px-2 py-0.5 rounded text-xs font-mono font-medium tracking-tight">HR-001</span>
+<h2 class="text-sm font-semibold text-[#eeeeee] ml-3 tracking-tight">Prepare the welcome guide</h2>
+<span class="inline-flex items-center gap-1.5 bg-[#2d281a] text-[#f5c35c] border border-[#544622] px-2.5 py-0.5 rounded-full text-xs font-medium ml-3">
+<span class="w-1.5 h-1.5 rounded-full bg-[#f5c35c]"></span>
+<span>In review</span>
+</span>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-[#9aa0a6] hover:text-[#eeeeee] hover:bg-[#23252a] transition-colors" title="More options" type="button">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+<button class="p-1.5 rounded-lg text-[#9aa0a6] hover:text-[#eeeeee] hover:bg-[#23252a] transition-colors" title="Close modal" type="button">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+</header>
+<!-- Modal Subheader / Tabs (Fixed, 42px) -->
+<nav class="flex-shrink-0 px-6 border-b border-[#32363d] flex gap-6 text-xs bg-[#191b1f]">
+<button class="text-[#9aa0a6] hover:text-[#eeeeee] py-2.5 transition-colors border-b-2 border-transparent" type="button">Details</button>
+<button class="text-[#9aa0a6] hover:text-[#eeeeee] py-2.5 transition-colors border-b-2 border-transparent" type="button">Discussion</button>
+<button class="text-[#9cd7b9] font-medium border-b-2 border-[#9cd7b9] py-2.5 -mb-px" type="button">Files and evidence</button>
+<button class="text-[#9aa0a6] hover:text-[#eeeeee] py-2.5 transition-colors border-b-2 border-transparent" type="button">Activity</button>
+</nav>
+<!-- Modal Body (Scrolling, 598px flex area) -->
+<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-[#191b1f]">
+<!-- Context notice line -->
+<p class="text-xs text-[#9aa0a6]">Review uses these exact versions.</p>
+<!-- Submitted Versions Section -->
+<div class="flex flex-col gap-2.5">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-semibold uppercase tracking-wider text-[#9aa0a6]">Submitted versions</span>
+<span class="text-xs text-[#9aa0a6]">2 items attached</span>
+</div>
+<!-- Document List Table -->
+<div class="border border-[#32363d] rounded-lg divide-y divide-[#32363d] overflow-hidden bg-[#23252a]">
+<!-- Row 1: Source Document -->
+<div class="px-4 py-3 flex items-center justify-between hover:bg-[#292c32] transition-colors duration-140">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-[#191b1f] border border-[#32363d] flex items-center justify-center text-[#e06c75]">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-[#eeeeee]">briefing.pdf</span>
+<span class="text-[11px] px-1.5 py-0.2 rounded bg-[#191b1f] text-[#9aa0a6] border border-[#32363d]">Source</span>
+<span class="text-[11px] font-mono px-1.5 py-0.2 rounded bg-[#191b1f] text-[#9cd7b9] border border-[#32363d]">v2</span>
+</div>
+<span class="text-[11px] text-[#9aa0a6] mt-0.5">2.4 MiB · Updated 4 hours ago</span>
+</div>
+</div>
+<a class="text-[#9cd7b9] font-medium text-xs hover:underline flex items-center gap-1 px-2.5 py-1 rounded hover:bg-[#191b1f]/50 transition-colors" href="#">
+<span>Open</span>
+<span class="material-symbols-outlined" data-icon="open_in_new" style="font-size: 14px;">open_in_new</span>
+</a>
+</div>
+<!-- Row 2: Output Document -->
+<div class="px-4 py-3 flex items-center justify-between hover:bg-[#292c32] transition-colors duration-140">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-[#191b1f] border border-[#32363d] flex items-center justify-center text-[#61afef]">
+<span class="material-symbols-outlined" data-icon="article">article</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-[#eeeeee]">welcome-guide.docx</span>
+<span class="text-[11px] px-1.5 py-0.2 rounded bg-[#191b1f] text-[#9aa0a6] border border-[#32363d]">Output</span>
+<span class="text-[11px] font-mono px-1.5 py-0.2 rounded bg-[#191b1f] text-[#9cd7b9] border border-[#32363d]">v1</span>
+</div>
+<span class="text-[11px] text-[#9aa0a6] mt-0.5">1.1 MiB · Updated 42 minutes ago</span>
+</div>
+</div>
+<a class="text-[#9cd7b9] font-medium text-xs hover:underline flex items-center gap-1 px-2.5 py-1 rounded hover:bg-[#191b1f]/50 transition-colors" href="#">
+<span>Open</span>
+<span class="material-symbols-outlined" data-icon="open_in_new" style="font-size: 14px;">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Independent Reviewer Verification Section -->
+<div class="flex flex-col gap-2">
+<div class="p-4 rounded-lg bg-[#23252a] border border-[#32363d]">
+<label class="flex items-start gap-3 cursor-pointer group">
+<input checked="" class="mt-0.5 w-4 h-4 rounded border-[#32363d] bg-[#191b1f] text-[#176b50] focus:ring-0 focus:ring-offset-0 transition cursor-pointer" type="checkbox"/>
+<div class="flex flex-col">
+<span class="text-xs text-[#eeeeee] font-medium group-hover:text-white transition-colors">These versions meet the task’s acceptance criteria.</span>
+<span class="text-[11px] text-[#9aa0a6] mt-1 leading-normal">Independent reviewer sign-off. Approving locks the reviewed versions to task HR-001.</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Assignment Metadata -->
+<div class="pt-2 flex items-center gap-2 text-xs text-[#9aa0a6] border-t border-[#32363d]/60">
+<span class="material-symbols-outlined text-[#9aa0a6]" data-icon="verified_user" style="font-size: 15px;">verified_user</span>
+<span>Assigned reviewer: <strong class="font-medium text-[#eeeeee]">Marcus Vance</strong></span>
+<span>·</span>
+<span>Submitted by: <strong class="font-medium text-[#eeeeee]">Sarah Jenkins</strong></span>
+</div>
+</div>
+<!-- Modal Footer (Fixed, 60px) -->
+<footer class="flex-shrink-0 h-[60px] px-6 border-t border-[#32363d] bg-[#191b1f] flex items-center justify-between">
+<!-- Left quiet dropdown action -->
+<button class="text-xs text-[#9aa0a6] hover:text-[#eeeeee] transition-colors flex items-center gap-1" type="button">
+<span>More actions</span>
+<span class="material-symbols-outlined" data-icon="expand_more" style="font-size: 16px;">expand_more</span>
+</button>
+<!-- Right actions -->
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-xs font-medium text-[#eeeeee] bg-[#23252a] border border-[#32363d] rounded-lg hover:bg-[#2c2f36] transition-colors duration-140" type="button">
+            Request changes
+          </button>
+<button class="px-4 py-2 text-xs font-semibold text-[#101113] bg-[#9cd7b9] rounded-lg hover:bg-[#8bc5a7] transition-colors duration-140 flex items-center gap-1.5 shadow-sm" type="button">
+<span class="material-symbols-outlined" data-icon="check" style="font-size: 16px; font-weight: 600;">check</span>
+<span>Accept versions</span>
+</button>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

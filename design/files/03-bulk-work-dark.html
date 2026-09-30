@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Bulk documents (Results &amp; Outcome Resolution)</title>
+<!-- Inter Google Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-low": "#181d1a",
+            "primary": "#b7f4d4",
+            "error-container": "#93000a",
+            "on-secondary": "#003824",
+            "surface-dim": "#0f1412",
+            "inverse-primary": "#306950",
+            "on-secondary-fixed": "#002114",
+            "on-primary-container": "#265f47",
+            "outline": "#8a938c",
+            "tertiary-container": "#c0cec2",
+            "surface-container-high": "#262b28",
+            "surface-tint": "#98d3b5",
+            "outline-variant": "#404943",
+            "on-primary-fixed": "#002114",
+            "primary-fixed-dim": "#98d3b5",
+            "tertiary": "#dceade",
+            "primary-fixed": "#b4f0d1",
+            "secondary": "#95d4b3",
+            "inverse-surface": "#dfe4de",
+            "surface-container-highest": "#313632",
+            "surface-container": "#1c211e",
+            "surface-bright": "#353a37",
+            "secondary-container": "#12533a",
+            "primary-container": "#9cd7b9",
+            "on-tertiary-fixed": "#121e17",
+            "on-background": "#dfe4de",
+            "surface": "#0f1412",
+            "on-tertiary-fixed-variant": "#3d4a41",
+            "on-surface": "#dfe4de",
+            "on-primary": "#003826",
+            "on-error": "#690005",
+            "inverse-on-surface": "#2c322e",
+            "on-surface-variant": "#c0c9c2",
+            "on-primary-fixed-variant": "#14503a",
+            "on-tertiary-container": "#4b584f",
+            "on-tertiary": "#27332b",
+            "surface-variant": "#313632",
+            "background": "#0f1412",
+            "tertiary-fixed-dim": "#bccabe",
+            "on-secondary-fixed-variant": "#0e5138",
+            "tertiary-fixed": "#d8e6da",
+            "secondary-fixed": "#b1f0ce",
+            "on-secondary-container": "#87c6a5",
+            "error": "#ffb4ab",
+            "on-error-container": "#ffdad6",
+            "surface-container-lowest": "#0a0f0c",
+            "secondary-fixed-dim": "#95d4b3",
+            /* Strict requested tokens */
+            "brand-canvas": "#101113",
+            "brand-surface": "#191b1f",
+            "brand-subtle": "#23252a",
+            "brand-hover": "#2c2f34",
+            "brand-text": "#f0f1f3",
+            "brand-muted": "#a8adb5",
+            "brand-border": "#32363d",
+            "brand-mint": "#9cd7b9",
+            "brand-mint-hover": "#8ecba9",
+            "brand-mint-dark": "#101113"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter": "1.5rem",
+            "margin-mobile": "1rem",
+            "margin-tablet": "1.5rem",
+            "margin": "2rem",
+            "gutter-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "space-xl": "2.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "label-lg": ["Inter", "sans-serif"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "headline-md": ["Inter", "sans-serif"],
+            "headline-lg": ["Inter", "sans-serif"],
+            "display": ["Inter", "sans-serif"]
+          },
+          "fontSize": {
+            "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "500" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #191b1f;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #32363d;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #404943;
+    }
+  </style>
+</head>
+<body class="bg-brand-canvas text-brand-text font-body-md antialiased overflow-hidden select-none h-screen w-screen">
+<!-- ========================================================================= -->
+<!-- 1. LEFT SIDEBAR (Preserved Shell via Shared Component: SideNavBar)       -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between p-4 z-40 bg-brand-surface border-r border-brand-border">
+<!-- Workspace Brand Header -->
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 px-1 py-1">
+<!-- Multicolour triangular bar logo for Maqbool -->
+<div class="relative w-7 h-7 flex-shrink-0 flex items-center justify-center rounded-lg bg-brand-subtle border border-brand-border overflow-hidden">
+<svg class="w-5 h-5" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 3L20 19H4L12 3Z" stroke="#9cd7b9" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M12 8L16 16H8L12 8Z" fill="#ffb4ab" opacity="0.8"></path>
+<circle cx="12" cy="13" fill="#ffd166" r="1.5"></circle>
+</svg>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm font-semibold text-brand-text tracking-tight truncate">Maqbool</span>
+<span class="font-label-sm text-label-sm text-brand-muted truncate">Studio North</span>
+</div>
+</div>
+<!-- Main Navigation -->
+<nav class="flex flex-col gap-1">
+<!-- Home -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-muted hover:bg-brand-hover text-brand-text font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<!-- Projects (Active) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-brand-subtle text-brand-text font-medium font-body-sm border border-brand-border/60" href="#">
+<span class="material-symbols-outlined text-brand-mint" data-icon="folder" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span class="text-brand-text font-medium">Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-muted hover:bg-brand-hover hover:text-brand-text font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-muted hover:bg-brand-hover hover:text-brand-text font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+<span>Inbox</span>
+</a>
+</nav>
+</div>
+<!-- Footer Controls and Profile -->
+<div class="flex flex-col gap-3 pt-3 border-t border-brand-border/70">
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-muted hover:bg-brand-hover hover:text-brand-text font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-muted hover:bg-brand-hover hover:text-brand-text font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>A little guidance</span>
+</a>
+</nav>
+<!-- User Profile (Alex Morgan) -->
+<div class="flex items-center gap-3 px-2 py-2 mt-1 rounded-lg bg-brand-subtle/50 border border-brand-border">
+<div class="w-8 h-8 rounded-full bg-brand-border flex items-center justify-center text-brand-mint font-semibold text-label-md">
+          AM
+        </div>
+<div class="flex flex-col min-w-0">
+<span class="text-body-sm font-label-md text-brand-text truncate">Alex Morgan</span>
+<span class="text-label-sm font-label-sm text-brand-muted truncate">Civil Lead</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- 2. TOPBAR (Preserved Shell via Shared Component: TopNavBar)              -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 left-56 right-0 h-[70px] bg-brand-surface border-b border-brand-border flex items-center justify-between px-6 z-30">
+<div class="flex items-center gap-8 h-full">
+<!-- Breadcrumb -->
+<div class="flex items-center gap-2">
+<span class="text-brand-muted font-body-md">Projects</span>
+<span class="text-brand-muted font-body-sm">/</span>
+<span class="text-brand-text font-body-md font-semibold tracking-tight">Harbour renewal HR-2024</span>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex items-center gap-6 h-full">
+<a class="text-brand-muted hover:text-brand-text font-body-sm py-5 transition-colors" href="#">Overview</a>
+<a class="text-brand-muted hover:text-brand-text font-body-sm py-5 transition-colors" href="#">Work</a>
+<a class="text-brand-muted hover:text-brand-text font-body-sm py-5 transition-colors" href="#">Timeline</a>
+<a class="text-brand-muted hover:text-brand-text font-body-sm py-5 transition-colors" href="#">Updates</a>
+<!-- Active Tab: Files with mint line indicator #9cd7b9 -->
+<a class="text-brand-text border-b-2 border-brand-mint py-5 font-semibold font-body-sm flex items-center gap-1.5" href="#">
+<span>Files</span>
+<span class="px-1.5 py-0.5 rounded-full bg-brand-subtle text-label-sm text-brand-mint font-semibold">142</span>
+</a>
+<a class="text-brand-muted hover:text-brand-text font-body-sm py-5 transition-colors" href="#">Delivery</a>
+</nav>
+</div>
+<!-- Actions & Search -->
+<div class="flex items-center gap-3">
+<!-- Search Input -->
+<div class="relative w-64">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-brand-muted">
+<span class="material-symbols-outlined text-[16px]" data-icon="search">search</span>
+</span>
+<input class="w-full h-9 pl-9 pr-3 text-body-sm bg-brand-subtle text-brand-text placeholder-brand-muted/70 rounded-lg border border-brand-border focus:border-brand-mint focus:outline-none focus:ring-0" placeholder="Search harbour files..." type="text"/>
+</div>
+<!-- Secondary Action -->
+<button class="h-9 px-3.5 text-body-sm font-label-md text-brand-text bg-brand-surface border border-brand-border hover:border-brand-muted/50 rounded-lg transition-colors duration-150" type="button">
+        Register documents
+      </button>
+<!-- Primary Action -->
+<button class="h-9 px-4 text-body-sm font-label-md font-semibold text-brand-mint-dark bg-brand-mint hover:bg-brand-mint-hover rounded-lg transition-colors duration-150 shadow-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+<span>Add files</span>
+</button>
+<!-- Notification Action -->
+<button class="w-9 h-9 flex items-center justify-center rounded-lg text-brand-muted hover:text-brand-text hover:bg-brand-hover transition-colors" type="button">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- 3. UNDERLYING CONTENT CANVAS (Files Inventory Preview)                   -->
+<!-- ========================================================================= -->
+<main class="ml-56 pt-[70px] h-screen bg-brand-canvas p-8 overflow-hidden filter blur-[2px] opacity-40 pointer-events-none">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h1 class="text-headline-md font-headline-md font-semibold text-brand-text">Project Files</h1>
+<p class="text-body-sm text-brand-muted">HR-2024 maritime structures, surveys, and regulatory filings</p>
+</div>
+<div class="flex gap-2">
+<div class="h-8 px-3 rounded bg-brand-subtle border border-brand-border text-brand-muted text-body-sm flex items-center">Export manifest</div>
+<div class="h-8 px-3 rounded bg-brand-subtle border border-brand-border text-brand-muted text-body-sm flex items-center">Folder view</div>
+</div>
+</div>
+<!-- Underlying Mock Table -->
+<div class="bg-brand-surface rounded-xl border border-brand-border overflow-hidden">
+<div class="grid grid-cols-12 px-6 py-3 border-b border-brand-border bg-brand-canvas text-brand-muted text-label-sm font-label-sm uppercase">
+<div class="col-span-4">File Name</div>
+<div class="col-span-2">Task Allocation</div>
+<div class="col-span-2">Author</div>
+<div class="col-span-2">Status</div>
+<div class="col-span-2 text-right">Modified</div>
+</div>
+<div class="divide-y divide-brand-border/40 font-body-sm">
+<div class="grid grid-cols-12 px-6 py-4 items-center">
+<div class="col-span-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-brand-muted">description</span>
+<span class="text-brand-text font-medium">Borehole_sample_survey_north.pdf</span>
+</div>
+<div class="col-span-2 text-brand-muted">Subsurface test</div>
+<div class="col-span-2 text-brand-muted">Dr. V. Rao</div>
+<div class="col-span-2"><span class="px-2 py-0.5 rounded text-label-sm bg-brand-subtle text-brand-mint">Approved</span></div>
+<div class="col-span-2 text-right text-brand-muted">Yesterday</div>
+</div>
+<div class="grid grid-cols-12 px-6 py-4 items-center">
+<div class="col-span-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-brand-muted">description</span>
+<span class="text-brand-text font-medium">Breakwater_armour_calc_final.xlsx</span>
+</div>
+<div class="col-span-2 text-brand-muted">Wave 2 review</div>
+<div class="col-span-2 text-brand-muted">M. Santos</div>
+<div class="col-span-2"><span class="px-2 py-0.5 rounded text-label-sm bg-brand-subtle text-brand-muted">Under review</span></div>
+<div class="col-span-2 text-right text-brand-muted">Oct 24</div>
+</div>
+<div class="grid grid-cols-12 px-6 py-4 items-center">
+<div class="col-span-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-brand-muted">description</span>
+<span class="text-brand-text font-medium">Tidal_surge_boundary_map.dwg</span>
+</div>
+<div class="col-span-2 text-brand-muted">Civil signoff</div>
+<div class="col-span-2 text-brand-muted">Alex Morgan</div>
+<div class="col-span-2"><span class="px-2 py-0.5 rounded text-label-sm bg-brand-subtle text-brand-mint">Approved</span></div>
+<div class="col-span-2 text-right text-brand-muted">Oct 22</div>
+</div>
+</div>
+</div>
+</main>
+<!-- ========================================================================= -->
+<!-- 4. CENTER FOREGROUND MODAL (Workflow Modal Overlay)                      -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0d0b]/80 backdrop-blur-sm p-4">
+<!-- Modal Card (Strict exact 960px x 720px, rounded-2xl, background #191b1f, border #32363d) -->
+<div class="w-[960px] h-[720px] bg-brand-surface border border-brand-border rounded-2xl shadow-2xl flex flex-col justify-between overflow-hidden">
+<!-- Top Modal Header & Step Indicator -->
+<div class="px-8 pt-6 pb-4 border-b border-brand-border bg-brand-surface flex-shrink-0">
+<!-- Title and Close Action -->
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2.5">
+<span class="w-2.5 h-2.5 rounded-full bg-brand-mint"></span>
+<h2 class="text-headline-sm font-headline-sm font-semibold text-brand-text tracking-tight">Register &amp; match documents</h2>
+</div>
+<button aria-label="Close dialog" class="w-8 h-8 rounded-lg flex items-center justify-center text-brand-muted hover:text-brand-text hover:bg-brand-hover transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+</div>
+<!-- 4 Steps Stepper Pill Bar -->
+<div class="flex items-center gap-3">
+<!-- Step 1: Choose documents (check) -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-subtle border border-brand-border/60 text-brand-muted text-body-sm font-label-md">
+<span class="w-4 h-4 rounded-full bg-[#1e2e26] border border-[#2d6a4f] flex items-center justify-center text-brand-mint">
+<span class="material-symbols-outlined text-[12px]" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</span>
+<span class="text-brand-muted">1. Choose documents</span>
+</div>
+<div class="w-4 h-px bg-brand-border"></div>
+<!-- Step 2: Match work (check) -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-subtle border border-brand-border/60 text-brand-muted text-body-sm font-label-md">
+<span class="w-4 h-4 rounded-full bg-[#1e2e26] border border-[#2d6a4f] flex items-center justify-center text-brand-mint">
+<span class="material-symbols-outlined text-[12px]" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</span>
+<span class="text-brand-muted">2. Match work</span>
+</div>
+<div class="w-4 h-px bg-brand-border"></div>
+<!-- Step 3: Review matches (check) -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-subtle border border-brand-border/60 text-brand-muted text-body-sm font-label-md">
+<span class="w-4 h-4 rounded-full bg-[#1e2e26] border border-[#2d6a4f] flex items-center justify-center text-brand-mint">
+<span class="material-symbols-outlined text-[12px]" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</span>
+<span class="text-brand-muted">3. Review matches</span>
+</div>
+<div class="w-4 h-px bg-brand-border"></div>
+<!-- Step 4: Results (active step with mint #9cd7b9 text and badge) -->
+<div class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-brand-subtle border border-brand-mint/50 text-brand-mint text-body-sm font-label-md">
+<span class="w-4 h-4 rounded-full bg-brand-mint text-brand-mint-dark font-bold text-[10px] flex items-center justify-center">4</span>
+<span class="font-semibold text-brand-mint">4. Results</span>
+</div>
+</div>
+</div>
+<!-- Modal Body (Scrollable interior only, fixed header and footer) -->
+<div class="flex-1 overflow-y-auto custom-scrollbar px-8 py-5 flex flex-col gap-5 bg-brand-surface">
+<!-- Interruption Recovery Banner -->
+<div class="p-3.5 rounded-xl bg-brand-subtle border border-[#5c4323] flex items-start justify-between gap-4">
+<div class="flex items-start gap-3">
+<div class="w-5 h-5 mt-0.5 rounded-full flex items-center justify-center text-[#f6ad55] flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="warning">warning</span>
+</div>
+<div class="text-body-sm text-brand-text leading-snug">
+<span class="font-semibold text-[#f6ad55]">Connection interrupted</span> · 6 items were safely saved before the network dropped. Check progress below before retrying unfinished items.
+            </div>
+</div>
+<button class="flex-shrink-0 text-body-sm font-label-md px-3 py-1.5 rounded-lg bg-[#2d241c] hover:bg-[#3d3228] text-brand-text border border-[#5c4323] transition-colors" type="button">
+            Check progress
+          </button>
+</div>
+<!-- Outcome Summary Header with Count Pills -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-3">
+<h3 class="text-headline-sm font-headline-sm font-semibold text-brand-text">Outcome summary</h3>
+<span class="text-body-sm text-brand-muted">Batch ID: #HR-REG-8820</span>
+</div>
+<div class="flex items-center gap-2">
+<!-- 8 saved pill -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1b2520] border border-[#2d6a4f] text-brand-mint font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-brand-mint"></span>
+<span>8 saved</span>
+</div>
+<!-- 2 need attention pill -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2d241c] border border-[#5c4323] text-[#f6ad55] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#f6ad55]"></span>
+<span>2 need attention</span>
+</div>
+<!-- 2 skipped pill -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-subtle border border-brand-border text-brand-muted font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-brand-muted"></span>
+<span>2 skipped</span>
+</div>
+</div>
+</div>
+<!-- Fixed-column Outcome Table -->
+<div class="border border-brand-border rounded-xl overflow-hidden bg-brand-canvas">
+<!-- Table Header -->
+<div class="grid grid-cols-12 px-5 py-2.5 bg-[#14161a] border-b border-brand-border text-brand-muted text-label-sm font-label-sm">
+<div class="col-span-2 uppercase tracking-wider">Document ref</div>
+<div class="col-span-3 uppercase tracking-wider">Filename / Type</div>
+<div class="col-span-3 uppercase tracking-wider">Linked task</div>
+<div class="col-span-2 uppercase tracking-wider">Outcome status</div>
+<div class="col-span-2 uppercase tracking-wider text-right">Resolution action</div>
+</div>
+<!-- Table Rows Container -->
+<div class="divide-y divide-brand-border/60 font-body-sm">
+<!-- Row 1: Success -->
+<div class="grid grid-cols-12 px-5 py-3 items-center hover:bg-brand-hover/40 transition-colors">
+<div class="col-span-2 font-mono text-body-sm text-brand-text font-medium">HR-001</div>
+<div class="col-span-3 flex items-center gap-2 min-w-0 pr-2">
+<span class="material-symbols-outlined text-brand-mint text-[18px]" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="text-brand-text truncate font-medium">Harbour_geotech_v2.pdf</span>
+</div>
+<div class="col-span-3 text-brand-muted truncate pr-2">Core drill depth analysis</div>
+<div class="col-span-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#1b2520] border border-[#2d6a4f] text-brand-mint">
+<span class="material-symbols-outlined text-[13px]" data-icon="check">check</span>
+<span>Saved</span>
+</span>
+</div>
+<div class="col-span-2 text-right">
+<button class="inline-flex items-center gap-1 text-label-md text-brand-mint hover:underline font-label-md" type="button">
+<span>Open task</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Row 2: Success -->
+<div class="grid grid-cols-12 px-5 py-3 items-center hover:bg-brand-hover/40 transition-colors">
+<div class="col-span-2 font-mono text-body-sm text-brand-text font-medium">HR-002</div>
+<div class="col-span-3 flex items-center gap-2 min-w-0 pr-2">
+<span class="material-symbols-outlined text-brand-mint text-[18px]" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="text-brand-text truncate font-medium">Jetty_pile_inspection.pdf</span>
+</div>
+<div class="col-span-3 text-brand-muted truncate pr-2">Wave 2 review</div>
+<div class="col-span-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#1b2520] border border-[#2d6a4f] text-brand-mint">
+<span class="material-symbols-outlined text-[13px]" data-icon="check">check</span>
+<span>Saved</span>
+</span>
+</div>
+<div class="col-span-2 text-right">
+<button class="inline-flex items-center gap-1 text-label-md text-brand-mint hover:underline font-label-md" type="button">
+<span>Open task</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Row 3: Success -->
+<div class="grid grid-cols-12 px-5 py-3 items-center hover:bg-brand-hover/40 transition-colors">
+<div class="col-span-2 font-mono text-body-sm text-brand-text font-medium">HR-003</div>
+<div class="col-span-3 flex items-center gap-2 min-w-0 pr-2">
+<span class="material-symbols-outlined text-brand-mint text-[18px]" data-icon="table_chart">table_chart</span>
+<span class="text-brand-text truncate font-medium">Tide_levels_q3.csv</span>
+</div>
+<div class="col-span-3 text-brand-muted truncate pr-2">Environmental baseline</div>
+<div class="col-span-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#1b2520] border border-[#2d6a4f] text-brand-mint">
+<span class="material-symbols-outlined text-[13px]" data-icon="check">check</span>
+<span>Saved</span>
+</span>
+</div>
+<div class="col-span-2 text-right">
+<button class="inline-flex items-center gap-1 text-label-md text-brand-mint hover:underline font-label-md" type="button">
+<span>Open task</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Row 4: Needs attention (Duplicate reference issue) -->
+<div class="grid grid-cols-12 px-5 py-3 items-start bg-[#1f1b18]/40 hover:bg-[#25201b]/60 transition-colors">
+<div class="col-span-2 font-mono text-body-sm text-brand-text font-medium pt-0.5">HR-004</div>
+<div class="col-span-3 pr-2">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-[#f6ad55] text-[18px]" data-icon="architecture">architecture</span>
+<span class="text-brand-text truncate font-medium">Pier_elevation_drawing.dwg</span>
+</div>
+<div class="text-[11px] text-[#f6ad55] mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="error_outline">error_outline</span>
+<span>HR-004 reference in use by another deliverable</span>
+</div>
+</div>
+<div class="col-span-3 text-brand-muted truncate pr-2 pt-0.5">Pier foundation review</div>
+<div class="col-span-2 pt-0.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#2d241c] border border-[#5c4323] text-[#f6ad55]">
+<span>Needs attention</span>
+</span>
+</div>
+<div class="col-span-2 text-right flex items-center justify-end gap-2 pt-0.5">
+<button class="px-2.5 py-1 text-body-sm font-label-md text-brand-text hover:bg-brand-hover rounded border border-brand-border transition-colors" type="button">
+                  Fix reference
+                </button>
+<button class="px-2.5 py-1 text-body-sm font-label-md text-[#f6ad55] hover:bg-[#3a2d21] rounded border border-[#5c4323] transition-colors" type="button">
+                  Retry item
+                </button>
+</div>
+</div>
+<!-- Row 5: Needs attention (Permission issue) -->
+<div class="grid grid-cols-12 px-5 py-3 items-start bg-[#1f1b18]/40 hover:bg-[#25201b]/60 transition-colors">
+<div class="col-span-2 font-mono text-body-sm text-brand-text font-medium pt-0.5">HR-008</div>
+<div class="col-span-3 pr-2">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-[#f6ad55] text-[18px]" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="text-brand-text truncate font-medium">Seawall_concrete_spec.pdf</span>
+</div>
+<div class="text-[11px] text-brand-muted mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-[#f6ad55]" data-icon="lock">lock</span>
+<span>Inaccessible task · Ask a project manager for access</span>
+</div>
+</div>
+<div class="col-span-3 text-brand-muted truncate pr-2 pt-0.5">Barrier wall signoff</div>
+<div class="col-span-2 pt-0.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#2d241c] border border-[#5c4323] text-[#f6ad55]">
+<span>Needs attention</span>
+</span>
+</div>
+<div class="col-span-2 text-right pt-0.5">
+<button class="px-2.5 py-1 text-body-sm font-label-md text-brand-text hover:bg-brand-hover rounded border border-brand-border transition-colors" type="button">
+                  Change task
+                </button>
+</div>
+</div>
+<!-- Row 6: Skipped -->
+<div class="grid grid-cols-12 px-5 py-3 items-start hover:bg-brand-hover/40 transition-colors">
+<div class="col-span-2 font-mono text-body-sm text-brand-muted font-medium pt-0.5">HR-011</div>
+<div class="col-span-3 pr-2">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-brand-muted text-[18px]" data-icon="layers">layers</span>
+<span class="text-brand-text truncate font-medium">Highres_bathymetry_lidar.raw</span>
+</div>
+<div class="text-[11px] text-brand-muted mt-1">
+                  Stored on shared drive as external reference (not uploaded)
+                </div>
+</div>
+<div class="col-span-3 text-brand-muted truncate pr-2 pt-0.5">Seafloor mapping</div>
+<div class="col-span-2 pt-0.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-brand-subtle border border-brand-border text-brand-muted">
+<span>Skipped</span>
+</span>
+</div>
+<div class="col-span-2 text-right pt-0.5">
+<button class="px-2.5 py-1 text-body-sm font-label-md text-brand-muted hover:text-brand-text hover:bg-brand-hover rounded border border-brand-border transition-colors" type="button">
+                  View reference
+                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Footer (Fixed at bottom, border-t border-[#32363d], rounded-b-2xl) -->
+<div class="px-8 py-4 border-t border-brand-border bg-brand-surface rounded-b-2xl flex items-center justify-between flex-shrink-0">
+<!-- Left: Secondary action -->
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-lg border border-brand-border text-brand-text hover:bg-brand-hover font-body-sm font-label-md transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="refresh">refresh</span>
+<span>Retry 2 unfinished items</span>
+</button>
+<span class="text-label-sm text-brand-muted">Completed items close into Files or Work</span>
+</div>
+<!-- Right: Primary completion action -->
+<button class="px-6 py-2.5 rounded-lg bg-brand-mint hover:bg-brand-mint-hover text-brand-mint-dark font-semibold font-body-sm shadow-md transition-all active:scale-[0.98]" type="button">
+          Done
+        </button>
+</div>
+</div>
+</div>
+</body></html>

@@ -43,7 +43,7 @@ export class HttpPlanningTransport extends AuthenticatedHttp implements Planning
 export interface PlanningProgress { state: 'completed'; operationId: string; projectId: string; receipt: PlanningReceipt }
 /** Existing-target commands require the checkpoint returned by the caller's reviewed read. */
 export interface ExecutePlanningInput { projectId: string; operationId?: string; command: PlanningIntent; reviewed?: PlanningPin; content?: PlanningPrivateContent; outcome?: string }
-export interface CreateTaskInput { projectId: string; title: string; taskId?: string; operationId?: string; description?: string;
+export interface CreateTaskInput { projectId: string; title: string; taskId?: string; operationId?: string; description?: string; documentReference?:string;
   startDate?: string; dueDate?: string; priority?: 'low' | 'normal' | 'high'; acceptanceCriteria?: string;
   assigneeIds?: string[]; leadProfileId?: string | null; phaseId?: string | null; milestoneId?: string | null; teamId?: string | null; reviewerProfileId?: string | null }
 export class PlanningController {
@@ -78,12 +78,12 @@ export class PlanningController {
       profile.credentialGeneration !== session.credentialGeneration || profile.sessionGeneration !== session.sessionGeneration || state.dataGeneration !== session.dataGeneration) throw new PlanningClientError('INVALID_PLANNING');
     return input;
   }
-  private async current(reference: Reference, signal: AbortSignal, epoch: number) {
+  private async current(reference: Reference, signal: AbortSignal, epoch: number, historyPlaintext = true) {
     const context = planningContext.parse(await this.transport.context(reference, { signal })); this.check(epoch);
     const session = this.session(); if (context.binding.workspaceId !== reference.workspaceId || context.binding.projectId !== reference.projectId ||
       context.binding.operationId !== reference.operationId || context.binding.accountId !== session.accountId || context.binding.deviceId !== session.deviceId) throw new PlanningClientError('INVALID_PLANNING');
     const history = await this.history(reference, signal, epoch), pin = await this.operations.pin(reference); this.check(epoch);
-    const input = { context, history, accountId: session.accountId, deviceId: session.deviceId!, ...(pin ? { pin } : {}) },
+    const input = { context, history, historyPlaintext, accountId: session.accountId, deviceId: session.deviceId!, ...(pin ? { pin } : {}) },
       view = await this.auth.worker.readPlanning(input, { signal }); this.check(epoch);
     await this.operations.recordPin(view.pin); this.check(epoch); await this.pins.recordVerifiedHistory(history); this.check(epoch);
     return { context, history, input, view };
@@ -97,7 +97,7 @@ export class PlanningController {
     if (receipt.workspaceId !== b.workspaceId || receipt.projectId !== b.projectId || receipt.operationId !== b.operationId || receipt.dataGeneration !== b.dataGeneration ||
       receipt.requestHash !== await digestObject(payload) || receipt.planningVersion !== body.nextVersion || receipt.planningHead !== await digestObject(payload.mutation) ||
       receipt.graphDigest !== body.afterGraphDigest || !same(receipt.mutation, payload.mutation)) throw new PlanningClientError('INVALID_PLANNING'); this.check(epoch);
-    const current = await this.current({ workspaceId: b.workspaceId, projectId: b.projectId, operationId: b.operationId }, signal, epoch);
+    const current = await this.current({ workspaceId: b.workspaceId, projectId: b.projectId, operationId: b.operationId }, signal, epoch, false);
     if (!current.context.history.some((mutation) => same(mutation, payload.mutation))) throw new PlanningClientError('INVALID_PLANNING');
     this.options.onWrite?.();
     return { state: 'completed', operationId: b.operationId, projectId: b.projectId, receipt };
@@ -110,7 +110,7 @@ export class PlanningController {
     const status = planningView.parse(await this.transport.status({ ...reference, dataGeneration: b.dataGeneration, requestHash }, { signal })); this.check(epoch);
     if (status.state === 'completed') { if (!status.receipt) throw new PlanningClientError('INVALID_PLANNING'); return this.receipt(status.receipt, record, signal, epoch); }
     if (status.receipt || Date.parse(b.expiresAt) <= Date.now()) throw new PlanningClientError('EXPIRED');
-    const current = await this.current(reference, signal, epoch), security = await verifySecurityHistory(current.history); this.check(epoch);
+    const current = await this.current(reference, signal, epoch, false), security = await verifySecurityHistory(current.history); this.check(epoch);
     verifyPlanningBinding(b, security);
     if (b.beforeHead !== current.context.binding.beforeHead || b.beforeVersion !== current.context.binding.beforeVersion) throw new PlanningClientError('CONFLICT');
     await validatePlanningPayload(record.payload, b, current.context.graph, current.context.records); this.check(epoch);
@@ -125,13 +125,14 @@ export class PlanningController {
     const session = this.session(), reference = { workspaceId: session.workspaceId, projectId: identifier.parse(input.projectId), operationId: input.operationId ?? crypto.randomUUID() };
     if (await this.operations.get(reference.workspaceId, reference.operationId)) throw new PlanningClientError('CONFLICT'); this.check(epoch);
     await this.access.refreshKeys(); this.check(epoch);
-    const current = await this.current(reference, signal, epoch);
+    const current = await this.current(reference, signal, epoch, false);
     if(existingTarget&&'reviewed' in input&&!same(planningPin.parse(input.reviewed),current.view.pin))throw new WriteConflict(reference.operationId,current.view,input);
     const resolved: ExecutePlanningInput = 'command' in input ? input : { projectId: input.projectId,
       command: { action: 'create_task', task: { id: input.taskId!, phaseId: input.phaseId ?? null, milestoneId: input.milestoneId ?? null,
         teamId: input.teamId ?? null, leadProfileId: input.leadProfileId ?? null, reviewerProfileId: input.reviewerProfileId ?? null,
         assigneeIds: input.assigneeIds ?? (current.context.binding.permissions.includes('manage_tasks') ? [] : [current.context.binding.accountId]) } },
       content: taskPrivateData.parse({ title: input.title, ...(input.description === undefined ? {} : { description: input.description }),
+        ...(input.documentReference===undefined?{}:{documentReference:input.documentReference}),
         ...(input.startDate === undefined ? {} : { startDate: input.startDate }), ...(input.dueDate === undefined ? {} : { dueDate: input.dueDate }),
         ...(input.priority === undefined ? {} : { priority: input.priority }), ...(input.acceptanceCriteria === undefined ? {} : { acceptanceCriteria: input.acceptanceCriteria }) }) };
     const needsClosingSettings = ['complete_project', 'cancel_project', 'complete_phase', 'cancel_phase', 'accept_milestone', 'cancel_milestone'].includes(resolved.command.action);

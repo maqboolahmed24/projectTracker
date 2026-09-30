@@ -1,3 +1,4 @@
+import { planningWireValue } from '../../shared/planning-api.js';
 import type pg from 'pg';
 import { z } from 'zod';
 import { transaction,type Databases } from '../../db.js';
@@ -14,7 +15,9 @@ import { withSecurityFence,projectAuthoritativeWorkspace } from '../identity/pro
 import type { SessionService,SessionPrincipal } from '../identity/sessions.js';
 import type { ServiceSecrets } from '../identity/secrets.js';
 import { finalizeDeletionIfDue } from '../lifecycle/deadline.js';
-import { checkpointKeyObjects,readRestoreInventory,restoreSamples,signRestoreService } from './manifest.js';
+import { checkpointKeyObjects,readRestoreInventory,restoreSamples,restoreFileSamples,signRestoreService } from './manifest.js';
+import { planningSecurityResolver } from '../../client/planning-crypto.js';
+import { fileChunkDigest,verifyFileManifest } from '../../shared/files.js';
 import { assertRestoredActiveUpgrade } from './upgrades.js';
 export interface RestoreAuth {cookieValue:string;csrfToken:string}
 interface Options {databases:Databases;secrets:ServiceSecrets;sessions:SessionService;origin:string;now?:()=>Date;beforeWorkspace?:(workspaceId:string)=>Promise<void>;
@@ -50,9 +53,9 @@ export class RestorationService {
     await this.#precheck(request.workspaceId);
     return withSecurityFence(this.options.databases,request.workspaceId,async a=>{
       const result=await tenantTransaction(this.options.databases.control,request.workspaceId,undefined,async c=>{
-        const w=await this.#authority(c,request.workspaceId);if(w.restore_quarantine)throw incomplete();await this.#history(c,w);
-        const keyObjects=await checkpointKeyObjects(c,request.workspaceId),captured=await appTx(a,request.workspaceId,()=>readRestoreInventory(a,request.workspaceId,keyObjects));
-        const manifest=restoreCheckpointManifest.parse(await signRestoreService<RestoreCheckpointManifest['body']>(this.options.secrets,{version:1,purpose:'ukda.content-checkpoint.v1',
+        const w=await this.#authority(c,request.workspaceId);if(w.restore_quarantine)throw incomplete();const history=await this.#history(c,w);
+        const keyObjects=await checkpointKeyObjects(c,request.workspaceId),captured=await appTx(a,request.workspaceId,()=>readRestoreInventory(a,request.workspaceId,keyObjects,undefined,planningSecurityResolver(history.input,history.state)));
+        const manifest=restoreCheckpointManifest.parse(await signRestoreService<RestoreCheckpointManifest['body']>(this.options.secrets,{version:2,purpose:'ukda.content-checkpoint.v2',
           ...request,capturedAt:this.#now().toISOString(),source:{securityHead:w.security_head,securityVersion:w.security_version,dataGeneration:w.data_generation,writeSchema:w.write_schema},inventory:captured.inventory}));
         await this.options.hooks?.checkpointCaptured?.(manifest);
         const hash=await digestObject(manifest),previous=(await c.query('SELECT manifest FROM security.content_checkpoints WHERE workspace_id=$1 AND checkpoint_id=$2',[request.workspaceId,request.checkpointId])).rows[0];
@@ -106,7 +109,7 @@ export class RestorationService {
         const keyObjects=await checkpointKeyObjects(c,ref.workspaceId);
         for(const key of row.checkpoint_manifest.body.inventory.keyObjects)if(!keyObjects.some(r=>r.id===key.id&&r.digest===key.digest&&r.kind===key.kind))throw incomplete();
         if(!row.reconciled_manifest){
-          const loaded=await appTx(a,ref.workspaceId,()=>readRestoreInventory(a,ref.workspaceId,keyObjects));
+          const loaded=await appTx(a,ref.workspaceId,()=>readRestoreInventory(a,ref.workspaceId,keyObjects,row.checkpoint_manifest.body.inventory.tables.map(t=>t.table)));
           const expected=row.checkpoint_manifest.body.inventory;
           if(!same(loaded.inventory.tables,expected.tables)||!same(loaded.inventory.objects,expected.objects)||!same(loaded.inventory.projectIds,expected.projectIds))throw incomplete();
         }
@@ -124,7 +127,16 @@ export class RestorationService {
       return tenantTransaction(this.options.databases.control,ref.workspaceId,undefined,async c=>{
         const w=await this.#authority(c,ref.workspaceId);if(w.active_restore_id!==ref.restoreId||!w.restore_quarantine)throw changed();const {state}=await this.#history(c,w);
         const captured=await appTx(a,ref.workspaceId,async()=>{
-          const content=await readRestoreInventory(a,ref.workspaceId,initial.keyObjects);
+          const owner=(await a.query("SELECT id FROM app.profiles WHERE workspace_id=$1 AND state='active' AND is_owner ORDER BY id LIMIT 1",[ref.workspaceId])).rows[0];if(!owner)throw incomplete();await a.query("SELECT set_config('ukda.profile_id',$1,true)",[owner.id]);
+          if(initial.row.checkpoint_manifest.body.version===2){
+            await a.query("DELETE FROM app.file_chunks WHERE workspace_id=$1 AND version_id IN(SELECT id FROM app.file_versions WHERE workspace_id=$1 AND state='staged')",[ref.workspaceId]);
+            await a.query("UPDATE app.file_versions SET state='cancelled',completed_at=$2 WHERE workspace_id=$1 AND state='staged'",[ref.workspaceId,this.#now()]);
+            await a.query('DELETE FROM app.file_upload_reservations WHERE workspace_id=$1',[ref.workspaceId]);
+            await a.query("UPDATE app.file_local_services SET state='revoked' WHERE workspace_id=$1 AND state='active'",[ref.workspaceId]);
+            await a.query("UPDATE app.file_delivery_batches SET state='cancelled' WHERE workspace_id=$1 AND state IN('frozen','confirmed')",[ref.workspaceId]);
+            await a.query(`UPDATE app.file_storage_usage SET active_uploads=0,reserved_bytes=0,used_bytes=(SELECT COALESCE(sum(reserved_bytes-(manifest->'body'->>'cipherBytes')::bigint),0) FROM app.file_versions WHERE workspace_id=$1)+(SELECT COALESCE(sum(octet_length(cipher_bytes)),0) FROM app.file_chunks WHERE workspace_id=$1) WHERE workspace_id=$1`,[ref.workspaceId]);
+          }
+          const content=await readRestoreInventory(a,ref.workspaceId,initial.keyObjects,undefined,planningSecurityResolver((await this.#history(c,w)).input,state));
           // Completed upgrades require their exact retained native lineage. Never
           // declare schema-1 source rows ready under current schema-2 authority.
           if(w.active_upgrade_id){if(!w.content_maintenance||w.write_schema!==1||state.activeUpgrade?.migrationId!==w.active_upgrade_id)throw incomplete();
@@ -139,7 +151,7 @@ export class RestorationService {
           await a.query('DELETE FROM app.reporting_summaries WHERE workspace_id=$1',[ref.workspaceId]);await a.query('DELETE FROM app.summaries WHERE workspace_id=$1',[ref.workspaceId]);
           await a.query('DELETE FROM app.reporting_preparations WHERE workspace_id=$1',[ref.workspaceId]);return content;
         });
-        const manifest=restoreReconciledManifest.parse(await signRestoreService<RestoreReconciledManifest['body']>(this.options.secrets,{version:1,purpose:'ukda.restore-manifest.v1',...ref,
+        const manifest=restoreReconciledManifest.parse(await signRestoreService<RestoreReconciledManifest['body']>(this.options.secrets,{...(initial.row.checkpoint_manifest.body.version===2?{version:2,purpose:'ukda.restore-manifest.v2',files:'files'in captured.inventory?captured.inventory.files:[],fileSamples:restoreFileSamples('files'in captured.inventory?captured.inventory.files:[])}:{version:1,purpose:'ukda.restore-manifest.v1'}),...ref,
           manifestDigest:initial.row.manifest_digest,source:{securityHead:w.security_head,securityVersion:w.security_version,dataGeneration:w.data_generation,writeSchema:w.write_schema},
           reconciledAt:this.#now().toISOString(),objects:captured.inventory.objects,samples:restoreSamples(captured.inventory.objects),keyEpochs:captured.inventory.keyEpochs,missingRecords:initial.missing}));
         const row=(await c.query<RestoreRow>('UPDATE security.restorations SET reconciled_manifest=$3,missing_records=$4 WHERE workspace_id=$1 AND restore_id=$2 RETURNING *',[ref.workspaceId,ref.restoreId,manifest,JSON.stringify(initial.missing)])).rows[0]!;
@@ -166,8 +178,13 @@ export class RestorationService {
     if(d.id===history.genesis.body.device.id)ids.add(history.genesis.body.deviceEnvelopeId);
     const materials=allKeys.filter(key=>ids.has(key.id)),loaded=await appTx(a,ref.workspaceId,()=>readRestoreInventory(a,ref.workspaceId));
     const samples=row.reconciled_manifest.body.samples.map(hash=>{const envelope=loaded.envelopes.get(hash);if(!envelope)throw incomplete();return envelope;});
-    const result=restoreContext.parse({binding,checkpoint:row.checkpoint_manifest,reconciled:row.reconciled_manifest,samples,materials});
-    if(Buffer.byteLength(canonicalJson(result))>RESTORE_MAX_BYTES)throw new AppError('RESTORE_TOO_LARGE','Restore verification exceeds this release limit',413);return result;
+    const fileSamples=[];if(row.reconciled_manifest.body.version===2)for(const hash of row.reconciled_manifest.body.fileSamples){
+      const ref=row.reconciled_manifest.body.files.find(f=>f.manifestDigest===hash);if(!ref)throw incomplete();const r=await appTx(a,binding.workspaceId,async()=>{await a.query("SELECT set_config('ukda.profile_id',$1,true)",[p.accountId]);const manifest=(await a.query('SELECT manifest,state FROM app.file_versions WHERE workspace_id=$1 AND project_id=$2 AND id=$3',[binding.workspaceId,ref.projectId,ref.versionId])).rows[0];if(!manifest||manifest.state!=='ready'||await digestObject(manifest.manifest)!==hash)throw incomplete();
+        await verifyFileManifest(manifest.manifest,planningSecurityResolver(history,state));const chunk=ref.storage==='managed'?(await a.query<{cipher_bytes:Buffer}>('SELECT cipher_bytes FROM app.file_chunks WHERE workspace_id=$1 AND project_id=$2 AND version_id=$3 AND chunk_index=0',[binding.workspaceId,ref.projectId,ref.versionId])).rows[0]?.cipher_bytes:null;
+        if(ref.storage==='managed'&&(!chunk||await fileChunkDigest(chunk)!==manifest.manifest.body.chunkHashes[0]))throw incomplete();return {manifest:manifest.manifest,chunk:chunk?base64urlEncode(chunk):null};});fileSamples.push(r);
+    }
+    const result=restoreContext.parse({binding,checkpoint:row.checkpoint_manifest,reconciled:row.reconciled_manifest,samples,materials,...(row.reconciled_manifest.body.version===2?{fileSamples}:{})});
+    if(Buffer.byteLength(canonicalJson(planningWireValue(result)))>RESTORE_MAX_BYTES)throw new AppError('RESTORE_TOO_LARGE','Restore verification exceeds this release limit',413);return result;
   }
   async #preflight(auth:RestoreAuth,ref:{workspaceId:string;restoreId:string},verification?:unknown){
     await tenantTransaction(this.options.databases.control,ref.workspaceId,undefined,async c=>{const {w}=await this.#owner(c,auth,ref.workspaceId),row=(await c.query<RestoreRow>('SELECT * FROM security.restorations WHERE workspace_id=$1 AND restore_id=$2',[ref.workspaceId,ref.restoreId])).rows[0];

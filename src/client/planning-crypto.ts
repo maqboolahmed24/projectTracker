@@ -22,7 +22,7 @@ export const phasePrivateData = z.strictObject({ name: z.string().trim().min(1).
 export const milestonePrivateData = z.strictObject({ name: z.string().trim().min(1).max(240), dueDate: z.iso.date().optional() });
 export const taskPrivateData = z.strictObject({ title: z.string().trim().min(1).max(240), description: z.string().max(20000).default(''),
   dueDate: z.iso.date().optional(), startDate: z.iso.date().optional(), priority: z.enum(['low', 'normal', 'high']).optional(),
-  acceptanceCriteria: z.string().max(20000).default('') }).refine(dates);
+  acceptanceCriteria: z.string().max(20000).default(''), documentReference:z.string().trim().min(1).max(128).optional() }).refine(dates);
 export const blockerPrivateData = z.strictObject({ reason: z.string().trim().min(1).max(20000), nextAction: z.string().trim().min(1).max(20000) });
 export type PlanningPrivateContent = z.input<typeof projectPrivateData> | z.input<typeof phasePrivateData> | z.input<typeof milestonePrivateData> | z.input<typeof taskPrivateData> | z.input<typeof blockerPrivateData>;
 type OmitCommand<T> = T extends unknown ? Omit<T, 'operationId' | 'expected' | 'outcome'> : never;
@@ -32,11 +32,11 @@ export class PlanningClientError extends Error {
     super(`Planning failed (${code})`); this.name = 'PlanningClientError';
   }
 }
-const copy = <T>(value: T): T => JSON.parse(canonicalJson(value)) as T;
+const copy = <T>(value: T): T => structuredClone(value);
 const same = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b);
 function invalid(): never { throw new PlanningClientError('INVALID_PLANNING'); }
 const outcomeData = z.strictObject({ text: z.string().trim().min(1).max(20000) });
-export interface ReadPlanningInput { context: PlanningContext; history: SecurityHistoryInput; accountId: string; deviceId: string; pin?: PlanningPin }
+export interface ReadPlanningInput { context: PlanningContext; history: SecurityHistoryInput; accountId: string; deviceId: string; pin?: PlanningPin; historyPlaintext?: boolean }
 export interface PreparePlanningInput extends ReadPlanningInput { command: PlanningIntent; content?: PlanningPrivateContent; outcome?: string; closingSettings?: ReadReportingSettingsInput; upgrade?: {migrationId:string;manifestDigest:string} }
 export interface ReadablePlanningRecord { kind: PlanningRecord['kind']; id: string; revision: string; contentRevision?: string; envelopeRevision?:string; content: Record<string, unknown> }
 export interface PlanningAuditData { version: 1; action: PlanningCommand['action']; changed: { kind: PlanningRecord['kind']; id: string; before: Record<string, unknown> | null; after: Record<string, unknown> }[];
@@ -80,7 +80,7 @@ export function planningSecurityResolver(history: SecurityHistoryInput, current:
     return promise;
   };
 }
-async function projectRing(context: PlanningContext, state: SecurityHistoryState, accountId: string, deviceId: string, bundle: DeviceBundle) {
+export async function readPlanningProjectKeyRing(context: PlanningContext, state: SecurityHistoryState, accountId: string, deviceId: string, bundle: DeviceBundle) {
   const b = context.binding, profile = state.profiles[accountId], device = state.devices[deviceId];
   const eligible = (scope: { scope: string; scopeId: string; keyEpoch: string; permissions: string[]; expiresAt: string | null }) => scope.scope === 'project' && scope.scopeId === b.projectId &&
     scope.keyEpoch === b.keyEpoch && scope.permissions.includes('read_project') && (scope.expiresAt === null || Date.parse(scope.expiresAt) > Date.now());
@@ -100,11 +100,11 @@ async function projectRing(context: PlanningContext, state: SecurityHistoryState
 }
 /** Internal Worker helper shared by planning and collaboration; never exposed through the browser entry point. */
 export async function openVerifiedPlanning(value: ReadPlanningInput, bundle: DeviceBundle) {
-  const input = copy(value), state = await verifySecurityHistory(input.history), context = await verifyPlanningContext(input.context, planningSecurityResolver(input.history, state)), b = context.binding;
+  const input = { ...value, history: copy(value.history), ...(value.pin ? { pin: copy(value.pin) } : {}) }, state = await verifySecurityHistory(input.history), context = await verifyPlanningContext(input.context, planningSecurityResolver(input.history, state)), b = context.binding;
   if (b.accountId !== input.accountId || b.deviceId !== input.deviceId || b.securityHead !== state.securityHead || b.securityVersion !== state.securityVersion ||
     b.signingPublicKey !== bundle.signingPublicKey || Date.parse(b.issuedAt) > Date.now() + 30000) invalid();
   checkPin(input.pin, pinFor(context));
-  const ring = await projectRing(context, state, input.accountId, input.deviceId, bundle);
+  const ring = await readPlanningProjectKeyRing(context, state, input.accountId, input.deviceId, bundle);
   const decrypt = async (envelope: PlanningRecord['envelope'], header: PlanningRecord['envelope']['header'], signingPublicKey: string) => {
     const entry = ring.find((key) => key.epoch === header.keyEpoch); if (!entry) throw new PlanningClientError('INCOMPLETE_KEYS');
     const key = base64urlDecode(entry.key, 32);
@@ -142,13 +142,13 @@ export async function openVerifiedPlanning(value: ReadPlanningInput, bundle: Dev
   const outcomes: ReadablePlanning['outcomes'] = [], audits: ReadablePlanning['audits'] = [];
   const outcomeObjects = new Map(context.outcomes.map((object) => [object.id, object])), auditObjects = new Map(context.audits.map((object) => [object.id, object]));
   // Signed chain sequence is authoritative; storage/transport object ordering is not.
-  for (const mutation of context.history) {
+  for (const mutation of input.historyPlaintext === false ? [] : context.history) {
     if (!mutation.body.outcome) continue;
     const object = outcomeObjects.get(mutation.body.outcome.id); if (!object) invalid();
     const text = outcomeData.parse(await decrypt(object.envelope, planningContentHeader(mutation.body.binding, 'update', object.id, '1'), mutation.body.binding.signingPublicKey)).text;
     outcomes.push({ id: object.id, text });
   }
-  for (const mutation of context.history) {
+  for (const mutation of input.historyPlaintext === false ? [] : context.history) {
     const object = auditObjects.get(mutation.body.audit.id); if (!object) invalid();
     const data = await decrypt(object.envelope, planningContentHeader(mutation.body.binding, 'audit', object.id, '1'), mutation.body.binding.signingPublicKey) as PlanningAuditData;
     if (!data || data.version !== 1 || data.action !== mutation.body.command.action || !Array.isArray(data.changed) || !Array.isArray(data.snapshotContents) ||
@@ -178,7 +178,7 @@ export async function openVerifiedPlanning(value: ReadPlanningInput, bundle: Dev
 /** Returns authorised plaintext for presentation only; the caller must not persist it. */
 export async function readPlanning(input: ReadPlanningInput, bundle: DeviceBundle): Promise<ReadablePlanning> { return (await openVerifiedPlanning(input, bundle)).readable; }
 export async function preparePlanning(value: PreparePlanningInput, bundle: DeviceBundle): Promise<PlanningPayload> {
-  const input = copy(value), { context, state, ring, readable, decryptRecord } = await openVerifiedPlanning(input, bundle), b = context.binding;
+  const input = { ...value, command: copy(value.command), ...(value.content === undefined ? {} : { content: copy(value.content) }) }, { context, state, ring, readable, decryptRecord } = await openVerifiedPlanning({...input,historyPlaintext:false}, bundle), b = context.binding;
   if (Date.parse(b.expiresAt) <= Date.now()) throw new PlanningClientError('EXPIRED');
   if (state.licenceState !== 'active' || state.entitlementState !== 'activated') invalid();
   const entry = ring.find((key) => key.epoch === b.keyEpoch); if (!entry) throw new PlanningClientError('INCOMPLETE_KEYS');

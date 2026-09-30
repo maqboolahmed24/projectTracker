@@ -12,7 +12,7 @@ import { refreshAccessKeys } from '../src/client/access-change-crypto.js';
 
 test('CP12 export Worker: complete ordinary data, hidden originals and readable history produce allowlisted UTF-8 JSON without security objects',async()=>{
   const f=await exportClientFixture(),input=await f.input(),before=canonicalJson(input),prepared=await prepareExport(input,f.owner.bundle),document=JSON.parse(prepared.json);
-  assert.equal(document.exportSchema,1);assert.equal(document.complete,true);assert.match(document.notice,/plaintext project data/);assert.equal(document.workspace.name,'Private access workspace');
+  assert.equal(document.exportSchema,1);assert.equal(document.complete,true);assert.match(document.notice,/readable workspace data/);assert.match(document.notice,/metadata only/);assert.equal(document.workspace.name,'Private access workspace');
   assert.equal(document.projects[0].name,'Private original project');assert.equal(document.tasks[0].title,'Private discussion task');
   assert.deepEqual(document.assignments,[{projectId:f.collab.planning.projectId,taskId:f.collab.taskId,profileId:f.owner.accountId,taskRevision:'1'}]);
   assert.equal(document.comments[0].hidden,true);assert.equal(document.comments[0].text,'Private original discussion');assert.equal(document.comments[0].moderation.reason,'Private moderation reason');

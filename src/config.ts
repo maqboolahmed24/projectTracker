@@ -14,6 +14,7 @@ const environment = z.object({
   CONTROL_DATABASE_URL: postgresUrl,
   ADMIN_DATABASE_URL: postgresUrl.optional(),
   CONTROL_ADMIN_DATABASE_URL: postgresUrl.optional(),
+  FILE_STORAGE_LIMIT_BYTES: z.coerce.number().int().min(2 * 1024 ** 3).max(8 * 1024 ** 3).default(8 * 1024 ** 3),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'silent']).default('info'),
 });
 

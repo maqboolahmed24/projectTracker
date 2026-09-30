@@ -14,6 +14,10 @@ import type * as profileHelpers from './profile-crypto.js';
 import type * as directoryHelpers from './directory-crypto.js';
 import type * as restorationHelpers from './restoration-crypto.js';
 import type * as lifecycleHelpers from './lifecycle-crypto.js';
+import type * as fileHelpers from './files-crypto.js';
+import type * as evidenceHelpers from './file-evidence-crypto.js';
+import type * as deliveryHelpers from './files-delivery-crypto.js';
+import type * as bulkHelpers from './files-bulk-crypto.js';
 import { z } from 'zod';
 import { AuthWorkerError, workerResponse, type AuthWorkerMethods, type AuthWorkerMethod,
   type AuthWorkerErrorCode, type UnlockDeviceInput } from './auth-worker.js';
@@ -144,6 +148,27 @@ export class AuthWorkerClient {
       return result;
     } finally { options.signal?.removeEventListener('abort', abort); }
   }
+  sealFileBulk(input:bulkHelpers.SealFileBulkInput,options?:WorkerCallOptions){return this.call('sealFileBulk',input,options);}
+  openFileBulk(input:bulkHelpers.OpenFileBulkInput,options?:WorkerCallOptions){return this.call('openFileBulk',input,options);}
+  prepareDelivery(input:deliveryHelpers.PrepareDeliveryInput,options?:WorkerCallOptions){return this.call('prepareDelivery',input,options);}
+  readDelivery(input:deliveryHelpers.ReadDeliveryInput,options?:WorkerCallOptions){return this.call('readDelivery',input,options);}
+  prepareDeliveryCommand(input:deliveryHelpers.PrepareDeliveryCommandInput,options?:WorkerCallOptions){return this.call('prepareDeliveryCommand',input,options);}
+  prepareDeliveryPair(input:deliveryHelpers.PrepareDeliveryPairInput,options?:WorkerCallOptions){return this.call('prepareDeliveryPair',input,options);}
+  readDeliveryService(input:deliveryHelpers.ReadDeliveryServiceInput,options?:WorkerCallOptions){return this.call('readDeliveryService',input,options);}
+  prepareDeliveryServiceRevocation(input:deliveryHelpers.PrepareDeliveryServiceRevocationInput,options?:WorkerCallOptions){return this.call('prepareDeliveryServiceRevocation',input,options);}
+  prepareDeliveryPublish(input:deliveryHelpers.PrepareDeliveryPublishInput,options?:WorkerCallOptions){return this.call('prepareDeliveryPublish',input,options);}
+  preparePublicationMaterial(input:deliveryHelpers.PreparePublicationMaterialInput,options?:WorkerCallOptions){return this.call('preparePublicationMaterial',input,options);}
+  prepareFileVerification(input:evidenceHelpers.PrepareFileVerificationInput,options?:WorkerCallOptions){return this.call('prepareFileVerification',input,options);}
+  readFileEvidence(input:evidenceHelpers.EvidenceCryptoInput,options?:WorkerCallOptions){return this.call('readFileEvidence',input,options);}
+  prepareFileSubmission(input:evidenceHelpers.PrepareFileSubmissionInput,options?:WorkerCallOptions){return this.call('prepareFileSubmission',input,options);}
+  prepareFileReview(input:evidenceHelpers.PrepareFileReviewInput,options?:WorkerCallOptions){return this.call('prepareFileReview',input,options);}
+  prepareSharedFileApproval(input:evidenceHelpers.PrepareSharedFileApprovalInput,options?:WorkerCallOptions){return this.call('prepareSharedFileApproval',input,options);}
+  prepareFileRevocation(input:evidenceHelpers.PrepareFileRevocationInput,options?:WorkerCallOptions){return this.call('prepareFileRevocation',input,options);}
+  hashFile(file:Blob,options?:WorkerCallOptions){return this.call('hashFile',{file},options);}
+  prepareFile(input:fileHelpers.PrepareFileInput,options?:WorkerCallOptions){return this.call('prepareFile',input,options);}
+  readFiles(input:fileHelpers.ReadFilesInput,options?:WorkerCallOptions){return this.call('readFiles',input,options);}
+  readFileBytes(input:fileHelpers.ReadFileBytesInput,options?:WorkerCallOptions){return this.call('readFileBytes',input,options);}
+  prepareFileLink(input:fileHelpers.PrepareFileLinkInput,options?:WorkerCallOptions){return this.call('prepareFileLink',input,options);}
   prepareLifecycle(input: lifecycleHelpers.PrepareLifecycleInput, options?: WorkerCallOptions) { return this.call('prepareLifecycle', input, options); }
   readWorkspaceDirectory(input: directoryHelpers.ReadWorkspaceDirectoryInput, options?: WorkerCallOptions) { return this.call('readWorkspaceDirectory', input, options); }
   readCurrentProfile(input: profileHelpers.ReadCurrentProfileInput, options?: WorkerCallOptions) { return this.call('readCurrentProfile', input, options); }

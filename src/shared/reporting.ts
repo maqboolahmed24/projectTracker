@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { binary, capabilities, contentEnvelope, counter, digest, identifier, positiveCounter } from './contracts.js';
+import { binary, permissionCapabilities, contentEnvelope, counter, digest, identifier, positiveCounter } from './contracts.js';
 import { base64urlDecode, canonicalJson, digestObject, verifyContentEnvelope, verifyObject, type ContentHeader } from './crypto.js';
 import { planningContext, type PlanningContext } from './planning-api.js';
 
@@ -31,10 +31,10 @@ export const reportingSettings = z.strictObject({ workspaceId: identifier, initi
 export type ReportingSettings = z.infer<typeof reportingSettings>;
 export const reportingSettingsContext = z.strictObject({ binding: reportingSettingsBinding, settings: reportingSettings });
 export type ReportingSettingsContext = z.infer<typeof reportingSettingsContext>;
-export const reportingVisibleScope = z.strictObject({ projectId: identifier, keyEpoch: positiveCounter, permissions: z.array(z.enum(capabilities)) });
+export const reportingVisibleScope = z.strictObject({ projectId: identifier, keyEpoch: positiveCounter, permissions: z.array(z.enum(permissionCapabilities)) });
 export const reportingSourceRecord = z.strictObject({ kind: z.enum(['project','phase','milestone','task','blocker']), id: identifier,
   revision: positiveCounter, contentRevision: positiveCounter, digest });
-export const reportingSource = z.strictObject({ projectId: identifier, permissionVersion: positiveCounter, permissions: z.array(z.enum(capabilities)), keyEpoch: positiveCounter,
+export const reportingSource = z.strictObject({ projectId: identifier, permissionVersion: positiveCounter, permissions: z.array(z.enum(permissionCapabilities)), keyEpoch: positiveCounter,
   planningVersion: counter, planningHead: digest, graphDigest: digest, records: z.array(reportingSourceRecord).max(2000) });
 export type ReportingSource = z.infer<typeof reportingSource>;
 export const reportingContextRequest = reportingReference.extend({ scope: reportingScope, timezone: reportingTimezone });

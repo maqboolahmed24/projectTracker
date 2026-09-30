@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maqbool Files · Dark</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            dk: {
+              canvas: '#101113',
+              surface: '#191b1f',
+              subtle: '#23252a',
+              hover: '#2c2f34',
+              text: '#f0f1f3',
+              muted: '#a8adb5',
+              border: '#32363d',
+              mint: '#9cd7b9',
+              'mint-hover': '#b2e2ca',
+              'primary-text': '#101113',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #32363d;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #444952;
+    }
+  </style>
+</head>
+<body class="h-full bg-[#101113] text-[#f0f1f3] font-sans antialiased overflow-hidden flex select-none">
+
+  <!-- LEFT SIDEBAR: 224px fixed width, charcoal surface (#191b1f) -->
+  <aside class="w-[224px] shrink-0 h-full bg-[#191b1f] border-r border-[#32363d] flex flex-col justify-between z-20">
+    <div>
+      <!-- Workspace Brand / Logo -->
+      <div class="h-[70px] px-5 flex items-center gap-3 border-b border-[#32363d]">
+        <!-- Multi-colour triangular bar logo -->
+        <div class="w-7 h-7 flex items-center justify-center shrink-0">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 18L10 6L12 10L7.5 18H4Z" fill="#9cd7b9"/>
+            <path d="M10 6L14 13L12 17L8.5 10L10 6Z" fill="#589e83"/>
+            <path d="M14 13L17 18H10.5L12 15L14 13Z" fill="#e07a5f"/>
+            <path d="M17 18L20 18L15 9L13.5 12L17 18Z" fill="#e9c46a"/>
+          </svg>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="text-[14px] font-semibold tracking-tight text-[#f0f1f3] truncate leading-tight">Maqbool</span>
+          <span class="text-[11px] font-normal text-[#a8adb5] truncate">Studio North</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-3 space-y-1">
+        <a href="#" class="flex items-center gap-3 px-3 h-9 rounded-[8px] text-[13px] font-normal text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150">
+          <span class="material-symbols-outlined text-[18px]">home</span>
+          <span>Home</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-3 h-9 rounded-[8px] text-[13px] font-medium text-[#9cd7b9] bg-[#23252a] transition-colors duration-150">
+          <span class="material-symbols-outlined text-[18px]">folder_open</span>
+          <span>Projects</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-3 h-9 rounded-[8px] text-[13px] font-normal text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150">
+          <span class="material-symbols-outlined text-[18px]">check_box</span>
+          <span>My work</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-3 h-9 rounded-[8px] text-[13px] font-normal text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150">
+          <span class="material-symbols-outlined text-[18px]">mail</span>
+          <span class="flex-1">Inbox</span>
+          <span class="text-[11px] font-medium text-[#a8adb5] px-1.5 py-0.5 rounded-full bg-[#23252a]">2</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Sidebar Bottom -->
+    <div class="p-3 border-t border-[#32363d] space-y-1">
+      <a href="#" class="flex items-center gap-3 px-3 h-9 rounded-[8px] text-[13px] font-normal text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150">
+        <span class="material-symbols-outlined text-[18px]">settings</span>
+        <span>Settings</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 px-3 h-9 rounded-[8px] text-[13px] font-normal text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] transition-colors duration-150">
+        <span class="material-symbols-outlined text-[18px]">help_outline</span>
+        <span>A little guidance</span>
+      </a>
+
+      <!-- User avatar & switch -->
+      <div class="pt-2 px-1 flex items-center justify-between">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-7 h-7 rounded-full bg-[#23252a] text-[#9cd7b9] flex items-center justify-center font-medium text-[11px] shrink-0 border border-[#32363d]">
+            AM
+          </div>
+          <div class="truncate">
+            <div class="text-[12px] font-medium text-[#f0f1f3] truncate leading-tight">Alex Morgan</div>
+            <div class="text-[10px] text-[#a8adb5] truncate">Project lead</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden">
+
+    <!-- TOPBAR: 70px fixed height, charcoal surface (#191b1f) -->
+    <header class="h-[70px] shrink-0 bg-[#191b1f] border-b border-[#32363d] px-8 flex items-center justify-between z-10">
+      <!-- Breadcrumbs & Context -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 text-[13px] text-[#a8adb5]">
+          <span class="hover:text-[#f0f1f3] cursor-pointer">Projects</span>
+          <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+          <span class="font-medium text-[#f0f1f3] flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#9cd7b9]"></span>
+            Harbour renewal
+          </span>
+        </div>
+        <span class="text-[11px] font-medium px-2 py-0.5 rounded-[6px] bg-[#23252a] text-[#a8adb5] border border-[#32363d]">HR-2024</span>
+      </div>
+
+      <!-- Project Tabs navigation -->
+      <nav class="flex items-center h-full space-x-1">
+        <a href="#" class="px-3.5 h-full inline-flex items-center text-[13px] font-normal text-[#a8adb5] hover:text-[#f0f1f3] border-b-2 border-transparent transition-colors">Overview</a>
+        <a href="#" class="px-3.5 h-full inline-flex items-center text-[13px] font-normal text-[#a8adb5] hover:text-[#f0f1f3] border-b-2 border-transparent transition-colors">Work</a>
+        <a href="#" class="px-3.5 h-full inline-flex items-center text-[13px] font-normal text-[#a8adb5] hover:text-[#f0f1f3] border-b-2 border-transparent transition-colors">Timeline</a>
+        <a href="#" class="px-3.5 h-full inline-flex items-center text-[13px] font-normal text-[#a8adb5] hover:text-[#f0f1f3] border-b-2 border-transparent transition-colors">Updates</a>
+        <a href="#" class="px-3.5 h-full inline-flex items-center text-[13px] font-medium text-[#9cd7b9] border-b-2 border-[#9cd7b9]">Files</a>
+        <a href="#" class="px-3.5 h-full inline-flex items-center text-[13px] font-normal text-[#a8adb5] hover:text-[#f0f1f3] border-b-2 border-transparent transition-colors">Delivery</a>
+      </nav>
+
+      <!-- Quick global actions -->
+      <div class="flex items-center gap-3">
+        <div class="text-[12px] text-[#a8adb5] flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+          <span>Online</span>
+        </div>
+        <button class="w-8 h-8 rounded-[8px] flex items-center justify-center text-[#a8adb5] hover:bg-[#2c2f34] hover:text-[#f0f1f3] border border-transparent transition-colors">
+          <span class="material-symbols-outlined text-[18px]">search</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT AREA with 32px margins -->
+    <main class="flex-1 overflow-y-auto custom-scrollbar p-8">
+      <div class="max-w-[1240px] mx-auto space-y-6">
+
+        <!-- Page Header & Action Controls -->
+        <div class="flex items-start justify-between">
+          <div>
+            <h1 class="text-[22px] font-semibold text-[#f0f1f3] tracking-tight">Files</h1>
+            <p class="text-[13px] text-[#a8adb5] mt-0.5">The sources, shared references and outputs behind your work.</p>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <button class="h-9 px-3.5 rounded-[8px] bg-[#191b1f] border border-[#32363d] text-[13px] font-medium text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors duration-150 inline-flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-[#a8adb5]">link</span>
+              <span>Register documents</span>
+            </button>
+            <button class="h-9 px-3.5 rounded-[8px] bg-[#9cd7b9] hover:bg-[#b2e2ca] text-[#101113] text-[13px] font-medium transition-colors duration-150 inline-flex items-center gap-2 shadow-sm">
+              <span class="material-symbols-outlined text-[16px]">add</span>
+              <span>Add files</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modest Storage Strip -->
+        <div class="bg-[#191b1f] border border-[#32363d] rounded-[12px] px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-4 flex-1 max-w-xl">
+            <div class="flex items-center gap-2 text-[12px] text-[#f0f1f3] font-medium shrink-0">
+              <span class="material-symbols-outlined text-[17px] text-[#a8adb5]">cloud_queue</span>
+              <span>684 MiB of 2 GiB used</span>
+            </div>
+            <!-- Quiet bar -->
+            <div class="w-full bg-[#23252a] h-1.5 rounded-full overflow-hidden">
+              <div class="bg-[#9cd7b9] h-full rounded-full" style="width: 33.4%"></div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="text-[11px] text-[#a8adb5]">Upload cap 25 MiB/file · 2 concurrent</span>
+            <button class="text-[12px] font-medium text-[#9cd7b9] hover:underline">View storage</button>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="flex items-center justify-between gap-3 pt-1">
+          <div class="flex items-center gap-2.5 flex-1 max-w-lg">
+            <!-- Search input -->
+            <div class="relative w-full">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[16px] text-[#a8adb5]">search</span>
+              <input type="text" placeholder="Find a file or document reference" value="" class="w-full h-9 pl-9 pr-3 text-[13px] bg-[#191b1f] border border-[#32363d] rounded-[8px] text-[#f0f1f3] placeholder-[#a8adb5] focus:outline-none focus:border-[#9cd7b9] transition-colors" />
+            </div>
+
+            <!-- Purpose Filter -->
+            <div class="relative shrink-0">
+              <button class="h-9 px-3 rounded-[8px] bg-[#191b1f] border border-[#32363d] text-[12px] font-medium text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors flex items-center gap-2">
+                <span class="text-[#a8adb5]">Purpose:</span>
+                <span>All files</span>
+                <span class="material-symbols-outlined text-[14px] text-[#a8adb5]">expand_more</span>
+              </button>
+            </div>
+
+            <!-- Location Filter -->
+            <div class="relative shrink-0">
+              <button class="h-9 px-3 rounded-[8px] bg-[#191b1f] border border-[#32363d] text-[12px] font-medium text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors flex items-center gap-2">
+                <span class="text-[#a8adb5]">Location:</span>
+                <span>All locations</span>
+                <span class="material-symbols-outlined text-[14px] text-[#a8adb5]">expand_more</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Selection status & View Toggle -->
+          <div class="flex items-center gap-3">
+            <span class="text-[12px] font-medium text-[#9cd7b9] bg-[#23252a] px-2.5 py-1 rounded-[6px] border border-[#32363d]">1 file selected</span>
+            <div class="flex items-center border border-[#32363d] rounded-[8px] p-0.5 bg-[#191b1f]">
+              <button class="w-7 h-7 rounded-[6px] bg-[#23252a] text-[#9cd7b9] flex items-center justify-center">
+                <span class="material-symbols-outlined text-[16px]">view_list</span>
+              </button>
+              <button class="w-7 h-7 rounded-[6px] text-[#a8adb5] hover:text-[#f0f1f3] flex items-center justify-center">
+                <span class="material-symbols-outlined text-[16px]">grid_view</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Files Table Card -->
+        <div class="bg-[#191b1f] border border-[#32363d] rounded-[12px] overflow-hidden shadow-none">
+          <table class="w-full text-left border-collapse table-fixed">
+            <thead>
+              <tr class="h-10 bg-[#141619] border-b border-[#32363d] text-[11px] font-medium text-[#a8adb5]">
+                <th class="w-10 px-3.5 text-center">
+                  <input type="checkbox" class="w-3.5 h-3.5 rounded border-[#32363d] bg-[#23252a] text-[#9cd7b9] focus:ring-0 cursor-pointer" />
+                </th>
+                <th class="w-[300px] px-3">Name & document ref</th>
+                <th class="w-[120px] px-3">Purpose</th>
+                <th class="w-[90px] px-3">Version</th>
+                <th class="w-[110px] px-3">Linked work</th>
+                <th class="w-[160px] px-3">Location</th>
+                <th class="w-[110px] px-3">Updated</th>
+                <th class="w-[90px] px-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#32363d] text-[12px]">
+
+              <!-- Row 1: Harbour brief.pdf (SELECTED) -->
+              <tr class="h-14 bg-[#23252a] hover:bg-[#2c2f34] transition-colors cursor-pointer">
+                <td class="px-3.5 text-center">
+                  <input type="checkbox" checked class="w-3.5 h-3.5 rounded border-[#9cd7b9] bg-[#23252a] text-[#9cd7b9] focus:ring-0 cursor-pointer" />
+                </td>
+                <td class="px-3">
+                  <div class="flex items-center gap-2.5">
+                    <span class="material-symbols-outlined text-[20px] text-[#f87171] shrink-0">picture_as_pdf</span>
+                    <div class="min-w-0">
+                      <div class="font-medium text-[#f0f1f3] truncate">Harbour brief.pdf</div>
+                      <div class="text-[11px] text-[#a8adb5]">HR-001 · 4.2 MiB</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-3">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-[6px] text-[11px] font-medium bg-[#23252a] text-[#f0f1f3] border border-[#32363d]">Source</span>
+                </td>
+                <td class="px-3">
+                  <span class="font-medium text-[#9cd7b9]">v3</span>
+                  <span class="text-[10px] text-[#a8adb5] ml-1">(exact)</span>
+                </td>
+                <td class="px-3">
+                  <span class="text-[#f0f1f3] hover:underline cursor-pointer">4 tasks</span>
+                </td>
+                <td class="px-3">
+                  <div class="flex items-center gap-1.5 text-[#a8adb5]">
+                    <span class="material-symbols-outlined text-[15px]">cloud_done</span>
+                    <span>Uploaded</span>
+                  </div>
+                </td>
+                <td class="px-3 text-[#a8adb5]">Today</td>
+                <td class="px-3 text-right">
+                  <div class="inline-flex items-center gap-1">
+                    <button class="w-7 h-7 rounded-[6px] text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center" title="Download">
+                      <span class="material-symbols-outlined text-[16px]">download</span>
+                    </button>
+                    <button class="w-7 h-7 rounded-[6px] text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center">
+                      <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2: Survey drawings.pdf (Shared drive with Needs verification warning) -->
+              <tr class="h-14 hover:bg-[#23252a]/50 transition-colors">
+                <td class="px-3.5 text-center">
+                  <input type="checkbox" class="w-3.5 h-3.5 rounded border-[#32363d] bg-[#23252a] text-[#9cd7b9] focus:ring-0 cursor-pointer" />
+                </td>
+                <td class="px-3">
+                  <div class="flex items-center gap-2.5">
+                    <span class="material-symbols-outlined text-[20px] text-[#9cd7b9] shrink-0">architecture</span>
+                    <div class="min-w-0">
+                      <div class="font-medium text-[#f0f1f3] truncate">Survey drawings.pdf</div>
+                      <div class="text-[11px] text-[#a8adb5]">HR-002 · 18.1 MiB</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-3">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-[6px] text-[11px] font-medium bg-[#23252a] text-[#f0f1f3] border border-[#32363d]">Source</span>
+                </td>
+                <td class="px-3">
+                  <span class="font-normal text-[#f0f1f3]">v1</span>
+                </td>
+                <td class="px-3">
+                  <span class="text-[#f0f1f3] hover:underline cursor-pointer">2 tasks</span>
+                </td>
+                <td class="px-3">
+                  <div class="flex flex-col">
+                    <div class="flex items-center gap-1 text-[#f0f1f3]">
+                      <span class="material-symbols-outlined text-[14px] text-[#a8adb5]">folder_shared</span>
+                      <span>Shared drive</span>
+                    </div>
+                    <!-- Tinted charcoal amber warning -->
+                    <div class="inline-flex items-center gap-1 text-[10px] text-[#fbbf24] font-medium mt-0.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#fbbf24]"></span>
+                      <span>Needs verification</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-3 text-[#a8adb5]">Yesterday</td>
+                <td class="px-3 text-right">
+                  <div class="inline-flex items-center gap-1">
+                    <button class="h-6 px-2 text-[11px] font-medium rounded-[6px] border border-[#32363d] bg-[#23252a] text-[#f0f1f3] hover:bg-[#2c2f34]">Check</button>
+                    <button class="w-7 h-7 rounded-[6px] text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center">
+                      <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 3: Design summary.docx (Output with Accepted badge) -->
+              <tr class="h-14 hover:bg-[#23252a]/50 transition-colors">
+                <td class="px-3.5 text-center">
+                  <input type="checkbox" class="w-3.5 h-3.5 rounded border-[#32363d] bg-[#23252a] text-[#9cd7b9] focus:ring-0 cursor-pointer" />
+                </td>
+                <td class="px-3">
+                  <div class="flex items-center gap-2.5">
+                    <span class="material-symbols-outlined text-[20px] text-[#60a5fa] shrink-0">description</span>
+                    <div class="min-w-0">
+                      <div class="font-medium text-[#f0f1f3] truncate">Design summary.docx</div>
+                      <div class="text-[11px] text-[#a8adb5]">HR-003 · 1.8 MiB</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-3">
+                  <div class="flex items-center gap-1.5">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-[6px] text-[11px] font-medium bg-[#23252a] text-[#9cd7b9] border border-[#32363d]">Output</span>
+                    <!-- Neutral charcoal tinted modestly with green -->
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-[4px] text-[10px] font-medium bg-[#1e2722] text-[#4ade80] border border-[#2e4738]">Accepted</span>
+                  </div>
+                </td>
+                <td class="px-3">
+                  <span class="font-normal text-[#f0f1f3]">v2</span>
+                </td>
+                <td class="px-3">
+                  <span class="text-[#f0f1f3] hover:underline cursor-pointer">1 task</span>
+                </td>
+                <td class="px-3">
+                  <div class="flex items-center gap-1.5 text-[#a8adb5]">
+                    <span class="material-symbols-outlined text-[15px]">cloud_done</span>
+                    <span>Uploaded</span>
+                  </div>
+                </td>
+                <td class="px-3 text-[#a8adb5]">14 Oct</td>
+                <td class="px-3 text-right">
+                  <div class="inline-flex items-center gap-1">
+                    <button class="w-7 h-7 rounded-[6px] text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center" title="Download">
+                      <span class="material-symbols-outlined text-[16px]">download</span>
+                    </button>
+                    <button class="w-7 h-7 rounded-[6px] text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center">
+                      <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 4: Budget sheet.xlsx (Shared source v4) -->
+              <tr class="h-14 hover:bg-[#23252a]/50 transition-colors">
+                <td class="px-3.5 text-center">
+                  <input type="checkbox" class="w-3.5 h-3.5 rounded border-[#32363d] bg-[#23252a] text-[#9cd7b9] focus:ring-0 cursor-pointer" />
+                </td>
+                <td class="px-3">
+                  <div class="flex items-center gap-2.5">
+                    <span class="material-symbols-outlined text-[20px] text-[#4ade80] shrink-0">table_view</span>
+                    <div class="min-w-0">
+                      <div class="font-medium text-[#f0f1f3] truncate">Budget sheet.xlsx</div>
+                      <div class="text-[11px] text-[#a8adb5]">HR-004 · 860 KiB</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-3">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-[6px] text-[11px] font-medium bg-[#23252a] text-[#f0f1f3] border border-[#32363d]">Shared source</span>
+                </td>
+                <td class="px-3">
+                  <span class="font-normal text-[#f0f1f3]">v4</span>
+                </td>
+                <td class="px-3">
+                  <span class="text-[#f0f1f3] hover:underline cursor-pointer">3 tasks</span>
+                </td>
+                <td class="px-3">
+                  <div class="flex items-center gap-1.5 text-[#a8adb5]">
+                    <span class="material-symbols-outlined text-[15px]">cloud_done</span>
+                    <span>Uploaded</span>
+                  </div>
+                </td>
+                <td class="px-3 text-[#a8adb5]">11 Oct</td>
+                <td class="px-3 text-right">
+                  <div class="inline-flex items-center gap-1">
+                    <button class="w-7 h-7 rounded-[6px] text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center" title="Download">
+                      <span class="material-symbols-outlined text-[16px]">download</span>
+                    </button>
+                    <button class="w-7 h-7 rounded-[6px] text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center">
+                      <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Table footer pagination / info -->
+          <div class="px-4 py-2.5 bg-[#141619] border-t border-[#32363d] flex items-center justify-between text-[11px] text-[#a8adb5]">
+            <span>Showing 4 registered files (512 document tasks maximum)</span>
+            <span class="flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+              All bytes verified locally
+            </span>
+          </div>
+        </div>
+
+        <!-- Separate purposeful empty state section (demonstration) -->
+        <div class="mt-8 pt-6 border-t border-[#32363d]">
+          <div class="text-[12px] font-medium text-[#a8adb5] mb-3 flex items-center justify-between">
+            <span>Empty state reference (when project has no files):</span>
+            <span class="text-[11px] text-[#a8adb5]">Self-contained pattern</span>
+          </div>
+          <div class="bg-[#191b1f] border border-[#32363d] rounded-[12px] p-8 text-center max-w-xl mx-auto">
+            <div class="w-11 h-11 rounded-full bg-[#23252a] text-[#9cd7b9] flex items-center justify-center mx-auto mb-3">
+              <span class="material-symbols-outlined text-[24px]">description</span>
+            </div>
+            <h3 class="text-[15px] font-semibold text-[#f0f1f3]">Your project files start here</h3>
+            <p class="text-[13px] text-[#a8adb5] mt-1 max-w-md mx-auto leading-relaxed">
+              Register briefs, site drawings and project summaries. Files are private to project members, with exact immutable versions.
+            </p>
+            <div class="mt-5 flex items-center justify-center gap-2.5">
+              <button class="h-9 px-3.5 rounded-[8px] bg-[#9cd7b9] text-[#101113] text-[13px] font-medium hover:bg-[#b2e2ca] transition-colors">
+                Add files
+              </button>
+              <button class="h-9 px-3.5 rounded-[8px] bg-[#191b1f] border border-[#32363d] text-[13px] font-medium text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors">
+                Keep on shared drive
+              </button>
+            </div>
+            <div class="mt-4 pt-3 border-t border-[#32363d]/60 text-[11px] text-[#a8adb5]">
+              Supported: PDF, DOCX, XLSX, RTF, PPTX, TXT, CSV, PNG, JPEG, WebP (up to 25 MiB/file).
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- CENTERED DIALOG: Harbour brief.pdf (780px width, 640px height, fixed header/footer, scrollable body) -->
+  <div class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
+    <div class="w-[780px] h-[640px] bg-[#191b1f] border border-[#32363d] rounded-[16px] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+
+      <!-- Fixed Modal Header -->
+      <div class="px-6 py-4 border-b border-[#32363d] shrink-0 flex items-start justify-between bg-[#191b1f]">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-[8px] bg-[#23252a] border border-[#32363d] flex items-center justify-center text-[#f87171]">
+            <span class="material-symbols-outlined text-[24px]">picture_as_pdf</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-[16px] font-semibold text-[#f0f1f3]">Harbour brief.pdf</h2>
+              <span class="text-[11px] font-medium px-2 py-0.5 rounded-[6px] bg-[#23252a] text-[#9cd7b9] border border-[#32363d]">v3 (Current)</span>
+            </div>
+            <p class="text-[12px] text-[#a8adb5] mt-0.5">Reference HR-001 · Source document · Uploaded</p>
+          </div>
+        </div>
+
+        <button class="w-8 h-8 rounded-[8px] text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center transition-colors">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Tab bar (Stable header) -->
+      <div class="px-6 bg-[#141619] border-b border-[#32363d] shrink-0 flex items-center justify-between">
+        <div class="flex space-x-6">
+          <button class="py-3 text-[13px] font-normal text-[#a8adb5] hover:text-[#f0f1f3] border-b-2 border-transparent transition-colors">
+            Preview
+          </button>
+          <button class="py-3 text-[13px] font-medium text-[#9cd7b9] border-b-2 border-[#9cd7b9] flex items-center gap-1.5">
+            <span>Versions</span>
+            <span class="text-[11px] px-1.5 py-0.2 rounded-full bg-[#23252a] text-[#9cd7b9]">3</span>
+          </button>
+          <button class="py-3 text-[13px] font-normal text-[#a8adb5] hover:text-[#f0f1f3] border-b-2 border-transparent transition-colors flex items-center gap-1.5">
+            <span>Linked work</span>
+            <span class="text-[11px] px-1.5 py-0.2 rounded-full bg-[#23252a] text-[#a8adb5]">4</span>
+          </button>
+        </div>
+
+        <!-- Read-only access badge -->
+        <span class="text-[11px] text-[#a8adb5] flex items-center gap-1">
+          <span class="material-symbols-outlined text-[13px]">lock_outline</span>
+          Private to project members
+        </span>
+      </div>
+
+      <!-- Scrollable Modal Body -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-5 bg-[#191b1f]">
+
+        <!-- Review Reference Notice Banner (Charcoal neutral tinted with soft green border) -->
+        <div class="p-3.5 bg-[#23252a] border border-[#32363d] rounded-[10px] flex items-start gap-3">
+          <span class="material-symbols-outlined text-[18px] text-[#9cd7b9] shrink-0 mt-0.5">verified</span>
+          <div class="text-[12px] leading-relaxed text-[#f0f1f3]">
+            <span class="font-medium text-[#9cd7b9]">Review reference:</span> Accepted evidence uses <strong>v2</strong>. Newer versions do not change earlier approvals.
+          </div>
+        </div>
+
+        <!-- Versions Section -->
+        <div>
+          <div class="flex items-center justify-between mb-2.5">
+            <h3 class="text-[13px] font-semibold text-[#f0f1f3]">Document versions</h3>
+            <button class="h-7 px-2.5 text-[11px] font-medium text-[#101113] bg-[#9cd7b9] rounded-[6px] hover:bg-[#b2e2ca] transition-colors flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">add</span>
+              <span>Add version</span>
+            </button>
+          </div>
+
+          <div class="border border-[#32363d] rounded-[10px] overflow-hidden divide-y divide-[#32363d]">
+            <!-- Version 3 (Active) -->
+            <div class="p-3.5 flex items-center justify-between bg-[#191b1f]">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-[#23252a] text-[#9cd7b9] flex items-center justify-center font-medium text-[11px] shrink-0 border border-[#32363d]">
+                  v3
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[13px] font-medium text-[#f0f1f3]">Exact version 3</span>
+                    <span class="text-[10px] font-medium px-2 py-0.2 rounded-full bg-[#23252a] text-[#9cd7b9] border border-[#32363d]">Latest working version</span>
+                  </div>
+                  <div class="text-[11px] text-[#a8adb5] mt-0.5">
+                    Uploaded by <strong class="text-[#f0f1f3] font-normal">Alex Morgan</strong> · Today, 10:42 · 4.2 MiB
+                  </div>
+                  <div class="text-[11px] text-[#a8adb5] mt-1 bg-[#141619] px-2 py-1 rounded-[4px] inline-block border border-[#32363d]/50">
+                    Note: Adjusted harbour dock dimensions and pier access parameters.
+                  </div>
+                </div>
+              </div>
+              <button class="h-8 px-3 rounded-[6px] border border-[#32363d] bg-[#23252a] text-[12px] font-medium text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-[14px]">download</span>
+                <span>Download</span>
+              </button>
+            </div>
+
+            <!-- Version 2 (Pinned / Evidence) -->
+            <div class="p-3.5 flex items-center justify-between bg-[#141619]">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-[#23252a] text-[#a8adb5] flex items-center justify-center font-medium text-[11px] shrink-0 border border-[#32363d]">
+                  v2
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[13px] font-medium text-[#f0f1f3]">Exact version 2</span>
+                    <!-- Charcoal neutral tinted with green -->
+                    <span class="text-[10px] font-medium px-2 py-0.2 rounded-full bg-[#1e2722] text-[#4ade80] border border-[#2e4738]">Pinned to Milestone 1 Review</span>
+                  </div>
+                  <div class="text-[11px] text-[#a8adb5] mt-0.5">
+                    Uploaded by <strong class="text-[#f0f1f3] font-normal">Sam Lee</strong> · 12 Oct, 14:15 · 4.1 MiB
+                  </div>
+                </div>
+              </div>
+              <button class="h-8 px-3 rounded-[6px] border border-[#32363d] bg-[#23252a] text-[12px] font-medium text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-[14px]">download</span>
+                <span>Download</span>
+              </button>
+            </div>
+
+            <!-- Version 1 -->
+            <div class="p-3.5 flex items-center justify-between bg-[#191b1f]">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-[#23252a] text-[#a8adb5] flex items-center justify-center font-medium text-[11px] shrink-0 border border-[#32363d]">
+                  v1
+                </div>
+                <div>
+                  <div class="text-[13px] font-medium text-[#f0f1f3]">Exact version 1</div>
+                  <div class="text-[11px] text-[#a8adb5] mt-0.5">
+                    Uploaded by <strong class="text-[#f0f1f3] font-normal">Taylor Reed</strong> · 01 Oct, 09:20 · 3.8 MiB
+                  </div>
+                </div>
+              </div>
+              <button class="h-8 px-3 rounded-[6px] border border-[#32363d] bg-[#23252a] text-[12px] font-medium text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-[14px]">download</span>
+                <span>Download</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Linked Work Summary -->
+        <div class="pt-2">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-[13px] font-semibold text-[#f0f1f3]">Linked tasks & deliverables</h3>
+            <span class="text-[11px] text-[#a8adb5]">Sources and outputs remain distinct</span>
+          </div>
+          <div class="space-y-1.5">
+            <div class="p-2.5 rounded-[8px] border border-[#32363d] bg-[#191b1f] flex items-center justify-between text-[12px]">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-[#60a5fa]"></span>
+                <span class="font-medium text-[#f0f1f3]">Review dock water-level tolerances</span>
+                <span class="text-[10px] text-[#a8adb5] px-1.5 py-0.2 rounded bg-[#23252a] border border-[#32363d]">Task #102</span>
+              </div>
+              <span class="text-[11px] text-[#9cd7b9] font-medium">Uses latest working version (v3)</span>
+            </div>
+            <div class="p-2.5 rounded-[8px] border border-[#32363d] bg-[#141619] flex items-center justify-between text-[12px]">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-[#4ade80]"></span>
+                <span class="font-medium text-[#f0f1f3]">Foundation structural signoff</span>
+                <span class="text-[10px] text-[#a8adb5] px-1.5 py-0.2 rounded bg-[#23252a] border border-[#32363d]">Task #094</span>
+              </div>
+              <span class="text-[11px] text-[#a8adb5] font-medium">Pinned to v2 (Evidence locked)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Fixed Modal Footer -->
+      <div class="px-6 py-3.5 border-t border-[#32363d] shrink-0 flex items-center justify-between bg-[#141619]">
+        <div class="text-[11px] text-[#a8adb5] flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[15px] text-[#9cd7b9]">verified_user</span>
+          <span>Encrypted in browser before transfer</span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <button class="h-9 px-4 rounded-[8px] bg-[#191b1f] border border-[#32363d] text-[13px] font-medium text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors">
+            Cancel
+          </button>
+          <button class="h-9 px-4 rounded-[8px] bg-[#9cd7b9] text-[#101113] text-[13px] font-medium hover:bg-[#b2e2ca] transition-colors flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[15px]">download</span>
+            <span>Download current (v3)</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

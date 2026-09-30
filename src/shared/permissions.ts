@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { capabilities, identifier } from './contracts.js';
+import { capabilities, permissionCapabilities, identifier } from './contracts.js';
 
-export type Capability = (typeof capabilities)[number];
+export type Capability = (typeof permissionCapabilities)[number];
 
 /** Role labels supply defaults, never ownership or project membership. */
 export const BUILTIN_ROLE_PERMISSIONS = Object.freeze({
@@ -13,7 +13,7 @@ export const BUILTIN_ROLE_PERMISSIONS = Object.freeze({
 export type BuiltinRole = keyof typeof BUILTIN_ROLE_PERMISSIONS;
 
 /** Reserved ownership/access actions are deliberately absent from the checkbox catalogue. */
-export const customRolePermissions = z.array(z.enum(capabilities)).min(1).max(capabilities.length)
+export const customRolePermissions = z.array(z.enum(permissionCapabilities)).min(1).max(permissionCapabilities.length)
   .refine((values) => new Set(values).size === values.length && values.includes('read_project'));
 
 type ActionPolicy =

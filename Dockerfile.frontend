@@ -3,12 +3,13 @@
 FROM node:24.20.0-bookworm-slim AS dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
+COPY vendor ./vendor
 RUN npm ci
 
 FROM dependencies AS build
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY . .
-RUN npm run build:frontend
+RUN test -s web/public/downloads/maqbool-local-mac.zip && npm run build:frontend
 # outputFileTracingRoot is the repository root; Next keeps web/server.js.
 RUN test -f web/.next/standalone/web/server.js \
     && test -f web/public/client/client.js \

@@ -1,0 +1,146 @@
+[
+  {
+    "workflow": "01-project-files",
+    "screen": "projects/2504438657315916160/screens/a476818e65944328a14001b1c57fe4ff",
+    "title": "Maqbool Files \u00b7 Light",
+    "html": "01-project-files-light.html",
+    "image": "01-project-files-light.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "01-project-files",
+    "screen": "projects/2504438657315916160/screens/b5ff93b3488c412a89a6ad8b655bc1bf",
+    "title": "Maqbool Files \u00b7 Dark",
+    "html": "01-project-files-dark.html",
+    "image": "01-project-files-dark.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "02-add-files",
+    "screen": "projects/2504438657315916160/screens/ae365b45551b4105b5e4088f92a8c820",
+    "title": "Maqbool \u00b7 Add Files & Shared Drive (Light)",
+    "html": "02-add-files-light.html",
+    "image": "02-add-files-light.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "02-add-files",
+    "screen": "projects/2504438657315916160/screens/ddac3f171f384b1dafe5c1713347ab15",
+    "title": "Maqbool \u00b7 Add Files & Shared Drive (Dark)",
+    "html": "02-add-files-dark.html",
+    "image": "02-add-files-dark.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "03-bulk-work",
+    "screen": "projects/2504438657315916160/screens/d523516fb79942c8a19377fac6f09827",
+    "title": "Maqbool \u00b7 Bulk Documents \u2014 Review Matches (Light)",
+    "html": "03-bulk-work-light.html",
+    "image": "03-bulk-work-light.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "03-bulk-work",
+    "screen": "projects/2504438657315916160/screens/bc7b34695b3944d192649991c863e12d",
+    "title": "Maqbool \u00b7 Bulk Documents \u2014 Results & Outcomes (Dark)",
+    "html": "03-bulk-work-dark.html",
+    "image": "03-bulk-work-dark.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "04-task-evidence",
+    "screen": "projects/2504438657315916160/screens/64960ef71e09497ea9178f1fe3ebe7ce",
+    "title": "Maqbool \u00b7 Evidence Light",
+    "html": "04-task-evidence-light.html",
+    "image": "04-task-evidence-light.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "04-task-evidence",
+    "screen": "projects/2504438657315916160/screens/af0c10648b6f4e1792091784e1943efa",
+    "title": "Maqbool \u00b7 Evidence Dark",
+    "html": "04-task-evidence-dark.html",
+    "image": "04-task-evidence-dark.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "05-delivery",
+    "screen": "projects/2504438657315916160/screens/4a020546b0824b7ebd3f262701057e64",
+    "title": "Maqbool \u00b7 Delivery Light",
+    "html": "05-delivery-light.html",
+    "image": "05-delivery-light.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "05-delivery",
+    "screen": "projects/2504438657315916160/screens/1231c64a015c4e9697e78a1025453b0a",
+    "title": "Maqbool \u00b7 Delivery Dark",
+    "html": "05-delivery-dark.html",
+    "image": "05-delivery-dark.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "06-publisher",
+    "screen": "projects/2504438657315916160/screens/30635c0d03624808bf2480db54afeefe",
+    "title": "Maqbool \u00b7 Shared-folder publishing (Light)",
+    "html": "06-publisher-light.html",
+    "image": "06-publisher-light.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "06-publisher",
+    "screen": "projects/2504438657315916160/screens/5184fbe911f44c09bcb74b33c54a4d58",
+    "title": "Maqbool \u00b7 Shared-folder publishing (Dark)",
+    "html": "06-publisher-dark.html",
+    "image": "06-publisher-dark.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "07-storage-export",
+    "screen": "projects/2504438657315916160/screens/2f0fd3dd56854035b694a1835913f572",
+    "title": "Maqbool \u00b7 Storage and export (Light)",
+    "html": "07-storage-export-light.html",
+    "image": "07-storage-export-light.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "07-storage-export",
+    "screen": "projects/2504438657315916160/screens/eb2de2e4cdff438b9842f4912ca1800f",
+    "title": "Maqbool \u00b7 Storage and export (Dark)",
+    "html": "07-storage-export-dark.html",
+    "image": "07-storage-export-dark.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "08-office-editor",
+    "screen": "projects/2504438657315916160/screens/8746e2d2e34d49198a186651f2b39f68",
+    "title": "Maqbool \u00b7 Document editing Light",
+    "html": "08-office-editor-light.html",
+    "image": "08-office-editor-light.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  },
+  {
+    "workflow": "08-office-editor",
+    "screen": "projects/2504438657315916160/screens/10706be6f9eb444f899fb77cbcc38d40",
+    "title": "Maqbool \u00b7 Document editing Dark",
+    "html": "08-office-editor-dark.html",
+    "image": "08-office-editor-dark.png",
+    "model": "GEMINI_3_8_FLASH",
+    "designSystem": "assets/18248857475683212615"
+  }
+]

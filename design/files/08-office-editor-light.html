@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Document editing Light</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter & JetBrains Mono Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#89d6b5",
+            "surface-tint": "#176b50",
+            "on-surface": "#151e18",
+            "on-primary-fixed-variant": "#00513b",
+            "surface-container-low": "#ecf6ed",
+            "secondary-fixed-dim": "#98d3b5",
+            "primary": "#00513b",
+            "secondary-container": "#b4f0d1",
+            "surface-variant": "#dbe5dc",
+            "tertiary-fixed-dim": "#ffb3ae",
+            "surface": "#f2fcf2",
+            "on-tertiary-fixed": "#3c0808",
+            "error-container": "#ffdad6",
+            "inverse-primary": "#89d6b5",
+            "outline-variant": "#bec9c2",
+            "surface-dim": "#d3ddd3",
+            "tertiary-container": "#914945",
+            "outline": "#6f7973",
+            "primary-container": "#176b50",
+            "on-secondary": "#ffffff",
+            "surface-container": "#e6f1e7",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed": "#002116",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#366f56",
+            "secondary-fixed": "#b4f0d1",
+            "inverse-surface": "#29332c",
+            "on-tertiary-fixed-variant": "#74322f",
+            "on-secondary-fixed": "#002114",
+            "secondary": "#306950",
+            "tertiary-fixed": "#ffdad7",
+            "on-error": "#ffffff",
+            "surface-container-high": "#e1ebe1",
+            "primary-fixed": "#a4f3d0",
+            "on-tertiary-container": "#ffccc8",
+            "inverse-on-surface": "#e9f3ea",
+            "surface-bright": "#f2fcf2",
+            "background": "#f2fcf2",
+            "on-surface-variant": "#3f4944",
+            "error": "#ba1a1a",
+            "on-background": "#151e18",
+            "tertiary": "#74322f",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#14503a",
+            "on-primary-container": "#9be9c6",
+            "surface-container-highest": "#dbe5dc",
+            "on-primary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "margin": "2rem",
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "display": ["Inter"],
+            "body-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "code": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "500" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "code": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      font-size: 20px;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #bec9c2;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #6f7973;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-hidden font-body-md text-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<div class="flex h-screen w-screen overflow-hidden">
+<!-- LEFT SIDEBAR (Fixed 224px per Shared Components) -->
+<aside class="w-[224px] h-screen shrink-0 bg-surface-container-lowest border-r border-outline-variant flex flex-col justify-between p-4 z-20">
+<div class="flex flex-col gap-6">
+<!-- Logo Header -->
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center border border-outline-variant shrink-0">
+<svg class="w-5 h-5" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 3L4 19H8.5L12 11.5L15.5 19H20L12 3Z" fill="#176b50"></path>
+<path d="M12 11.5L9.5 17H14.5L12 11.5Z" fill="#ffb3ae"></path>
+<circle cx="12" cy="7" fill="#306950" r="1.5"></circle>
+</svg>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-headline-sm font-headline-sm tracking-tight text-on-surface truncate">Maqbool</span>
+<span class="text-label-sm font-label-sm text-outline truncate">Studio North</span>
+</div>
+</div>
+<!-- Primary Action / New Document -->
+<button class="w-full flex items-center justify-center gap-2 h-10 px-4 bg-primary-container text-on-primary rounded-lg text-label-md font-label-md hover:opacity-95 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>New Document</span>
+</button>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col gap-1">
+<!-- Overview -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors duration-150 text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-outline">dashboard</span>
+<span>Overview</span>
+</a>
+<!-- Documents -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors duration-150 text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-outline">description</span>
+<span>Documents</span>
+</a>
+<!-- Projects (Active per prompt) -->
+<a class="flex items-center justify-between px-3 py-2 text-primary font-semibold bg-surface-container-low rounded-lg text-label-md font-label-md" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>Projects</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</a>
+<!-- Shared -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors duration-150 text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-outline">group</span>
+<span>Shared</span>
+</a>
+<!-- Archive -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors duration-150 text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-outline">archive</span>
+<span>Archive</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Profile & Support -->
+<div class="flex flex-col gap-3 pt-3 border-t border-outline-variant">
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-1.5 text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-outline text-[18px]">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-1.5 text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-outline text-[18px]">help</span>
+<span>Support</span>
+</a>
+</nav>
+<!-- Alex Morgan Profile Card -->
+<div class="flex items-center gap-3 p-2 bg-surface-container-low rounded-lg border border-outline-variant/60">
+<img class="w-9 h-9 rounded-full object-cover shrink-0 border border-outline-variant" data-alt="High quality professional headshot of Alex Morgan, lead architect, looking forward with natural friendly expression, neutral studio background, crisp lighting and minimal tone" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmPXQo5z2cGpOz9isNtU3K-afYm0-08nhFiUhMaLCjSVftA0Zll_UBn-bMUzeH_s79GQwBCrVCbwfETqhxXdkDvKvbt6t_StUmTVG1LPLgtjQYWEIOz4f_bUsMLr7eDjXKCjK_XKjrubeEAtfF6uZc5yZXAaSDw1I-2hYLXFl11OmcgYLwQ3zAShJrbr20Pa0m9iluqB2XkIURi2BacZYHmr2cSsvugSsV7QX4aHr_PbAVCGEK6uTmSdRH5s2zQK3mgQClIfquF58"/>
+<div class="flex flex-col overflow-hidden">
+<span class="text-label-md font-label-md text-on-surface font-semibold truncate leading-tight">Alex Morgan</span>
+<span class="text-label-sm font-label-sm text-outline truncate leading-tight">Owner / Lead Arch.</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- MAIN FRAME CONTAINER -->
+<div class="flex-1 flex flex-col h-screen min-w-0 overflow-hidden relative">
+<!-- TOP NAV BAR (Fixed 70px) -->
+<header class="h-[70px] w-full shrink-0 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-8 z-10">
+<!-- Breadcrumb / Project Identifier -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-body-md font-body-md">
+<span class="text-on-surface-variant">Studio North</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface-variant">Projects</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface font-semibold flex items-center gap-2">
+              Harbour renewal
+              <span class="text-label-sm font-code px-1.5 py-0.5 rounded bg-surface-container text-outline">HR-2024</span>
+</span>
+</div>
+<!-- Project View Tabs -->
+<nav class="hidden lg:flex items-center gap-6 h-[70px]">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors pb-1 text-label-md font-label-md flex items-center h-full" href="#">Overview</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors pb-1 text-label-md font-label-md flex items-center h-full" href="#">Work</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors pb-1 text-label-md font-label-md flex items-center h-full" href="#">Timeline</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors pb-1 text-label-md font-label-md flex items-center h-full" href="#">Updates</a>
+<!-- Files (Active with underline) -->
+<a class="text-primary font-semibold border-b-2 border-primary pb-1 text-label-md font-label-md flex items-center h-full" href="#">Files</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors pb-1 text-label-md font-label-md flex items-center h-full" href="#">Delivery</a>
+</nav>
+</div>
+<!-- Top Right Actions -->
+<div class="flex items-center gap-4">
+<!-- Search Bar -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">search</span>
+<input class="w-full h-9 pl-9 pr-3 rounded-lg bg-surface border border-outline-variant text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary placeholder:text-outline" placeholder="Search harbour files..." type="text"/>
+<kbd class="absolute right-2.5 top-2 px-1.5 py-0.5 text-[10px] font-code bg-surface-container-high text-outline rounded border border-outline-variant">⌘K</kbd>
+</div>
+<!-- Notifications -->
+<button aria-label="Notifications" class="w-9 h-9 rounded-lg flex items-center justify-center text-outline hover:bg-surface-container transition-colors relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary-container ring-2 ring-surface-container-lowest"></span>
+</button>
+<!-- Add Files Button -->
+<button class="flex items-center gap-2 h-9 px-3.5 bg-primary-container text-on-primary rounded-lg text-label-md font-label-md hover:opacity-95 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+<span>+ Add files</span>
+</button>
+</div>
+</header>
+<!-- CANVAS BACKGROUND VIEW (Files directory under the modal) -->
+<main class="flex-1 bg-surface p-8 overflow-y-auto relative">
+<div class="max-w-6xl mx-auto flex flex-col gap-6 opacity-40 select-none pointer-events-none filter blur-[1px]">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<h1 class="text-headline-md font-headline-md text-on-surface">Harbour Renewal Project Documents</h1>
+<p class="text-body-sm font-body-sm text-outline">Manage drawings, design summaries, and council submission packages.</p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-label-md font-label-md text-outline">All categories</span>
+<span class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-label-md font-label-md text-outline">Sort: Updated</span>
+</div>
+</div>
+<!-- Document Table Mock -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="grid grid-cols-12 px-6 py-3 border-b border-outline-variant bg-surface-container-low text-label-sm font-label-sm text-outline">
+<div class="col-span-5">NAME</div>
+<div class="col-span-2">VERSION</div>
+<div class="col-span-2">SIZE</div>
+<div class="col-span-3">LAST MODIFIED</div>
+</div>
+<!-- Row 1: Design Summary -->
+<div class="grid grid-cols-12 px-6 py-4 border-b border-outline-variant items-center bg-surface-container-lowest">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[22px]">description</span>
+<span class="font-semibold text-on-surface">Design summary.docx</span>
+</div>
+<div class="col-span-2 text-outline"><span class="px-2 py-0.5 rounded bg-surface-container font-code text-label-sm">v2.0</span></div>
+<div class="col-span-2 text-outline font-code text-body-sm">14.2 MiB</div>
+<div class="col-span-3 text-outline text-body-sm">Today at 10:42 AM by Alex Morgan</div>
+</div>
+<!-- Row 2: Harbour brief -->
+<div class="grid grid-cols-12 px-6 py-4 border-b border-outline-variant items-center">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-container text-[22px]">picture_as_pdf</span>
+<span class="font-medium text-on-surface">Harbour brief.pdf</span>
+</div>
+<div class="col-span-2 text-outline"><span class="px-2 py-0.5 rounded bg-surface-container font-code text-label-sm">v1.4</span></div>
+<div class="col-span-2 text-outline font-code text-body-sm">28.4 MiB</div>
+<div class="col-span-3 text-outline text-body-sm">Yesterday by Studio Lead</div>
+</div>
+<!-- Row 3: Seawall spec -->
+<div class="grid grid-cols-12 px-6 py-4 items-center">
+<div class="col-span-5 flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-container text-[22px]">picture_as_pdf</span>
+<span class="font-medium text-on-surface">Seawall concrete spec.pdf</span>
+</div>
+<div class="col-span-2 text-outline"><span class="px-2 py-0.5 rounded bg-surface-container font-code text-label-sm">v3.1</span></div>
+<div class="col-span-2 text-outline font-code text-body-sm">9.6 MiB</div>
+<div class="col-span-3 text-outline text-body-sm">Jun 14, 2024 by Sam Lee</div>
+</div>
+</div>
+</div>
+<!-- FOCUSED DOCUMENT MODAL (Workflow 8: Document Editing Experience) -->
+<div class="absolute inset-0 bg-on-surface/20 backdrop-blur-[2px] flex items-center justify-center p-6 z-30">
+<div class="w-full max-w-7xl h-[942px] bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+<!-- MODAL HEADER 1: Document Meta & Workflow Tab Bar -->
+<div class="h-14 px-6 border-b border-outline-variant bg-surface-container-lowest flex items-center justify-between shrink-0">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded bg-surface-container-low flex items-center justify-center text-primary border border-outline-variant/60">
+<span class="material-symbols-outlined text-[18px]">article</span>
+</div>
+<div>
+<span class="text-headline-sm font-headline-sm text-on-surface">Design summary.docx</span>
+<span class="text-label-sm font-code text-outline ml-2">v2</span>
+</div>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant mx-1"></div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-outline">
+<span>Ref: <strong class="font-code text-on-surface">HR-DOC-082</strong></span>
+<span>•</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-medium">Source document</span>
+<span>•</span>
+<span>Uploaded · 14.2 MiB</span>
+</div>
+</div>
+<!-- Workflow Top Tabs -->
+<div class="flex items-center gap-6 h-full">
+<button class="h-full border-b-2 border-primary text-primary font-semibold text-label-md font-label-md px-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Preview &amp; Editor</span>
+</button>
+<button class="h-full border-b-2 border-transparent text-on-surface-variant hover:text-on-surface text-label-md font-label-md px-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>Versions (3)</span>
+</button>
+<button class="h-full border-b-2 border-transparent text-on-surface-variant hover:text-on-surface text-label-md font-label-md px-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">link</span>
+<span>Linked work (4)</span>
+</button>
+<button aria-label="Close dialog" class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:bg-surface-container transition-colors ml-4">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</div>
+<!-- MODAL HEADER 2: Status Banner (Workflow 8 Requirement 1) -->
+<div class="px-6 py-2.5 bg-surface-container-low border-b border-outline-variant flex items-center justify-between shrink-0">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-lowest border border-outline-variant shadow-xs">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="text-label-sm font-label-sm font-semibold text-primary">Ready to save · Updated document received</span>
+</div>
+<span class="text-body-sm font-body-sm text-outline">Editing a copy of v2 · Edited output is <span class="font-code text-on-surface font-medium">14.8 MiB</span> (under 25 MiB cap)</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-label-sm font-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">cloud_done</span>
+                  Draft cached locally
+                </span>
+<span class="h-3 w-[1px] bg-outline-variant"></span>
+<button class="text-label-sm font-label-sm text-primary hover:underline font-medium">Discard changes</button>
+</div>
+</div>
+<!-- WORKSPACE INTERIOR: Integrated ONLYOFFICE Editor + Floating Save Overlay -->
+<div class="flex-1 flex overflow-hidden relative bg-[#f7f8f7]">
+<!-- MAIN DOCUMENT AREA -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- ONLYOFFICE TOOLBAR RIBBON (Workflow 8 Requirement 2) -->
+<div class="bg-surface-container-lowest border-b border-outline-variant shrink-0 flex flex-col">
+<!-- Ribbon Menu Categories -->
+<div class="flex items-center gap-6 px-6 pt-2 border-b border-outline-variant/50 text-label-sm font-label-sm">
+<button class="pb-2 text-outline hover:text-on-surface">File</button>
+<button class="pb-2 text-primary font-semibold border-b-2 border-primary">Home</button>
+<button class="pb-2 text-outline hover:text-on-surface">Insert</button>
+<button class="pb-2 text-outline hover:text-on-surface">Layout</button>
+<button class="pb-2 text-outline hover:text-on-surface">References</button>
+<button class="pb-2 text-outline hover:text-on-surface flex items-center gap-1">
+                      Collaboration
+                      <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+</button>
+<button class="pb-2 text-outline hover:text-on-surface">View</button>
+</div>
+<!-- Ribbon Formatting Controls Strip -->
+<div class="flex items-center gap-3 px-6 py-2 overflow-x-auto">
+<!-- Undo / Redo -->
+<div class="flex items-center gap-0.5 border-r border-outline-variant pr-2">
+<button class="w-7 h-7 flex items-center justify-center rounded hover:bg-surface-container text-outline" title="Undo">
+<span class="material-symbols-outlined text-[18px]">undo</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded hover:bg-surface-container text-outline" title="Redo">
+<span class="material-symbols-outlined text-[18px]">redo</span>
+</button>
+</div>
+<!-- Font Selector & Size -->
+<div class="flex items-center gap-1 border-r border-outline-variant pr-2">
+<div class="h-7 px-2.5 rounded bg-surface border border-outline-variant text-label-sm font-label-sm flex items-center gap-2 text-on-surface font-medium cursor-pointer">
+<span>Inter</span>
+<span class="material-symbols-outlined text-[14px] text-outline">expand_more</span>
+</div>
+<div class="h-7 px-2 rounded bg-surface border border-outline-variant text-label-sm font-code flex items-center gap-1 text-on-surface cursor-pointer">
+<span>11pt</span>
+<span class="material-symbols-outlined text-[14px] text-outline">expand_more</span>
+</div>
+</div>
+<!-- Text Styles: Bold, Italic, Underline, Strikethrough -->
+<div class="flex items-center gap-0.5 border-r border-outline-variant pr-2">
+<button class="w-7 h-7 flex items-center justify-center rounded bg-surface-container-high text-on-surface font-bold text-body-sm" title="Bold">B</button>
+<button class="w-7 h-7 flex items-center justify-center rounded hover:bg-surface-container text-on-surface italic text-body-sm" title="Italic">I</button>
+<button class="w-7 h-7 flex items-center justify-center rounded hover:bg-surface-container text-on-surface underline text-body-sm" title="Underline">U</button>
+<button class="w-7 h-7 flex items-center justify-center rounded hover:bg-surface-container text-outline text-[18px]" title="Text Color">
+<span class="material-symbols-outlined text-[18px]">format_color_text</span>
+</button>
+</div>
+<!-- Alignments & Lists -->
+<div class="flex items-center gap-0.5 border-r border-outline-variant pr-2">
+<button class="w-7 h-7 flex items-center justify-center rounded bg-surface-container-high text-on-surface" title="Align Left">
+<span class="material-symbols-outlined text-[18px]">format_align_left</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded hover:bg-surface-container text-outline" title="Align Center">
+<span class="material-symbols-outlined text-[18px]">format_align_center</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded hover:bg-surface-container text-outline" title="Bulleted List">
+<span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+</button>
+</div>
+<!-- Table & Comments -->
+<div class="flex items-center gap-1">
+<button class="h-7 px-2 flex items-center gap-1 rounded hover:bg-surface-container text-label-sm font-label-sm text-on-surface" title="Insert Table">
+<span class="material-symbols-outlined text-[18px] text-outline">table_chart</span>
+<span>Table</span>
+</button>
+<button class="h-7 px-2 flex items-center gap-1 rounded hover:bg-surface-container text-label-sm font-label-sm text-on-surface" title="Add Comment">
+<span class="material-symbols-outlined text-[18px] text-outline">add_comment</span>
+<span>Comments</span>
+</button>
+</div>
+</div>
+</div>
+<!-- DOCUMENT PAPER CANVAS (High Fidelity Architectural Review Viewport) -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-8 flex justify-center bg-[#f0f3f0]">
+<div class="w-full max-w-[780px] bg-surface-container-lowest border border-outline-variant rounded-sm shadow-md min-h-[960px] p-12 text-[#202923] flex flex-col gap-6 relative">
+<!-- Paper Header Metadata Strip -->
+<div class="flex justify-between items-start pb-6 border-b border-outline-variant/60">
+<div>
+<span class="text-label-sm font-code tracking-wider text-outline uppercase">Council Submittal Stage 2 · Technical Documentation</span>
+<h1 class="text-display font-display text-on-surface mt-1">Harbour Renewal — Phase 2 Design Summary</h1>
+<p class="text-body-sm font-body-sm text-outline mt-1">Document Ref: HR-DOC-082 · Prepared by Maqbool Studio North</p>
+</div>
+<div class="text-right">
+<span class="px-2.5 py-1 rounded bg-surface-container font-code text-label-sm text-on-surface font-medium">REVISION v2.4 (DRAFT)</span>
+<p class="text-[11px] font-body-sm text-outline mt-1">Updated Today at 10:48 AM</p>
+</div>
+</div>
+<!-- Executive Overview -->
+<section class="flex flex-col gap-2">
+<h2 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+<span>1. Executive Overview</span>
+</h2>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+                        This revised design summary consolidates mechanical load computations, tidal exposure barriers, and low-carbon concrete formulations for the Harbour Quay promenade. Structural adjustments in Version 2 incorporate feedback received from the Municipal Waterfront Commission regarding pedestrian clearways and flood surge resilience.
+                      </p>
+</section>
+<!-- Technical Specifications Bento Summary -->
+<section class="grid grid-cols-3 gap-4 my-2">
+<div class="p-4 rounded-lg bg-surface border border-outline-variant/80 flex flex-col gap-1">
+<span class="text-label-sm font-label-sm text-outline">TIDAL SURGE TOLERANCE</span>
+<span class="text-headline-md font-headline-md text-primary font-code">+3.85m AHD</span>
+<span class="text-[12px] text-outline">Verified against 100-yr high tide</span>
+</div>
+<div class="p-4 rounded-lg bg-surface border border-outline-variant/80 flex flex-col gap-1">
+<span class="text-label-sm font-label-sm text-outline">PEDESTRIAN CORRIDOR</span>
+<span class="text-headline-md font-headline-md text-on-surface font-code">6.4m Minimum</span>
+<span class="text-[12px] text-outline">Unobstructed shoreline walk</span>
+</div>
+<div class="p-4 rounded-lg bg-surface border border-outline-variant/80 flex flex-col gap-1">
+<span class="text-label-sm font-label-sm text-outline">ESTIMATED LIFE CYCLE</span>
+<span class="text-headline-md font-headline-md text-on-surface font-code">75 Years</span>
+<span class="text-[12px] text-outline">Reinforced marine-grade polymer</span>
+</div>
+</section>
+<!-- Structural Specifications & Materials Table -->
+<section class="flex flex-col gap-3">
+<h2 class="text-headline-sm font-headline-sm text-on-surface">2. Structural Material Schedule</h2>
+<div class="border border-outline-variant rounded-lg overflow-hidden">
+<table class="w-full text-left text-body-sm font-body-sm">
+<thead class="bg-surface-container-low text-label-sm font-label-sm text-outline border-b border-outline-variant">
+<tr>
+<th class="p-2.5 font-semibold">Element</th>
+<th class="p-2.5 font-semibold">Specification</th>
+<th class="p-2.5 font-semibold">Standard Code</th>
+<th class="p-2.5 font-semibold">Supplier Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/60">
+<tr class="hover:bg-surface/50">
+<td class="p-2.5 font-medium text-on-surface">Seawall Facing</td>
+<td class="p-2.5 text-on-surface-variant font-code text-[12px]">C50/60 Low-Carbon Geopolymer</td>
+<td class="p-2.5 text-outline font-code text-[12px]">BS EN 206:2021</td>
+<td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-label-sm bg-surface-container-low text-primary font-medium">Approved</span></td>
+</tr>
+<tr class="hover:bg-surface/50">
+<td class="p-2.5 font-medium text-on-surface">Promenade Decking</td>
+<td class="p-2.5 text-on-surface-variant font-code text-[12px]">Recycled Blackbutt Composite</td>
+<td class="p-2.5 text-outline font-code text-[12px]">AS 1684.2-2021</td>
+<td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-label-sm bg-surface-container-low text-primary font-medium">Approved</span></td>
+</tr>
+<tr class="hover:bg-surface/50">
+<td class="p-2.5 font-medium text-on-surface">Balustrade Rails</td>
+<td class="p-2.5 text-on-surface-variant font-code text-[12px]">Grade 316 Marine Stainless Steel</td>
+<td class="p-2.5 text-outline font-code text-[12px]">ASTM A240</td>
+<td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-label-sm bg-surface-container-low text-primary font-medium">Under Review</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Sign-off Block -->
+<section class="mt-4 pt-4 border-t border-outline-variant/60 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Close up portrait photograph of Alex Morgan, project principal with quiet focus and architectural design background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA75mRyXeNU2zYCAB8cnxbySE6mDd3J-G-C5CuYn0fLjokH6cKSXj-tgzfL8m40Zbh8QOq44PjpioUZuuPsqRUjMWVrnw9CcT6tB8o1p16x_fCEQnhw4ygkwJzupOVAsv_H84FPVXbtMIi52g1tLy4d1NBa-wQYKhVAQM3cjttPukYLgZtgDHXMEvVcUWfKGaym673SbLIHEmyiyI297AIFD0_yh7bZ22IvHPYAj8zOh0CQoa6s8t8mI71LlZDlZWhYqowQnBllH8A"/>
+<div>
+<span class="text-label-md font-label-md font-semibold text-on-surface block leading-tight">Alex Morgan</span>
+<span class="text-label-sm font-label-sm text-outline">Lead Architect · Signed off v2</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Portrait photograph of Sam Lee, municipal engineering consultant, professional demeanor, natural studio environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVSTOaddF57gP9uyn8SDJy3krMMtRnSFJTP0gnOhmegGVgYzCvbAGGn8bFsbISCYA_412HRGDTslAaRh-ps3dPx8QNlZCwKG58NCRMchpsjMcsudE2t27KQvQX5ujuityJmg-7huIdexAQvG78raqjydxFRD33DgF_Szg7UCFT9NSykP7fcfofSyMlxn9l70a2-sg6N6fk6QU_KA7iSQOfWcqkM_VGTTFp1oA2uSmblbpH56UWo_OVim5hAQghfuK4BQs8zpngtq8"/>
+<div>
+<span class="text-label-md font-label-md font-semibold text-on-surface block leading-tight">Sam Lee</span>
+<span class="text-label-sm font-label-sm text-outline">Structural Engineer · Co-signatory</span>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center gap-1 text-primary text-label-sm font-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+                          Authorised Stage 2
+                        </span>
+</div>
+</section>
+</div>
+</div>
+</div>
+<!-- RIGHT PANEL: Save Confirmation & Version Control Overlay (Workflow 8 Requirement 3) -->
+<aside class="w-[360px] bg-surface-container-lowest border-l border-outline-variant p-6 flex flex-col justify-between shrink-0 overflow-y-auto">
+<div class="flex flex-col gap-6">
+<!-- Header Action Bar in Editor -->
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant">
+<span class="text-label-md font-label-md font-semibold text-on-surface">Version Management</span>
+<button class="text-label-sm font-label-sm text-outline hover:text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                      Back to Files
+                    </button>
+</div>
+<!-- Primary Save Card: "Save as version 3" -->
+<div class="rounded-xl border border-primary/30 bg-surface-container-low/60 p-4 flex flex-col gap-3 shadow-xs">
+<div class="flex items-center justify-between">
+<span class="text-headline-sm font-headline-sm text-on-surface font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">save</span>
+                        Save as version 3
+                      </span>
+<span class="text-label-sm font-code px-2 py-0.5 rounded bg-primary-container text-on-primary">v3.0</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+                      Version 3 will be saved as an immutable version. Earlier reviews and delivery approvals still use their original versions.
+                    </p>
+<!-- Next Step Callout -->
+<div class="p-3 bg-surface-container-lowest rounded-lg border border-outline-variant flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">flag</span>
+<span class="text-label-sm font-label-sm text-on-surface">
+<strong class="font-semibold block text-primary">Next action:</strong>
+                        Open task and submit new version for review.
+                      </span>
+</div>
+<!-- Change Description Note -->
+<div class="flex flex-col gap-1.5 pt-1">
+<label class="text-label-sm font-label-sm text-outline">Version change note (optional)</label>
+<input class="h-9 px-3 rounded-lg bg-surface-container-lowest border border-outline-variant text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary" type="text" value="Adjusted marine concrete spec to C50/60 based on engineer notes"/>
+</div>
+<!-- Primary Emerald CTA Button (#176b50) -->
+<button class="w-full h-11 bg-primary-container text-on-primary rounded-lg text-label-md font-label-md font-semibold hover:opacity-95 transition-all shadow-sm flex items-center justify-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+<span>Save new version</span>
+</button>
+</div>
+<!-- Secondary Option Card: "Work on your computer" -->
+<div class="rounded-xl border border-outline-variant bg-surface-container-lowest p-4 flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[20px]">laptop_mac</span>
+<span class="text-headline-sm font-headline-sm text-on-surface">Work on your computer</span>
+</div>
+<p class="text-body-sm font-body-sm text-outline leading-relaxed">
+                      After editing on your computer, upload the updated file. Changes do not sync automatically.
+                    </p>
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 h-9 px-3 rounded-lg border border-outline-variant bg-surface hover:bg-surface-container text-on-surface text-label-md font-label-md flex items-center justify-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px] text-outline">download</span>
+<span>Download</span>
+</button>
+<button class="flex-1 h-9 px-3 rounded-lg border border-outline-variant bg-surface-container-low text-primary hover:bg-surface-container text-label-md font-label-md font-semibold flex items-center justify-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">file_upload</span>
+<span>Add new version</span>
+</button>
+</div>
+</div>
+<!-- Version History Stack Preview -->
+<div class="flex flex-col gap-2">
+<span class="text-label-sm font-label-sm text-outline font-semibold tracking-wider uppercase">Prior Immutable Versions</span>
+<div class="flex flex-col gap-1.5">
+<div class="p-2.5 rounded-lg border border-outline-variant/70 bg-surface-container-low/40 flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-2">
+<span class="font-code text-label-sm font-semibold text-on-surface">v2</span>
+<span class="text-on-surface">Current active working base</span>
+</div>
+<span class="font-code text-outline text-[11px]">14.2 MiB</span>
+</div>
+<div class="p-2.5 rounded-lg border border-outline-variant/40 bg-surface flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-2">
+<span class="font-code text-label-sm text-outline">v1</span>
+<span class="text-outline">Initial council submission</span>
+</div>
+<span class="font-code text-outline text-[11px]">11.8 MiB</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Audit Stamp -->
+<div class="pt-4 border-t border-outline-variant flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+                    SHA-256 Verified
+                  </span>
+<span>Maqbool Engine v4.2</span>
+</div>
+</aside>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

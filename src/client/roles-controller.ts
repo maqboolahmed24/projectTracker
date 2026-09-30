@@ -90,6 +90,7 @@ export async function prepareRoleChange(value: PrepareRoleChangeInput, bundle: D
     if (!same(await decryptContent(envelope, key, base64urlDecode(bundle.signingPublicKey, 32), context.labelHeader), { displayName })) invalid();
     const id = crypto.randomUUID(), role = { id: binding.roleId, template: 'custom' as const, revision: binding.nextRevision,
       state: binding.action === 'retire' ? 'retired' as const : 'active' as const, permissions,
+      ...(permissions.includes('download_files') ? { permissionCatalogue: 2 as const } : {}),
       label: { id, revision: binding.nextRevision, digest: await digestObject(envelope) } };
     const transition = await signObject({ version: 1 as const, purpose: 'ukda.custom-role-definition.v1' as const, binding, role }, signing);
     return (await validateRolePayload({ transition, label: { id, envelope } }, binding)).payload;

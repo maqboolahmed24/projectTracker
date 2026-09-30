@@ -1,5 +1,5 @@
 import type pg from 'pg';
-import { capabilities, positiveCounter } from '../../shared/contracts.js';
+import { permissionCapabilities, positiveCounter } from '../../shared/contracts.js';
 import type { PairingScope } from '../../shared/pairing.js';
 
 export class PersonalScopeError extends Error { constructor() { super('Current personal key scope is unavailable'); } }
@@ -44,7 +44,7 @@ export async function readPersonalScopes(client: pg.PoolClient, workspaceId: str
     const first = group[0]!, permissions = new Set(group.flatMap((row) => row.permissions));
     return { scope: first.scope_kind, scopeId: first.scope_id ?? workspaceId, mode: first.scope_kind === 'workspace' && isOwner ? 'custody' : 'content',
       keyEpoch: first.key_epoch, expiresAt: earliest(group.map((row) => row.expires_at))?.toISOString() ?? null,
-      permissions: capabilities.filter((permission) => permissions.has(permission)), sources: group.map((row) => ({ grantId: row.grant_id,
+      permissions: permissionCapabilities.filter((permission) => permissions.has(permission)), sources: group.map((row) => ({ grantId: row.grant_id,
         generation: row.generation, manifestId: row.key_manifest_object_id!, manifestDigest: row.object_hash! })) };
   });
   if (!scopes.some((scope) => scope.scope === 'workspace')) unavailable();

@@ -13,7 +13,7 @@ execFileSync('openssl', ['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-keyo
 const server = createServer({ key: await readFile(keyPath), cert: await readFile(certificatePath) }, async (request, response) => {
   response.setHeader('Cache-Control', 'no-store');
   response.setHeader('X-Content-Type-Options', 'nosniff');
-  response.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; connect-src 'self'");
+  response.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; frame-src 'self'");
   try {
     const path = new URL(request.url, 'https://127.0.0.1:3555').pathname;
     // A test owns the real API fixture on this fixed loopback port. Forwarding
@@ -30,6 +30,9 @@ const server = createServer({ key: await readFile(keyPath), cert: await readFile
       return;
     }
     if (request.method !== 'GET') throw new Error();
+    if(path==='/preview-test'){response.setHeader('Content-Type','text/html; charset=utf-8');response.end('<!doctype html><title>Document preview verification</title><link rel="stylesheet" href="/preview-harness.css"><script type="module" src="/preview-harness.js"></script>');return;}
+    if(path==='/preview-harness.js'||path==='/preview-harness.css'){response.setHeader('Content-Type',path.endsWith('.css')?'text/css':'text/javascript');response.end(await readFile(join('.local/testing/preview-browser',basename(path))));return;}
+    if(path==='/preview/pdf.worker.min.mjs'){response.setHeader('Content-Type','text/javascript');response.end(await readFile('node_modules/pdfjs-dist/build/pdf.worker.min.mjs'));return;}
     if (path === '/') {
       response.setHeader('Content-Type', 'text/html; charset=utf-8');
       response.end('<!doctype html><title>UKDA browser verification</title><script type="module" src="/harness.js"></script>');
@@ -40,7 +43,7 @@ const server = createServer({ key: await readFile(keyPath), cert: await readFile
       response.end("import * as client from '/client.js'; window.ukda = client;");
       return;
     }
-    if (!/^\/[a-zA-Z0-9_.-]+\.js$/.test(path)) throw new Error();
+    if (!/^\/(?:client\/)?[a-zA-Z0-9_.-]+\.js$/.test(path)) throw new Error();
     const bytes = await readFile(join('dist/browser', basename(path)));
     response.setHeader('Content-Type', 'text/javascript; charset=utf-8');
     response.end(bytes);

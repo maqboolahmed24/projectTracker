@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { binary, capabilities, contentEnvelope, counter, digest, identifier, positiveCounter, type ContentEnvelope } from './contracts.js';
+import { binary, permissionCapabilities, contentEnvelope, counter, digest, identifier, positiveCounter, type ContentEnvelope } from './contracts.js';
 import { base64urlDecode, canonicalJson, digestObject, verifyContentEnvelope, verifyObject } from './crypto.js';
 import { planningContext, planningAuthority, planningContentHeader, initialPlanningGraph, applyPlanningSecurityCleanup,
   type PlanningBinding, type PlanningContext, type PlanningSecurityResolver } from './planning-api.js';
@@ -17,7 +17,7 @@ export const collaborationReference = z.strictObject({workspaceId:identifier,pro
 export const collaborationContextRequest = collaborationReference.extend({entryId:identifier,kind:collaborationKind});
 export const collaborationBindingV1 = collaborationContextRequest.extend({version:z.literal(1),origin:z.string().url(),accountId:identifier,deviceId:identifier,
   credentialGeneration:positiveCounter,sessionGeneration:positiveCounter,keyGeneration:positiveCounter,signingPublicKey:binary(32),
-  permissionVersion:positiveCounter,permissions:z.array(z.enum(capabilities)),isOwner:z.boolean(),keyEpoch:positiveCounter,
+  permissionVersion:positiveCounter,permissions:z.array(z.enum(permissionCapabilities)),isOwner:z.boolean(),keyEpoch:positiveCounter,
   securityVersion:positiveCounter,securityHead:digest,dataGeneration:positiveCounter,
   planningAnchor:z.strictObject({version:counter,head:digest}),issuedAt:z.iso.datetime(),expiresAt:z.iso.datetime()});
 export const collaborationBindingV2=collaborationBindingV1.extend({version:z.literal(2),writeSchema:z.union([z.literal(1),z.literal(2)])});

@@ -1,3 +1,4 @@
+import { planningWireValue } from '../../shared/planning-api.js';
 import type pg from 'pg';
 import { z } from 'zod';
 import type { Databases } from '../../db.js';
@@ -115,7 +116,7 @@ export class UpgradeService {
         p.workspace.lifecycle!=='active'||p.workspace.licence_state!=='active'||p.workspace.restore_quarantine?'paused':row?'active':'available';
       const result=parse(upgradeContext,{binding:await this.#binding(p,migrationId,ref.operationId,manifest,completed,now),state,manifest,completed,records:selected,
         nextCursor:remaining.length>selected.length?upgradeRecordKey(selected.at(-1)!.reference):null,start:row?.signed_start??null,finish:row?.signed_finish??null});
-      if(Buffer.byteLength(canonicalJson(result))>UPGRADE_MAX_CONTEXT_BYTES)throw new AppError('UPGRADE_TOO_LARGE','Encrypted upgrade page exceeds this release limit',413);
+      if(Buffer.byteLength(canonicalJson(planningWireValue(result)))>UPGRADE_MAX_CONTEXT_BYTES)throw new AppError('UPGRADE_TOO_LARGE','Encrypted upgrade page exceeds this release limit',413);
       return result;
     });
   }

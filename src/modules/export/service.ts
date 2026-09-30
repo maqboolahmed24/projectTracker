@@ -1,3 +1,5 @@
+import { planningWireValue,PLANNING_HISTORY_MAX_BYTES } from '../../shared/planning-api.js';
+import {fileManifest} from '../../shared/files.js';
 import type pg from 'pg';
 import { z } from 'zod';
 import type { Databases } from '../../db.js';
@@ -54,14 +56,17 @@ export class ExportService {
       "SELECT 'collaboration_change',operation_id,project_id,entry_revision::text,payload,NULL FROM app.collaboration_operations WHERE workspace_id=$1",
       "SELECT 'settings_change',operation_id,NULL::uuid,revision::text,payload,NULL FROM app.reporting_operations WHERE workspace_id=$1 AND kind='settings'",
       "SELECT 'settings',workspace_id,NULL::uuid,revision::text,to_jsonb(head),NULL FROM app.reporting_settings WHERE workspace_id=$1");
-    // A single SQL statement gives all current rows and native history references
-    // one MVCC point; source payloads are read later and checked against it.
-    const rows=(await a.query<CapturedRow>(`SELECT * FROM (${selects.join(' UNION ALL ')}) sources ORDER BY kind,id LIMIT $2`,[p.workspaceId,EXPORT_MAX_REFERENCES+1])).rows;
-    if(rows.length>EXPORT_MAX_REFERENCES||Buffer.byteLength(canonicalJson(rows))>EXPORT_TOTAL_BYTES)throw tooLarge();
+    if((await a.query("SELECT to_regclass('app.file_versions') AS present")).rows[0].present)selects.push("SELECT 'file_version',id,project_id,version::text,manifest,NULL FROM app.file_versions WHERE workspace_id=$1 AND state='ready'");
+    // A transaction-local cursor retains one MVCC statement snapshot while
+    // reading bounded pages. Large signed history never becomes one wire body.
+    const rows:CapturedRow[]=[],manifest:ExportManifestRecord[]=[];let internalBytes=0;
+    await a.query(`DECLARE ukda_export_capture NO SCROLL CURSOR FOR SELECT * FROM (${selects.join(' UNION ALL ')}) sources ORDER BY kind,id LIMIT $2`,[p.workspaceId,EXPORT_MAX_REFERENCES+1]);
+    try{for(let n=0;n<=Math.ceil(EXPORT_MAX_REFERENCES/64);n++){const page=(await a.query<CapturedRow>('FETCH FORWARD 64 FROM ukda_export_capture')).rows;
+      for(const row of page){if(rows.length>=EXPORT_MAX_REFERENCES)throw tooLarge();internalBytes+=Buffer.byteLength(canonicalJson(row));if(internalBytes>PLANNING_HISTORY_MAX_BYTES)throw tooLarge();
+        manifest.push(row.kind==='settings'?{kind:'settings',id:row.id,projectId:null,revision:row.revision,digest:row.value as string}:await exportRecord(row.kind,row.id,row.project_id,row.revision,row.value));
+        rows.push(['workspace','profile','file_version'].includes(row.kind)?row:{...row,value:null});}
+      if(page.length<64)break;}}finally{await a.query('CLOSE ukda_export_capture');}
     if(!same(rows.filter(r=>r.kind==='project').map(r=>r.id).sort(),projectIds))throw changed();
-    const manifest:ExportManifestRecord[]=[];
-    for(const row of rows)manifest.push(row.kind==='settings'?{kind:'settings',id:row.id,projectId:null,revision:row.revision,digest:row.value as string}:
-      await exportRecord(row.kind,row.id,row.project_id,row.revision,row.value));
     if(!manifest.some(r=>r.kind==='settings')) {
       const initial=(await c.query("SELECT object_hash FROM security.staged_objects WHERE workspace_id=$1 AND object_id=$1 AND object_kind='encrypted_workspace' AND state='committed'",[p.workspaceId])).rows[0];
       if(!initial)throw changed();manifest.push({kind:'settings',id:p.workspaceId,projectId:null,revision:'0',digest:initial.object_hash});
@@ -116,7 +121,10 @@ export class ExportService {
         return {kind:'workspace' as const,workspace:contentEnvelope.parse(current.rows.find(r=>r.kind==='workspace')!.value),
           profiles:current.rows.filter(r=>r.kind==='profile').map(r=>({id:r.id,revision:r.revision,state:r.state as 'active'|'suspended'|'removed',envelope:r.state==='removed'?null:contentEnvelope.parse(r.value)})),settings:await readReportingSettings(a,c,p)};});
     } else if(source.kind==='project')data={kind:'project',context:await this.planning.context(auth.cookieValue,auth.csrfToken,{workspaceId:ref.workspaceId,projectId:source.id,operationId:ref.exportId})};
-    else if(source.kind==='team') {const pages=[];let afterRevision='0',anchor:undefined|{revision:string;digest:string};
+    else if(source.kind==='file_versions') {
+      const versions=snapshot.manifest.filter(r=>r.kind==='file_version'&&r.projectId===source.projectId),offset=versions.findIndex(r=>r.id===source.id);if(offset<0)throw changed();
+      data={kind:'file_versions',manifests:versions.slice(offset,offset+100).map(r=>fileManifest.parse(snapshot.rows.find(row=>row.kind==='file_version'&&row.id===r.id)!.value))};
+    } else if(source.kind==='team') {const pages=[];let afterRevision='0',anchor:undefined|{revision:string;digest:string};
       for(let n=0;n<512;n++){const page=await this.teams.history(auth,{workspaceId:ref.workspaceId,teamId:source.id,afterRevision,...(anchor?{anchor}:{}),limit:100});pages.push(page);
         if(page.complete)break;afterRevision=page.nextRevision!;anchor=page.anchor;}
       if(!pages.at(-1)?.complete)throw tooLarge();data={kind:'team',pages};
@@ -124,7 +132,7 @@ export class ExportService {
     const expected=new Map(snapshot.manifest.map(r=>[exportManifestKey(r),r]));
     for(const r of await exportSourceManifest(data)){const prior=expected.get(exportManifestKey(r));if(!prior||!same(prior,r))throw changed();}
     const page:ExportPage={binding:snapshot.binding,source,data,nextCursor:index+1<snapshot.sources.length?exportManifestKey(source):null};
-    if(Buffer.byteLength(canonicalJson(page))>EXPORT_PAGE_BYTES)throw tooLarge();await this.#checked(auth,ref);return page;
+    if(Buffer.byteLength(canonicalJson(planningWireValue(page)))>EXPORT_PAGE_BYTES)throw tooLarge();await this.#checked(auth,ref);return page;
   }
   async finalize(auth:ExportAuth,input:unknown):Promise<ExportReceipt> {const signed=parse(exportFinalize,input),b=signed.body.binding;
     if(!await verifyObject(signed,base64urlDecode(b.signingPublicKey,32),'ukda.plaintext-export.v1'))throw forbidden();

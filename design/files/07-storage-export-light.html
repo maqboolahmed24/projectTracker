@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Storage and export (Light)</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-primary": "#affedb",
+            "tertiary": "#576343",
+            "on-tertiary-fixed": "#424e30",
+            "primary-fixed-dim": "#96e4c2",
+            "primary-dim": "#005e45",
+            "on-tertiary-container": "#546040",
+            "on-secondary-fixed-variant": "#555d5a",
+            "surface": "#f9f9f8",
+            "primary-container": "#a4f3d0",
+            "tertiary-container": "#ebf9d0",
+            "error-container": "#fe8983",
+            "tertiary-fixed": "#ebf9d0",
+            "tertiary-fixed-dim": "#ddebc2",
+            "on-secondary-container": "#4b5450",
+            "on-secondary-fixed": "#39413e",
+            "on-primary-fixed-variant": "#12684d",
+            "surface-bright": "#f9f9f8",
+            "background": "#f9f9f8",
+            "on-background": "#2c3433",
+            "tertiary-dim": "#4b5738",
+            "surface-dim": "#d2dcdb",
+            "primary-fixed": "#a4f3d0",
+            "surface-tint": "#176b50",
+            "on-secondary": "#f2fbf6",
+            "outline-variant": "#abb4b3",
+            "error": "#9f403d",
+            "surface-container-highest": "#dce4e3",
+            "on-error": "#fff7f6",
+            "outline": "#747c7c",
+            "on-primary": "#e0ffee",
+            "surface-variant": "#dce4e3",
+            "surface-container-low": "#f1f4f3",
+            "secondary": "#58615d",
+            "secondary-fixed-dim": "#cdd7d2",
+            "secondary-fixed": "#dbe5e0",
+            "error-dim": "#4e0309",
+            "on-tertiary-fixed-variant": "#5e6a4a",
+            "secondary-dim": "#4c5551",
+            "secondary-container": "#dbe5e0",
+            "on-primary-container": "#005e44",
+            "surface-container": "#eaefee",
+            "on-primary-fixed": "#004934",
+            "on-surface-variant": "#586160",
+            "on-error-container": "#752121",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-high": "#e3e9e8",
+            "primary": "#176b50",
+            "on-tertiary": "#f0fed5",
+            "on-surface": "#2c3433",
+            "inverse-surface": "#0c0f0e",
+            "inverse-on-surface": "#9b9d9d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "margin": "2rem",
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "headline-md": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "headline-lg": ["Inter", "sans-serif"]
+          },
+          "fontSize": {
+            "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1rem", "fontWeight": "500" }],
+            "body-sm": ["0.8125rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "label-sm": ["0.75rem", { "lineHeight": "0.875rem", "fontWeight": "500" }],
+            "headline-md": ["1.375rem", { "lineHeight": "1.875rem", "fontWeight": "600" }],
+            "body-md": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "fontWeight": "600" }],
+            "headline-lg": ["1.75rem", { "lineHeight": "2.25rem", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      font-size: 1.25rem;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    body {
+      background-color: #f7f8f7;
+      color: #202923;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased flex min-h-screen">
+<!-- Left Sidebar (SideNavBar Shared Component) -->
+<aside class="fixed top-0 left-0 h-screen w-56 bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline z-30 flex flex-col justify-between p-space-sm w-56">
+<div class="flex flex-col gap-space-md">
+<!-- Brand Logo / Workspace Header -->
+<div class="flex items-center gap-space-sm px-space-xs py-space-xs">
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center border border-outline-variant/40 shrink-0">
+<!-- Tri-colour brand mark -->
+<svg aria-label="Maqbool triangular logo" fill="none" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 3L21 19H3L12 3Z" stroke="#176b50" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M12 8L17.5 17.5H6.5L12 8Z" fill="#3a9b7b" opacity="0.35"></path>
+<circle cx="12" cy="14" fill="#176b50" r="1.75"></circle>
+</svg>
+</div>
+<div class="flex flex-col leading-tight min-w-0">
+<span class="font-headline-sm text-headline-sm font-semibold text-on-surface dark:text-inverse-on-surface tracking-tight truncate">Maqbool</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant dark:text-outline-variant truncate">Private Workspace</span>
+</div>
+</div>
+<!-- Navigation Tabs: Home, Projects, My work, Inbox, Settings (ACTIVE), A little guidance -->
+<nav class="flex flex-col gap-0.5 mt-space-xs">
+<!-- 1. Home -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<!-- 2. Projects -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="folder_open">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</a>
+<!-- 3. My work -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-label-md text-label-md">My work</span>
+</a>
+<!-- 4. Inbox -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="inbox">inbox</span>
+<span class="font-label-md text-label-md">Inbox</span>
+</a>
+<!-- 5. Settings (ACTIVE LOCK - Destination match for Settings > Data & Privacy) -->
+<a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-2 text-primary dark:text-inverse-primary font-semibold bg-surface-container dark:bg-secondary-container rounded-DEFAULT transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<!-- 6. A little guidance -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
+<span class="font-label-md text-label-md">A little guidance</span>
+</a>
+</nav>
+</div>
+<!-- User Account / Footer -->
+<div class="border-t border-outline-variant/30 pt-space-xs flex items-center justify-between">
+<div class="flex items-center gap-space-sm px-space-xs py-1.5 w-full rounded-DEFAULT hover:bg-surface-container-high transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[24px] text-on-surface-variant" data-icon="account_circle">account_circle</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Alex Morgan</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Owner / Lead Arch.</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Shell Wrapper -->
+<div class="flex-1 flex flex-col pl-56">
+<!-- Top Navigation Bar (TopNavBar Shared Component) -->
+<header class="sticky top-0 z-20 flex items-center justify-between w-full h-[70px] px-space-lg bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline">
+<!-- Breadcrumb / Product Name Title -->
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-medium text-on-surface dark:text-inverse-on-surface">Studio North</span>
+<span class="text-outline text-label-sm">/</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Settings</span>
+<span class="text-outline text-label-sm">/</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Data and privacy</span>
+</div>
+<!-- Right Header Actions -->
+<div class="flex items-center gap-space-md">
+<!-- Search bar -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant pointer-events-none" data-icon="search">search</span>
+<input class="w-full h-9 pl-9 pr-3 rounded-lg border border-outline-variant/60 bg-surface-container-low text-on-surface placeholder:text-on-surface-variant font-body-sm text-body-sm focus:outline-none focus:border-primary focus:bg-surface-container-lowest transition-colors" placeholder="Search workspace settings..." type="text"/>
+</div>
+<!-- Trailing action icons -->
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-container transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-container transition-colors" title="Filter &amp; sorting">
+<span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+<div class="h-5 w-[1px] bg-outline-variant/40"></div>
+<!-- Primary Action -->
+<button class="h-9 px-space-md bg-primary hover:bg-[#12553f] text-on-primary font-label-md text-label-md font-medium rounded-lg transition-colors flex items-center gap-1.5 shadow-none">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+<span>Create</span>
+</button>
+</div>
+</header>
+<!-- Secondary Settings Horizontal Tabs -->
+<div class="bg-surface-container-lowest border-b border-outline-variant/50 px-space-lg">
+<div class="max-w-[1280px] mx-auto flex gap-space-lg">
+<a class="py-3 font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors border-b-2 border-transparent" href="#">General</a>
+<a class="py-3 font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors border-b-2 border-transparent" href="#">People</a>
+<a aria-current="page" class="py-3 font-label-md text-label-md text-primary font-semibold border-b-2 border-primary" href="#">Data &amp; privacy</a>
+<a class="py-3 font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors border-b-2 border-transparent" href="#">Security</a>
+<a class="py-3 font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors border-b-2 border-transparent" href="#">Billing</a>
+</div>
+</div>
+<!-- Main Content Canvas (max-w: 1280px, 32px horizontal margins) -->
+<main class="flex-1 w-full max-w-[1280px] mx-auto px-margin py-8">
+<!-- Page Header -->
+<div class="mb-8">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Data and privacy</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1.5 max-w-2xl">
+          Understand what is stored, backed up and included when you take your work with you.
+        </p>
+</div>
+<!-- Bento-style Calm Grid: 12-column layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- CARD 1: Workspace storage (Full 12 cols or 7 cols top) -->
+<section class="col-span-12 bg-surface-container-lowest rounded-xl border border-outline-variant/60 p-6 flex flex-col gap-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Workspace storage</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Calculated across active deliverables, attachments, and pinned milestone versions.</p>
+</div>
+<div class="flex items-baseline gap-1.5 bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant/40 shrink-0">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">684 MiB</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">of 2 GiB used (33.4%)</span>
+</div>
+</div>
+<!-- Segmented Progress Bar -->
+<div class="flex flex-col gap-2">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="33.4" class="w-full h-3 bg-surface-container-low rounded-full overflow-hidden flex" role="progressbar">
+<!-- Current files: 412 MiB (approx 20.1%) -->
+<div class="h-full bg-primary" style="width: 20.1%" title="Current files: 412 MiB"></div>
+<!-- Retained versions: 186 MiB (approx 9.1%) -->
+<div class="h-full bg-[#3a9b7b]" style="width: 9.1%" title="Retained versions: 186 MiB"></div>
+<!-- Unfinished uploads: 86 MiB (approx 4.2%) -->
+<div class="h-full bg-[#d97706]" style="width: 4.2%" title="Unfinished uploads: 86 MiB"></div>
+<!-- Free space -->
+<div class="h-full bg-surface-container" style="width: 66.6%"></div>
+</div>
+<!-- Legend Dots & Values -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+<div class="flex items-start gap-2.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary mt-1 shrink-0"></span>
+<div class="flex flex-col">
+<div class="font-label-md text-label-md text-on-surface font-medium">Current files · 412 MiB</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Active drafts, task attachments, and project documents</div>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="w-2.5 h-2.5 rounded-full bg-[#3a9b7b] mt-1 shrink-0"></span>
+<div class="flex flex-col">
+<div class="font-label-md text-label-md text-on-surface font-medium">Retained versions · 186 MiB</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Pinned in completed reviews and signed deliverables</div>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="w-2.5 h-2.5 rounded-full bg-[#d97706] mt-1 shrink-0"></span>
+<div class="flex flex-col">
+<div class="font-label-md text-label-md text-on-surface font-medium">Unfinished uploads · 86 MiB</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">2 incomplete client file transfers awaiting resume</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Limits & Actions Row -->
+<div class="pt-4 border-t border-outline-variant/40 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="font-label-sm text-label-sm text-on-surface-variant max-w-xl">
+              Limits: 25 MiB per uploaded file · 64 items and 250 MiB per batch · 512 document tasks per project · 2 GiB external file check
+            </div>
+<div class="flex items-center gap-3 shrink-0">
+<button class="h-9 px-3.5 rounded-lg border border-outline-variant/80 hover:bg-surface-container font-label-md text-label-md text-on-surface transition-colors">
+                Manage unfinished uploads
+              </button>
+<button class="h-9 px-3.5 rounded-lg text-primary hover:bg-primary/5 font-label-md text-label-md font-medium transition-colors flex items-center gap-1">
+<span>View project files</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- CARD 2: Download your workspace (Owner export) - 7 Columns -->
+<section class="col-span-12 lg:col-span-7 bg-surface-container-lowest rounded-xl border border-outline-variant/60 p-6 flex flex-col justify-between">
+<div>
+<!-- Header with Badge -->
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2.5">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Download your workspace</h2>
+<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-surface-container text-on-surface-variant tracking-wide">Owner only</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-5">
+              Export workspace activity, task history and managed files in a self-contained archive.
+            </p>
+<!-- Export Options & Notice Box -->
+<div class="space-y-4 mb-6">
+<label class="flex items-start gap-3 cursor-pointer select-none">
+<input checked="" class="mt-1 w-4 h-4 rounded text-primary focus:ring-primary border-outline-variant" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium">Include uploaded files and retained versions</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Packages full original documents alongside the workspace summary record</span>
+</div>
+</label>
+<!-- Notice box -->
+<div class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-3.5 flex items-start gap-3">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] mt-0.5 shrink-0" data-icon="info">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                  Files on a shared drive are listed as references. Their contents are not included.
+                </p>
+</div>
+</div>
+<!-- In-Flight Progress State -->
+<div class="bg-surface-container-low/70 border border-outline-variant/40 rounded-lg p-4 mb-4">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-md text-label-md text-on-surface font-medium">Preparing files · 12 of 32 files packaged</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">38%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 38%"></div>
+</div>
+</div>
+</div>
+<!-- Bottom Action and Privacy Note -->
+<div class="pt-4 border-t border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<p class="font-label-sm text-label-sm text-on-surface-variant">
+              Keep this download private. It contains readable workspace content.
+            </p>
+<div class="flex items-center gap-2.5 shrink-0">
+<button class="h-9 px-3.5 rounded-lg border border-outline-variant/80 hover:bg-surface-container font-label-md text-label-md text-on-surface transition-colors">
+                Cancel
+              </button>
+<button class="h-9 px-4 rounded-lg bg-primary hover:bg-[#12553f] text-on-primary font-label-md text-label-md font-medium transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+<span>Download archive</span>
+</button>
+</div>
+</div>
+</section>
+<!-- CARD 3: Backup and recovery - 5 Columns -->
+<section class="col-span-12 lg:col-span-5 bg-surface-container-lowest rounded-xl border border-outline-variant/60 p-6 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Protected cloud backups</h2>
+<span class="w-2.5 h-2.5 rounded-full bg-primary" title="Backup engine healthy"></span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">
+              Automated continuous recovery safeguards ensuring zero single points of workspace failure.
+            </p>
+<div class="space-y-4">
+<!-- Item 1: Cloud backup status -->
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium leading-snug">
+                    Uploaded files and retained versions are included in protected cloud backups
+                  </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                    Last completed today at 04:00 UTC
+                  </span>
+</div>
+</div>
+<!-- Item 2: Shared drive note -->
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="cloud_off">cloud_off</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface leading-snug">
+                    Shared-drive file contents must be backed up by your organisation.
+                  </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">
+                    Maqbool maintains links and metadata only
+                  </span>
+</div>
+</div>
+<!-- Item 3: Integrity verification -->
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified">verified</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium leading-snug">
+                    Checking restored files
+                  </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                    All 32 project files verified against exact recorded versions.
+                  </span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/40 mt-6">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="shield">shield</span>
+              Workspace disaster recovery is verified weekly
+            </span>
+</div>
+</section>
+<!-- CARD 4: Retention and account cleanup - 12 Columns -->
+<section class="col-span-12 bg-surface-container-lowest rounded-xl border border-outline-variant/60 p-6">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+<div class="max-w-3xl">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-1.5">Retention and account cleanup</h2>
+<div class="space-y-1.5 font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>Current files remain active while in project use.</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>Retained evidence versions cannot be selectively deleted while milestone reviews are open.</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>Backup snapshots expire automatically after 30 days.</span>
+</div>
+</div>
+</div>
+<!-- Danger / Management Link -->
+<div class="shrink-0 flex items-center">
+<a class="h-9 px-4 rounded-lg border border-outline-variant text-[#9f403d] hover:bg-[#9f403d]/5 font-label-md text-label-md font-medium transition-colors flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="delete_outline">delete_outline</span>
+<span>Manage account and workspace closure</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Discrete Future Features Section (As defined by Style Guidance) -->
+<section class="col-span-12 pt-2">
+<h3 class="font-label-sm text-label-sm text-on-surface-variant mb-3 tracking-wide">FUTURE FEATURES</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Feature 1 -->
+<div class="p-4 rounded-xl border border-outline-variant/40 bg-surface-container-low/50 opacity-60 flex flex-col gap-1 cursor-not-allowed">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-medium">Email updates</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant" data-icon="mail">mail</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Not available in this build.</span>
+</div>
+<!-- Feature 2 -->
+<div class="p-4 rounded-xl border border-outline-variant/40 bg-surface-container-low/50 opacity-60 flex flex-col gap-1 cursor-not-allowed">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-medium">Integrations</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant" data-icon="hub">hub</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Not available in this build.</span>
+</div>
+<!-- Feature 3 -->
+<div class="p-4 rounded-xl border border-outline-variant/40 bg-surface-container-low/50 opacity-60 flex flex-col gap-1 cursor-not-allowed">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-medium">Customer-hosted processing</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant" data-icon="dns">dns</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Not available in this build.</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

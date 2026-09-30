@@ -1,3 +1,4 @@
+import { planningWireValue } from '../../shared/planning-api.js';
 import { randomUUID } from 'node:crypto';
 import type pg from 'pg';
 import { z } from 'zod';
@@ -157,7 +158,7 @@ export class ReportingService {
         settingsRevision:settings.revision,settingsHead:settings.head,initialDigest:await digestObject(settings.initial),timezone:request.timezone,
         asOfUtc:now.toISOString(),localDate:reportingLocalDate(now.toISOString(),request.timezone),complete:true,calculationVersion:'progress-health-v1'});
       const binding=reportingBinding.parse(await this.#prepare(a,'summary',candidate,now)),context:ReportingContext={binding,settings,projects:contexts};
-      if(Buffer.byteLength(canonicalJson(context))>REPORTING_MAX_BYTES)throw oversized();return action(a,context,p,now);
+      if(Buffer.byteLength(canonicalJson(planningWireValue(context)))>REPORTING_MAX_BYTES)throw oversized();return action(a,context,p,now);
     });
   }
   async context(auth:ReportingAuth,input:unknown):Promise<ReportingContext>{const ref=parse(reportingContextRequest,input);return this.#current(auth,ref,async(_a,context)=>context) as Promise<ReportingContext>;}

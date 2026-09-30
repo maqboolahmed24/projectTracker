@@ -21,10 +21,10 @@ const quote=name=>{if(!/^[a-z_][a-z0-9_]*$/.test(name))fail('INVALID_TABLE');ret
  * compiled release. This executable does not embed its own security reducer. */
 export async function recoveryRuntime(env=process.env){
   const [{loadConfig},{createDatabases,transaction},{ServiceSecrets,loadIdentityConfig},{SessionService},{RestorationService},restoration,manifest,
-    {EntitlementOperations},purge,{finalizeDeletionIfDue},crypto]=await Promise.all([
+    {EntitlementOperations},purge,{finalizeDeletionIfDue},crypto,{collectExpiredFileUploads}]=await Promise.all([
     import('../dist/src/config.js'),import('../dist/src/db.js'),import('../dist/src/modules/identity/secrets.js'),import('../dist/src/modules/identity/sessions.js'),
     import('../dist/src/modules/restoration/service.js'),import('../dist/src/shared/restoration.js'),import('../dist/src/modules/restoration/manifest.js'),
-    import('../dist/src/modules/identity/entitlements.js'),import('../dist/src/modules/lifecycle/purge.js'),import('../dist/src/modules/lifecycle/deadline.js'),import('../dist/src/shared/crypto.js')]);
+    import('../dist/src/modules/identity/entitlements.js'),import('../dist/src/modules/lifecycle/purge.js'),import('../dist/src/modules/lifecycle/deadline.js'),import('../dist/src/shared/crypto.js'),import('../dist/src/modules/files/maintenance.js')]);
   const config=loadConfig(env,{allowAdmin:true});
   if(!config.ADMIN_DATABASE_URL||!config.CONTROL_ADMIN_DATABASE_URL)fail('ADMIN_CONFIGURATION_REQUIRED');
   const actor={operatorId:opaqueId(env.UKDA_OPERATOR_ID)},databases=createDatabases(config),secrets=new ServiceSecrets(loadIdentityConfig(env));
@@ -36,7 +36,7 @@ export async function recoveryRuntime(env=process.env){
     const deployment=recoveryDeployment(env);
     const records=new RecoveryRecords(deployment.recordsDirectory,await repositorySecret(`${deployment.directory}/app.conf`));
     const trusted={[secrets.keyId]:await new EntitlementOperations(databases,secrets).publicSigningKey()};
-    return {databases,secrets,application,control,actor,records,transaction,...restoration,...manifest,...purge,...crypto,
+    return {databases,secrets,application,control,actor,records,transaction,collectExpiredFileUploads,...restoration,...manifest,...purge,...crypto,
       service:hooks=>new RestorationService({...common,...(hooks?{hooks}:{})}),finalize:id=>finalizeDeletionIfDue({databases,secrets,workspaceId:opaqueId(id)}),trusted,
       close:()=>Promise.all([databases.close(),application.end(),control.end()])};
   }catch(error){await Promise.all([databases.close(),application.end(),control.end()]);throw error;}
@@ -99,15 +99,27 @@ export async function verifyRestoreRows(runtime,manifest,table,rows){
   const expected=manifest.body.inventory.tables.find(r=>r.table===table),digest=await runtime.digestObject(rows.map(r=>runtime.canonicalRestoreRow(table,r)).map(runtime.canonicalJson).sort());
   if(!expected||expected.count!==rows.length||expected.digest!==digest)fail('RESTORE_MANIFEST_MISMATCH');
 }
-async function isolatedRows(runtime,artifact,manifest){
-  const tables=new Map();let count=0,bytes=0;
-  for(const table of runtime.RESTORE_TABLES){
+/** Re-read a paused, owned isolated database in small pages. Private binary
+ * chunks remain inside that recoverable artifact until installation commits. */
+async function* isolatedTablePages(runtime,artifact,workspaceId,table){
+  if(!OWNED.test(artifact.name)||!runtime.RESTORE_TABLES.includes(table))fail('RESTORE_SOURCE_INVALID');
+  for(let offset=0;offset<=runtime.RESTORE_MAX_OBJECTS;offset+=16){
     const source=await execute(['exec','-i','--user','postgres',artifact.name,'psql','-X','-U',storeInfo('app').user,'-d',storeInfo('app').database,'-At','-v','ON_ERROR_STOP=1'],
-      {input:`SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM (SELECT * FROM app.${quote(table)} WHERE workspace_id='${opaqueId(manifest.body.workspaceId)}'::uuid LIMIT ${runtime.RESTORE_MAX_OBJECTS+1}) t;`});
-    bytes+=Buffer.byteLength(source);if(bytes>CHECKPOINT_BYTES)fail('RESTORE_SIZE_LIMIT');
-    const rows=JSON.parse(source);if(!Array.isArray(rows)||rows.some(r=>!r||r.workspace_id!==manifest.body.workspaceId))fail('RESTORE_SOURCE_INVALID');
-    count+=rows.length;if(count>runtime.RESTORE_MAX_OBJECTS)fail('RESTORE_SIZE_LIMIT');
-    await verifyRestoreRows(runtime,manifest,table,rows);tables.set(table,rows);
+      {input:`SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM (SELECT * FROM app.${quote(table)} WHERE workspace_id='${opaqueId(workspaceId)}'::uuid ORDER BY ctid LIMIT 16 OFFSET ${offset}) t;`});
+    const rows=JSON.parse(source);if(!Array.isArray(rows)||rows.length>16||rows.some(r=>!r||r.workspace_id!==workspaceId))fail('RESTORE_SOURCE_INVALID');yield rows;if(rows.length<16)return;
+  }fail('RESTORE_SIZE_LIMIT');
+}
+async function isolatedRows(runtime,artifact,manifest){
+  const tables=new Map();let count=0,bytes=0,binaryBytes=0;
+  for(const expected of manifest.body.inventory.tables){const table=expected.table,canonical=[];let columns=null,rowCount=0;
+    for await(const rows of isolatedTablePages(runtime,artifact,manifest.body.workspaceId,table))for(const row of rows){
+      const keys=Object.keys(row).sort();if(columns&&columns.join()!==keys.join())fail('RESTORE_SCHEMA_MISMATCH');columns=keys;
+      const canonicalRow=runtime.canonicalRestoreRow(table,row),encoded=runtime.canonicalJson(canonicalRow);bytes+=Buffer.byteLength(encoded);if(bytes>(runtime.RESTORE_ROW_MAX_BYTES??CHECKPOINT_BYTES))fail('RESTORE_SIZE_LIMIT');
+      if(table==='file_chunks'){binaryBytes+=canonicalRow.cipher_bytes_length;if(binaryBytes>(runtime.RESTORE_BINARY_MAX_BYTES??0))fail('RESTORE_SIZE_LIMIT');}
+      canonical.push(encoded);rowCount++;count++;if(count>runtime.RESTORE_MAX_OBJECTS)fail('RESTORE_SIZE_LIMIT');
+    }
+    const digest=runtime.restoreTableDigest?runtime.restoreTableDigest(canonical):await runtime.digestObject(canonical.sort());if(rowCount!==expected.count||digest!==expected.digest)fail('RESTORE_MANIFEST_MISMATCH');
+    tables.set(table,{kind:'isolated-table',artifact,workspaceId:manifest.body.workspaceId,rowCount,columns:columns??[],digest});
   }
   return tables;
 }
@@ -123,14 +135,19 @@ export async function installRows(runtime,workspaceId,restoreId,tables){
     for(const [table,rows]of tables){
       if(!runtime.RESTORE_TABLES.includes(table))fail('INVALID_TABLE');
       const columns=(await a.query("SELECT attname FROM pg_attribute WHERE attrelid=$1::regclass AND attnum>0 AND NOT attisdropped ORDER BY attname",[`app.${table}`])).rows.map(r=>r.attname);
-      if(rows.some(row=>Object.keys(row).sort().join()!==columns.join()))fail('RESTORE_SCHEMA_MISMATCH');
+      if(Array.isArray(rows)?rows.some(row=>Object.keys(row).sort().join()!==columns.join()):rows.kind!=='isolated-table'||rows.workspaceId!==workspaceId||rows.rowCount>runtime.RESTORE_MAX_OBJECTS||rows.rowCount&&rows.columns.join()!==columns.join())fail('RESTORE_SCHEMA_MISMATCH');
     }
-    const changed=[...new Set([...DISPOSABLE,...runtime.RESTORE_TABLES.filter(t=>t!=='workspaces')])];
+    const changed=[...new Set([...DISPOSABLE,...(runtime.RESTORE_DISPOSABLE_FILE_TABLES??[]),...runtime.RESTORE_TABLES.filter(t=>t!=='workspaces')])];
     for(const table of changed)await a.query(`ALTER TABLE app.${quote(table)} DISABLE TRIGGER USER`);
     for(const table of changed)await a.query(`DELETE FROM app.${quote(table)} WHERE workspace_id=$1`,[workspaceId]);
-    for(const [table,rows]of tables)for(const row of rows){
-      if(table==='workspaces')await a.query('UPDATE app.workspaces SET encrypted_envelope=$2,revision=$3 WHERE workspace_id=$1',[workspaceId,row.encrypted_envelope,row.revision]);
-      else await a.query(`INSERT INTO app.${quote(table)} SELECT * FROM jsonb_populate_record(NULL::app.${quote(table)},$1::jsonb)`,[JSON.stringify(row)]);
+    for(const [table,source]of tables){const canonical=[];let rowCount=0;
+      const pages=Array.isArray(source)?(async function*(){yield source;})():isolatedTablePages(runtime,source.artifact,workspaceId,table);
+      for await(const rows of pages)for(const row of rows){
+        if(!Array.isArray(source)){if(Object.keys(row).sort().join()!==source.columns.join())fail('RESTORE_SCHEMA_MISMATCH');canonical.push(runtime.canonicalJson(runtime.canonicalRestoreRow(table,row)));rowCount++;}
+        if(table==='workspaces')await a.query('UPDATE app.workspaces SET encrypted_envelope=$2,revision=$3 WHERE workspace_id=$1',[workspaceId,row.encrypted_envelope,row.revision]);
+        else await a.query(`INSERT INTO app.${quote(table)} SELECT * FROM jsonb_populate_record(NULL::app.${quote(table)},$1::jsonb)`,[JSON.stringify(row)]);
+      }
+      if(!Array.isArray(source)&&(rowCount!==source.rowCount||(runtime.restoreTableDigest?runtime.restoreTableDigest(canonical):await runtime.digestObject(canonical.sort()))!==source.digest))fail('RESTORE_MANIFEST_MISMATCH');
     }
     // No session_replication_role bypass: database foreign keys remain deferred
     // and checked at commit. Only approved history/user triggers are disabled.
@@ -255,6 +272,8 @@ async function tick(runtime,control){
   const purges=[];for(const row of candidates.slice(0,MAX_TICK_PURGES))purges.push(await purgeOne(runtime,row.workspace_id));
   const remaining=(await runtime.control.query("SELECT 1 FROM security.workspaces WHERE lifecycle='pending_deletion' AND delete_after<=clock_timestamp() LIMIT 1")).rowCount;
   if(remaining||(await runtime.purgeCandidates(runtime.control)).length)fail('DUE_DELETION_BATCH_REMAINS');
+  const expiredUploads=(await runtime.application.query("SELECT workspace_id FROM app.file_versions WHERE state='staged' AND expires_at<=clock_timestamp() GROUP BY workspace_id ORDER BY min(expires_at) LIMIT 64")).rows;
+  let removedUploads=0;for(const row of expiredUploads)removedUploads+=(await runtime.collectExpiredFileUploads(runtime.application,row.workspace_id)).removed;
   const retention=await expiry(runtime);
   const latestPurge=(await runtime.control.query('SELECT max(live_payloads_purged_at) AS completed FROM security.workspace_purges')).rows[0]?.completed;
   let requiresClean=purges.length>0||retention.some(r=>r.requiresFull);
@@ -268,7 +287,7 @@ async function tick(runtime,control){
   if(needs.length||!chooseFullBackups(inventories)){
     const result=await captureAll(runtime,needs.length?needs:ids,control);checkpoints=result.checkpoints;
   }
-  await writeMetrics(runtime);return {finalized:due.length,purged:purges.length,checkpoints};
+  await writeMetrics(runtime);return {finalized:due.length,purged:purges.length,removedUploads,checkpoints};
 }
 function commandArguments(command,values){
   if(!['checkpoint','restore','purge','tick','daemon','metrics'].includes(command)||command==='checkpoint'&&values.length>1||command==='restore'&&values.length!==2||command==='purge'&&values.length!==1||['tick','daemon','metrics'].includes(command)&&values.length)fail('USAGE');

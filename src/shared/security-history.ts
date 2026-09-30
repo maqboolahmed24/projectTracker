@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { genesisBody, transcriptFromGenesis } from './activation.js';
-import { binary, capabilities, digest, identifier, positiveCounter } from './contracts.js';
+import { binary, capabilities, permissionCapabilities, digest, identifier, positiveCounter } from './contracts.js';
 import { base64urlDecode, canonicalJson, digestObject, verifyObject } from './crypto.js';
 import { entitlementTransitionBody } from './entitlement.js';
 import { pairingConfirmationFor, pairingGrant, type PairingScope } from './pairing.js';
@@ -19,7 +19,7 @@ import { applyRestoreTransition, restoreStart, restoreVerification } from './res
 
 export interface HistoryScope {
   scope: 'workspace' | 'project'; scopeId: string; mode: 'custody' | 'content'; keyEpoch: string;
-  permissions: (typeof capabilities)[number][]; manifests: { id: string; digest: string }[];
+  permissions: (typeof permissionCapabilities)[number][]; manifests: { id: string; digest: string }[];
   expiresAt: string | null;
 }
 export interface HistoryProfile {
@@ -32,8 +32,9 @@ export interface HistoryProfile {
   scopes: HistoryScope[];
 }
 export interface HistoryRole {
-  id: string; template: BuiltinRole | 'custom'; revision: string; permissions: (typeof capabilities)[number][];
+  id: string; template: BuiltinRole | 'custom'; revision: string; permissions: (typeof permissionCapabilities)[number][];
   state: 'active' | 'retired'; label: { id: string; revision: string; digest: string } | null;
+  permissionCatalogue?: 2 | undefined;
 }
 /** Retain retired public recovery keys so older signed transitions remain verifiable. */
 export interface HistoryRecoveryAuthority {
@@ -380,7 +381,7 @@ export async function verifySecurityHistory(value: SecurityHistoryInput): Promis
       let operationId: string;
       if (outer.body.purpose === 'ukda.workspace-lifecycle.v1' || outer.body.purpose === 'ukda.workspace-deleted.v1') {
         operationId=await applyLifecycleHistory(unknown,state,input.trustedServiceKeys);
-      } else if (outer.body.purpose === 'ukda.restore-start.v1' || outer.body.purpose === 'ukda.restore-verify.v1') {
+      } else if (outer.body.purpose === 'ukda.restore-start.v1' || outer.body.purpose === 'ukda.restore-verify.v1' || outer.body.purpose === 'ukda.restore-verify.v2') {
         const restored=await applyRestoreTransition(state,unknown,input.trustedServiceKeys);
         operationId=outer.body.purpose==='ukda.restore-start.v1'?restoreStart.parse(unknown).body.operationId:restoreVerification.parse(unknown).body.binding.operationId;
         Object.assign(state,{...restored,securityHead:state.securityHead,securityVersion:state.securityVersion});

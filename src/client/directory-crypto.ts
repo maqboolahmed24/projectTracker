@@ -1,4 +1,4 @@
-import { contentEnvelope, type capabilities } from '../shared/contracts.js';
+import { contentEnvelope, type permissionCapabilities } from '../shared/contracts.js';
 import { resolveAvatarSelection, type AvatarSelection } from '../shared/avatar.js';
 import { verifySecurityHistory, type SecurityHistoryState } from '../shared/security-history.js';
 import type { DeviceBundle } from './device-store.js';
@@ -11,7 +11,7 @@ export interface DirectoryPerson {
 }
 export interface WorkspaceDirectory {
   workspaceId:string;workspaceName:string;accountId:string;deviceId:string;isOwner:boolean;genesisFingerprint:string;
-  people:DirectoryPerson[];projectIds:string[];permissions:(typeof capabilities)[number][];
+  people:DirectoryPerson[];projectIds:string[];permissions:(typeof permissionCapabilities)[number][];
   devices:{id:string;accountId:string;active:boolean;current:boolean}[];
   lifecycle:'active'|'pending_deletion'|'deleted';deletion:SecurityHistoryState['deletion'];
   restoreQuarantine:boolean;activeRestore:SecurityHistoryState['activeRestore'];

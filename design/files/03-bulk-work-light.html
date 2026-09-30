@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Bulk documents (Review matches - Light)</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-variant": "#dce4e3",
+            "on-secondary-container": "#4b5450",
+            "surface-container-low": "#f1f4f3",
+            "on-secondary": "#f2fbf6",
+            "background": "#f9f9f8",
+            "error": "#9f403d",
+            "secondary-dim": "#4c5551",
+            "secondary-container": "#dbe5e0",
+            "secondary": "#58615d",
+            "surface-dim": "#d2dcdb",
+            "on-background": "#2c3433",
+            "on-tertiary-fixed": "#424e30",
+            "on-surface-variant": "#586160",
+            "outline-variant": "#abb4b3",
+            "inverse-on-surface": "#9b9d9d",
+            "primary-container": "#a4f3d0",
+            "primary": "#176b50",
+            "inverse-surface": "#0c0f0e",
+            "primary-fixed": "#a4f3d0",
+            "on-tertiary": "#f0fed5",
+            "on-secondary-fixed-variant": "#555d5a",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-high": "#e3e9e8",
+            "surface-container-highest": "#dce4e3",
+            "on-error-container": "#752121",
+            "tertiary-fixed-dim": "#ddebc2",
+            "primary-dim": "#005e45",
+            "on-error": "#fff7f6",
+            "on-tertiary-container": "#546040",
+            "tertiary-container": "#ebf9d0",
+            "error-dim": "#4e0309",
+            "tertiary": "#576343",
+            "on-tertiary-fixed-variant": "#5e6a4a",
+            "surface-bright": "#f9f9f8",
+            "on-secondary-fixed": "#39413e",
+            "secondary-fixed": "#dbe5e0",
+            "surface": "#f9f9f8",
+            "secondary-fixed-dim": "#cdd7d2",
+            "tertiary-dim": "#4b5738",
+            "on-surface": "#2c3433",
+            "on-primary": "#e0ffee",
+            "primary-fixed-dim": "#96e4c2",
+            "surface-tint": "#176b50",
+            "tertiary-fixed": "#ebf9d0",
+            "surface-container": "#eaefee",
+            "outline": "#747c7c",
+            "on-primary-fixed": "#004934",
+            "error-container": "#fe8983",
+            "inverse-primary": "#affedb",
+            "on-primary-fixed-variant": "#12684d",
+            "on-primary-container": "#005e44"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "body-md": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1rem", "fontWeight": "500" }],
+            "headline-md": ["1.375rem", { "lineHeight": "1.875rem", "fontWeight": "600" }],
+            "headline-lg": ["1.75rem", { "lineHeight": "2.25rem", "fontWeight": "600" }],
+            "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "fontWeight": "600" }],
+            "label-sm": ["0.75rem", { "lineHeight": "0.875rem", "fontWeight": "500" }],
+            "body-sm": ["0.8125rem", { "lineHeight": "1.25rem", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      font-size: 1.125rem;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Desktop App Shell Container -->
+<div class="flex h-screen w-screen overflow-hidden">
+<!-- Shared Component: SideNavBar -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between p-4 z-40 bg-surface border-r border-outline-variant/30">
+<!-- Header / Logo -->
+<div>
+<div class="flex items-center gap-2.5 px-2 py-1 mb-6">
+<!-- Maqbool multicolour triangular logo -->
+<svg aria-label="Maqbool multicolour triangular logo" class="w-6 h-6 flex-shrink-0" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2L2 20H22L12 2Z" fill="#176B50" fill-opacity="0.15"></path>
+<path d="M12 2L4 18L12 14L20 18L12 2Z" fill="#176B50"></path>
+<path d="M12 14L4 18H20L12 14Z" fill="#EBF9D0"></path>
+<circle cx="12" cy="11" fill="#FFFFFF" r="2"></circle>
+</svg>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-semibold text-on-surface tracking-tight leading-none">Maqbool</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-medium mt-0.5">Workspace</span>
+</div>
+</div>
+<!-- Primary Navigation Tabs -->
+<nav class="flex flex-col gap-1">
+<!-- Home -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<!-- Projects (Active) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container text-primary font-medium text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined" data-icon="folder" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+<span>Inbox</span>
+</a>
+</nav>
+</div>
+<!-- Footer navigation & User Profile -->
+<div class="flex flex-col gap-1 pt-4 border-t border-outline-variant/30">
+<!-- Settings -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<!-- A little guidance -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>A little guidance</span>
+</a>
+<!-- Profile summary -->
+<div class="flex items-center gap-2.5 px-3 py-2 mt-2 rounded-lg bg-surface-container-low">
+<img class="w-7 h-7 rounded-full object-cover border border-outline-variant/40" data-alt="High key minimalist portrait photograph of Alex Morgan, workspace lead, with a calm restrained expression against a neutral studio backdrop with soft ambient light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEzH3EMftp6TxMmz68oHJbNr0t51MiBq6HQnBnMOdpU86ESQ0GN1TcIWKqmFVYfhMQpg5PZDykph1f09RlfWctvTHSltO5k4ciuK7g5ydaCjmmg921KBEaQ4Co75oim76e5_yFBfto2a1JeysVY6WochrnICknFWn8PzL74rFL97BLEr-xdwXcKfI-teEjjyK-cfE5_GpI8LOtd9tOgqUdPZgWPxxL0uEGZoE_HL_c8MpfZSITdEWC_zhfrnk7h2PGq6_E0GTynpQ"/>
+<div class="flex flex-col truncate">
+<span class="text-label-md font-label-md text-on-surface font-medium truncate leading-tight">Alex Morgan</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant truncate">Studio North</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Viewport Canvas -->
+<div class="ml-56 flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Shared Component: TopNavBar -->
+<header class="h-[70px] bg-surface-container-lowest border-b border-outline-variant/30 px-8 flex items-center justify-between z-30 shrink-0">
+<div class="flex items-center gap-8">
+<div>
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm text-on-surface-variant">
+<span>Studio North</span>
+<span>/</span>
+</div>
+<h1 class="text-body-md font-body-md text-on-surface font-semibold">Projects / Harbour renewal HR-2024</h1>
+</div>
+<!-- Project View Tabs -->
+<nav class="flex items-center gap-6 ml-4">
+<a class="text-on-surface-variant py-5 text-body-sm font-body-sm hover:text-on-surface transition-colors" href="#">Overview</a>
+<a class="text-on-surface-variant py-5 text-body-sm font-body-sm hover:text-on-surface transition-colors" href="#">Work</a>
+<a class="text-on-surface-variant py-5 text-body-sm font-body-sm hover:text-on-surface transition-colors" href="#">Timeline</a>
+<a class="text-on-surface-variant py-5 text-body-sm font-body-sm hover:text-on-surface transition-colors" href="#">Updates</a>
+<a class="text-primary border-b-2 border-primary py-5 font-semibold text-body-sm font-body-sm" href="#">Files</a>
+<a class="text-on-surface-variant py-5 text-body-sm font-body-sm hover:text-on-surface transition-colors" href="#">Delivery</a>
+</nav>
+</div>
+<!-- Right Side Actions & Tools -->
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-on-surface-variant text-base" data-icon="search">search</span>
+<input class="h-8 pl-8 pr-3 text-body-sm font-body-sm rounded-lg border border-outline-variant/40 bg-surface-container-low text-on-surface focus:outline-none focus:border-primary w-52 placeholder:text-on-surface-variant/60" placeholder="Search files &amp; tasks..." type="text"/>
+</div>
+<button class="h-8 px-3 rounded-lg border border-outline-variant/40 text-on-surface hover:bg-surface-container-low text-body-sm font-body-sm font-medium transition-colors">
+            Register documents
+          </button>
+<button class="h-8 px-3 rounded-lg bg-primary text-on-primary hover:bg-primary-dim text-body-sm font-body-sm font-medium transition-colors">
+            Add files
+          </button>
+</div>
+</header>
+<!-- Background Content Area (Project Files Inventory with 32px margins) -->
+<main class="flex-1 overflow-auto p-8 bg-surface">
+<div class="max-w-[1280px] mx-auto opacity-45 pointer-events-none select-none">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h2 class="text-headline-sm font-headline-sm font-semibold text-on-surface">Document Inventory</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Central project files, geotechnical deliverables, and harbor survey notes.</p>
+</div>
+<div class="flex gap-2">
+<span class="px-2.5 py-1 rounded bg-surface-container text-body-sm font-body-sm">All files (142)</span>
+<span class="px-2.5 py-1 rounded text-body-sm font-body-sm text-on-surface-variant">Recent</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden">
+<table class="w-full text-left text-body-sm font-body-sm">
+<thead class="bg-surface-container-low border-b border-outline-variant/30 text-on-surface-variant font-medium">
+<tr>
+<th class="py-3 px-4">Document name</th>
+<th class="py-3 px-4">Reference</th>
+<th class="py-3 px-4">Wave</th>
+<th class="py-3 px-4">Owner</th>
+<th class="py-3 px-4">Updated</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20 text-on-surface">
+<tr>
+<td class="py-3 px-4 font-medium">Harbour_geotech_v2.pdf</td>
+<td class="py-3 px-4 text-on-surface-variant">HR-001</td>
+<td class="py-3 px-4">Wave 2</td>
+<td class="py-3 px-4">Alex Morgan</td>
+<td class="py-3 px-4 text-on-surface-variant">2 days ago</td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium">Breakwater_acoustic_study.pdf</td>
+<td class="py-3 px-4 text-on-surface-variant">HR-002</td>
+<td class="py-3 px-4">Wave 1</td>
+<td class="py-3 px-4">Taylor Reed</td>
+<td class="py-3 px-4 text-on-surface-variant">1 week ago</td>
+</tr>
+<tr>
+<td class="py-3 px-4 font-medium">Tide_gauge_telemetry_Q1.xlsx</td>
+<td class="py-3 px-4 text-on-surface-variant">HR-003</td>
+<td class="py-3 px-4">Wave 2</td>
+<td class="py-3 px-4">Sam Lee</td>
+<td class="py-3 px-4 text-on-surface-variant">3 days ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</div>
+<!-- Centered Workflow Modal Overlay (Subtle 12% Backdrop) -->
+<div class="fixed inset-0 bg-inverse-surface/30 backdrop-blur-[2px] flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+<!-- Modal Card (w-[960px] h-[720px], rounded-2xl, background #ffffff) -->
+<div class="w-[960px] h-[720px] bg-surface-container-lowest border border-outline-variant/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden relative">
+<!-- Modal Header -->
+<div class="px-6 pt-5 pb-3 border-b border-outline-variant/20">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="assignment_turned_in">assignment_turned_in</span>
+<h2 class="text-headline-sm font-headline-sm font-semibold text-on-surface">Register &amp; match documents</h2>
+</div>
+<button aria-label="Close modal" class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- 4 Steps Pill Stepper -->
+<div class="flex items-center gap-2 text-label-sm font-label-sm py-1">
+<!-- Step 1: Completed -->
+<div class="flex items-center gap-1.5 text-primary">
+<span class="w-4 h-4 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-[10px]">
+<span class="material-symbols-outlined text-xs" data-icon="check">check</span>
+</span>
+<span class="font-medium">1. Choose documents</span>
+</div>
+<span class="text-outline-variant">›</span>
+<!-- Step 2: Completed -->
+<div class="flex items-center gap-1.5 text-primary">
+<span class="w-4 h-4 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-[10px]">
+<span class="material-symbols-outlined text-xs" data-icon="check">check</span>
+</span>
+<span class="font-medium">2. Match work</span>
+</div>
+<span class="text-outline-variant">›</span>
+<!-- Step 3: Active -->
+<div class="flex items-center gap-1.5 text-primary">
+<span class="w-4 h-4 rounded-full bg-primary text-on-primary flex items-center justify-center text-[10px] font-bold">3</span>
+<span class="font-semibold text-on-surface">3. Review matches</span>
+</div>
+<span class="text-outline-variant">›</span>
+<!-- Step 4: Upcoming -->
+<div class="flex items-center gap-1.5 text-on-surface-variant/70">
+<span class="w-4 h-4 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center text-[10px]">4</span>
+<span>4. Results</span>
+</div>
+</div>
+<!-- Subtitle Tab Toggles -->
+<div class="flex items-center gap-6 mt-3 border-t border-outline-variant/10 pt-2">
+<button class="text-primary font-semibold text-body-sm font-body-sm border-b-2 border-primary pb-1">
+            Review document matches
+          </button>
+<button class="text-on-surface-variant font-medium text-body-sm font-body-sm hover:text-on-surface pb-1 transition-colors">
+            Submit outputs
+          </button>
+</div>
+</div>
+<!-- Quota & Batch Info Banner & Warning Notice -->
+<div class="px-6 py-2.5 bg-surface flex flex-col gap-2 border-b border-outline-variant/20 shrink-0">
+<div class="flex items-center justify-between text-label-sm font-label-sm text-on-surface-variant">
+<div class="flex items-center gap-4">
+<span class="font-medium text-on-surface">Batch status:</span>
+<span>12 of 64 items</span>
+<span class="text-outline-variant">•</span>
+<span>43 MiB of 250 MiB</span>
+<span class="text-outline-variant">•</span>
+<span>12 of 512 document tasks</span>
+</div>
+<div class="flex items-center gap-1.5 text-primary text-label-sm font-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span>Validation in sync</span>
+</div>
+</div>
+<!-- Warning notice box -->
+<div class="bg-surface-container-low border border-primary/20 rounded-lg px-3.5 py-2 flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-base" data-icon="info">info</span>
+<p class="text-body-sm font-body-sm text-on-surface">
+            Only ready items will be saved. Completed items won't be repeated if you retry.
+          </p>
+</div>
+</div>
+<!-- Scrollable Table Body (h-[440px] overflow-y-auto) -->
+<div class="h-[440px] overflow-y-auto flex-1 bg-surface-container-lowest">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-container-low/95 backdrop-blur-sm z-10 border-b border-outline-variant/20 text-label-sm font-label-sm text-on-surface-variant">
+<tr>
+<th class="py-2.5 px-4 font-medium w-28">Reference</th>
+<th class="py-2.5 px-4 font-medium w-52">Filename / Type</th>
+<th class="py-2.5 px-4 font-medium w-48">Linked task</th>
+<th class="py-2.5 px-4 font-medium w-40">Assignee &amp; Wave</th>
+<th class="py-2.5 px-4 font-medium">Status</th>
+<th class="py-2.5 px-4 font-medium text-right w-36">Row action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20 text-body-sm font-body-sm">
+<!-- Row 1: Ready -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-4 font-medium text-on-surface">
+                HR-001
+              </td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface truncate">Harbour_geotech_v2.pdf</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Source doc · 14.2 MiB</span>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">
+                Core drill depth analysis
+              </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-semibold text-xs">
+                    AM
+                  </div>
+<div class="flex flex-col leading-tight">
+<span class="text-on-surface text-label-md font-label-md">Alex Morgan</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Wave 2</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-primary-container/50 text-on-primary-container font-medium border border-primary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  Ready
+                </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="px-2.5 py-1 rounded text-primary hover:bg-primary-container/30 font-medium text-label-md font-label-md transition-colors">
+                  Edit
+                </button>
+</td>
+</tr>
+<!-- Row 2: In Use Error / Warning -->
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded border border-error bg-error/5 text-error font-medium inline-block">
+                  HR-004
+                </span>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface truncate">Pier_elevation_drawing.dwg</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Source doc · 8.1 MiB</span>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">
+                Pier foundation review
+              </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-semibold text-xs">
+                    SL
+                  </div>
+<div class="flex flex-col leading-tight">
+<span class="text-on-surface text-label-md font-label-md">Sam Lee</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Wave 2</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-error">
+<span class="material-symbols-outlined text-sm" data-icon="warning">warning</span>
+<span class="text-label-sm font-label-sm font-medium">HR-004 is already in use</span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded text-primary border border-outline-variant/40 hover:bg-surface-container text-label-sm font-label-sm font-medium transition-colors">
+                    Rename reference
+                  </button>
+<a class="px-1.5 py-1 text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm underline transition-colors" href="#">
+                    Open existing
+                  </a>
+</div>
+</td>
+</tr>
+<!-- Row 3: Needs Task Selection -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-4 font-medium text-on-surface">
+                HR-006
+              </td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface truncate">Tide_variance_log.csv</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Source doc · 2.4 MiB</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="relative">
+<select class="w-full h-8 pl-2 pr-6 text-label-sm font-label-sm bg-surface-container-lowest border border-primary/50 text-on-surface rounded-lg focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer">
+<option selected="">Choose a task...</option>
+<option>Wave impact measurement</option>
+<option>Siltation tracking survey</option>
+<option>Hydrographic baseline review</option>
+</select>
+<span class="material-symbols-outlined absolute right-1.5 top-2 pointer-events-none text-on-surface-variant text-sm" data-icon="expand_more">expand_more</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-semibold text-xs">
+                    TR
+                  </div>
+<div class="flex flex-col leading-tight">
+<span class="text-on-surface text-label-md font-label-md">Taylor Reed</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Wave 2</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container text-on-surface font-medium">
+                  Needs task selection
+                </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-medium text-label-md font-label-md transition-colors">
+                  Select task
+                </button>
+</td>
+</tr>
+<!-- Row 4: Assignee Missing Access -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-4 font-medium text-on-surface">
+                HR-008
+              </td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface truncate">Seawall_concrete_spec.pdf</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Deliverable · 18.5 MiB</span>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">
+                Barrier wall signoff
+              </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<div class="relative">
+<div class="w-6 h-6 rounded-full bg-outline-variant/40 text-on-surface flex items-center justify-center font-semibold text-xs">
+                      JB
+                    </div>
+<span class="material-symbols-outlined absolute -top-1 -right-1 text-xs text-error font-bold" data-icon="error">error</span>
+</div>
+<div class="flex flex-col leading-tight">
+<span class="text-on-surface text-label-md font-label-md">Jordan Blake</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Wave 1</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1 px-2 py-1 rounded bg-secondary-container/40 text-on-secondary-container text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="person_off">person_off</span>
+<span>This person no longer has project access</span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-2 py-1 rounded text-primary hover:bg-primary-container/30 font-medium text-label-sm font-label-sm transition-colors">
+                    Reassign person
+                  </button>
+<button class="px-1 text-on-surface-variant hover:text-error text-label-sm font-label-sm transition-colors">
+                    Clear
+                  </button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Oversized file -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-4 font-medium text-on-surface">
+                HR-011
+              </td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface truncate">Highres_bathymetry_lidar.raw</span>
+<span class="text-label-sm font-label-sm text-error font-medium">Source doc · 340 MiB (Over 25 MiB cap)</span>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">
+                Seafloor mapping
+              </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-semibold text-xs">
+                    AM
+                  </div>
+<div class="flex flex-col leading-tight">
+<span class="text-on-surface text-label-md font-label-md">Alex Morgan</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Wave 2</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col gap-1">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Oversized file (340 MiB)</span>
+<button class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-tertiary-container text-on-tertiary-container w-fit hover:bg-tertiary-fixed-dim transition-colors">
+<span class="material-symbols-outlined text-xs" data-icon="cloud">cloud</span>
+<span>Keep on shared drive</span>
+</button>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="px-2.5 py-1 rounded border border-outline-variant/40 hover:bg-surface-container text-on-surface font-medium text-label-sm font-label-sm transition-colors">
+                  Store reference only
+                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Fixed Bottom Action Footer (h-18 px-6 flex items-center justify-between bg-white rounded-b-2xl border-t) -->
+<div class="h-18 px-6 py-4 flex items-center justify-between bg-surface-container-lowest border-t border-outline-variant/30 rounded-b-2xl shrink-0">
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-lg border border-outline-variant/40 text-on-surface hover:bg-surface-container-low font-medium text-body-sm font-body-sm transition-colors">
+            Cancel
+          </button>
+<button class="px-4 py-2 rounded-lg text-on-surface hover:bg-surface-container-low font-medium text-body-sm font-body-sm transition-colors">
+            Back
+          </button>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-body-sm font-body-sm text-on-surface-variant">
+            3 items require adjustment
+          </span>
+<button class="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-dim text-on-primary font-medium text-body-sm font-body-sm transition-all shadow-sm active:scale-95 flex items-center gap-2">
+<span>Register 8 ready documents</span>
+<span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool Workspace — Projects / Harbour renewal HR-2024</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed-variant": "#14503a",
+            "tertiary": "#74322f",
+            "surface-tint": "#176b50",
+            "on-surface": "#151e18",
+            "surface": "#f2fcf2",
+            "background": "#f2fcf2",
+            "inverse-surface": "#29332c",
+            "on-primary-fixed": "#002116",
+            "on-tertiary-fixed-variant": "#74322f",
+            "tertiary-container": "#914945",
+            "on-error": "#ffffff",
+            "surface-dim": "#d3ddd3",
+            "error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#00513b",
+            "on-secondary-container": "#366f56",
+            "surface-container-low": "#ecf6ed",
+            "on-surface-variant": "#3f4944",
+            "on-background": "#151e18",
+            "secondary-fixed": "#b4f0d1",
+            "secondary-container": "#b4f0d1",
+            "surface-container": "#e6f1e7",
+            "primary-container": "#176b50",
+            "primary": "#00513b",
+            "on-secondary": "#ffffff",
+            "surface-bright": "#f2fcf2",
+            "inverse-primary": "#89d6b5",
+            "inverse-on-surface": "#e9f3ea",
+            "surface-container-high": "#e1ebe1",
+            "primary-fixed-dim": "#89d6b5",
+            "on-primary-container": "#9be9c6",
+            "on-tertiary-fixed": "#3c0808",
+            "outline": "#6f7973",
+            "tertiary-fixed": "#ffdad7",
+            "surface-variant": "#dbe5dc",
+            "secondary": "#306950",
+            "on-primary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb3ae",
+            "on-tertiary-container": "#ffccc8",
+            "surface-container-highest": "#dbe5dc",
+            "error": "#ba1a1a",
+            "outline-variant": "#bec9c2",
+            "primary-fixed": "#a4f3d0",
+            "secondary-fixed-dim": "#98d3b5",
+            "on-secondary-fixed": "#002114"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "gutter-lg": "1.5rem",
+            "space-lg": "1.5rem",
+            "margin": "1.5rem",
+            "gutter": "1rem"
+          },
+          "fontFamily": {
+            "code": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "display": ["Inter"]
+          },
+          "fontSize": {
+            "code": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Custom scrollbar for clean architectural minimalism */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #bec9c2;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: #6f7973;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-hidden select-none font-body-md text-body-md">
+<!-- ================= APP SHELL CONTAINER ================= -->
+<div class="flex h-screen w-screen overflow-hidden">
+<!-- 1. LEFT SIDEBAR (Width 224px / w-56 from Shared Components JSON) -->
+<aside class="w-56 h-screen flex flex-col justify-between p-4 z-40 bg-surface border-r border-outline-variant shrink-0">
+<div class="flex flex-col gap-6">
+<!-- Logo / Workspace Header -->
+<div class="flex items-center gap-3 px-2 pt-1">
+<div class="w-7 h-7 rounded-lg bg-primary-container flex items-center justify-center text-on-primary font-bold text-sm tracking-tight shadow-sm">
+<span class="material-symbols-outlined text-[18px]">change_history</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-semibold text-on-surface tracking-tight leading-tight">Maqbool</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant leading-none">Workspace</span>
+</div>
+</div>
+<!-- Navigation Tabs from Shared Components JSON -->
+<nav class="flex flex-col gap-1">
+<!-- Home -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span>Home</span>
+</a>
+<!-- Projects (Active parent context) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container text-primary font-medium text-body-sm font-body-sm min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[20px]">assignment</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[20px]">inbox</span>
+<span>Inbox</span>
+</a>
+</nav>
+</div>
+<!-- Footer navigation tabs from JSON -->
+<div class="flex flex-col gap-1 pt-4 border-t border-outline-variant">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-sm font-body-sm transition-colors min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+<span>A little guidance</span>
+</a>
+</div>
+</aside>
+<!-- 2. MAIN LAYOUT AREA -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+<!-- TOPBAR (Height 70px) -->
+<header class="h-[70px] bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-6 shrink-0 z-30">
+<div class="flex items-center gap-8">
+<!-- Project Breadcrumb & Indicator -->
+<div class="flex items-center gap-2.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container inline-block"></span>
+<span class="text-body-md font-body-md text-on-surface font-semibold tracking-tight">Projects / Harbour renewal HR-2024</span>
+</div>
+<!-- Section Navigation Links from Shared Components JSON -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant py-5 hover:text-on-surface text-body-sm font-body-sm transition-colors" href="#">Overview</a>
+<a class="text-on-surface-variant py-5 hover:text-on-surface text-body-sm font-body-sm transition-colors" href="#">Work</a>
+<a class="text-on-surface-variant py-5 hover:text-on-surface text-body-sm font-body-sm transition-colors" href="#">Timeline</a>
+<a class="text-on-surface-variant py-5 hover:text-on-surface text-body-sm font-body-sm transition-colors" href="#">Updates</a>
+<!-- Active Files tab -->
+<a class="text-primary border-b-2 border-primary py-5 font-semibold text-body-sm font-body-sm" href="#">Files</a>
+<a class="text-on-surface-variant py-5 hover:text-on-surface text-body-sm font-body-sm transition-colors" href="#">Delivery</a>
+</nav>
+</div>
+<!-- Trailing Actions & Search from Shared Components JSON -->
+<div class="flex items-center gap-3">
+<button class="min-h-[44px] px-3.5 py-1.5 rounded-lg border border-outline-variant text-body-sm font-body-sm text-on-surface hover:bg-surface-container-low transition-colors font-medium" type="button">
+            Register documents
+          </button>
+<button class="min-h-[44px] px-3.5 py-1.5 rounded-lg bg-primary-container text-on-primary text-body-sm font-body-sm hover:bg-primary transition-colors font-medium flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Add files</span>
+</button>
+<div class="h-6 w-px bg-outline-variant mx-1"></div>
+<button aria-label="Notifications" class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button aria-label="Search" class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined">search</span>
+</button>
+<!-- User Profile -->
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-label-md font-label-md font-semibold text-primary ml-1">
+            SN
+          </div>
+</div>
+</header>
+<!-- BASE CANVAS: Files Workspace (Partially visible behind backdrop) -->
+<main class="flex-1 bg-background p-6 overflow-hidden flex flex-col gap-4">
+<!-- Workspace Filter Bar -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h1 class="text-headline-md font-headline-md text-on-surface tracking-tight">Project files</h1>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-label-sm font-label-sm text-on-surface-variant">42 items</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary" placeholder="Filter files by name or tag..." type="text"/>
+</div>
+<button class="min-h-[40px] px-3 border border-outline-variant rounded-lg bg-surface-container-lowest text-body-sm font-body-sm flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+<span>Filter</span>
+</button>
+</div>
+</div>
+<!-- Files Mock Table (Subtle architectural card) -->
+<div class="w-full flex-1 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col shadow-sm">
+<div class="grid grid-cols-12 px-6 py-3 border-b border-outline-variant bg-surface-container-low text-label-md font-label-md text-on-surface-variant">
+<div class="col-span-6">Name</div>
+<div class="col-span-2">Reference</div>
+<div class="col-span-2">Modified</div>
+<div class="col-span-2 text-right">Size</div>
+</div>
+<div class="divide-y divide-outline-variant">
+<div class="grid grid-cols-12 px-6 py-3.5 items-center hover:bg-surface-container-low transition-colors text-body-sm font-body-sm">
+<div class="col-span-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="font-medium text-on-surface">HR-2024_Master_Plan_v3.pdf</span>
+</div>
+<div class="col-span-2 text-on-surface-variant">HR-DOC-001</div>
+<div class="col-span-2 text-on-surface-variant">Yesterday by Sarah</div>
+<div class="col-span-2 text-right text-on-surface-variant">14.2 MB</div>
+</div>
+<div class="grid grid-cols-12 px-6 py-3.5 items-center hover:bg-surface-container-low transition-colors text-body-sm font-body-sm">
+<div class="col-span-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">table_view</span>
+<span class="font-medium text-on-surface">Harbour_bathymetry_analysis.xlsx</span>
+</div>
+<div class="col-span-2 text-on-surface-variant">HR-DOC-104</div>
+<div class="col-span-2 text-on-surface-variant">2 days ago</div>
+<div class="col-span-2 text-right text-on-surface-variant">8.6 MB</div>
+</div>
+<div class="grid grid-cols-12 px-6 py-3.5 items-center hover:bg-surface-container-low transition-colors text-body-sm font-body-sm">
+<div class="col-span-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-outline">image</span>
+<span class="font-medium text-on-surface">Quayside_survey_drone_capture.jpg</span>
+</div>
+<div class="col-span-2 text-on-surface-variant">HR-IMG-048</div>
+<div class="col-span-2 text-on-surface-variant">May 12, 2024</div>
+<div class="col-span-2 text-right text-on-surface-variant">22.4 MB</div>
+</div>
+<div class="grid grid-cols-12 px-6 py-3.5 items-center hover:bg-surface-container-low transition-colors text-body-sm font-body-sm">
+<div class="col-span-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="font-medium text-on-surface">Harbour_renewal_geotechnical_specifications.pdf</span>
+</div>
+<div class="col-span-2 text-on-surface-variant">HR-DOC-089</div>
+<div class="col-span-2 text-on-surface-variant">May 10, 2024</div>
+<div class="col-span-2 text-right text-on-surface-variant">6.1 MB</div>
+</div>
+</div>
+</div>
+</main>
+<!-- ================= 3. MODAL DIALOG & BACKDROP OVERLAY ================= -->
+<!-- Scrim Overlay: rgba(15,20,18,0.45) with slight blur -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background-color: rgba(15, 20, 18, 0.45); backdrop-filter: blur(4px);">
+<!-- MODAL CONTAINER: Exactly 760px wide by 660px high -->
+<section aria-labelledby="modal-headline" aria-modal="true" class="w-[760px] h-[660px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-32px)] bg-surface-container-lowest border border-outline-variant rounded-2xl flex flex-col overflow-hidden" role="dialog" style="box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12);">
+<!-- FIXED MODAL HEADER (64px Non-scrolling) -->
+<header class="h-16 px-6 border-b border-outline-variant flex items-center justify-between shrink-0 bg-surface-container-lowest">
+<div class="flex items-center gap-8">
+<h2 class="text-headline-sm font-headline-sm text-on-surface font-semibold tracking-tight" id="modal-headline">Add files to project</h2>
+<!-- Tab Switcher -->
+<div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-lg border border-outline-variant">
+<button class="px-3 py-1.5 rounded bg-surface-container-lowest text-primary font-semibold text-body-sm font-body-sm shadow-xs transition-colors" type="button">
+                  Upload files
+                </button>
+<button class="px-3 py-1.5 rounded text-on-surface-variant hover:text-on-surface font-medium text-body-sm font-body-sm transition-colors" type="button">
+                  Keep on shared drive
+                </button>
+</div>
+</div>
+<!-- Close icon button (44px target) -->
+<button aria-label="Close dialog" class="w-11 h-11 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</header>
+<!-- SCROLLABLE MODAL BODY -->
+<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-5 custom-scrollbar bg-surface-container-lowest">
+<!-- Storage Notice / Warning Alert Box -->
+<div class="p-3.5 rounded-xl border border-[#fed7aa] bg-[#fffaf5] flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#c2410c] text-[20px]">warning</span>
+<div class="flex flex-col">
+<span class="text-body-sm font-body-sm font-medium text-[#9a3412]">There is not enough storage for this upload</span>
+<a class="text-label-md font-label-md text-primary hover:underline" href="#">View storage (1.9 of 2.0 GiB used)</a>
+</div>
+</div>
+<button class="min-h-[40px] px-3.5 py-1.5 rounded-lg border border-[#fed7aa] bg-surface-container-lowest text-[#9a3412] hover:bg-[#fff5ec] text-body-sm font-body-sm font-medium transition-colors whitespace-nowrap" type="button">
+                Keep on shared drive
+              </button>
+</div>
+<!-- Restrained Dashed Dropzone -->
+<div class="border-2 border-dashed border-outline-variant hover:border-primary rounded-xl p-5 text-center flex flex-col items-center justify-center gap-1.5 bg-surface-container-lowest hover:bg-surface-container-low transition-all cursor-pointer group">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-105 transition-transform mb-1">
+<span class="material-symbols-outlined text-[22px]">cloud_upload</span>
+</div>
+<div class="text-body-md font-body-md font-medium text-on-surface">
+                Choose files or drop them here
+              </div>
+<div class="text-label-sm font-label-sm text-on-surface-variant max-w-lg leading-relaxed">
+                25 MiB per file · Up to 64 items or 250 MiB in one batch · Supported formats: PDF, DOCX, XLSX, RTF, PPTX, TXT, CSV, PNG, JPEG, WebP
+              </div>
+</div>
+<!-- Upload Queue List -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-label-md font-label-md text-on-surface font-semibold">Upload queue (5 items)</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">2 uploading actively</span>
+</div>
+<!-- Item 1: Active Upload 1 -->
+<div class="p-3.5 rounded-xl border border-outline-variant bg-surface-container-lowest flex flex-col gap-3 hover:border-outline transition-colors">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">table_view</span>
+</div>
+<div>
+<div class="text-body-sm font-body-sm font-medium text-on-surface leading-tight">Harbour_bathymetry_analysis.xlsx</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">8.6 MiB</div>
+</div>
+</div>
+<!-- Purpose dropdown & Document ref input -->
+<div class="flex items-center gap-2">
+<select class="h-9 px-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary">
+<option selected="">Source document</option>
+<option>Output / Deliverable</option>
+</select>
+<input class="h-9 w-28 px-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary font-mono text-[12px]" placeholder="Reference" type="text" value="HR-DOC-104"/>
+</div>
+</div>
+<!-- Progress Row -->
+<div class="flex items-center gap-3">
+<div class="flex-1 flex flex-col gap-1">
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-300" style="width: 48%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant">
+<span>Uploading 4.2 of 8.6 MiB (48%)</span>
+<span class="text-primary font-medium">1.2 MB/s</span>
+</div>
+</div>
+<button class="min-h-[44px] px-2 text-label-md font-label-md text-error hover:underline flex items-center justify-center" type="button">
+                    Cancel upload
+                  </button>
+</div>
+</div>
+<!-- Item 2: Active Upload 2 -->
+<div class="p-3.5 rounded-xl border border-outline-variant bg-surface-container-lowest flex flex-col gap-3 hover:border-outline transition-colors">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</div>
+<div>
+<div class="text-body-sm font-body-sm font-medium text-on-surface leading-tight">Pier_structural_notes_v2.docx</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">3.1 MiB</div>
+</div>
+</div>
+<!-- Purpose dropdown & Document ref input -->
+<div class="flex items-center gap-2">
+<select class="h-9 px-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary">
+<option selected="">Source document</option>
+<option>Output / Deliverable</option>
+</select>
+<input class="h-9 w-28 px-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary font-mono text-[12px]" placeholder="Reference" type="text" value="HR-DOC-105"/>
+</div>
+</div>
+<!-- Progress Row -->
+<div class="flex items-center gap-3">
+<div class="flex-1 flex flex-col gap-1">
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-300" style="width: 58%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant">
+<span>Uploading 1.8 of 3.1 MiB (58%)</span>
+<span class="text-primary font-medium">840 KB/s</span>
+</div>
+</div>
+<button class="min-h-[44px] px-2 text-label-md font-label-md text-error hover:underline flex items-center justify-center" type="button">
+                    Cancel upload
+                  </button>
+</div>
+</div>
+<!-- Item 3: Queued Item -->
+<div class="p-3.5 rounded-xl border border-outline-variant bg-surface-container-low/60 flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+</div>
+<div>
+<div class="text-body-sm font-body-sm font-medium text-on-surface leading-tight">Environmental_impact_summary.pdf</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">12.4 MiB · <span class="text-secondary font-medium">Queued (2 active browser uploads running)</span></div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<select class="h-9 px-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary">
+<option>Source document</option>
+<option selected="">Output</option>
+</select>
+<input class="h-9 w-28 px-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary font-mono text-[12px]" placeholder="Reference" type="text" value="HR-DOC-106"/>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-error transition-colors" title="Remove from queue" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<!-- Item 4: Oversized Error Item -->
+<div class="p-3.5 rounded-xl border border-[#fed7aa] bg-[#fffaf5] flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-[#ffedd5] flex items-center justify-center text-[#c2410c] shrink-0">
+<span class="material-symbols-outlined text-[18px]">error</span>
+</div>
+<div>
+<div class="text-body-sm font-body-sm font-medium text-on-surface leading-tight">Survey drawings.pdf · 86 MiB</div>
+<div class="text-label-sm font-label-sm text-[#9a3412] font-medium">This file is larger than 25 MiB.</div>
+</div>
+</div>
+<!-- Actions right next to it -->
+<div class="flex items-center gap-2">
+<button class="min-h-[44px] px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-[#fed7aa] text-body-sm font-body-sm font-medium text-[#9a3412] hover:bg-[#fff5ec] transition-colors" type="button">
+                      Keep on shared drive
+                    </button>
+<button class="min-h-[44px] px-2.5 text-label-md font-label-md text-on-surface-variant hover:text-error transition-colors" type="button">
+                      Remove
+                    </button>
+</div>
+</div>
+</div>
+<!-- Item 5: Invalid Format Error Item -->
+<div class="p-3.5 rounded-xl border border-error-container bg-[#fff5f5] flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-error-container flex items-center justify-center text-error shrink-0">
+<span class="material-symbols-outlined text-[18px]">block</span>
+</div>
+<div>
+<div class="text-body-sm font-body-sm font-medium text-on-surface leading-tight">Site_archive_bundle.zip · 4.8 MiB</div>
+<div class="text-label-sm font-label-sm text-error">Use a supported file type (e.g. PDF, DOCX, XLSX, RTF). Zip archives are not supported.</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="min-h-[44px] px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-error-container text-body-sm font-body-sm font-medium text-error hover:bg-[#ffebeb] transition-colors" type="button">
+                      Choose another file
+                    </button>
+<button class="min-h-[44px] px-2.5 text-label-md font-label-md text-on-surface-variant hover:text-error transition-colors" type="button">
+                      Remove
+                    </button>
+</div>
+</div>
+</div>
+<!-- Interrupted Row Notice -->
+<div class="p-3 rounded-lg border border-outline-variant bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">pause_circle</span>
+<span class="text-body-sm font-body-sm text-on-surface">Upload paused. Your completed files are safe.</span>
+</div>
+<button class="min-h-[36px] px-3 rounded-lg bg-surface-container-lowest border border-outline-variant text-body-sm font-body-sm font-medium text-on-surface hover:bg-surface-container-low transition-colors" type="button">
+                  Retry unfinished
+                </button>
+</div>
+</div>
+</div>
+<!-- FIXED MODAL FOOTER (64px Non-scrolling) -->
+<footer class="h-16 px-6 border-t border-outline-variant flex items-center justify-between shrink-0 bg-surface-container-lowest">
+<!-- Left Info -->
+<div class="flex items-center gap-2 text-label-md font-label-md text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary">lock</span>
+<span>2 browser uploads running · Encrypted before transfer</span>
+</div>
+<!-- Right Actions -->
+<div class="flex items-center gap-3">
+<button class="min-h-[44px] px-4 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low text-body-sm font-body-sm font-medium transition-colors" type="button">
+                Cancel
+              </button>
+<button class="min-h-[44px] px-5 py-2 rounded-lg bg-[#176b50] hover:bg-[#135741] text-white text-body-sm font-body-sm font-semibold transition-colors shadow-xs flex items-center gap-1.5" type="button">
+<span>Add 3 files</span>
+</button>
+</div>
+</footer>
+</section>
+</div>
+</div>
+</div>
+</body></html>

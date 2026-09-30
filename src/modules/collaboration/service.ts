@@ -1,3 +1,4 @@
+import { planningWireValue } from '../../shared/planning-api.js';
 import { randomUUID } from 'node:crypto';
 import type pg from 'pg';
 import { z } from 'zod';
@@ -168,7 +169,7 @@ export class CollaborationService {
       const remaining = request.after ? rows.filter((row) => row.id > request.after!) : rows, selected = remaining.slice(0,request.limit), entries: CollaborationEntry[] = [];
       for (const row of selected) { const value = await this.#entry(application,planning,request.kind,row.id,securityAt); if (!value || value.verified.hidden && !request.includeHidden) throw changed(); entries.push(value.entry); }
       const page: CollaborationPage = { planning,entries,anchor,nextCursor:remaining.length > selected.length ? selected.at(-1)!.id : null,complete:remaining.length <= selected.length };
-      if (Buffer.byteLength(canonicalJson(page)) > COLLABORATION_MAX_PAGE_BYTES) throw oversized(); return page;
+      if (Buffer.byteLength(canonicalJson(planningWireValue(page))) > COLLABORATION_MAX_PAGE_BYTES) throw oversized(); return page;
     });
   }
 }

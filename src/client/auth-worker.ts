@@ -21,11 +21,38 @@ import type * as profileHelpers from './profile-crypto.js';
 import type * as directoryHelpers from './directory-crypto.js';
 import type * as restorationHelpers from './restoration-crypto.js';
 import type * as lifecycleHelpers from './lifecycle-crypto.js';
+import type * as fileHelpers from './files-crypto.js';
+import type * as evidenceHelpers from './file-evidence-crypto.js';
+import type * as deliveryHelpers from './files-delivery-crypto.js';
+import type * as bulkHelpers from './files-bulk-crypto.js';
 
 export type DeviceProofContext = Omit<DeviceChallenge, 'version' | 'purpose' | 'ceremonyId' | 'nonce' | 'issuedAt' | 'expiresAt'>;
 export interface UnlockDeviceInput { context: DeviceContext; wrapper: DeviceWrapper; exportKey: string; proofContext: DeviceProofContext }
 export type WorkerLoginResult = Omit<Awaited<ReturnType<typeof opaqueHelpers.finishLogin>>, 'sessionKey'>;
 export interface AuthWorkerMethods {
+  sealFileBulk: { input:bulkHelpers.SealFileBulkInput; output:Awaited<ReturnType<typeof bulkHelpers.sealFileBulk>> };
+  openFileBulk: { input:bulkHelpers.OpenFileBulkInput; output:Awaited<ReturnType<typeof bulkHelpers.openFileBulk>> };
+
+  prepareDelivery: { input:deliveryHelpers.PrepareDeliveryInput; output:Awaited<ReturnType<typeof deliveryHelpers.prepareDelivery>> };
+  readDelivery: { input:deliveryHelpers.ReadDeliveryInput; output:Awaited<ReturnType<typeof deliveryHelpers.readDelivery>> };
+  prepareDeliveryCommand: { input:deliveryHelpers.PrepareDeliveryCommandInput; output:Awaited<ReturnType<typeof deliveryHelpers.prepareDeliveryCommand>> };
+  prepareDeliveryPair: { input:deliveryHelpers.PrepareDeliveryPairInput; output:Awaited<ReturnType<typeof deliveryHelpers.prepareDeliveryPair>> };
+  readDeliveryService: { input:deliveryHelpers.ReadDeliveryServiceInput; output:Awaited<ReturnType<typeof deliveryHelpers.readDeliveryService>> };
+  prepareDeliveryServiceRevocation: { input:deliveryHelpers.PrepareDeliveryServiceRevocationInput; output:Awaited<ReturnType<typeof deliveryHelpers.prepareDeliveryServiceRevocation>> };
+  prepareDeliveryPublish: { input:deliveryHelpers.PrepareDeliveryPublishInput; output:Awaited<ReturnType<typeof deliveryHelpers.prepareDeliveryPublish>> };
+  preparePublicationMaterial: { input:deliveryHelpers.PreparePublicationMaterialInput; output:Awaited<ReturnType<typeof deliveryHelpers.preparePublicationMaterial>> };
+
+  prepareFileVerification: { input:evidenceHelpers.PrepareFileVerificationInput; output:Awaited<ReturnType<typeof evidenceHelpers.prepareFileVerification>> };
+  readFileEvidence: { input:evidenceHelpers.EvidenceCryptoInput; output:Awaited<ReturnType<typeof evidenceHelpers.readFileEvidence>> };
+  prepareFileSubmission: { input:evidenceHelpers.PrepareFileSubmissionInput; output:Awaited<ReturnType<typeof evidenceHelpers.prepareFileSubmission>> };
+  prepareFileReview: { input:evidenceHelpers.PrepareFileReviewInput; output:Awaited<ReturnType<typeof evidenceHelpers.prepareFileReview>> };
+  prepareSharedFileApproval: { input:evidenceHelpers.PrepareSharedFileApprovalInput; output:Awaited<ReturnType<typeof evidenceHelpers.prepareSharedFileApproval>> };
+  prepareFileRevocation: { input:evidenceHelpers.PrepareFileRevocationInput; output:Awaited<ReturnType<typeof evidenceHelpers.prepareFileRevocation>> };
+  hashFile: { input: { file: Blob }; output: string };
+  prepareFile: { input: fileHelpers.PrepareFileInput; output: Awaited<ReturnType<typeof fileHelpers.prepareFile>> };
+  readFiles: { input: fileHelpers.ReadFilesInput; output: Awaited<ReturnType<typeof fileHelpers.readFiles>> };
+  readFileBytes: { input: fileHelpers.ReadFileBytesInput; output: Awaited<ReturnType<typeof fileHelpers.readFileBytes>> };
+  prepareFileLink: { input: fileHelpers.PrepareFileLinkInput; output: Awaited<ReturnType<typeof fileHelpers.prepareFileLink>> };
   capabilities: { input: { origin: string }; output: { webAssembly: true; webCrypto: true; indexedDB: true } };
   startRegistration: { input: { password: string }; output: Awaited<ReturnType<typeof opaqueHelpers.startRegistration>> };
   finishRegistration: { input: Parameters<typeof opaqueHelpers.finishRegistration>[0]; output: Awaited<ReturnType<typeof opaqueHelpers.finishRegistration>> };
@@ -87,13 +114,13 @@ export interface AuthWorkerMethods {
 }
 export type AuthWorkerMethod = keyof AuthWorkerMethods;
 export const workerErrorCode = z.enum(['UNSUPPORTED', 'UPDATE_REQUIRED', 'INVALID_REQUEST', 'PASSWORD_POLICY', 'CONFIGURATION', 'AUTHENTICATION',
-  'SERVER_KEY', 'LOCKED', 'CONTEXT_MISMATCH', 'CHALLENGE_EXPIRED', 'INCOMPLETE_KEYS', 'FINGERPRINT_MISMATCH', 'CANCELLED', 'LOGGED_OUT', 'CLOSED', 'INTERNAL']);
+  'SERVER_KEY', 'LOCKED', 'CONTEXT_MISMATCH', 'CHALLENGE_EXPIRED', 'INCOMPLETE_KEYS', 'FINGERPRINT_MISMATCH', 'CANCELLED', 'LOGGED_OUT', 'CLOSED', 'INTERNAL', 'TOO_LARGE', 'UNSUPPORTED_FORMAT', 'CHANGED_FILE']);
 export type AuthWorkerErrorCode = z.infer<typeof workerErrorCode>;
 export class AuthWorkerError extends Error {
   constructor(readonly code: AuthWorkerErrorCode) { super(`Authentication worker failed (${code})`); this.name = 'AuthWorkerError'; }
 }
 export const workerRequest = z.strictObject({ version: z.literal(1), id: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
-  method: z.enum(['capabilities', 'startRegistration', 'finishRegistration', 'startLogin', 'finishLogin', 'unlockDevice', 'deviceProof', 'preparePasswordChange', 'verifyPasswordChangeWrapper', 'createPairingDevice', 'verifyPairingDevice', 'confirmPairingRecipient', 'confirmPairingApprover', 'preparePairingApproval', 'verifyPairingDelivery', 'proveOwnerPhrase', 'prepareRecoveryDraft', 'verifyRecoveryDraftWrapper', 'confirmRecoveryRecipient', 'preparePhraseRecoveryApproval', 'prepareOwnerRecoveryApproval', 'verifyRecoveryDelivery', 'prepareJoinInvitation', 'prepareEnrolmentDraft', 'verifyEnrolmentDraft', 'confirmEnrolmentTarget', 'prepareEnrolmentApproval', 'verifyEnrolmentDelivery', 'prepareRoleChange', 'readRoleLabels', 'prepareAccessChange', 'refreshAccessKeys', 'prepareProjectCreate', 'prepareTeamChange', 'readTeams', 'readTeamHistory', 'preparePlanning', 'readPlanning', 'prepareCollaboration', 'readCollaboration', 'prepareInbox', 'readReportingSettings', 'prepareReportingSettings', 'calculateReporting', 'prepareReporting', 'readReporting', 'prepareUpgradeStart', 'prepareIdentityUpgrade', 'prepareUpgradeFinish', 'prepareTeamUpgrade', 'prepareCollaborationUpgrade', 'prepareExport', 'readCurrentProfile', 'readWorkspaceDirectory', 'readRestoration', 'prepareRestorationVerification', 'prepareLifecycle', 'clear']), input: z.unknown() });
+  method: z.enum(['sealFileBulk','openFileBulk','prepareDelivery','readDelivery','prepareDeliveryCommand','prepareDeliveryPair','readDeliveryService','prepareDeliveryServiceRevocation','prepareDeliveryPublish','preparePublicationMaterial','prepareFileVerification','readFileEvidence','prepareFileSubmission','prepareFileReview','prepareSharedFileApproval','prepareFileRevocation','hashFile', 'prepareFile', 'readFiles', 'readFileBytes', 'prepareFileLink', 'capabilities', 'startRegistration', 'finishRegistration', 'startLogin', 'finishLogin', 'unlockDevice', 'deviceProof', 'preparePasswordChange', 'verifyPasswordChangeWrapper', 'createPairingDevice', 'verifyPairingDevice', 'confirmPairingRecipient', 'confirmPairingApprover', 'preparePairingApproval', 'verifyPairingDelivery', 'proveOwnerPhrase', 'prepareRecoveryDraft', 'verifyRecoveryDraftWrapper', 'confirmRecoveryRecipient', 'preparePhraseRecoveryApproval', 'prepareOwnerRecoveryApproval', 'verifyRecoveryDelivery', 'prepareJoinInvitation', 'prepareEnrolmentDraft', 'verifyEnrolmentDraft', 'confirmEnrolmentTarget', 'prepareEnrolmentApproval', 'verifyEnrolmentDelivery', 'prepareRoleChange', 'readRoleLabels', 'prepareAccessChange', 'refreshAccessKeys', 'prepareProjectCreate', 'prepareTeamChange', 'readTeams', 'readTeamHistory', 'preparePlanning', 'readPlanning', 'prepareCollaboration', 'readCollaboration', 'prepareInbox', 'readReportingSettings', 'prepareReportingSettings', 'calculateReporting', 'prepareReporting', 'readReporting', 'prepareUpgradeStart', 'prepareIdentityUpgrade', 'prepareUpgradeFinish', 'prepareTeamUpgrade', 'prepareCollaborationUpgrade', 'prepareExport', 'readCurrentProfile', 'readWorkspaceDirectory', 'readRestoration', 'prepareRestorationVerification', 'prepareLifecycle', 'clear']), input: z.unknown() });
 export const workerResponse = z.discriminatedUnion('ok', [
   z.strictObject({ version: z.literal(1), id: z.number().int().positive(), ok: z.literal(true), result: z.unknown() }),
   z.strictObject({ version: z.literal(1), id: z.number().int().positive(), ok: z.literal(false), code: workerErrorCode }),
@@ -189,6 +216,10 @@ export function installAuthWorker(scope: AuthWorkerScope, environment: AuthWorke
     await initialize();
     (await import('../shared/content-schema.js')).assertSupportedContentSchemas(input);
     if (epoch !== startedEpoch) throw new AuthWorkerError('CANCELLED');
+    if (method === 'hashFile') {
+      const accepted=z.strictObject({file:z.instanceof(Blob)}).parse(input);
+      return (await import('./files-crypto.js')).hashSelectedFile(accepted.file);
+    }
     if (method === 'startRegistration' || method === 'startLogin') {
       const accepted = z.strictObject({ password: z.string().max(2048) }).parse(input);
       const helpers = await import('./opaque.js');
@@ -366,7 +397,7 @@ export function installAuthWorker(scope: AuthWorkerScope, environment: AuthWorke
       return helpers.prepareInbox(accepted, { signingPrivateKey: crypto.base64urlEncode(cached.signing), recipientPrivateKey: crypto.base64urlEncode(cached.recipient),
         signingPublicKey: c.signingPublicKey, recipientPublicKey: c.recipientPublicKey });
     }
-    if (method === 'preparePlanning' || method === 'readPlanning' || method === 'prepareCollaboration' || method === 'readCollaboration' || method === 'prepareCollaborationUpgrade') {
+    if (['sealFileBulk','openFileBulk','prepareDelivery','readDelivery','prepareDeliveryCommand','prepareDeliveryPair','readDeliveryService','prepareDeliveryServiceRevocation','prepareDeliveryPublish','preparePublicationMaterial','preparePlanning','readPlanning','prepareCollaboration','readCollaboration','prepareCollaborationUpgrade','prepareFile','readFiles','readFileBytes','prepareFileLink','prepareFileVerification','readFileEvidence','prepareFileSubmission','prepareFileReview','prepareSharedFileApproval','prepareFileRevocation'].includes(method)) {
       if (!cached) throw new AuthWorkerError('LOCKED');
       const helpers = await import('./planning-crypto.js'), accepted = input as planningHelpers.PreparePlanningInput;
       if (accepted.history?.origin !== environment.origin) throw new AuthWorkerError('CONTEXT_MISMATCH');
@@ -380,6 +411,37 @@ export function installAuthWorker(scope: AuthWorkerScope, environment: AuthWorke
         accepted.accountId !== context.accountId || accepted.deviceId !== context.deviceId) throw new AuthWorkerError('CONTEXT_MISMATCH');
       const bundle = { signingPrivateKey: crypto.base64urlEncode(cached.signing), recipientPrivateKey: crypto.base64urlEncode(cached.recipient),
         signingPublicKey: context.signingPublicKey, recipientPublicKey: context.recipientPublicKey };
+      if (method==='sealFileBulk'||method==='openFileBulk') {
+        const bulk=await import('./files-bulk-crypto.js');
+        return method==='sealFileBulk'?bulk.sealFileBulk(input as bulkHelpers.SealFileBulkInput,bundle):bulk.openFileBulk(input as bulkHelpers.OpenFileBulkInput,bundle);
+      }
+      if (['prepareDelivery','readDelivery','prepareDeliveryCommand','prepareDeliveryPair','readDeliveryService','prepareDeliveryServiceRevocation','prepareDeliveryPublish','preparePublicationMaterial'].includes(method)) {
+        const delivery=await import('./files-delivery-crypto.js');
+        if(method==='prepareDelivery')return delivery.prepareDelivery(input as deliveryHelpers.PrepareDeliveryInput,bundle);
+        if(method==='readDelivery')return delivery.readDelivery(input as deliveryHelpers.ReadDeliveryInput,bundle);
+        if(method==='prepareDeliveryCommand')return delivery.prepareDeliveryCommand(input as deliveryHelpers.PrepareDeliveryCommandInput,bundle);
+        if(method==='prepareDeliveryPair')return delivery.prepareDeliveryPair(input as deliveryHelpers.PrepareDeliveryPairInput,bundle);
+        if(method==='readDeliveryService')return delivery.readDeliveryService(input as deliveryHelpers.ReadDeliveryServiceInput,bundle);
+        if(method==='prepareDeliveryServiceRevocation')return delivery.prepareDeliveryServiceRevocation(input as deliveryHelpers.PrepareDeliveryServiceRevocationInput,bundle);
+        if(method==='prepareDeliveryPublish')return delivery.prepareDeliveryPublish(input as deliveryHelpers.PrepareDeliveryPublishInput,bundle);
+        if(method==='preparePublicationMaterial')return delivery.preparePublicationMaterial(input as deliveryHelpers.PreparePublicationMaterialInput,bundle);
+      }
+      if (["prepareFileVerification","readFileEvidence","prepareFileSubmission","prepareFileReview","prepareSharedFileApproval","prepareFileRevocation"].includes(method)) {
+        const evidence=await import('./file-evidence-crypto.js');
+        if(method==='prepareFileVerification')return evidence.prepareFileVerification(input as evidenceHelpers.PrepareFileVerificationInput,bundle);
+        if(method==='readFileEvidence')return evidence.readFileEvidence(input as evidenceHelpers.EvidenceCryptoInput,bundle);
+        if(method==='prepareFileSubmission')return evidence.prepareFileSubmission(input as evidenceHelpers.PrepareFileSubmissionInput,bundle);
+        if(method==='prepareFileReview')return evidence.prepareFileReview(input as evidenceHelpers.PrepareFileReviewInput,bundle);
+        if(method==='prepareSharedFileApproval')return evidence.prepareSharedFileApproval(input as evidenceHelpers.PrepareSharedFileApprovalInput,bundle);
+        if(method==='prepareFileRevocation')return evidence.prepareFileRevocation(input as evidenceHelpers.PrepareFileRevocationInput,bundle);
+      }
+      if (['prepareFile','readFiles','readFileBytes','prepareFileLink'].includes(method)) {
+        const files=await import('./files-crypto.js');
+        if(method==='prepareFile')return files.prepareFile(input as fileHelpers.PrepareFileInput,bundle);
+        if(method==='readFiles')return files.readFiles(input as fileHelpers.ReadFilesInput,bundle);
+        if(method==='readFileBytes')return files.readFileBytes(input as fileHelpers.ReadFileBytesInput,bundle);
+        return files.prepareFileLink(input as fileHelpers.PrepareFileLinkInput,bundle);
+      }
       if (method === 'prepareCollaboration' || method === 'readCollaboration' || method === 'prepareCollaborationUpgrade') {
         const collaboration = await import('./collaboration-crypto.js');
         if(method === 'prepareCollaborationUpgrade')return collaboration.prepareCollaborationUpgrade(input as collaborationHelpers.PrepareCollaborationUpgradeInput,bundle);
@@ -527,6 +589,7 @@ export function installAuthWorker(scope: AuthWorkerScope, environment: AuthWorke
       else if (error instanceof z.ZodError) code = 'INVALID_REQUEST';
       else if (error && typeof error === 'object' && 'name' in error && 'code' in error) {
         if (error.name === 'ContentSchemaError' && error.code === 'UPDATE_REQUIRED') code='UPDATE_REQUIRED';
+        else if(error.name==='FileClientError') code=workerErrorCode.safeParse(error.code).success?error.code as AuthWorkerErrorCode:'CONTEXT_MISMATCH';
         else if (error.name === 'ClientOpaqueError' && workerErrorCode.safeParse(error.code).success) code = error.code as AuthWorkerErrorCode;
         else if (error.name === 'DeviceStoreError') code = 'AUTHENTICATION';
         else if (['PairingClientError', 'RecoveryClientError', 'EnrolmentClientError', 'EnrolmentCryptoError', 'RolesClientError', 'AccessChangeClientError', 'ProjectCreateClientError', 'TeamsClientError', 'PlanningClientError', 'PlanningError'].includes(String(error.name))) code = ['INCOMPLETE_KEYS', 'FINGERPRINT_MISMATCH'].includes(String(error.code)) ? error.code as AuthWorkerErrorCode : 'CONTEXT_MISMATCH';

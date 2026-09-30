@@ -7,8 +7,10 @@ import { customRolePermissions } from './permissions.js';
 export const ROLE_CHANGE_TTL_MS = 600_000;
 export const roleLabelReference = z.strictObject({ id: identifier, revision: positiveCounter, digest });
 export const roleDefinition = z.strictObject({ id: identifier, template: z.literal('custom'), revision: positiveCounter,
-  state: z.enum(['active', 'retired']), permissions: customRolePermissions, label: roleLabelReference })
-  .refine((value) => value.label.revision === value.revision);
+  state: z.enum(['active', 'retired']), permissions: customRolePermissions, label: roleLabelReference,
+  permissionCatalogue: z.literal(2).optional() })
+  .refine((value) => value.label.revision === value.revision)
+  .refine((value) => value.permissions.includes('download_files') ? value.permissionCatalogue === 2 : value.permissionCatalogue === undefined);
 export type RoleDefinition = z.infer<typeof roleDefinition>;
 export const roleReference = z.strictObject({ workspaceId: identifier, operationId: identifier });
 export type RoleReference = z.infer<typeof roleReference>;
@@ -43,7 +45,7 @@ export type RoleView = z.infer<typeof roleView>;
 export const roleListRequest = z.strictObject({ workspaceId: identifier, afterRoleId: identifier.optional(), limit: z.number().int().min(1).max(100).default(50) });
 export const roleList = z.strictObject({ workspaceId: identifier, roles: z.array(z.strictObject({ id: identifier,
   template: z.enum(['owner', 'manager', 'member', 'viewer', 'custom']), revision: positiveCounter, state: z.enum(['active', 'retired']),
-  permissions: customRolePermissions, label: labelObject.nullable() })).max(100), nextRoleId: identifier.nullable(),
+  permissions: customRolePermissions, label: labelObject.nullable(), permissionCatalogue: z.literal(2).optional() })).max(100), nextRoleId: identifier.nullable(),
   current: z.strictObject({ securityHead: digest, securityVersion: positiveCounter }),
   materials: z.array(z.strictObject({ id: identifier, digest, kind: z.string().max(64), value: z.unknown() })).max(4097) });
 export type RoleList = z.infer<typeof roleList>;

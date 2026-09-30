@@ -54,6 +54,7 @@ export class RoleService {
     const o = await this.#object(c, workspaceId, row.encrypted_role_object_id, 'encrypted_role'), envelope = contentEnvelope.parse(o.versioned_object);
     if (envelope.header.recordId !== roleId || envelope.header.recordType !== 'role' || envelope.header.workspaceId !== workspaceId || envelope.header.revision !== row.revision) throw changed();
     return { row, definition: { id: roleId, template: 'custom', revision: row.revision, state: row.state, permissions: row.permissions,
+      ...(row.permissions.includes('download_files') ? { permissionCatalogue: 2 as const } : {}),
       label: { id: o.object_id, revision: row.revision, digest: o.object_hash } }, label: { id: o.object_id, envelope } };
   }
   async #unused(c: pg.PoolClient, workspaceId: string, roleId: string, now: Date) {
@@ -190,7 +191,8 @@ export class RoleService {
       for (const row of page) {
         const label = row.template === 'custom' ? (await this.#definition(c, request.workspaceId, row.role_id))!.label : null;
         if (!label) await this.#object(c, request.workspaceId, row.definition_object_id);
-        roles.push({ id: row.role_id, template: row.template, revision: row.revision, state: row.state, permissions: row.permissions, label });
+        roles.push({ id: row.role_id, template: row.template, revision: row.revision, state: row.state, permissions: row.permissions, label,
+          ...(row.permissions.includes('download_files') ? { permissionCatalogue: 2 as const } : {}) });
       }
       return { workspaceId: request.workspaceId, roles, nextRoleId: rows.length > request.limit ? page.at(-1)!.role_id : null,
         current: { securityHead: w.security_head, securityVersion: w.security_version }, materials: await this.#materials(c, request.workspaceId, p, w, now) };

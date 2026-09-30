@@ -1,0 +1,82 @@
+[
+  {
+    "group": "01-project-files",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "modelId": "GEMINI_3_8_FLASH",
+    "deviceType": "DESKTOP",
+    "promptFile": "01-project-files.prompt.md",
+    "responseFile": "01-project-files.response.json",
+    "submittedOnce": true
+  },
+  {
+    "group": "02-add-files",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "modelId": "GEMINI_3_8_FLASH",
+    "deviceType": "DESKTOP",
+    "promptFile": "02-add-files.prompt.md",
+    "responseFile": "02-add-files.response.json",
+    "submittedOnce": true
+  },
+  {
+    "group": "03-bulk",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "modelId": "GEMINI_3_8_FLASH",
+    "deviceType": "DESKTOP",
+    "promptFile": "03-bulk.prompt.md",
+    "responseFile": "03-bulk.response.json",
+    "submittedOnce": true
+  },
+  {
+    "group": "04-task-evidence",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "modelId": "GEMINI_3_8_FLASH",
+    "deviceType": "DESKTOP",
+    "promptFile": "04-task-evidence.prompt.md",
+    "responseFile": "04-task-evidence.response.json",
+    "submittedOnce": true
+  },
+  {
+    "group": "05-preview-editor",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "modelId": "GEMINI_3_8_FLASH",
+    "deviceType": "DESKTOP",
+    "promptFile": "05-preview-editor.prompt.md",
+    "responseFile": "05-preview-editor.response.json",
+    "submittedOnce": true
+  },
+  {
+    "group": "06-delivery",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "modelId": "GEMINI_3_8_FLASH",
+    "deviceType": "DESKTOP",
+    "promptFile": "06-delivery.prompt.md",
+    "responseFile": "06-delivery.response.json",
+    "submittedOnce": true
+  },
+  {
+    "group": "07-local-service",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "modelId": "GEMINI_3_8_FLASH",
+    "deviceType": "DESKTOP",
+    "promptFile": "07-local-service.prompt.md",
+    "responseFile": "07-local-service.response.json",
+    "submittedOnce": true
+  },
+  {
+    "group": "08-storage",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "modelId": "GEMINI_3_8_FLASH",
+    "deviceType": "DESKTOP",
+    "promptFile": "08-storage.prompt.md",
+    "responseFile": "08-storage.response.json",
+    "submittedOnce": true
+  }
+]

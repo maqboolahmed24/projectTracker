@@ -55,7 +55,6 @@ const futureGroups = [
   ['AI assistance','Explore evidence-based summaries and project questions.'],
   ['Email notifications','Receive workspace updates by email.'],
   ['Board views','Organise the same tasks as cards on a board.'],
-  ['Attachments','Keep supporting files beside the work.'],
   ['Mentions and channels','Bring people into focused conversations.'],
   ['Dependencies and scheduling','Connect dependent tasks and automate scheduling.'],
   ['Risk register','Track project risks and the actions planned to address them.'],

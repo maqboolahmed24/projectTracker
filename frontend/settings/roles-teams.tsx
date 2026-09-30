@@ -15,6 +15,7 @@ const permissionChoices = [
   ['manage_tasks', 'Manage tasks', 'Manage tasks, assignments and task reviewers.'],
   ['approve_tasks', 'Approve tasks', 'Review other people’s submitted work.'],
   ['plan_projects', 'Plan projects', 'Manage phases, milestones and project closure.'],
+  ['download_files', 'Download files', 'Save project files and delivery packages to their device.'],
 ] as const;
 type Permission = typeof permissionChoices[number][0];
 function RoleEditor({ role, onClose }: { role?: ReadableRole; onClose: () => void }) {

@@ -16,6 +16,18 @@ export { verifySecurityHistory } from '../shared/security-history.js';
 export { PasswordChangeController, HttpPasswordChangeTransport, IndexedPasswordChangeStore } from './password-change.js';
 export { PairingController, HttpPairingTransport, IndexedPairingStore, seedActivationPin } from './pairing.js';
 export { openClient } from './runtime.js';
+export { FilesController, HttpFilesTransport } from './files-controller.js';
+export type { UploadFileInput, ReadableFileEntry, ReadableFileVersion } from './files-controller.js';
+export { FileClientError } from './files-crypto.js';
+export type { ReadableFileMetadata } from './files-crypto.js';
+export { IndexedFilesStore } from './files-store.js';
+export { FileEvidenceController, HttpFileEvidenceTransport } from './file-evidence-controller.js';
+export { IndexedFileEvidenceStore } from './file-evidence-store.js';
+export type { EvidenceSelection, EvidenceProgress } from './file-evidence-controller.js';
+export { DeliveryController,HttpDeliveryTransport } from './files-delivery-controller.js';
+export { IndexedDeliveryStore } from './files-delivery-store.js';
+export type { CreateDeliveryInput,CreateDeliveryItem,ReadableDelivery,ReadableDeliveryService } from './files-delivery-controller.js';
+export type { PrivateDeliveryDetails,PrivateDeliveryService } from './files-delivery-crypto.js';
 export { RecoveryController, HttpRecoveryTransport, IndexedRecoveryStore } from './recovery-controller.js';
 export { EnrolmentController, HttpEnrolmentTransport } from './enrolment-controller.js';
 export { IndexedEnrolmentStore } from './enrolment-store.js';
@@ -65,3 +77,10 @@ export { IndexedLifecycleStore } from './lifecycle-store.js';
 
 export { DirectoryController } from './directory-controller.js';
 export type { WorkspaceDirectory, DirectoryPerson } from './directory-crypto.js';
+
+export { FileBulkController } from './files-bulk.js';
+export { IndexedFileBulkStore } from './files-bulk-store.js';
+export type { BulkItemInput,BulkMode,BulkSelection } from './files-bulk.js';
+export type { FileBulkDraft,FileBulkItem,StoredFileBulk } from './files-bulk-crypto.js';
+
+export { FileEditorController,type FileEditorLease } from './file-editor-controller.js';

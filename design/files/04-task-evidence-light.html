@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Evidence Light</title>
+<!-- Google Fonts: Hanken Grotesk & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..800;1,300..800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed": "#a4f3d0",
+            "primary": "#00513b",
+            "primary-fixed-dim": "#89d6b5",
+            "on-secondary-fixed-variant": "#3f4944",
+            "on-primary-fixed-variant": "#00513b",
+            "tertiary-fixed-dim": "#b4c5ff",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#5b655f",
+            "outline-variant": "#bec9c2",
+            "on-tertiary-fixed": "#00174b",
+            "surface-bright": "#f2fcf2",
+            "on-secondary-fixed": "#141d19",
+            "surface-variant": "#dbe5dc",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#ced8ff",
+            "inverse-primary": "#89d6b5",
+            "surface-dim": "#d3ddd3",
+            "outline": "#6f7973",
+            "tertiary-fixed": "#dbe1ff",
+            "on-surface": "#151e18",
+            "primary-container": "#176b50",
+            "surface-container": "#e6f1e7",
+            "secondary-fixed": "#dbe5de",
+            "inverse-on-surface": "#e9f3ea",
+            "surface-tint": "#176b50",
+            "on-background": "#151e18",
+            "on-tertiary-fixed-variant": "#003ea8",
+            "on-primary-container": "#9be9c6",
+            "background": "#f2fcf2",
+            "error-container": "#ffdad6",
+            "tertiary-container": "#0053db",
+            "secondary": "#57615b",
+            "secondary-container": "#d8e2db",
+            "on-primary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#ecf6ed",
+            "on-surface-variant": "#3f4944",
+            "surface": "#f2fcf2",
+            "error": "#ba1a1a",
+            "tertiary": "#003ea8",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#002116",
+            "on-error": "#ffffff",
+            "inverse-surface": "#29332c",
+            "surface-container-high": "#e1ebe1",
+            "surface-container-highest": "#dbe5dc",
+            "secondary-fixed-dim": "#bfc9c2"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "space-md": "0.875rem",
+            "space-xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.75rem",
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "gutter": "1.25rem",
+            "margin": "2rem"
+          },
+          "fontFamily": {
+            "code-sm": ["JetBrains Mono"],
+            "headline-md": ["Hanken Grotesk"],
+            "label-sm": ["Hanken Grotesk"],
+            "headline-lg": ["Hanken Grotesk"],
+            "body-sm": ["Hanken Grotesk"],
+            "code-md": ["JetBrains Mono"],
+            "headline-sm": ["Hanken Grotesk"],
+            "label-lg": ["Hanken Grotesk"],
+            "headline-lg-mobile": ["Hanken Grotesk"],
+            "body-md": ["Hanken Grotesk"],
+            "display-lg-mobile": ["Hanken Grotesk"],
+            "display-lg": ["Hanken Grotesk"],
+            "label-md": ["Hanken Grotesk"],
+            "body-lg": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "code-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.025em", "fontWeight": "500" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "code-md": ["12px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["13px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #dbe5dc;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: #bec9c2;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased font-body-md text-body-md min-h-screen overflow-hidden select-none">
+<!-- ========================================================================= -->
+<!-- 1. PERSISTENT SIDEBAR NAVIGATION (Shared Component: SideNavBar)            -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-56 bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline z-30 flex flex-col justify-between p-space-sm transition-colors duration-150 ease-in-out">
+<!-- Brand / Workspace Header -->
+<div>
+<div class="flex items-center gap-space-sm px-space-sm py-space-md mb-space-sm">
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center shrink-0 border border-outline-variant overflow-hidden" title="Maqbool triangular logo">
+<svg class="w-4 h-4" fill="none" viewbox="0 0 24 24">
+<polygon fill="#176b50" opacity="0.85" points="12,3 22,20 2,20"></polygon>
+<polygon fill="#003ea8" opacity="0.5" points="12,7 19,19 5,19"></polygon>
+<polygon fill="#d8e2db" points="12,11 16,18 8,18"></polygon>
+</svg>
+</div>
+<div class="leading-tight truncate">
+<div class="font-headline-md text-headline-md font-semibold text-on-surface dark:text-inverse-on-surface tracking-tight">Maqbool</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant truncate">Private Workspace</div>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="space-y-1">
+<!-- Home -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<!-- Projects (Active) -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-primary dark:text-inverse-primary font-semibold bg-surface-container dark:bg-secondary-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-label-md text-label-md">My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+<span class="font-label-md text-label-md">Inbox</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<!-- A little guidance -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant font-medium hover:bg-surface-container-high dark:hover:bg-secondary hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-label-md text-label-md">A little guidance</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer User Card -->
+<div class="pt-space-sm border-t border-outline-variant">
+<div class="flex items-center justify-between px-space-sm py-2 rounded-DEFAULT hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-space-sm truncate">
+<img class="w-7 h-7 rounded-full object-cover border border-outline-variant" data-alt="Close up photographic portrait of Alex Morgan in daylight, soft natural look, calm expression, high quality editorial framing with quiet minimalist light-mode aesthetic, deep forest green and cool mint accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjQ5BevXkSldqZ1ed8Npk4p72DVkoK-JnW0xSDmiD0jBD92cUcdER3BMo-5HV_97uMWKH9OEuuKERE0vA1siJ-zjpuf5dsvQz2J0aZC8lvkDjcL7V1Rx3whsRIWFzS1e3EgKEvXmDXKnuXZOhA6Y5Wf3LFq7pJR5vGOMvu6rA1N_EkG-3JkOWQ-_lbt34QfivMy_Fo4Ait0HeQTbtl_hCP78sZdAI8E-KWZP7OEhGhGlYjI-DYK3un7w34B5elA15ry0ImkqqDxV8"/>
+<div class="truncate">
+<div class="font-label-md text-label-md font-semibold text-on-surface truncate">Alex Morgan</div>
+<div class="font-label-sm text-label-sm text-secondary truncate">Lead Architect</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- 2. TOPBAR NAVIGATION (Shared Component: TopNavBar)                         -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 right-0 left-56 h-[70px] bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline z-20 flex items-center justify-between px-space-lg transition-colors duration-150 ease-in-out">
+<!-- Breadcrumbs & Nav Links Cluster -->
+<div class="flex items-center gap-space-xl">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-medium text-on-surface">Studio North</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline-sm text-headline-sm font-medium text-on-surface-variant">Projects</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline-sm text-headline-sm font-semibold text-on-surface flex items-center gap-1.5">
+          Harbour renewal
+          <span class="font-code-sm text-code-sm px-1.5 py-0.5 rounded bg-surface-container-high text-secondary border border-outline-variant">HR-2024</span>
+</span>
+</div>
+<!-- Links: Overview, Work (active), Timeline, Updates, Files, Delivery -->
+<nav class="hidden xl:flex items-center gap-space-lg text-body-sm pt-2">
+<a class="text-on-surface-variant pb-space-sm font-medium hover:text-on-surface transition-colors" href="#">Overview</a>
+<a class="text-primary dark:text-inverse-primary font-semibold border-b-2 border-primary dark:border-inverse-primary pb-space-sm" href="#">Work</a>
+<a class="text-on-surface-variant pb-space-sm font-medium hover:text-on-surface transition-colors" href="#">Timeline</a>
+<a class="text-on-surface-variant pb-space-sm font-medium hover:text-on-surface transition-colors" href="#">Updates</a>
+<a class="text-on-surface-variant pb-space-sm font-medium hover:text-on-surface transition-colors" href="#">Files</a>
+<a class="text-on-surface-variant pb-space-sm font-medium hover:text-on-surface transition-colors" href="#">Delivery</a>
+</nav>
+</div>
+<!-- Trailing Actions & Search -->
+<div class="flex items-center gap-space-md">
+<!-- Search Input -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-8 pr-3 py-1.5 text-body-sm placeholder:text-outline focus:outline-none focus:border-primary focus:ring-0" placeholder="Search tasks, files..." type="text"/>
+</div>
+<!-- Icon Actions -->
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-secondary hover:bg-surface-container hover:text-on-surface transition-colors" title="Notifications">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-secondary hover:bg-surface-container hover:text-on-surface transition-colors" title="Filter list">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+<!-- Primary Action: Create -->
+<button class="h-8 px-3.5 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined" data-icon="add" style="font-size:16px;">add</span>
+<span>Create</span>
+</button>
+<!-- Profile Avatar -->
+<div class="w-8 h-8 rounded-full border border-outline-variant overflow-hidden ml-1">
+<img class="w-full h-full object-cover" data-alt="Refined crisp profile picture of Alex Morgan in natural studio light, minimalistic backdrop, quiet focused visual aesthetic fitting a high precision evidence audit tool with pale mint and dark slate tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZrNSpOzfRQZ6stLzdlaqgborL_vLLNQkMkZYdpDCO9Gj-047SIHyYGAOns6TezrnYwkztXmZpstvBVi8S3xm0XCOuicDDPQMClkpU9hPx41HROBsI-3er3jDPde-f3Kc2M2XS6u9vcfHEJ_u3g60Fjh_F0-X0XwIYvmWijUpBZrL2mxEpMakKCEsyUrLenJz4ytpO956FHw5x5uR8OrVOxQxhig6_Gm5kGED_CZRnqqcsX4zgUty8S7c6LAPATruDy6kVp8kJPnM"/>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- 3. MUTED / BLURRED BACKGROUND CANVAS (Project Work View)                   -->
+<!-- ========================================================================= -->
+<main class="ml-56 pt-[70px] p-space-lg h-screen overflow-hidden bg-surface filter blur-[2px] opacity-40 pointer-events-none select-none">
+<div class="max-w-6xl mx-auto space-y-6">
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Harbour Renewal Workboard</h1>
+<p class="font-body-sm text-body-sm text-secondary">Milestones, verification pipelines, and waterfront layout iterations.</p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container rounded border border-outline-variant text-body-sm">Wave 02 · Phase 1</span>
+<span class="px-3 py-1 bg-surface-container-high rounded border border-outline-variant text-body-sm">Sprint 14</span>
+</div>
+</div>
+<!-- Dummy Task Cards Grid in background -->
+<div class="grid grid-cols-3 gap-4">
+<div class="p-4 bg-surface-container-lowest border border-outline-variant rounded-xl space-y-2">
+<span class="font-label-sm text-label-sm text-secondary">HR-101</span>
+<p class="font-headline-sm text-headline-sm">Bathymetric seabed analysis</p>
+<div class="h-2 bg-surface-container rounded-full w-2/3"></div>
+</div>
+<div class="p-4 bg-surface-container-lowest border-2 border-primary rounded-xl space-y-2">
+<span class="font-label-sm text-label-sm text-primary font-semibold">HR-104 · ACTIVE REVIEW</span>
+<p class="font-headline-sm text-headline-sm">Review waterfront layout</p>
+<div class="h-2 bg-primary rounded-full w-3/4"></div>
+</div>
+<div class="p-4 bg-surface-container-lowest border border-outline-variant rounded-xl space-y-2">
+<span class="font-label-sm text-label-sm text-secondary">HR-109</span>
+<p class="font-headline-sm text-headline-sm">Public pier zoning permissions</p>
+<div class="h-2 bg-surface-container rounded-full w-1/3"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- ========================================================================= -->
+<!-- 4. MODAL OVERLAY: Exactly 960px x 740px, Refined Utilitarian Design        -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/40 backdrop-blur-[3px] p-4">
+<!-- Modal Card Box -->
+<div class="w-[960px] h-[740px] max-w-full max-h-full bg-surface-container-lowest border border-outline-variant rounded-[16px] shadow-2xl flex flex-col overflow-hidden text-on-surface">
+<!-- ===================================================================== -->
+<!-- MODAL FIXED HEADER                                                    -->
+<!-- ===================================================================== -->
+<div class="px-8 pt-6 pb-0 border-b border-outline-variant bg-surface-container-lowest shrink-0">
+<!-- Top Row: Breadcrumb & Close -->
+<div class="flex items-center justify-between pb-3">
+<div class="flex items-center gap-2 font-code-sm text-code-sm text-secondary">
+<span class="font-semibold text-primary">Task #HR-104</span>
+<span>·</span>
+<span>Harbour renewal</span>
+</div>
+<button class="w-7 h-7 rounded-lg flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container transition-colors" onclick="window.history.back()" title="Close modal">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Title Row with Status Badge -->
+<div class="flex items-center justify-between pb-5">
+<div class="flex items-center gap-3.5">
+<h2 class="font-headline-lg text-headline-lg font-semibold text-[#202923] tracking-tight">Review waterfront layout</h2>
+<!-- In review refined purple badge -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#f3e8ff] text-[#7c3aed] border border-[#e9d5ff]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#7c3aed]"></span>
+              In review
+            </span>
+</div>
+<div class="text-right">
+<span class="font-code-sm text-code-sm text-outline">Submission ID · S-2410-09</span>
+</div>
+</div>
+<!-- Navigation Tabs inside Modal -->
+<div class="flex items-center gap-8 -mb-px">
+<button class="pb-3 text-secondary font-label-md text-label-md hover:text-on-surface transition-colors flex items-center gap-1.5">
+            Details
+          </button>
+<button class="pb-3 text-primary font-label-md text-label-md font-semibold border-b-2 border-primary flex items-center gap-1.5">
+<span>Files and evidence</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-primary font-code-sm text-[10px]">3</span>
+</button>
+<button class="pb-3 text-secondary font-label-md text-label-md hover:text-on-surface transition-colors flex items-center gap-1.5">
+            Discussion
+            <span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+</button>
+<button class="pb-3 text-secondary font-label-md text-label-md hover:text-on-surface transition-colors">
+            Activity
+          </button>
+</div>
+</div>
+<!-- ===================================================================== -->
+<!-- MODAL SCROLLABLE BODY (32px / p-8 padding)                             -->
+<!-- ===================================================================== -->
+<div class="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar bg-surface-container-lowest">
+<!-- Metadata Grid: 4 distinct columns with vertical label/value separation -->
+<div class="grid grid-cols-4 gap-6 p-4 rounded-xl bg-surface-container-low/50 border border-outline-variant/60">
+<!-- Col 1: Assignees -->
+<div class="space-y-1.5">
+<span class="block font-label-sm text-label-sm text-secondary uppercase tracking-wider">Assignees</span>
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2 overflow-hidden shrink-0">
+<img class="w-6 h-6 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="Portrait avatar of Alex Morgan with calm composed expression in natural light, subtle mint background accent matching high-end architectural studio design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVTdQ6SF1T6raJ8bZrz2ynBLyu8nyWyAkwMZnj9l9kZf-2BtVJfREa-j4ACuxwWgAN6Ed_b3sDKEn6BodIIs6aE_qPlPB3FFEvahRQ8NXoJzUoeTKXgioefohFFAFQGkTc_wn6CIQs3Z5zmp2ayKETNd3WHY7p9NvFK1CehvhRkThVOy0bDi63JiXkyFdGhv6fgh-Nxw_5dgu3YZ4uwGdaiHbexQ4fl5a39v4jM2cF61Ie3PoIbMPosNxK5hfiauId4RSDOcabEvU"/>
+<img class="w-6 h-6 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="Portrait avatar of Sam Lee in clean studio setting, neutral lighting, subtle deep green tone, professional design aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv28lb5wiEfqhQn9z205DAXR6Jy6-Gy-gWfFxn4phDUb0QK8uX3l6eM6WkgLtnmMfMSAbBaS5jjduJmtzIb0j_sbuTOdE__ac-DF3JEzsOeDh3qmYhWx7REHTK1Sa3vvabNIHxoxBNf-9TXlw81xxQUjlU7vWkXgkN68vWlpeSDpSDErq9Ue453xCMfTAoymSRsq3qoUv1h0ncfopNBq_86Tl0hvjX7L2Oan5FAflHIn9oK9ux6qS0euLWD8myT9nBjzyDR3NgM7w"/>
+</div>
+<span class="font-body-sm text-body-sm font-medium text-on-surface truncate">Alex Morgan, Sam Lee</span>
+</div>
+</div>
+<!-- Col 2: Task lead -->
+<div class="space-y-1.5">
+<span class="block font-label-sm text-label-sm text-secondary uppercase tracking-wider">Task lead</span>
+<div class="flex items-center gap-2">
+<img class="w-5 h-5 rounded-full object-cover border border-outline-variant" data-alt="Alex Morgan headshot avatar photo, warm natural daylight, modern minimal office aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByntH0H8UZ2r-8KMyYjFT247CGBWQuGLl9UMiV-LhUwShYh6cIe0SdZyM3DyeuADD62dYoIGe-11T-aEdj3ivNg501prWtqmoz3Ht_6cWJyJQlXpu9Qz4k_HStmQSj5gl5m9caGtnzFp6XOsbYuT8eav2tCAq6JMSZhKb1FocczbVNzpNEBzRnBGiCL69t9PEVPzYEOY-Hx7bUasxHok8RmtXNQ2d9GzmrDDlUVTSjZ7TtcVxGP0uxyuVrWsqjADK2h5nCB4YX6no"/>
+<span class="font-body-sm text-body-sm font-medium text-on-surface truncate">Alex Morgan</span>
+</div>
+</div>
+<!-- Col 3: Due date -->
+<div class="space-y-1.5">
+<span class="block font-label-sm text-label-sm text-secondary uppercase tracking-wider">Due date</span>
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-outline" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-sm text-body-sm font-medium">24 October 2024</span>
+</div>
+</div>
+<!-- Col 4: Priority -->
+<div class="space-y-1.5">
+<span class="block font-label-sm text-label-sm text-secondary uppercase tracking-wider">Priority</span>
+<div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container/40 text-on-error-container border border-error/20 font-label-sm text-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                High
+              </span>
+</div>
+</div>
+</div>
+<!-- Evidence Notice Box / Review Banner -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-outline-variant flex items-start justify-between gap-4">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg font-semibold text-on-surface">Submitted for review on 24 October by Sam Lee</h4>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">This review covers the versions shown below. Newer files do not change this submission.</p>
+</div>
+</div>
+<div class="shrink-0">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container-lowest text-on-surface-variant border border-outline-variant font-label-sm text-label-sm font-medium">
+<span class="material-symbols-outlined text-outline" data-icon="verified_user" style="font-size:14px;">verified_user</span>
+              Reviewer: Taylor Reed
+            </span>
+</div>
+</div>
+<!-- SECTION: SOURCES (2 items) -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-[#202923] flex items-center gap-2">
+<span>Sources</span>
+<span class="font-code-sm text-code-sm px-1.5 py-0.5 bg-surface-container rounded text-secondary font-normal">2 items</span>
+</h3>
+<span class="font-label-sm text-label-sm text-outline">Input specifications &amp; references</span>
+</div>
+<!-- Source Item 1: HR-001 -->
+<div class="p-4 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-outline transition-colors space-y-3">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-lg bg-red-50 text-red-700 border border-red-200 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-code-sm text-code-sm font-medium text-secondary">HR-001</span>
+<span class="font-headline-sm text-headline-sm font-semibold text-[#202923]">Harbour brief.pdf</span>
+<span class="font-code-sm text-code-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-medium">v3</span>
+<span class="font-label-sm text-label-sm text-outline">· Uploaded</span>
+</div>
+<!-- Callout Tag -->
+<div class="flex items-center gap-2 mt-1.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-surface-container text-on-surface-variant border border-outline-variant">
+<span class="material-symbols-outlined" data-icon="info" style="font-size:13px;">info</span>
+                      Working file now has v4 · Review uses v3
+                    </span>
+<button class="font-label-sm text-label-sm text-primary hover:underline font-medium">Version history</button>
+</div>
+</div>
+</div>
+<!-- Status & Actions -->
+<div class="flex items-center gap-2 shrink-0">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#a4f3d0]/30 text-[#00513b] font-label-sm text-label-sm font-medium border border-[#89d6b5]">
+<span class="material-symbols-outlined" data-icon="check_circle" style="font-size:14px;">check_circle</span>
+                  Exact version verified
+                </span>
+<button class="h-8 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors">
+                  Open exact version
+                </button>
+<button class="h-8 px-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-secondary hover:text-on-surface hover:bg-surface-container transition-colors" title="Download">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Source Item 2: HR-002 (Amber warning for shared drive verification) -->
+<div class="p-4 rounded-xl border border-amber-200 bg-amber-50/20 hover:border-amber-300 transition-colors space-y-3">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-800 border border-amber-200 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-code-sm text-code-sm font-medium text-secondary">HR-002</span>
+<span class="font-headline-sm text-headline-sm font-semibold text-[#202923]">Survey drawings.pdf</span>
+<span class="font-code-sm text-code-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-medium">v1</span>
+<span class="font-label-sm text-label-sm text-outline">· Stored on shared drive</span>
+</div>
+<div class="flex items-center gap-2 mt-1.5">
+<span class="inline-flex items-center gap-1 font-body-sm text-body-sm text-secondary">
+<span class="material-symbols-outlined text-outline" data-icon="cloud_sync" style="font-size:14px;">cloud_sync</span>
+                      External shared-drive file
+                    </span>
+</div>
+</div>
+</div>
+<!-- Action & Warning Pill -->
+<div class="flex items-center gap-2 shrink-0">
+<div class="text-right">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-100 text-amber-900 border border-amber-300 font-label-sm text-label-sm font-medium">
+<span class="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span>
+                    Choose file to check
+                  </span>
+</div>
+<button class="h-8 px-3 rounded-lg border border-amber-300 bg-amber-50 text-amber-950 font-label-md text-label-md font-medium hover:bg-amber-100 transition-colors">
+                  Check selected file
+                </button>
+<button class="h-8 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors">
+                  Open location
+                </button>
+</div>
+</div>
+<!-- Warning Notice bar inside Item 2 -->
+<div class="flex items-center gap-2 px-3 py-1.5 bg-amber-100/60 rounded-lg text-amber-900 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-amber-700" data-icon="warning" style="font-size:16px;">warning</span>
+<span>Not verified on this device · Check selected file before accepting</span>
+</div>
+</div>
+</div>
+<!-- SECTION: OUTPUTS (1 item) -->
+<div class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-[#202923] flex items-center gap-2">
+<span>Outputs</span>
+<span class="font-code-sm text-code-sm px-1.5 py-0.5 bg-surface-container rounded text-secondary font-normal">1 item</span>
+</h3>
+<span class="font-label-sm text-label-sm text-outline">Target review artefacts</span>
+</div>
+<!-- Output Item 1: HR-003 -->
+<div class="p-4 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-outline transition-colors space-y-3">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-lg bg-orange-50 text-orange-700 border border-orange-200 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="slideshow">slideshow</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-code-sm text-code-sm font-medium text-secondary">HR-003</span>
+<span class="font-headline-sm text-headline-sm font-semibold text-[#202923]">Waterfront layout.pptx</span>
+<span class="font-code-sm text-code-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-medium">v2</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-surface-container text-primary font-label-sm text-[10px] font-semibold uppercase tracking-wider">
+                      Output deliverable
+                    </span>
+</div>
+<div class="flex items-center gap-3 mt-1.5">
+<span class="font-body-sm text-body-sm text-secondary">Submitted by Sam Lee</span>
+<span class="text-outline-variant">·</span>
+<span class="font-body-sm text-body-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined" data-icon="visibility" style="font-size:13px;">visibility</span>
+                      Office document · Preview may differ from the original
+                    </span>
+</div>
+</div>
+</div>
+<!-- Status & Actions -->
+<div class="flex items-center gap-2 shrink-0">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#a4f3d0]/30 text-[#00513b] font-label-sm text-label-sm font-medium border border-[#89d6b5]">
+<span class="material-symbols-outlined" data-icon="check_circle" style="font-size:14px;">check_circle</span>
+                  Matches this version · 14.2 MiB
+                </span>
+<button class="h-8 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined" data-icon="open_in_new" style="font-size:15px;">open_in_new</span>
+                  Open exact version (Preview)
+                </button>
+<button class="h-8 px-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-secondary hover:text-on-surface hover:bg-surface-container transition-colors" title="Download">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Authoring Actions Row & Guardrail notice -->
+<div class="pt-2 border-t border-outline-variant/60 flex items-center justify-between text-body-sm">
+<div class="flex items-center gap-2">
+<button class="h-8 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-secondary hover:text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined" data-icon="add" style="font-size:15px;">add</span>
+              Add file
+            </button>
+<button class="h-8 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-secondary hover:text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined" data-icon="link" style="font-size:15px;">link</span>
+              Link project file
+            </button>
+<button class="h-8 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-secondary hover:text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined" data-icon="upload_file" style="font-size:15px;">upload_file</span>
+              Add output version
+            </button>
+</div>
+<div class="text-outline font-body-sm text-body-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined" data-icon="shield" style="font-size:16px;">shield</span>
+<span>Files changed? Submit the new versions for review.</span>
+</div>
+</div>
+</div>
+<!-- ===================================================================== -->
+<!-- MODAL FIXED FOOTER                                                    -->
+<!-- ===================================================================== -->
+<div class="px-8 py-4 bg-surface-container-lowest border-t border-outline-variant flex items-center justify-between shrink-0">
+<!-- Reviewer context & blocker hint -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="font-body-sm text-body-sm text-secondary">Logged in as <strong class="text-on-surface font-medium">Taylor Reed</strong> (Reviewer)</span>
+</div>
+<span class="text-outline-variant">|</span>
+<div class="flex items-center gap-1.5 text-amber-800 font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span>Check the shared-drive file before accepting.</span>
+</div>
+</div>
+<!-- Footer Actions Buttons -->
+<div class="flex items-center gap-3">
+<!-- Cancel -->
+<button class="h-9 px-4 rounded-lg border border-outline-variant text-secondary hover:text-on-surface hover:bg-surface-container font-label-md text-label-md transition-colors" onclick="window.history.back()">
+            Cancel
+          </button>
+<!-- Request changes -->
+<button class="h-9 px-4 rounded-lg border border-outline-variant hover:border-amber-400 text-amber-900 bg-amber-50/50 hover:bg-amber-100/50 font-label-md text-label-md font-medium transition-colors">
+            Request changes
+          </button>
+<!-- Accept submission (Blocked/Disabled state with tooltip hint) -->
+<div class="relative group">
+<button class="h-9 px-5 rounded-lg bg-primary/40 text-on-primary/60 font-label-md text-label-md font-medium cursor-not-allowed flex items-center gap-1.5" disabled="">
+<span class="material-symbols-outlined" data-icon="lock" style="font-size:16px;">lock</span>
+              Accept submission
+            </button>
+<!-- Surgical Tooltip -->
+<div class="absolute bottom-full right-0 mb-2 hidden group-hover:block w-64 p-2 bg-inverse-surface text-inverse-on-surface text-xs rounded shadow-lg pointer-events-none z-50">
+              Complete the verification check on Survey drawings.pdf to enable acceptance.
+            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

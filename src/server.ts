@@ -40,6 +40,12 @@ import { ProjectCreateService } from './modules/work/project-create.js';
 import { registerProjectCreateRoutes, projectCreateAccountBudget } from './modules/work/project-create-routes.js';
 import { PlanningService } from './modules/work/planning.js';
 import { registerPlanningRoutes, planningAccountBudget } from './modules/work/planning-routes.js';
+import { FilesService } from './modules/files/service.js';
+import { registerFilesRoutes, filesAccountBudget } from './modules/files/routes.js';
+import { FileEvidenceService } from './modules/files/evidence-service.js';
+import { registerFileEvidenceRoutes } from './modules/files/evidence-routes.js';
+import { DeliveryService } from './modules/files/delivery-service.js';
+import { registerDeliveryRoutes } from './modules/files/delivery-routes.js';
 import { CollaborationService } from './modules/collaboration/service.js';
 import { registerCollaborationRoutes, collaborationAccountBudget } from './modules/collaboration/routes.js';
 import { InboxService } from './modules/notifications/inbox.js';
@@ -98,6 +104,12 @@ try {
     projectCreation: new ProjectCreateService({ databases, sessions, secrets, origin: config.APP_ORIGIN,
       requestBudget: projectCreateAccountBudget(budgets) }) });
   registerPlanningRoutes(app, { origin: config.APP_ORIGIN, budgets, planning });
+  registerFilesRoutes(app, { origin: config.APP_ORIGIN, budgets,
+    files: new FilesService({ databases, sessions, secrets, origin: config.APP_ORIGIN, planning, deploymentLimitBytes: config.FILE_STORAGE_LIMIT_BYTES, requestBudget: filesAccountBudget(budgets) }) });
+  registerFileEvidenceRoutes(app, { origin: config.APP_ORIGIN, budgets,
+    evidence: new FileEvidenceService({ databases, sessions, secrets, origin: config.APP_ORIGIN, planning }) });
+  registerDeliveryRoutes(app, { origin: config.APP_ORIGIN, budgets,
+    delivery: new DeliveryService({ databases, sessions, secrets, origin: config.APP_ORIGIN, planning }) });
   registerCollaborationRoutes(app, { origin: config.APP_ORIGIN, budgets, collaboration });
   registerUpgradeRoutes(app, { origin: config.APP_ORIGIN, budgets, upgrades: new UpgradeService({ databases, sessions, secrets, origin: config.APP_ORIGIN,
     handlers: { planning: (a,payload)=>planning.save(a.cookieValue,a.csrfToken,payload), team: (a,payload)=>teams.save(a,payload),

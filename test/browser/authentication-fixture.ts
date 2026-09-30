@@ -69,6 +69,12 @@ import { registerLiveRoutes } from '../../src/modules/work/live-routes.js';
 import { InboxService } from '../../src/modules/notifications/inbox.js';
 import { registerInboxRoutes } from '../../src/modules/notifications/inbox-routes.js';
 import { registerTeamRoutes, teamAccountBudget } from '../../src/modules/work/team-routes.js';
+import { FilesService } from '../../src/modules/files/service.js';
+import { filesAccountBudget, registerFilesRoutes } from '../../src/modules/files/routes.js';
+import { FileEvidenceService } from '../../src/modules/files/evidence-service.js';
+import { registerFileEvidenceRoutes } from '../../src/modules/files/evidence-routes.js';
+import { DeliveryService } from '../../src/modules/files/delivery-service.js';
+import { registerDeliveryRoutes } from '../../src/modules/files/delivery-routes.js';
 
 export const origin = 'https://127.0.0.1:3555';
 export const password = 'A browser session fixture password 24794';
@@ -128,6 +134,12 @@ export async function authenticationFixture(restricted = false, avatar?: Client.
   registerRestorationRoutes(app, { origin, budgets, restoration });
   registerTeamRoutes(app, { origin: origin, budgets, teams });
   registerPlanningRoutes(app, { origin: origin, budgets, planning });
+  registerFilesRoutes(app, { origin, budgets,
+    files: new FilesService({ databases, sessions, secrets, origin, planning, requestBudget: filesAccountBudget(budgets) }) });
+  registerFileEvidenceRoutes(app, { origin, budgets,
+    evidence: new FileEvidenceService({ databases, sessions, secrets, origin, planning }) });
+  registerDeliveryRoutes(app, { origin, budgets,
+    delivery: new DeliveryService({ databases, sessions, secrets, origin, planning }) });
   registerCollaborationRoutes(app, { origin: origin, budgets, collaboration });
   registerUpgradeRoutes(app, { origin: origin, budgets, upgrades: new UpgradeService({ databases, sessions, secrets, origin: origin,
     handlers: { planning: (a,payload)=>planning.save(a.cookieValue,a.csrfToken,payload), team: (a,payload)=>teams.save(a,payload),
@@ -164,7 +176,8 @@ export async function authenticationFixture(restricted = false, avatar?: Client.
           await client.query("SELECT pg_advisory_xact_lock(hashtextextended('ukda.workspace:' || $1,0))", [workspaceId]);
           // Fixture-only cleanup of immutable history for this disposable workspace.
           await client.query("SET LOCAL session_replication_role='replica'");
-          for (const table of ['export_sessions','restorations','unrecovered_projects','lifecycle_tombstones','encrypted_upgrade_items','encrypted_upgrade_operations','encrypted_upgrade_sources','encrypted_upgrades','outbox', 'operation_receipts', 'audit_events', 'record_versions', 'comments', 'updates', 'blockers',
+          for (const table of ['file_editor_permits','file_delivery_permits','file_service_pairings','file_local_services','file_delivery_operations','file_delivery_batches','file_approval_revocations','file_review_items','file_reviews','file_submissions','file_evidence_operations','file_chunks','file_upload_reservations','task_file_links','file_operations','file_versions','project_files','file_storage_usage',
+            'export_sessions','restorations','unrecovered_projects','lifecycle_tombstones','encrypted_upgrade_items','encrypted_upgrade_operations','encrypted_upgrade_sources','encrypted_upgrades','outbox', 'operation_receipts', 'audit_events', 'record_versions', 'comments', 'updates', 'blockers',
             'task_assignments', 'tasks', 'milestones', 'project_phases', 'notification_preferences', 'notification_receipts', 'notifications', 'inbox_operations', 'summaries',
             'reporting_operations', 'reporting_preparations', 'reporting_summaries', 'reporting_settings', 'collaboration_operations', 'planning_operations', 'project_planning_heads', 'project_access', 'projects', 'team_members', 'teams', 'profiles', 'roles', 'workspaces']) await client.query(`DELETE FROM app.${table} WHERE workspace_id=$1`, [workspaceId]);
         });

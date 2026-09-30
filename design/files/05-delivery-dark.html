@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Delivery Dark</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#0f1412",
+            "canvas-dark": "#101113",
+            "surface-dark": "#191b1f",
+            "subtle-dark": "#23252a",
+            "hover-dark": "#2c2f34",
+            "text-dark": "#f0f1f3",
+            "muted-dark": "#a8adb5",
+            "border-dark": "#32363d",
+            "primary-mint": "#9cd7b9",
+            "primary-text": "#101113",
+            "error-container": "#93000a",
+            "tertiary-container": "#c0cec2",
+            "on-secondary-fixed-variant": "#0e5138",
+            "on-background": "#dfe4de",
+            "surface-dim": "#0f1412",
+            "on-surface": "#dfe4de",
+            "on-error": "#690005",
+            "on-surface-variant": "#c0c9c2",
+            "secondary-fixed-dim": "#95d4b3",
+            "on-tertiary-container": "#4b584f",
+            "on-primary-fixed-variant": "#14503a",
+            "on-tertiary": "#27332b",
+            "inverse-surface": "#dfe4de",
+            "surface-container-high": "#262b28",
+            "on-tertiary-fixed-variant": "#3d4a41",
+            "tertiary": "#dceade",
+            "surface-tint": "#98d3b5",
+            "secondary-container": "#12533a",
+            "surface": "#0f1412",
+            "on-primary-container": "#265f47",
+            "secondary": "#95d4b3",
+            "primary-fixed": "#b4f0d1",
+            "error": "#ffb4ab",
+            "outline": "#8a938c",
+            "outline-variant": "#404943",
+            "tertiary-fixed-dim": "#bccabe",
+            "surface-container-lowest": "#0a0f0c",
+            "on-error-container": "#ffdad6",
+            "surface-bright": "#353a37",
+            "on-secondary-container": "#87c6a5",
+            "surface-variant": "#313632",
+            "surface-container-low": "#181d1a",
+            "primary-container": "#9cd7b9",
+            "on-secondary-fixed": "#002114",
+            "surface-container": "#1c211e",
+            "primary": "#b7f4d4",
+            "inverse-primary": "#306950",
+            "on-primary-fixed": "#002114",
+            "secondary-fixed": "#b1f0ce",
+            "primary-fixed-dim": "#98d3b5",
+            "on-primary": "#003826",
+            "tertiary-fixed": "#d8e6da",
+            "surface-container-highest": "#313632",
+            "on-secondary": "#003824",
+            "on-tertiary-fixed": "#121e17",
+            "inverse-on-surface": "#2c322e"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-xl": "2.5rem",
+            "margin-mobile": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "gutter-mobile": "1rem",
+            "gutter": "1.5rem",
+            "margin-tablet": "1.5rem",
+            "margin": "2rem"
+          },
+          fontFamily: {
+            "label-md": ["Inter", "sans-serif"],
+            "headline-lg": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "label-lg": ["Inter", "sans-serif"],
+            "headline-lg-mobile": ["Inter", "sans-serif"],
+            "display-mobile": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "headline-md": ["Inter", "sans-serif"],
+            "display": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"]
+          },
+          fontSize: {
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+            "headline-lg": ["30px", { lineHeight: "38px", letterSpacing: "-0.02em", fontWeight: "600" }],
+            "body-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.005em", fontWeight: "400" }],
+            "headline-sm": ["18px", { lineHeight: "24px", letterSpacing: "-0.01em", fontWeight: "500" }],
+            "body-lg": ["16px", { lineHeight: "24px", letterSpacing: "-0.005em", fontWeight: "400" }],
+            "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "500" }],
+            "headline-lg-mobile": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "display-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.025em", fontWeight: "600" }],
+            "body-md": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }],
+            "headline-md": ["22px", { lineHeight: "28px", letterSpacing: "-0.015em", fontWeight: "500" }],
+            "display": ["40px", { lineHeight: "48px", letterSpacing: "-0.03em", fontWeight: "600" }],
+            "label-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #191b1f;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #32363d;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #40464f;
+    }
+  </style>
+</head>
+<body class="bg-[#101113] text-[#f0f1f3] font-body-md text-body-md antialiased min-h-screen selection:bg-[#9cd7b9] selection:text-[#101113] overflow-x-hidden">
+<!-- ================= SIDEBAR (SideNavBar Component Anchor) ================= -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between p-4 z-40 bg-[#191b1f] border-r border-[#32363d] select-none">
+<div class="flex flex-col gap-6">
+<!-- Workspace Brand Anchor -->
+<div class="flex items-center gap-3 px-2 pt-1">
+<svg aria-label="Maqbool multicolour triangular logo" class="w-6 h-6 flex-shrink-0" fill="none" viewbox="0 0 28 28">
+<path d="M14 2L2 24H26L14 2Z" fill="#23252a" stroke="#32363d" stroke-width="1.5"></path>
+<path d="M14 2L8 24L14 17L20 24L14 2Z" fill="#9cd7b9"></path>
+<path d="M14 17L2 24L8 24L14 17Z" fill="#7fa8d6"></path>
+<path d="M14 17L26 24L20 24L14 17Z" fill="#d99f6b"></path>
+</svg>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-semibold text-[#f0f1f3] tracking-tight leading-none">Maqbool</span>
+<span class="text-label-sm font-label-sm text-[#a8adb5] mt-1">Workspace</span>
+</div>
+</div>
+<!-- Main Navigation Tabs -->
+<nav aria-label="Main Navigation" class="flex flex-col gap-1">
+<!-- Home -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#23252a] hover:text-[#f0f1f3] text-body-sm font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<!-- Projects (Active per instruction: mint accent text & #23252a background) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#23252a] text-[#9cd7b9] font-medium text-body-sm font-body-sm transition-colors duration-150 border-l-2 border-[#9cd7b9]" href="#">
+<span class="material-symbols-outlined" data-icon="folder" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span class="text-[#f0f1f3]">Projects</span>
+</a>
+<!-- My work -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#23252a] hover:text-[#f0f1f3] text-body-sm font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span>My work</span>
+</a>
+<!-- Inbox -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#23252a] hover:text-[#f0f1f3] text-body-sm font-body-sm transition-colors duration-150" href="#">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#9cd7b9]"></span>
+</div>
+<span>Inbox</span>
+</a>
+<div class="my-3 border-t border-[#32363d]/60"></div>
+<!-- Footer / Sub navigation tabs -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#23252a] hover:text-[#f0f1f3] text-body-sm font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a8adb5] hover:bg-[#23252a] hover:text-[#f0f1f3] text-body-sm font-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>A little guidance</span>
+</a>
+</nav>
+</div>
+<!-- User Profile Bottom (Alex Morgan) -->
+<div class="pt-4 border-t border-[#32363d] flex items-center gap-3 px-1">
+<div class="w-8 h-8 rounded-lg bg-[#23252a] border border-[#32363d] flex items-center justify-center font-label-md text-label-md font-semibold text-[#9cd7b9]">
+        AM
+      </div>
+<div class="flex flex-col min-w-0">
+<span class="text-body-sm font-body-sm font-medium text-[#f0f1f3] truncate">Alex Morgan</span>
+<span class="text-label-sm font-label-sm text-[#a8adb5] truncate">Owner / Lead Architect</span>
+</div>
+</div>
+</aside>
+<!-- ================= TOPBAR (TopNavBar Component Anchor) ================= -->
+<header class="fixed top-0 left-56 right-0 h-[70px] bg-[#191b1f] border-b border-[#32363d] flex items-center justify-between px-6 z-30 select-none">
+<div class="flex items-center gap-6">
+<!-- Breadcrumb Hierarchy -->
+<nav aria-label="Breadcrumb" class="flex items-center gap-2 text-body-sm font-body-sm text-[#a8adb5]">
+<span class="hover:text-[#f0f1f3] cursor-pointer">Studio North</span>
+<span class="text-[#32363d]">/</span>
+<span class="hover:text-[#f0f1f3] cursor-pointer">Projects</span>
+<span class="text-[#32363d]">/</span>
+<span class="text-[#f0f1f3] font-medium">Harbour renewal (HR-2024)</span>
+</nav>
+<!-- Center Tabs -->
+<div class="hidden xl:flex items-center gap-5 ml-4">
+<a class="py-[23px] text-body-sm font-body-sm text-[#a8adb5] hover:text-[#f0f1f3] transition-colors" href="#">Overview</a>
+<a class="py-[23px] text-body-sm font-body-sm text-[#a8adb5] hover:text-[#f0f1f3] transition-colors" href="#">Work</a>
+<a class="py-[23px] text-body-sm font-body-sm text-[#a8adb5] hover:text-[#f0f1f3] transition-colors" href="#">Timeline</a>
+<a class="py-[23px] text-body-sm font-body-sm text-[#a8adb5] hover:text-[#f0f1f3] transition-colors" href="#">Updates</a>
+<a class="py-[23px] text-body-sm font-body-sm text-[#a8adb5] hover:text-[#f0f1f3] transition-colors" href="#">Files</a>
+<!-- Active Tab: Delivery -->
+<a class="py-[23px] text-body-sm font-body-sm text-[#9cd7b9] border-b-2 border-[#9cd7b9] font-semibold transition-colors" href="#">Delivery</a>
+</div>
+</div>
+<!-- Trailing Action Controls -->
+<div class="flex items-center gap-3">
+<!-- Icon buttons -->
+<button aria-label="Search" class="w-10 h-10 rounded-lg flex items-center justify-center text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#23252a] border border-[#32363d]/60 transition-colors" type="button">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button aria-label="Notifications" class="w-10 h-10 rounded-lg flex items-center justify-center text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#23252a] border border-[#32363d]/60 relative transition-colors" type="button">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+</button>
+<div class="h-6 w-[1px] bg-[#32363d] mx-1"></div>
+<!-- Primary Action -->
+<button class="min-h-[44px] px-4 py-2 bg-[#9cd7b9] hover:bg-[#b2e3ca] text-[#101113] rounded-lg font-label-lg font-medium text-label-lg flex items-center gap-2 active:scale-95 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined" data-icon="add" style="font-size: 18px;">add</span>
+<span>Create delivery batch</span>
+</button>
+</div>
+</header>
+<!-- ================= MAIN CONTENT CANVAS ================= -->
+<main class="ml-56 pt-[70px] min-h-screen bg-[#101113] p-8">
+<div class="max-w-[1400px] mx-auto space-y-8">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-[#32363d]/50">
+<div>
+<h1 class="text-headline-lg font-headline-lg font-bold text-[#f0f1f3] tracking-tight">Delivery</h1>
+<p class="text-body-md font-body-md text-[#a8adb5] mt-1">Prepare approved versions for their official destination.</p>
+</div>
+<div class="flex items-center gap-2 text-label-md font-label-md text-[#a8adb5] bg-[#191b1f] border border-[#32363d] px-3 py-1.5 rounded-lg">
+<span class="w-2 h-2 rounded-full bg-[#9cd7b9] animate-pulse"></span>
+<span>Target repo connected: /Official/Harbour-Renewal/</span>
+</div>
+</div>
+<!-- Overview Stat Cards Row (3 cards, 12px rounded, border #32363d, bg #191b1f, 16px padding) -->
+<section aria-label="Delivery Summary Stats" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<!-- Card 1: Awaiting review -->
+<div class="bg-[#191b1f] border border-[#32363d] rounded-[12px] p-4 flex flex-col justify-between hover:border-[#40464f] transition-colors">
+<div class="flex items-center justify-between text-[#a8adb5]">
+<span class="text-label-md font-label-md uppercase tracking-wider">Awaiting review</span>
+<span class="w-7 h-7 rounded-md bg-[#23252a] flex items-center justify-center text-[#d99f6b]">
+<span class="material-symbols-outlined" data-icon="pending_actions" style="font-size: 16px;">pending_actions</span>
+</span>
+</div>
+<div class="mt-4 flex items-baseline gap-2">
+<span class="text-headline-lg font-headline-lg font-bold text-[#f0f1f3]">3</span>
+<span class="text-body-sm font-body-sm text-[#a8adb5]">tasks pending signoff</span>
+</div>
+<div class="mt-3 pt-3 border-t border-[#23252a] text-label-sm font-label-sm text-[#a8adb5] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#d99f6b]"></span>
+<span>Next review milestone: Friday 17:00</span>
+</div>
+</div>
+<!-- Card 2: Ready for delivery -->
+<div class="bg-[#191b1f] border border-[#32363d] rounded-[12px] p-4 flex flex-col justify-between hover:border-[#40464f] transition-colors relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-[2px] bg-[#9cd7b9]"></div>
+<div class="flex items-center justify-between text-[#a8adb5]">
+<span class="text-label-md font-label-md uppercase tracking-wider text-[#9cd7b9] font-medium">Ready for delivery</span>
+<span class="w-7 h-7 rounded-md bg-[#23252a] flex items-center justify-center text-[#9cd7b9]">
+<span class="material-symbols-outlined" data-icon="verified" style="font-size: 16px; font-variation-settings: 'FILL' 1;">verified</span>
+</span>
+</div>
+<div class="mt-4 flex items-baseline gap-2">
+<span class="text-headline-lg font-headline-lg font-bold text-[#f0f1f3]">8</span>
+<span class="text-body-sm font-body-sm text-[#a8adb5]">approved versions ready to freeze</span>
+</div>
+<div class="mt-3 pt-3 border-t border-[#23252a] text-label-sm font-label-sm text-[#9cd7b9] flex items-center gap-1.5">
+<span class="material-symbols-outlined" data-icon="check_circle" style="font-size: 14px;">check_circle</span>
+<span>All verification checksums locked</span>
+</div>
+</div>
+<!-- Card 3: Published -->
+<div class="bg-[#191b1f] border border-[#32363d] rounded-[12px] p-4 flex flex-col justify-between hover:border-[#40464f] transition-colors">
+<div class="flex items-center justify-between text-[#a8adb5]">
+<span class="text-label-md font-label-md uppercase tracking-wider">Published</span>
+<span class="w-7 h-7 rounded-md bg-[#23252a] flex items-center justify-center text-[#7fa8d6]">
+<span class="material-symbols-outlined" data-icon="inventory_2" style="font-size: 16px;">inventory_2</span>
+</span>
+</div>
+<div class="mt-4 flex items-baseline gap-2">
+<span class="text-headline-lg font-headline-lg font-bold text-[#f0f1f3]">1</span>
+<span class="text-body-sm font-body-sm text-[#a8adb5]">package archived</span>
+</div>
+<div class="mt-3 pt-3 border-t border-[#23252a] text-label-sm font-label-sm text-[#a8adb5] truncate flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#7fa8d6]"></span>
+<span class="truncate">Harbour renewal Phase 1 (Confirmed)</span>
+</div>
+</div>
+</section>
+<!-- Background overview table (Behind modal visual context) -->
+<section aria-hidden="true" class="bg-[#191b1f] border border-[#32363d] rounded-xl overflow-hidden opacity-40 select-none pointer-events-none">
+<div class="px-6 py-4 border-b border-[#32363d] flex items-center justify-between">
+<span class="text-label-lg font-label-lg font-medium text-[#f0f1f3]">Active Delivery Staging</span>
+<span class="text-label-sm font-label-sm text-[#a8adb5]">Batch ID: DLV-2024-082</span>
+</div>
+<div class="p-6">
+<div class="h-4 bg-[#23252a] rounded w-3/4 mb-3"></div>
+<div class="h-4 bg-[#23252a] rounded w-1/2 mb-3"></div>
+<div class="h-4 bg-[#23252a] rounded w-5/6"></div>
+</div>
+</section>
+</div>
+</main>
+<!-- ================= PRIMARY FEATURED WORKFLOW MODAL DIALOG ================= -->
+<!-- Muted dark backdrop rgba(0,0,0,0.7) -->
+<div class="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+<!-- Centered 960x720 modal dialog (Fixed dimensions, non-overflow outer shell, 16px rounded corners, bg #191b1f, border #32363d, shadow-2xl) -->
+<div aria-labelledby="modal-title" aria-modal="true" class="w-full max-w-[960px] h-[720px] bg-[#191b1f] border border-[#32363d] rounded-[16px] shadow-2xl flex flex-col overflow-hidden relative" role="dialog">
+<!-- ================= DIALOG HEADER (Fixed) ================= -->
+<div class="px-6 py-4 border-b border-[#32363d] flex items-center justify-between bg-[#191b1f] flex-shrink-0">
+<div>
+<h2 class="text-headline-sm font-headline-sm font-semibold text-[#f0f1f3]" id="modal-title">Confirm this delivery</h2>
+<p class="text-label-md font-label-md text-[#a8adb5] mt-0.5">Step 3 of 3 · Final confirmation</p>
+</div>
+<button aria-label="Close dialog" class="w-8 h-8 rounded-lg flex items-center justify-center text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#23252a] border border-transparent hover:border-[#32363d] transition-all" type="button">
+<span class="material-symbols-outlined" data-icon="close" style="font-size: 20px;">close</span>
+</button>
+</div>
+<!-- ================= DIALOG BODY (Scrollable only in body) ================= -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
+<!-- Summary banner / Callout -->
+<div class="bg-[#23252a] border border-[#32363d] rounded-xl p-4 flex flex-col gap-2.5">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-3">
+<span class="px-2.5 py-1 rounded-md bg-[#191b1f] border border-[#32363d] text-label-md font-label-md text-[#f0f1f3] font-medium">8 files</span>
+<span class="px-2.5 py-1 rounded-md bg-[#191b1f] border border-[#32363d] text-label-md font-label-md text-[#a8adb5]">2 replacements</span>
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-[#f0f1f3]">
+<span class="text-[#a8adb5]">Destination:</span>
+<code class="font-mono text-label-sm font-label-sm bg-[#101113] px-2 py-0.5 rounded border border-[#32363d] text-[#9cd7b9]">/Official/Harbour-Renewal/Deliverables/Phase-2/</code>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm text-[#9cd7b9] bg-[#101113] px-2.5 py-1 rounded-full border border-[#32363d]">
+<span class="material-symbols-outlined" data-icon="lock" style="font-size: 13px;">lock</span>
+              Batch locked
+            </span>
+</div>
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-[#a8adb5] pt-2 border-t border-[#32363d]/60">
+<span class="material-symbols-outlined text-[#d99f6b] flex-shrink-0" data-icon="info" style="font-size: 16px;">info</span>
+<span>These versions and destinations will be fixed. Changes require a new confirmation.</span>
+</div>
+</div>
+<!-- Table showing frozen delivery batch items -->
+<div class="border border-[#32363d] rounded-xl overflow-hidden bg-[#101113]">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-body-sm font-body-sm">
+<thead>
+<tr class="bg-[#191b1f] border-b border-[#32363d] text-[#a8adb5] text-label-sm font-label-sm uppercase tracking-wider">
+<th class="py-2.5 px-3.5 font-medium w-16">Ref</th>
+<th class="py-2.5 px-3.5 font-medium">File name</th>
+<th class="py-2.5 px-3.5 font-medium">Exact approved</th>
+<th class="py-2.5 px-3.5 font-medium">Approved by</th>
+<th class="py-2.5 px-3.5 font-medium">Operation &amp; Path</th>
+<th class="py-2.5 px-3.5 font-medium text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#23252a]">
+<!-- Row 1: HR-001 -->
+<tr class="hover:bg-[#23252a]/40 transition-colors">
+<td class="py-3 px-3.5 font-mono text-label-sm font-label-sm text-[#a8adb5]">HR-001</td>
+<td class="py-3 px-3.5 font-medium text-[#f0f1f3] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#d99f6b]" data-icon="slideshow" style="font-size: 18px;">slideshow</span>
+<span>Waterfront layout.pptx</span>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-[#23252a] text-[#f0f1f3] text-label-sm font-label-sm border border-[#32363d]">Version 2 of 2</span>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">Taylor Reed · <span class="text-[#f0f1f3]/80">24 Oct</span></td>
+<td class="py-3 px-3.5">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm">
+<span class="px-1.5 py-0.5 rounded bg-[#23252a] text-[#d99f6b] font-medium border border-[#32363d]">Replace</span>
+<code class="text-[#a8adb5] font-mono">/Exec/Waterfront_layout_v2.pptx</code>
+</div>
+</td>
+<td class="py-3 px-3.5 text-right">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm font-medium text-[#9cd7b9] bg-[#23252a] px-2 py-0.5 rounded border border-[#32363d]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+                      Ready
+                    </span>
+</td>
+</tr>
+<!-- Row 2: HR-003 -->
+<tr class="hover:bg-[#23252a]/40 transition-colors">
+<td class="py-3 px-3.5 font-mono text-label-sm font-label-sm text-[#a8adb5]">HR-003</td>
+<td class="py-3 px-3.5 font-medium text-[#f0f1f3] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#ffb4ab]" data-icon="picture_as_pdf" style="font-size: 18px;">picture_as_pdf</span>
+<span>Seawall structural notes.pdf</span>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-[#23252a] text-[#f0f1f3] text-label-sm font-label-sm border border-[#32363d]">Version 3 of 3</span>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">Taylor Reed · <span class="text-[#f0f1f3]/80">23 Oct</span></td>
+<td class="py-3 px-3.5">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm">
+<span class="px-1.5 py-0.5 rounded bg-[#23252a] text-[#7fa8d6] font-medium border border-[#32363d]">Add</span>
+<code class="text-[#a8adb5] font-mono">/Structural/Seawall_notes_v3.pdf</code>
+</div>
+</td>
+<td class="py-3 px-3.5 text-right">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm font-medium text-[#9cd7b9] bg-[#23252a] px-2 py-0.5 rounded border border-[#32363d]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+                      Ready
+                    </span>
+</td>
+</tr>
+<!-- Row 3: HR-002 (Honest shared drive flag) -->
+<tr class="bg-[#191b1f]/50 hover:bg-[#23252a]/60 transition-colors border-l-2 border-l-[#7fa8d6]">
+<td class="py-3 px-3.5 font-mono text-label-sm font-label-sm text-[#a8adb5]">HR-002</td>
+<td class="py-3 px-3.5 font-medium text-[#f0f1f3]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#ffb4ab]" data-icon="picture_as_pdf" style="font-size: 18px;">picture_as_pdf</span>
+<span>Survey drawings.pdf</span>
+</div>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-[#23252a] text-[#f0f1f3] text-label-sm font-label-sm border border-[#32363d]">Version 1 of 1</span>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">Alex Morgan · <span class="text-[#f0f1f3]/80">22 Oct</span></td>
+<td class="py-3 px-3.5">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm">
+<span class="px-1.5 py-0.5 rounded bg-[#23252a] text-[#7fa8d6] font-medium border border-[#32363d]">Add</span>
+<code class="text-[#a8adb5] font-mono">/Surveys/Survey_drawings_v1.pdf</code>
+</div>
+</td>
+<td class="py-3 px-3.5 text-right">
+<span class="inline-flex flex-col items-end">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm font-medium text-[#7fa8d6] bg-[#23252a] px-2 py-0.5 rounded border border-[#32363d]">
+<span class="material-symbols-outlined" data-icon="cloud_sync" style="font-size: 13px;">cloud_sync</span>
+                        Stored on shared drive
+                      </span>
+<span class="text-[10px] text-[#a8adb5] mt-0.5">Matches this version · 86 MiB checked locally</span>
+</span>
+</td>
+</tr>
+<!-- Row 4: HR-007 -->
+<tr class="hover:bg-[#23252a]/40 transition-colors">
+<td class="py-3 px-3.5 font-mono text-label-sm font-label-sm text-[#a8adb5]">HR-007</td>
+<td class="py-3 px-3.5 font-medium text-[#f0f1f3] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#9cd7b9]" data-icon="table_chart" style="font-size: 18px;">table_chart</span>
+<span>Tide variance log.csv</span>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-[#23252a] text-[#f0f1f3] text-label-sm font-label-sm border border-[#32363d]">Version 2 of 2</span>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">Sam Lee · <span class="text-[#f0f1f3]/80">21 Oct</span></td>
+<td class="py-3 px-3.5">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm">
+<span class="px-1.5 py-0.5 rounded bg-[#23252a] text-[#b49cd7] font-medium border border-[#32363d]">Move</span>
+<code class="text-[#a8adb5] font-mono">/Data/Tide_variance_Q3.csv</code>
+</div>
+</td>
+<td class="py-3 px-3.5 text-right">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm font-medium text-[#9cd7b9] bg-[#23252a] px-2 py-0.5 rounded border border-[#32363d]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+                      Ready
+                    </span>
+</td>
+</tr>
+<!-- Row 5: HR-012 -->
+<tr class="hover:bg-[#23252a]/40 transition-colors">
+<td class="py-3 px-3.5 font-mono text-label-sm font-label-sm text-[#a8adb5]">HR-012</td>
+<td class="py-3 px-3.5 font-medium text-[#f0f1f3] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#ffb4ab]" data-icon="picture_as_pdf" style="font-size: 18px;">picture_as_pdf</span>
+<span>Pier pile inspection.pdf</span>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-[#23252a] text-[#f0f1f3] text-label-sm font-label-sm border border-[#32363d]">Version 1 of 1</span>
+</td>
+<td class="py-3 px-3.5 text-[#a8adb5]">Alex Morgan · <span class="text-[#f0f1f3]/80">20 Oct</span></td>
+<td class="py-3 px-3.5">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm">
+<span class="px-1.5 py-0.5 rounded bg-[#23252a] text-[#d99f6b] font-medium border border-[#32363d]">Replace</span>
+<code class="text-[#a8adb5] font-mono">/Inspection/Pile_test_2024.pdf</code>
+</div>
+</td>
+<td class="py-3 px-3.5 text-right">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm font-medium text-[#9cd7b9] bg-[#23252a] px-2 py-0.5 rounded border border-[#32363d]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+                      Ready
+                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Honest external storage notice callout -->
+<div class="bg-[#191b1f] border border-[#32363d] rounded-xl p-3.5 flex items-start gap-3">
+<span class="material-symbols-outlined text-[#7fa8d6] flex-shrink-0 mt-0.5" data-icon="inventory" style="font-size: 20px;">inventory</span>
+<div class="text-body-sm font-body-sm text-[#a8adb5]">
+<span class="text-[#f0f1f3] font-medium">Storage distinction:</span>
+            File contents for <span class="text-[#f0f1f3] underline decoration-[#32363d]">Survey drawings.pdf</span> are stored on your shared drive and will not be included in the browser package download unless supplied and checked.
+          </div>
+</div>
+<!-- Delivery publication options preview (Two structured option cards) -->
+<div class="space-y-3">
+<div class="text-label-md font-label-md uppercase tracking-wider text-[#a8adb5] font-medium">Choose delivery method</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Card A: Download package -->
+<label class="relative bg-[#191b1f] border border-[#32363d] rounded-xl p-4 flex flex-col justify-between hover:border-[#40464f] cursor-pointer transition-colors group">
+<div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#a8adb5] group-hover:text-[#f0f1f3]" data-icon="folder_zip">folder_zip</span>
+<span class="text-body-md font-body-md font-medium text-[#f0f1f3]">Download package</span>
+</div>
+<input class="h-4 w-4 text-[#9cd7b9] bg-[#101113] border-[#32363d] focus:ring-0 focus:ring-offset-0" name="publish_mode" type="radio"/>
+</div>
+<p class="text-body-sm font-body-sm text-[#a8adb5] mt-2.5">
+                  Download a ZIP package containing browser-stored files (42.8 MiB) and an integrity manifest listing all 8 exact versions and external shared-drive references.
+                </p>
+</div>
+<div class="mt-4 pt-3 border-t border-[#23252a] flex items-center gap-1.5 text-label-sm font-label-sm text-[#a8adb5]">
+<span class="material-symbols-outlined text-[#d99f6b]" data-icon="warning" style="font-size: 14px;">warning</span>
+<span>Downloading a package does not confirm files were placed in your official folder.</span>
+</div>
+</label>
+<!-- Card B: Publish to shared folder (Companion active state) -->
+<label class="relative bg-[#23252a] border-2 border-[#9cd7b9] rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all">
+<div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#9cd7b9]" data-icon="sync_saved_locally">sync_saved_locally</span>
+<span class="text-body-md font-body-md font-medium text-[#f0f1f3]">Publish to shared folder</span>
+</div>
+<input checked="" class="h-4 w-4 text-[#9cd7b9] bg-[#101113] border-[#32363d] focus:ring-0 focus:ring-offset-0" name="publish_mode" type="radio"/>
+</div>
+<div class="mt-2 inline-flex items-center gap-1.5 text-label-sm font-label-sm text-[#9cd7b9] bg-[#191b1f] px-2.5 py-1 rounded-md border border-[#32363d]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9cd7b9]"></span>
+<span>Companion ready · /Volumes/Official-Harbour/</span>
+</div>
+<p class="text-body-sm font-body-sm text-[#a8adb5] mt-2">
+                  Verifies official folder, writes files, and validates destination integrity.
+                </p>
+</div>
+<div class="mt-4 pt-3 border-t border-[#32363d] flex items-center gap-1.5 text-label-sm font-label-sm text-[#9cd7b9]">
+<span class="material-symbols-outlined" data-icon="verified_user" style="font-size: 14px;">verified_user</span>
+<span>Direct atomic delivery with instantaneous log audit.</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Confirmation Checkbox -->
+<div class="pt-2">
+<label class="flex items-start gap-3 p-3 rounded-lg bg-[#23252a]/70 border border-[#32363d] cursor-pointer hover:bg-[#23252a] transition-colors">
+<input checked="" class="mt-0.5 h-4 w-4 rounded bg-[#101113] border-[#32363d] text-[#9cd7b9] focus:ring-0 focus:ring-offset-0 accent-[#9cd7b9]" type="checkbox"/>
+<span class="text-body-sm font-body-sm text-[#f0f1f3] select-none">
+              I have checked the selected versions and destinations
+            </span>
+</label>
+</div>
+</div>
+<!-- ================= DIALOG FOOTER (Fixed) ================= -->
+<div class="px-6 py-4 border-t border-[#32363d] flex items-center justify-between bg-[#191b1f] flex-shrink-0">
+<!-- Left: Back action -->
+<button class="text-body-sm font-body-sm text-[#a8adb5] hover:text-[#f0f1f3] flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-[#23252a] transition-colors" type="button">
+<span class="material-symbols-outlined" data-icon="arrow_back" style="font-size: 18px;">arrow_back</span>
+<span>Back to destinations</span>
+</button>
+<!-- Right actions -->
+<div class="flex items-center gap-3">
+<button class="px-3.5 py-2 rounded-lg text-body-sm font-body-sm text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#23252a] border border-transparent transition-colors" type="button">
+            Cancel
+          </button>
+<button class="px-3.5 py-2 rounded-lg bg-[#23252a] hover:bg-[#2c2f34] text-[#f0f1f3] border border-[#32363d] text-body-sm font-body-sm font-medium flex items-center gap-1.5 active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[#a8adb5]" data-icon="download" style="font-size: 18px;">download</span>
+<span>Download package</span>
+</button>
+<button class="px-4 py-2.5 rounded-lg bg-[#9cd7b9] hover:bg-[#b2e3ca] text-[#101113] font-label-lg font-medium text-label-lg flex items-center gap-2 active:scale-95 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined" data-icon="task_alt" style="font-size: 18px;">task_alt</span>
+<span>Confirm &amp; publish to shared folder</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

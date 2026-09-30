@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maqbool · Document Editing Conflict &amp; Governance</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter & JetBrains Mono Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#89d6b5",
+            "surface-tint": "#176b50",
+            "on-surface": "#151e18",
+            "on-primary-fixed-variant": "#00513b",
+            "surface-container-low": "#ecf6ed",
+            "secondary-fixed-dim": "#98d3b5",
+            "primary": "#00513b",
+            "secondary-container": "#b4f0d1",
+            "surface-variant": "#dbe5dc",
+            "tertiary-fixed-dim": "#ffb3ae",
+            "surface": "#f2fcf2",
+            "on-tertiary-fixed": "#3c0808",
+            "error-container": "#ffdad6",
+            "inverse-primary": "#89d6b5",
+            "outline-variant": "#bec9c2",
+            "surface-dim": "#d3ddd3",
+            "tertiary-container": "#914945",
+            "outline": "#6f7973",
+            "primary-container": "#176b50",
+            "on-secondary": "#ffffff",
+            "surface-container": "#e6f1e7",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed": "#002116",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#366f56",
+            "secondary-fixed": "#b4f0d1",
+            "inverse-surface": "#29332c",
+            "on-tertiary-fixed-variant": "#74322f",
+            "on-secondary-fixed": "#002114",
+            "secondary": "#306950",
+            "tertiary-fixed": "#ffdad7",
+            "on-error": "#ffffff",
+            "surface-container-high": "#e1ebe1",
+            "primary-fixed": "#a4f3d0",
+            "on-tertiary-container": "#ffccc8",
+            "inverse-on-surface": "#e9f3ea",
+            "surface-bright": "#f2fcf2",
+            "background": "#f2fcf2",
+            "on-surface-variant": "#3f4944",
+            "error": "#ba1a1a",
+            "on-background": "#151e18",
+            "tertiary": "#74322f",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#14503a",
+            "on-primary-container": "#9be9c6",
+            "surface-container-highest": "#dbe5dc",
+            "on-primary": "#ffffff",
+            // Dark Mode Precise Tokens
+            "canvas-dark": "#101113",
+            "surface-dark": "#191b1f",
+            "subtle-dark": "#23252a",
+            "hover-dark": "#2c2f34",
+            "text-dark": "#f0f1f3",
+            "muted-dark": "#a8adb5",
+            "border-dark": "#32363d",
+            "mint-accent": "#9cd7b9",
+            "mint-text": "#101113"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "margin": "2rem",
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "headline-md": ["Inter", "sans-serif"],
+            "display": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "headline-lg": ["Inter", "sans-serif"],
+            "code": ["JetBrains Mono", "monospace"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "500" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "code": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #101113;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #32363d;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-[#101113] text-[#f0f1f3] font-body-md text-body-md antialiased h-screen overflow-hidden flex select-none">
+<!-- ==================== LEFT SIDEBAR (224px) ==================== -->
+<aside class="w-[224px] h-screen shrink-0 bg-[#191b1f] border-r border-[#32363d] flex flex-col justify-between p-4 z-20">
+<!-- Top Workspace Branding -->
+<div class="flex flex-col gap-6">
+<!-- Brand & Workspace -->
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-8 h-8 rounded-lg bg-[#23252a] border border-[#32363d] flex items-center justify-center text-[#9cd7b9]">
+<!-- Triangular bar icon representation -->
+<svg fill="currentColor" height="18" viewbox="0 0 24 24" width="18">
+<path d="M12 3L2 21H22L12 3ZM12 7.8L18.2 18.5H5.8L12 7.8Z"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-[#f0f1f3] tracking-tight">Maqbool</span>
+<span class="font-body-sm text-body-sm text-[#a8adb5]">Studio North</span>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full h-9 min-h-[44px] px-3 rounded-lg bg-[#23252a] hover:bg-[#2c2f34] border border-[#32363d] text-[#f0f1f3] font-label-md text-label-md flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>New Document</span>
+</button>
+<!-- Primary Navigation -->
+<nav class="flex flex-col gap-1">
+<a class="h-10 px-3 rounded-lg flex items-center gap-3 text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span>Home</span>
+</a>
+<!-- Active: Projects -->
+<a class="h-10 px-3 rounded-lg flex items-center gap-3 bg-[#23252a] text-[#9cd7b9] font-semibold border-l-2 border-[#9cd7b9] transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">folder</span>
+<span>Projects</span>
+</a>
+<a class="h-10 px-3 rounded-lg flex items-center gap-3 text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+<span>My work</span>
+</a>
+<a class="h-10 px-3 rounded-lg flex items-center justify-between text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors font-label-md text-label-md" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]">inbox</span>
+<span>Inbox</span>
+</div>
+<span class="text-[11px] font-label-sm px-1.5 py-0.5 rounded-full bg-[#23252a] border border-[#32363d] text-[#a8adb5]">3</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Section -->
+<div class="flex flex-col gap-2 pt-4 border-t border-[#32363d]">
+<a class="h-10 px-3 rounded-lg flex items-center gap-3 text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">lightbulb</span>
+<span>A little guidance</span>
+</a>
+<a class="h-10 px-3 rounded-lg flex items-center gap-3 text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Settings</span>
+</a>
+<!-- Current User Avatar Profile -->
+<div class="mt-2 pt-3 border-t border-[#32363d]/60 flex items-center gap-3 px-2 py-1">
+<div class="w-8 h-8 rounded-full bg-[#23252a] border border-[#32363d] flex items-center justify-center font-label-md text-label-md text-[#9cd7b9] font-medium shrink-0">
+          AM
+        </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-[#f0f1f3] truncate font-medium">Alex Morgan</span>
+<span class="font-label-sm text-label-sm text-[#a8adb5] truncate">Lead Architect</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ==================== MAIN WORKSPACE ==================== -->
+<div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden bg-[#101113]">
+<!-- Top Utility Bar (70px) -->
+<header class="h-[70px] w-full shrink-0 bg-[#191b1f] border-b border-[#32363d] flex items-center justify-between px-8 z-10">
+<!-- Breadcrumb Hierarchy -->
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-[#a8adb5] min-w-0">
+<span class="hover:text-[#f0f1f3] cursor-pointer">Studio North</span>
+<span class="text-[#32363d]">/</span>
+<span class="hover:text-[#f0f1f3] cursor-pointer">Projects</span>
+<span class="text-[#32363d]">/</span>
+<span class="text-[#f0f1f3] font-medium truncate">Harbour renewal</span>
+</div>
+<!-- Navigation Tabs Cluster -->
+<nav class="hidden md:flex items-center gap-6 h-full">
+<a class="h-full flex items-center text-[#a8adb5] hover:text-[#f0f1f3] font-label-md text-label-md transition-colors" href="#">Overview</a>
+<a class="h-full flex items-center text-[#a8adb5] hover:text-[#f0f1f3] font-label-md text-label-md transition-colors" href="#">Work</a>
+<a class="h-full flex items-center text-[#a8adb5] hover:text-[#f0f1f3] font-label-md text-label-md transition-colors" href="#">Timeline</a>
+<a class="h-full flex items-center text-[#a8adb5] hover:text-[#f0f1f3] font-label-md text-label-md transition-colors" href="#">Updates</a>
+<!-- Active Tab: Files -->
+<a class="h-full flex items-center text-[#9cd7b9] font-semibold border-b-2 border-[#9cd7b9] font-label-md text-label-md" href="#">Files</a>
+<a class="h-full flex items-center text-[#a8adb5] hover:text-[#f0f1f3] font-label-md text-label-md transition-colors" href="#">Delivery</a>
+</nav>
+<!-- Trailing Action Controls -->
+<div class="flex items-center gap-3">
+<!-- Quick Search Trigger -->
+<button class="w-9 h-9 min-h-[44px] min-w-[44px] rounded-lg text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+<!-- Alerts Trigger -->
+<button class="w-9 h-9 min-h-[44px] min-w-[44px] rounded-lg text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] flex items-center justify-center relative transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="w-2 h-2 rounded-full bg-[#ffb3ae] absolute top-2.5 right-2.5"></span>
+</button>
+<div class="w-px h-6 bg-[#32363d] mx-1"></div>
+<!-- Status indicator -->
+<div class="flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#23252a] border border-[#32363d]">
+<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-[#f0f1f3]">Offline buffer active</span>
+</div>
+</div>
+</header>
+<!-- Staging Content Canvas (Underneath Overlay) -->
+<main class="flex-1 overflow-y-auto custom-scroll p-8 relative flex justify-center">
+<!-- Dimmed Background Document Sheet for Realism -->
+<div class="w-full max-w-[840px] bg-[#191b1f] border border-[#32363d] rounded-xl p-10 opacity-30 pointer-events-none select-none">
+<div class="flex justify-between items-start mb-8 pb-4 border-b border-[#32363d]">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-[#f0f1f3]">Harbour Renewal · Phase 2 Design Specification</h1>
+<p class="font-body-sm text-body-sm text-[#a8adb5] mt-1">Design summary.docx · Last touched by Alex Morgan</p>
+</div>
+<span class="px-2.5 py-1 rounded bg-[#23252a] text-[#a8adb5] font-code text-code border border-[#32363d]">DOCX / 14.8 MiB</span>
+</div>
+<div class="space-y-4 text-[#a8adb5] font-body-md text-body-md">
+<p class="h-4 bg-[#23252a] rounded w-3/4"></p>
+<p class="h-4 bg-[#23252a] rounded w-full"></p>
+<p class="h-4 bg-[#23252a] rounded w-5/6"></p>
+<div class="h-32 bg-[#23252a] rounded-lg my-6 border border-[#32363d]"></div>
+<p class="h-4 bg-[#23252a] rounded w-2/3"></p>
+<p class="h-4 bg-[#23252a] rounded w-4/5"></p>
+</div>
+</div>
+<!-- ==================== WORKFLOW 8: MODAL & GOVERNANCE OVERLAY ==================== -->
+<div class="fixed inset-0 z-30 flex items-center justify-center p-4 bg-[#101113]/85 backdrop-blur-[2px]">
+<!-- Main Dialog Container (16px corners, max 740px, Level 3 elevation) -->
+<div class="w-full max-w-[740px] bg-[#191b1f] border border-[#32363d] rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[942px] animate-in fade-in zoom-in-95 duration-200">
+<!-- Modal Header (Stale Edit Conflict Notification) -->
+<div class="p-6 pb-4 border-b border-[#32363d] flex items-start gap-4">
+<div class="w-10 h-10 rounded-xl bg-[#23252a] border border-[#32363d] flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]">shield</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-[#f0f1f3] tracking-tight">A newer version is already saved</h2>
+<span class="font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-[#23252a] text-amber-300 border border-amber-900/40">
+                  Version conflict
+                </span>
+</div>
+<p class="font-body-md text-body-md text-[#a8adb5] mt-1.5 leading-relaxed">
+                Another team member saved changes while this document was being edited. Your edited copy has been preserved safely without overwriting their work.
+              </p>
+</div>
+</div>
+<!-- Modal Scrollable Body -->
+<div class="p-6 space-y-6 overflow-y-auto custom-scroll">
+<!-- Section 1: Comparison Split View -->
+<div>
+<div class="flex items-center justify-between mb-2.5">
+<span class="font-label-md text-label-md text-[#f0f1f3] font-medium">Comparison breakdown</span>
+<span class="font-label-sm text-label-sm text-[#a8adb5]">File: Design summary.docx</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Left Box: Local Copy -->
+<div class="p-4 rounded-xl bg-[#23252a] border border-[#32363d] flex flex-col justify-between relative group hover:border-[#a8adb5]/40 transition-colors">
+<div>
+<div class="flex items-center justify-between gap-2 mb-2">
+<span class="font-headline-sm text-headline-sm text-[#f0f1f3]">Your edited copy</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#191b1f] text-[#a8adb5] border border-[#32363d]">
+                        from v2
+                      </span>
+</div>
+<div class="space-y-1.5 text-body-sm font-body-sm text-[#a8adb5] mt-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Modified 10 mins ago</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">hard_drive</span>
+<span>14.8 MiB</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span class="text-[#f0f1f3]">Alex Morgan (You)</span>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-[#32363d] flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-amber-300/90 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                      Unsaved local changes
+                    </span>
+<span class="font-code text-code text-[#a8adb5]">Local buffer</span>
+</div>
+</div>
+<!-- Right Box: Current Active File (v3) -->
+<div class="p-4 rounded-xl bg-[#23252a] border border-[#32363d] flex flex-col justify-between relative group hover:border-[#a8adb5]/40 transition-colors">
+<div>
+<div class="flex items-center justify-between gap-2 mb-2">
+<span class="font-headline-sm text-headline-sm text-[#f0f1f3]">Current active file</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#101113] text-[#9cd7b9] border border-[#32363d] font-medium">
+                        v3 active
+                      </span>
+</div>
+<div class="space-y-1.5 text-body-sm font-body-sm text-[#a8adb5] mt-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>Saved 24 mins ago</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">hard_drive</span>
+<span>15.1 MiB</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">account_circle</span>
+<span class="text-[#f0f1f3]">Saved by Sam Lee</span>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-[#32363d] flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-[#9cd7b9] flex items-center gap-1.5 font-medium">
+<span class="material-symbols-outlined text-[14px]">push_pin</span>
+                      Pinned to Milestone 2
+                    </span>
+<span class="font-code text-code text-[#a8adb5]">Project head</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 2: Editor Companion Bridge Status Card -->
+<div class="p-4 rounded-xl bg-[#23252a] border border-[#32363d] space-y-3">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-amber-400 text-[20px]">desktop_access_disabled</span>
+<span class="font-label-md text-label-md text-[#f0f1f3] font-semibold">We can't reach your editing Mac</span>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-label-sm bg-[#191b1f] text-amber-300/80 border border-[#32363d]">
+                    Bridge offline
+                  </span>
+</div>
+<!-- Action Controls for Companion -->
+<div class="flex items-center gap-2 self-start sm:self-auto">
+<button class="h-8 min-h-[44px] px-3 rounded-lg bg-[#191b1f] hover:bg-[#2c2f34] border border-[#32363d] text-[#f0f1f3] text-body-sm font-body-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>Retry connection</span>
+</button>
+<button class="h-8 min-h-[44px] px-3 rounded-lg bg-[#191b1f] hover:bg-[#2c2f34] border border-[#32363d] text-[#f0f1f3] text-body-sm font-body-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">laptop</span>
+<span>Work on your computer</span>
+</button>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-[#a8adb5]">
+                An Owner can connect your organisation's editor. You can still work on your computer.
+              </p>
+<!-- Operational Offline Sync Rule -->
+<div class="p-3 rounded-lg bg-[#191b1f] border border-[#32363d] flex flex-col md:flex-row md:items-center justify-between gap-3">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#a8adb5] text-[18px] shrink-0 mt-0.5">info</span>
+<span class="font-body-sm text-body-sm text-[#a8adb5]">
+                    After editing on your computer, upload the updated file. Changes do not sync automatically.
+                  </span>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<button class="h-8 min-h-[44px] px-2.5 rounded-lg bg-[#23252a] hover:bg-[#2c2f34] border border-[#32363d] text-[#f0f1f3] font-label-md text-label-md flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span>Download for desktop editing</span>
+</button>
+<button class="h-8 min-h-[44px] px-2.5 rounded-lg bg-[#23252a] hover:bg-[#2c2f34] border border-[#32363d] text-[#f0f1f3] font-label-md text-label-md flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">upload_file</span>
+<span>Add new version</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Section 3: Read-Only Viewer & Permission Notice -->
+<div class="p-3.5 rounded-xl bg-[#23252a] border border-[#32363d] flex items-center gap-3">
+<span class="material-symbols-outlined text-[#a8adb5] text-[20px] shrink-0">visibility_lock</span>
+<p class="font-body-sm text-body-sm text-[#a8adb5]">
+                You can preview this file. Editing is available to people assigned to this work or a project manager.
+              </p>
+</div>
+<!-- Section 4: Governance Guardrails & Size Limits -->
+<div class="flex flex-wrap items-center justify-between gap-3 px-1 text-body-sm font-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#9cd7b9] text-[18px]">verified_user</span>
+<span class="text-[#a8adb5]">Earlier approved and delivery-pinned versions remain immutable.</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-md bg-[#23252a] border border-[#32363d] text-[#f0f1f3] font-label-sm text-label-sm font-medium">
+                  Maximum edited output 25 MiB enforced
+                </span>
+</div>
+</div>
+</div>
+<!-- Modal Footer Actions (Strict Hierarchy & Ergonomics) -->
+<div class="p-6 pt-4 bg-[#191b1f] border-t border-[#32363d] flex flex-col-reverse sm:flex-row items-center justify-between gap-3">
+<button class="h-10 min-h-[44px] px-4 rounded-lg text-[#a8adb5] hover:text-[#f0f1f3] hover:bg-[#2c2f34] font-label-md text-label-md transition-colors w-full sm:w-auto">
+              Cancel / Keep editing
+            </button>
+<div class="flex flex-wrap items-center justify-end gap-2.5 w-full sm:w-auto">
+<!-- Secondary Action 1 -->
+<button class="h-10 min-h-[44px] px-3.5 rounded-lg bg-[#23252a] hover:bg-[#2c2f34] border border-[#32363d] text-[#f0f1f3] font-label-md text-label-md flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span>Download my edited copy</span>
+</button>
+<!-- Secondary Action 2 -->
+<button class="h-10 min-h-[44px] px-3.5 rounded-lg bg-[#23252a] hover:bg-[#2c2f34] border border-[#32363d] text-[#f0f1f3] font-label-md text-label-md flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span>Save as a separate file</span>
+</button>
+<!-- Primary Action: Mint Solid Fill, #101113 Text -->
+<button class="h-10 min-h-[44px] px-4 rounded-lg bg-[#9cd7b9] hover:bg-[#89d6b5] text-[#101113] font-headline-sm text-headline-sm font-semibold flex items-center gap-2 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+<span>Open current version (v3)</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -16,3 +16,6 @@ playwright-report/
 /web/public/client/
 /web/public/brand/
 /web/tsconfig.tsbuildinfo
+
+/web/public/downloads/
+/web/public/preview/
