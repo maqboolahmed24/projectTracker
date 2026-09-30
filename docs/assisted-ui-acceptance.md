@@ -6,6 +6,8 @@ This bounded pass makes Maqbool clearer without replacing its identity, lifecycl
 
 - Planned project cards and headers expose **Start project** to people who can plan that project. Existing planning receipts and interrupted-save recovery handle the action. Cards retain a separate **Open project** control.
 - Home shows actual personal assignments and reviews. Review links open the review view. Project, wave and task guidance explains the immediate prerequisite, responsibility or read-only state and exposes only permitted actions.
+- Priority exposes Low, Normal and High as native, keyboard-accessible radio choices instead of a dropdown in task creation and editing. Selection persists through the real backend.
+- Successful access approval refreshes project eligibility along with the people directory, so newly joined teammates can be assigned immediately. A refresh failure preserves the completed approval and shows a reload notice.
 - Work search icons stay inside their fields and adjacent filters stay together. Long names wrap, task dialogs retain their frame across tabs, and opening/closing a task retains the underlying project scroll position.
 - Global search uses an honest icon button with a labeled, focused search dialog. Both Ctrl+K and Command+K open it. Search trims whitespace and opens actual tasks or waves, including return navigation from a wave into its milestone.
 - File previews have expand/restore controls. Expanded geometry remains stable across tabs; Escape first restores the window and then dismisses it. Small-screen file actions wrap without overlapping the size/source summary.

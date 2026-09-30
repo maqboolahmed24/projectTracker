@@ -123,7 +123,7 @@ function Application(){
           </>}
         </main>
       </div>
-      {approval&&directory&&!loading&&!loadError&&<Modal key={approval.id} open onClose={()=>{setApproval(undefined);approvalDiscovery.retry();}} title={directory.isOwner?'Approve access':'Approve my device'} description={directory.isOwner?'Help a teammate join, recover their account, or use a new device.':'Approve a new browser or device for your own account.'}><IdentityApprovals client={client} isOwner={directory.isOwner} people={directory.people} {...(approval.handoff?{initialHandoff:approval.handoff}:{})} onDone={async()=>{await reloadDirectory();await approval.onDone?.();}}/></Modal>}
+      {approval&&directory&&!loading&&!loadError&&<Modal key={approval.id} open onClose={()=>{setApproval(undefined);approvalDiscovery.retry();}} title={directory.isOwner?'Approve access':'Approve my device'} description={directory.isOwner?'Help a teammate join, recover their account, or use a new device.':'Approve a new browser or device for your own account.'}><IdentityApprovals client={client} isOwner={directory.isOwner} people={directory.people} {...(approval.handoff?{initialHandoff:approval.handoff}:{})} onDone={async()=>{try{await reloadProjects();}catch{notify('Access is approved. Refresh the page to see the latest workspace.','error');}await approval.onDone?.();}}/></Modal>}
       <Modal open={searchOpen} onClose={()=>setSearchOpen(false)} title="Find your work" description="Search the projects, waves and tasks you can access.">
         <Input autoFocus aria-label="Search your work" placeholder="Search by name…" value={search} onChange={e=>setSearch(e.target.value)}/>
         <div className="search-results">

@@ -213,7 +213,7 @@ test('a project moves through waves, shared work history, completion and archive
     await finishOutcome(page, 'Complete project', 'A small release with a clear path forward.');
     await projectOptions(page);
     await page.getByRole('button', { name: 'Archive project', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Unarchive project', exact: true })).toBeVisible();
+    await expect(page.getByRole('dialog', { name: 'Project options', exact: true }).getByRole('button', { name: 'Unarchive project', exact: true })).toBeVisible();
     await expect(page.getByLabel('Share an update', { exact: true })).toHaveCount(0);
     await closeDialog(page.getByRole('dialog', { name: 'Project options', exact: true }));
     await page.getByRole('button', { name: 'All projects', exact: false }).click();
@@ -221,7 +221,7 @@ test('a project moves through waves, shared work history, completion and archive
     await expect(page.locator('.project-card').filter({ hasText: projectName })).toHaveCount(1);
     await page.locator('.project-card').filter({ hasText: projectName }).getByRole('button', { name: 'Open project', exact: true }).click();
     await projectOptions(page);
-    await page.getByRole('button', { name: 'Unarchive project', exact: true }).click();
+    await page.getByRole('dialog', { name: 'Project options', exact: true }).getByRole('button', { name: 'Unarchive project', exact: true }).click();
     await page.getByRole('button', { name: 'Reopen project', exact: true }).click();
     await expect(page.locator('.page-header')).toContainText('Active');
     await closeDialog(page.getByRole('dialog', { name: 'Project options', exact: true }));
