@@ -9,7 +9,7 @@ import { Activity, Discussion } from './discussion';
 import { TaskDetail } from './task';
 import { ReviewPolicy } from './review-policy';
 import { ProjectFiles,ProjectDelivery } from '../files';
-import { activeTasks, content, dateLabel, DetailItem, DetailList, displayStatus, editable, executable, has, orderedPhases, People, phaseName, projectName, Section, shortDate, StateBadge, taskName, text, unfinished, useAction, usePlanningAction, useReport, workspaceWritable } from './shared';
+import { activeTasks, content, dateLabel, DetailItem, DetailList, displayStatus, editable, executable, has, orderedPhases, People, phaseName, projectName, Section, shortDate, StateBadge, TaskTitle, taskName, text, unfinished, useAction, usePlanningAction, useReport, workspaceWritable } from './shared';
 import type { Project } from './shared';
 import './guidance.css';
 
@@ -21,7 +21,7 @@ export function TaskList({project,tasks,onOpen,showPhase=false}:{project:Project
       <button type="button" className="task-row" onClick={()=>onOpen(task.id)}>
         <span className={`task-state-icon state-${task.state}`} aria-hidden="true">{task.state==='done'?<CheckCircle2 size={19}/>:<Circle size={19}/>}</span>
         <span className="task-row-title">
-          <strong>{taskName(project,task.id)}</strong>
+          <strong><TaskTitle state={task.state}>{taskName(project,task.id)}</TaskTitle></strong>
           {(showPhase||blocked||data.priority==='high')&&<span className="task-row-notes">
             {showPhase&&<span className="muted">{phaseName(project,task.phaseId)}</span>}
             {blocked&&<Badge tone="warning">Blocked</Badge>}

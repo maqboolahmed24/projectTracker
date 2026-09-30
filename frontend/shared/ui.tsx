@@ -26,7 +26,7 @@ export function EmptyState({title,description,action,icon}:{title:string;descrip
 export function ErrorNotice({error,retry}:{error:unknown;retry?:()=>void}){return <div className="notice notice-error" role="alert"><AlertCircle size={19}/><span>{customerError(error)}</span>{retry&&<Button variant="ghost" onClick={retry}>Try again <ArrowRight size={16}/></Button>}</div>;}
 const openDialogs:HTMLDialogElement[]=[];
 let previousOverflow='';
-export function Modal({open,onClose,title,description,children,footer,navigation,layout='content',scrollKey,expandable=false}:{open:boolean;onClose:()=>void;title:string;description?:ReactNode;children:ReactNode;footer?:ReactNode;navigation?:ReactNode;layout?:'content'|'detail'|'form';scrollKey?:string;expandable?:boolean}){
+export function Modal({open,onClose,title,description,children,footer,navigation,layout='content',scrollKey,expandable=false}:{open:boolean;onClose:()=>void;title:ReactNode;description?:ReactNode;children:ReactNode;footer?:ReactNode;navigation?:ReactNode;layout?:'content'|'detail'|'form';scrollKey?:string;expandable?:boolean}){
   const ref=useRef<HTMLDialogElement>(null),body=useRef<HTMLDivElement>(null),heading=useId(),[mounted,setMounted]=useState(false),[expanded,setExpanded]=useState(false);
   useEffect(()=>setMounted(true),[]);
   useEffect(()=>{

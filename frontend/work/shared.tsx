@@ -41,6 +41,7 @@ export function DetailList({children}:{children:ReactNode}) {
 export function DetailItem({label,children,action}:{label:ReactNode;children:ReactNode;action?:ReactNode}) {
   return <div className="detail-item"><dt className="detail-label">{label}</dt><dd className="detail-value"><div className="detail-content">{children}</div>{action&&<div className="detail-action">{action}</div>}</dd></div>;
 }
+export function TaskTitle({state,children}:{state:PlanningTask['state']|undefined;children:ReactNode}) { return <span className={`task-title${state==='done'?' is-complete':''}`}>{children}</span>; }
 export function StateBadge({state}:{state:string}) { return <Badge tone={statusTone(state)}>{displayStatus(state)}</Badge>; }
 export function useAction(options:{onReview?:(current:unknown)=>void}={}) {
   const {reloadProjects,reloadDirectory,notify}=useApp();
