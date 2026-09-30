@@ -1,6 +1,6 @@
 'use client';
 import { Component, useCallback, useEffect, useRef, useState, type ErrorInfo, type ReactNode } from 'react';
-import { AlertCircle, ArrowRight, Check, ChevronDown, CircleHelp, Info, Folder, Home, Inbox, ListTodo, LogOut, Menu, Monitor, Moon, Search, Settings, ShieldCheck, Sun, X } from 'lucide-react';
+import { AlertCircle, ArrowRight, Check, CheckCircle2, ChevronDown, CircleHelp, Info, Folder, Home, Inbox, ListTodo, LogOut, Menu, Monitor, Moon, Search, Settings, ShieldCheck, Sun, X } from 'lucide-react';
 import { IdentityGateway, IdentityApprovals, parseHandoff } from './identity';
 import { readApprovalRequests } from './identity/IdentityApprovals';
 import { useIdentityPolling } from './identity/useIdentityPolling';
@@ -11,7 +11,7 @@ import { createClient, type ClientRuntime } from './shared/runtime';
 import { rememberVerifiedProfile } from './shared/remembered-profile';
 import { Avatar, Badge, Button, EmptyState, ErrorNotice, Input, Modal, Spinner } from './shared/ui';
 import { WorkspaceGuidance } from './shared/guidance';
-import { projectName } from './work/shared';
+import { projectName, TaskTitle } from './work/shared';
 import './shared/polish.css';
 import type { WorkspaceDirectory } from '../src/client/directory-crypto.js';
 import type { ReadablePlanning } from '../src/client/planning-crypto.js';
@@ -127,7 +127,7 @@ function Application(){
       <Modal open={searchOpen} onClose={()=>setSearchOpen(false)} title="Find your work" description="Search the projects, waves and tasks you can access.">
         <Input autoFocus aria-label="Search your work" placeholder="Search by name…" value={search} onChange={e=>setSearch(e.target.value)}/>
         <div className="search-results">
-          {results.map(({project,record})=><button key={record.id} onClick={()=>navigate({page:'project',projectId:project.graph.project.id,tab:record.kind==='project'?'overview':'work',...(record.kind==='task'?{taskId:record.id}:record.kind==='phase'?{phaseId:record.id}:{})})}><span className="search-result-icon">{record.kind==='task'?<ListTodo size={18}/>:<Folder size={18}/>}</span><span><strong>{String(record.content.title??record.content.name)}</strong><small>{record.kind==='phase'?(project.graph.project.phaseLabel==='phase'?'Phase':'Wave'):record.kind==='task'?'Task':'Project'}{record.kind!=='project'?` · ${projectName(project)}`:project.graph.project.archived?' · Archived':''}</small></span><ArrowRight size={16}/></button>)}
+          {results.map(({project,record})=>{const task=record.kind==='task'?project.graph.tasks.find(task=>task.id===record.id):undefined;return <button key={record.id} onClick={()=>navigate({page:'project',projectId:project.graph.project.id,tab:record.kind==='project'?'overview':'work',...(record.kind==='task'?{taskId:record.id}:record.kind==='phase'?{phaseId:record.id}:{})})}><span className="search-result-icon">{task?.state==='done'?<CheckCircle2 size={18}/>:record.kind==='task'?<ListTodo size={18}/>:<Folder size={18}/>}</span><span><strong>{record.kind==='task'?<TaskTitle state={task?.state}>{String(record.content.title??record.content.name)}</TaskTitle>:String(record.content.title??record.content.name)}</strong><small>{record.kind==='phase'?(project.graph.project.phaseLabel==='phase'?'Phase':'Wave'):record.kind==='task'?'Task':'Project'}{record.kind!=='project'?` · ${projectName(project)}`:project.graph.project.archived?' · Archived':''}</small></span><ArrowRight size={16}/></button>;})}
           {query&&!results.length&&<div className="search-empty"><p className="muted">No matches. Try another name or browse your projects.</p><Button variant="ghost" onClick={()=>navigate({page:'projects'})}>Browse projects <ArrowRight size={15}/></Button></div>}
           {!query&&<><p className="search-section-label">{projects.length?'Quick access':'Your workspace'}</p>{projects.filter(project=>!project.graph.project.archived).slice(0,5).map(project=><button key={project.graph.project.id} onClick={()=>navigate({page:'project',projectId:project.graph.project.id})}><span className="search-result-icon"><Folder size={18}/></span><span><strong>{projectName(project)}</strong><small>Open project</small></span><ArrowRight size={16}/></button>)}<button onClick={()=>navigate({page:'my-work'})}><span className="search-result-icon"><ListTodo size={18}/></span><span><strong>My work</strong><small>Your tasks and review requests</small></span><ArrowRight size={16}/></button></>}
         </div>
