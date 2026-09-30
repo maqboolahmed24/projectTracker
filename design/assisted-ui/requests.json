@@ -1,0 +1,26 @@
+[
+  {
+    "name": "01-projects-home",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "deviceType": "DESKTOP",
+    "modelId": "GEMINI_3_8_FLASH",
+    "promptFile": "01-projects-home.prompt.md"
+  },
+  {
+    "name": "02-project-next-action",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "deviceType": "DESKTOP",
+    "modelId": "GEMINI_3_8_FLASH",
+    "promptFile": "02-project-next-action.prompt.md"
+  },
+  {
+    "name": "03-task-guidance",
+    "projectId": "5855422246659088288",
+    "designSystem": "assets/12527623825984102001",
+    "deviceType": "DESKTOP",
+    "modelId": "GEMINI_3_8_FLASH",
+    "promptFile": "03-task-guidance.prompt.md"
+  }
+]

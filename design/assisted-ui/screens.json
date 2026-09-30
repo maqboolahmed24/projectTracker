@@ -1,0 +1,62 @@
+[
+  {
+    "brief": "01-projects-home",
+    "title": "Home - Light Mode",
+    "id": "3ea97a1a007c465b988c8fe911d4783f",
+    "resource": "projects/5855422246659088288/screens/3ea97a1a007c465b988c8fe911d4783f",
+    "status": "COMPLETE",
+    "screenshot": "01-projects-home-3ea97a1a007c465b988c8fe911d4783f.png",
+    "html": "01-projects-home-3ea97a1a007c465b988c8fe911d4783f.html",
+    "response": "01-projects-home.response.json"
+  },
+  {
+    "brief": "01-projects-home",
+    "title": "Home - Dark Mode",
+    "id": "749844013cc84298bbcb41f8a9c1b3d8",
+    "resource": "projects/5855422246659088288/screens/749844013cc84298bbcb41f8a9c1b3d8",
+    "status": "COMPLETE",
+    "screenshot": "01-projects-home-749844013cc84298bbcb41f8a9c1b3d8.png",
+    "html": "01-projects-home-749844013cc84298bbcb41f8a9c1b3d8.html",
+    "response": "01-projects-home.response.json"
+  },
+  {
+    "brief": "02-project-next-action",
+    "title": "Project Overview - Light Mode",
+    "id": "5ae82be4d6ab4fdca2517e9ff9f3a202",
+    "resource": "projects/5855422246659088288/screens/5ae82be4d6ab4fdca2517e9ff9f3a202",
+    "status": "COMPLETE",
+    "screenshot": "02-project-next-action-5ae82be4d6ab4fdca2517e9ff9f3a202.png",
+    "html": "02-project-next-action-5ae82be4d6ab4fdca2517e9ff9f3a202.html",
+    "response": "02-project-next-action.response.json"
+  },
+  {
+    "brief": "02-project-next-action",
+    "title": "Project Overview - Dark Mode",
+    "id": "111eada64944490592781f96553ef287",
+    "resource": "projects/5855422246659088288/screens/111eada64944490592781f96553ef287",
+    "status": "COMPLETE",
+    "screenshot": "02-project-next-action-111eada64944490592781f96553ef287.png",
+    "html": "02-project-next-action-111eada64944490592781f96553ef287.html",
+    "response": "02-project-next-action.response.json"
+  },
+  {
+    "brief": "03-task-guidance",
+    "title": "Task Detail Modal - Dark Mode",
+    "id": "0dfae2251a3e48b09b0db3a4c29aae6b",
+    "resource": "projects/5855422246659088288/screens/0dfae2251a3e48b09b0db3a4c29aae6b",
+    "status": "COMPLETE",
+    "screenshot": "03-task-guidance-0dfae2251a3e48b09b0db3a4c29aae6b.png",
+    "html": "03-task-guidance-0dfae2251a3e48b09b0db3a4c29aae6b.html",
+    "response": "03-task-guidance.response.json"
+  },
+  {
+    "brief": "03-task-guidance",
+    "title": "Task Detail Modal - Light Mode",
+    "id": "98b7b68036ff48bc9713513d22ac259e",
+    "resource": "projects/5855422246659088288/screens/98b7b68036ff48bc9713513d22ac259e",
+    "status": "COMPLETE",
+    "screenshot": "03-task-guidance-98b7b68036ff48bc9713513d22ac259e.png",
+    "html": "03-task-guidance-98b7b68036ff48bc9713513d22ac259e.html",
+    "response": "03-task-guidance.response.json"
+  }
+]

@@ -174,6 +174,9 @@ test('task tabs keep a stable frame, scroll inside it and return from nested edi
 
     await task.getByRole('tab', { name: 'Details', exact: true }).focus();
     await page.keyboard.press('ArrowRight');
+    await expect(task.getByRole('tab', { name: 'Files and evidence', exact: true })).toHaveAttribute('aria-selected', 'true');
+    await expect(task.getByRole('tab', { name: 'Files and evidence', exact: true })).toBeFocused();
+    await page.keyboard.press('ArrowRight');
     await expect(task.getByRole('tab', { name: 'Discussion', exact: true })).toHaveAttribute('aria-selected', 'true');
     await expect(task.getByRole('tab', { name: 'Discussion', exact: true })).toBeFocused();
     await expect(task.getByLabel('Add to the conversation', { exact: true })).toHaveValue(draft);

@@ -1,0 +1,40 @@
+/* Assisted work views keep each decision close to the work it affects. */
+.assisted-dashboard { min-width: 0; }
+.assisted-dashboard .page-header { margin-bottom: 0; }
+.assisted-dashboard .dashboard-heading { margin: 10px 0 -6px; }
+.assisted-dashboard .dashboard-heading p { margin-top: 5px; font-size: 12px; }
+.assisted-dashboard .dashboard-result-count { font-size: 12px; color: var(--muted); margin-top: -10px; overflow-wrap: anywhere; }
+.personal-summary { display: flex; gap: 12px 32px; flex-wrap: wrap; padding: 8px 0 18px; border-bottom: 1px solid var(--line); }
+.personal-summary > button { display: inline-flex; align-items: center; gap: 11px; border: 0; background: transparent; border-radius: 7px; padding: 5px 4px; color: var(--muted); font-size: 13px; min-height: 44px; }
+.personal-summary > button:hover { color: var(--text); }
+.personal-count { display: inline-grid; place-items: center; min-width: 28px; height: 28px; padding: 0 6px; background: var(--surface-subtle); border-radius: 7px; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.personal-count.has-reviews { background: var(--purple-soft); color: var(--purple); }
+.assisted-dashboard .project-grid { align-items: stretch; }
+.assisted-dashboard .assisted-project-card { display: flex; flex-direction: column; min-width: 0; text-align: left; padding: 22px; cursor: default; transform: none; box-shadow: none; transition: border-color .16s; }
+.assisted-dashboard .assisted-project-card:hover { transform: none; box-shadow: none; border-color: var(--line); }
+.assisted-project-card > .section-heading { margin-bottom: 18px; }
+.assisted-project-card .project-mark { width: 36px; height: 36px; border-radius: 9px; }
+.assisted-project-card .project-card-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.assisted-project-card > h2 { font-size: 17px; line-height: 1.45; overflow-wrap: anywhere; }
+.assisted-project-card > .project-card-description { color: var(--muted); margin-top: 8px; font-size: 12px; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.assisted-project-card > .card-progress { margin: 20px 0 16px; gap: 7px; font-size: 11px; }
+.assisted-project-card .project-progress-label { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+.assisted-project-card .progress-track { margin: 0; }
+.assisted-project-card .project-card-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 11px; color: var(--muted); }
+.assisted-project-card > .project-next-step { margin-top: auto; padding-top: 20px; font-size: 12px; color: var(--muted); min-height: 58px; }
+.assisted-project-card .project-card-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+.assisted-project-card .project-card-actions > .button { font-size: 12px; padding: 9px 11px; min-height: 40px; }
+.assisted-project-card .project-card-feedback { margin-top: 14px; }
+.assisted-project-card .project-card-feedback .notice { flex-wrap: wrap; }
+.assisted-dashboard .tabs .count-badge { margin-left: 6px; }
+.assisted-dashboard .home-foot { padding-top: 8px; flex-wrap: wrap; }
+@media (max-width: 700px) {
+  .assisted-dashboard .assisted-project-card { padding: 20px; }
+  .assisted-dashboard .dashboard-heading { align-items: flex-start; }
+  .personal-summary { gap: 8px 20px; }
+  .assisted-dashboard .work-toolbar > .button { align-self: center; }
+  .assisted-dashboard .work-toolbar .search-field .input { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .assisted-dashboard .assisted-project-card { transition: none; }
+}

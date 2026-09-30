@@ -5,7 +5,7 @@ import type { ReadablePlanning } from '../../src/client/planning-crypto.js';
 import type { WorkspaceDirectory } from '../../src/client/directory-crypto.js';
 export type { WorkspaceDirectory };
 export type Theme = 'light'|'dark'|'system';
-export interface AppRoute {page:'home'|'projects'|'my-work'|'inbox'|'project'|'settings';projectId?:string;taskId?:string;tab?:string;section?:string}
+export interface AppRoute {page:'home'|'projects'|'my-work'|'inbox'|'project'|'settings';projectId?:string;taskId?:string;phaseId?:string;tab?:string;section?:string}
 export interface AppContextValue {
   client:ClientRuntime;
   directory:WorkspaceDirectory|null;

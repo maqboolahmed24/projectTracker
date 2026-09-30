@@ -11,7 +11,7 @@ async function confirmDialog(page: Page, label: string) {
 
 // These tests drive the product controls. Fixture setup installs an existing
 // approved device; it does not replace any form, API, Worker or database write.
-test('settings: interrupted role save, reviewed edits, teams, timezone and unavailable features', async ({ page }) => {
+test('settings: interrupted role save, reviewed edits, teams, timezone and recoverable legacy settings links', async ({ page }) => {
   const fixture = await authenticationFixture(), errors = trackBrowserErrors(page), bodies: string[] = [];
   const initialRole = 'Private delivery coordinators', finalRole = 'Private delivery reviewers', initialTeam = 'Private launch team', finalTeam = 'Private release team';
   page.on('request', request => { if (request.method() === 'POST') bodies.push(request.postData() ?? ''); });
@@ -74,11 +74,16 @@ test('settings: interrupted role save, reviewed edits, teams, timezone and unava
     await page.getByLabel('Colour theme', { exact: true }).selectOption('dark');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await navigate(page, '/settings/integrations');
-    await expect(page.locator('.settings-role-card.settings-future')).toHaveCount(11);
-    for (const heading of ['GitHub','AI assistance','Email notifications','Board views','Attachments','Mentions and channels','Dependencies and scheduling','Risk register','Forecasts and workload','External connectors','Customer-hosted processing']) {
-      const card = page.locator('.settings-role-card').filter({ has: page.getByRole('heading', { name: heading, exact: true }) });
-      await expect(card).toContainText('Not available in this build.'); await expect(card.getByRole('button', { name: 'Not available', exact: true })).toBeDisabled();
-    }
+    await expect(page.getByRole('navigation', { name: 'Settings sections' }).getByRole('button', { name: 'Integrations', exact: true })).toHaveCount(0);
+    await expect(page.locator('.settings-role-card.settings-future')).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Integrations are not available', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Back to workspace settings', exact: true }).click();
+    await expect(page.getByRole('navigation', { name: 'Settings sections' }).getByRole('button', { name: 'Workspace', exact: true })).toHaveAttribute('aria-current', 'page');
+    await expect(panel(page, 'Reporting timezone')).toContainText('Current timezone: America/New_York');
+    await navigate(page, '/settings/unknown-section');
+    await expect(page.getByRole('heading', { name: 'Settings unavailable', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Back to workspace settings', exact: true }).click();
+    await expect(page).toHaveURL(/\/settings\/workspace$/);
     for (const plaintext of [initialRole,finalRole,initialTeam,finalTeam,'Private team description',password]) expect(bodies.some(body => body.includes(plaintext))).toBe(false);
     expect(errors).toEqual([]);
   } finally { await page.close(); await fixture.close(); }

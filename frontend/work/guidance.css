@@ -1,0 +1,22 @@
+/* One quiet, contextual next step. Inherit the shared light/dark palette. */
+.work-guidance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.work-guidance > div { min-width: 0; }
+.work-guidance strong { display: block; font-size: 15px; line-height: 1.45; }
+.work-guidance p { margin: 5px 0 0; color: var(--muted); font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+.work-guidance > .button { flex: 0 0 auto; }
+.work-filter-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.task-blockers { scroll-margin-top: 16px; }
+.task-blockers:focus-visible { outline: 2px solid var(--primary); outline-offset: 6px; border-radius: 8px; }
+@media (max-width: 600px) {
+  .work-guidance { align-items: flex-start; flex-direction: column; padding: 16px; gap: 12px; }
+  .work-guidance > .button { align-self: flex-start; max-width: 100%; }
+}
