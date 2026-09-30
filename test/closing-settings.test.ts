@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import test from 'node:test';
 import { closingSettings } from '../src/shared/closing-settings.js';
 import { base64urlDecode, digestObject, signObject } from '../src/shared/crypto.js';
-import { planningMutation, readPlanningClosingSettings, validatePlanningPayload, verifyPlanningContext } from '../src/shared/planning-api.js';
+import { planningMutation, readPlanningClosingSettings, validatePlanningPayload, verifyPlanningContext, clearPlanningReplayCache } from '../src/shared/planning-api.js';
 import { planningSecurityResolver, preparePlanning } from '../src/client/planning-crypto.js';
 import { planningClientFixture } from './planning-client-fixture.js';
 
@@ -47,6 +47,8 @@ test('CP10 closure settings: real stamped closure binds its operation while grap
   try { foreign.mutation = await signObject(foreign.mutation.body, key); } finally { key.fill(0); }
   await assert.rejects(validatePlanningPayload(foreign, before.context.binding, before.context.graph, before.context.records), /Invalid closing settings/);
   const historical = structuredClone(verified); historical.history[0] = foreign.mutation; historical.binding.beforeHead = await digestObject(foreign.mutation);
+  await assert.rejects(verifyPlanningContext(historical, planningSecurityResolver(f.f.history, f.f.state)), /Changed verified planning prefix/);
+  clearPlanningReplayCache();
   await assert.rejects(verifyPlanningContext(historical, planningSecurityResolver(f.f.history, f.f.state)), /Invalid historical closing settings/);
 });
 
