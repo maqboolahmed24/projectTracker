@@ -29,7 +29,12 @@ test('project cards start work directly, recover a lost reply and stay useful wh
     await expect(card.getByRole('button', { name: 'Start project', exact: true })).toBeEnabled();
     await expect(card.locator('button button')).toHaveCount(0);
     await card.getByRole('heading', { name, exact: true }).click();
-    await expect(page).toHaveURL(/\/projects$/); // Reading/selecting the card must not navigate.
+    await expect(page).toHaveURL(new RegExp(`/projects/${projectId}/overview$`));
+    await navigate(page, '/');
+    // The empty card padding is a target too, including on Home.
+    await card.click({ position: { x: 12, y: 12 } });
+    await expect(page).toHaveURL(new RegExp(`/projects/${projectId}/overview$`));
+    await navigate(page, '/projects');
 
     let committedStarts = 0;
     await page.route('**/v1/work/planning/save', async route => {

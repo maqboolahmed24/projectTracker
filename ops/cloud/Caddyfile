@@ -12,5 +12,18 @@
 	}
 	# The frontend's same-origin proxy handles /v1. No public API/worker endpoint.
 	# Request access logging is deliberately disabled: links can carry private data.
-	reverse_proxy frontend:3000
+	redir /landing /landing/ 308
+	handle_path /landing/* {
+		root * /srv/landing/current
+		header {
+			Cache-Control "no-cache"
+			Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'self'; frame-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'self'"
+			X-Frame-Options "SAMEORIGIN"
+			Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		}
+		file_server
+	}
+	handle {
+		reverse_proxy frontend:3000
+	}
 }

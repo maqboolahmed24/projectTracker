@@ -49,7 +49,13 @@ function ProjectCard({project,report}:{project:Project;report?:ReadableReporting
   const assigned=[...new Set(tasks.flatMap(task=>task.assigneeIds))],canStart=p.state==='planned'&&!p.archived&&workspaceWritable(directory)&&has(project,'plan_projects');
   const percentage=report?.progress.percentage;
   const next=!workspaceWritable(directory)?'This workspace is read-only. Saved work is available to view.':p.archived?'Saved work and history are available to view.':p.state==='planned'?canStart?'Start this project so your team can begin tasks.':'Your project planner can start work when the team is ready.':p.state==='complete'?'All work is complete. You can revisit the results.':p.state==='cancelled'?'Work has stopped. Its history is still available.':!tasks.length?has(project,'create_tasks')?'Open this project to add its first task.':'No tasks have been added to this project yet.':tasks.some(task=>task.state==='review')?'Work is ready for review. Open the project to see it.':report?.signals.blockedTaskIds.length?'Some work is blocked. Open the project to see what it needs.':done===tasks.length?'Tasks are finished. Check the remaining project steps.':'Open the project to pick up the next task.';
-  return <article className="card project-card assisted-project-card" aria-label={projectName(project)}>
+  return <article className="card project-card assisted-project-card" aria-label={projectName(project)} onClick={event=>{
+    // Keep each action independent; the existing Open button is the keyboard target.
+    if(event.defaultPrevented||!(event.target instanceof Element)||event.target.closest('button, a, input, select, textarea, [role="button"], [role="link"], [contenteditable="true"]'))return;
+    const selection=window.getSelection();
+    if(selection&&!selection.isCollapsed&&selection.containsNode(event.currentTarget,true))return;
+    navigate({page:'project',projectId:p.id});
+  }}>
     <div className="section-heading"><span className="project-mark"><Layers3 size={20}/></span><div className="project-card-badges"><StateBadge state={p.state}/>{p.archived&&<Badge>Archived</Badge>}</div></div>
     <h2>{projectName(project)}</h2>{text(data.description)&&<p className="project-card-description">{text(data.description)}</p>}
     <div className="card-progress"><div className="project-progress-label"><span>{p.archived?'Archived project':tasks.length?`${done} of ${tasks.length} tasks complete`:'No tasks yet'}</span>{percentage!==null&&percentage!==undefined&&<span>{percentage}%</span>}</div>{percentage!==null&&percentage!==undefined&&<div className="progress-track" role="progressbar" aria-label="Project progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={percentage}><span style={{width:`${percentage}%`}}/></div>}</div>

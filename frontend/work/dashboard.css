@@ -10,8 +10,8 @@
 .personal-count { display: inline-grid; place-items: center; min-width: 28px; height: 28px; padding: 0 6px; background: var(--surface-subtle); border-radius: 7px; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
 .personal-count.has-reviews { background: var(--purple-soft); color: var(--purple); }
 .assisted-dashboard .project-grid { align-items: stretch; }
-.assisted-dashboard .assisted-project-card { display: flex; flex-direction: column; min-width: 0; text-align: left; padding: 22px; cursor: default; transform: none; box-shadow: none; transition: border-color .16s; }
-.assisted-dashboard .assisted-project-card:hover { transform: none; box-shadow: none; border-color: var(--line); }
+.assisted-dashboard .assisted-project-card { display: flex; flex-direction: column; min-width: 0; text-align: left; padding: 22px; cursor: pointer; transform: none; box-shadow: none; transition: border-color .16s; }
+.assisted-dashboard .assisted-project-card:hover,.assisted-dashboard .assisted-project-card:focus-within { transform: none; box-shadow: none; border-color: color-mix(in srgb, var(--primary) 45%, var(--line)); }
 .assisted-project-card > .section-heading { margin-bottom: 18px; }
 .assisted-project-card .project-mark { width: 36px; height: 36px; border-radius: 9px; }
 .assisted-project-card .project-card-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }

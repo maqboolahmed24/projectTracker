@@ -199,6 +199,13 @@ services:
     volumes:
       - caddy-data:/data
       - caddy-config:/config
+      # Mount the stable parent so an atomic current symlink switches releases.
+      - type: bind
+        source: /opt/maqbool/landing
+        target: /srv/landing
+        read_only: true
+        bind:
+          create_host_path: false
     configs:
       - {source: caddy, target: /etc/caddy/Caddyfile}
     depends_on:
