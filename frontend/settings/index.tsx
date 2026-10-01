@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import './settings.css';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { User, Users, Shield, SlidersHorizontal, Database, RefreshCw, Laptop, KeyRound, ArrowRight } from 'lucide-react';
 import { useApp } from '../shared/context';
 import { Avatar, Badge, Button, EmptyState, ErrorNotice, Modal, PageHead, Spinner } from '../shared/ui';
@@ -7,7 +8,8 @@ import { PasswordChangePanel, createHandoffLink } from '../identity';
 import { ShareLink } from '../identity/components';
 import { PeopleSettings } from './people';
 import { RolesSettings, TeamsSettings } from './roles-teams';
-import { DataSettings, MaintenanceSettings, RestorePanel, WorkspaceSettings } from './data';
+import { DataSettings, RestorePanel, WorkspaceSettings } from './data';
+import { MaintenanceSettings } from './maintenance';
 import { dateLabel, LoadState, Panel, SecureConfirm, SettingsRefresh, useSettingsLoad, isFinishing } from './common';
 export { RestorePanel } from './data';
 function AccountSettings() {
@@ -61,10 +63,27 @@ export function SettingsArea({section='workspace'}:{section?:string}) {
   const refresh=useMemo(()=>({version,refresh:()=>setVersion(v=>v+1)}),[version]);
   useEffect(()=>client.auth.onClear(()=>setVersion(v=>v+1)),[client]);
   const current = section==='general'?'workspace':section==='profile'?'account':section==='security'?'account':section==='members'?'people':section==='permissions'?'roles':section;
+  const navigation = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const nav = navigation.current; if (!nav) return;
+    const revealCurrent = () => {
+      if (nav.scrollWidth <= nav.clientWidth) return;
+      const active = nav.querySelector<HTMLElement>('[aria-current="page"]'); if (!active) return;
+      const viewport = nav.getBoundingClientRect(), item = active.getBoundingClientRect();
+      // Scroll this row alone. scrollIntoView would also move the page away
+      // from its heading when following a settings link or resizing a window.
+      if (item.left < viewport.left) nav.scrollLeft += item.left - viewport.left - 8;
+      else if (item.right > viewport.right) nav.scrollLeft += item.right - viewport.right + 8;
+    };
+    revealCurrent();
+    const observer = new ResizeObserver(revealCurrent); observer.observe(nav);
+    return () => observer.disconnect();
+  }, [current, directory?.isOwner, directory?.restoreQuarantine]);
+
   if (!directory) return <div role="status" className="settings-loading"><Spinner/> Opening workspace settings…</div>;
   if (directory.restoreQuarantine) return <SettingsRefresh.Provider value={refresh}><div className="settings-content"><PageHead title="Review recovered workspace" description="The workspace stays closed until its recovered content has been checked."/>{directory.isOwner && directory.activeRestore ? <RestorePanel restoreId={directory.activeRestore.restoreId} onDone={reloadDirectory}/> : <EmptyState title="An Owner needs to review this workspace" description="Current security changes remain in place while the review is completed." action={<Button variant="secondary" onClick={()=>void reloadDirectory()}>Check again</Button>}/>}</div></SettingsRefresh.Provider>;
   const selected=sections.find(item=>item.id===current), allowed=selected && (!selected.owner||directory.isOwner);
-  return <SettingsRefresh.Provider value={refresh}><div className="settings-layout"><nav className="settings-nav" aria-label="Settings sections">{sections.filter(item=>!item.owner||directory.isOwner).map(item=><button type="button" key={item.id} className={item.id===current?'active':''} aria-current={item.id===current?'page':undefined} onClick={()=>navigate({page:'settings',section:item.id})}><item.icon size={18}/>{item.label}</button>)}</nav><div className="settings-content">
+  return <SettingsRefresh.Provider value={refresh}><div className="settings-layout"><nav ref={navigation} className="settings-nav" aria-label="Settings sections">{sections.filter(item=>!item.owner||directory.isOwner).map(item=><button type="button" key={item.id} className={item.id===current?'active':''} aria-current={item.id===current?'page':undefined} onClick={()=>navigate({page:'settings',section:item.id})}><item.icon size={18}/>{item.label}</button>)}</nav><div className="settings-content">
     {directory.lifecycle==='pending_deletion'&&<div className="notice notice-warning"><div><strong>Workspace deletion is scheduled</strong><p>Ordinary work is read-only. Deletion is due {dateLabel(directory.deletion?.deleteAfter)}.</p></div><Button variant="secondary" onClick={()=>navigate({page:'settings',section:'data'})}>Review deletion</Button></div>}
     {directory.licenceState!=='active'&&<div className="notice notice-warning">Your workspace licence currently restricts access. You can still review your account and download available work.</div>}
     {!allowed?<EmptyState title={current==='integrations'?'Integrations are not available':'Settings unavailable'} description="You can manage your workspace using the available settings." action={<Button variant="secondary" onClick={()=>navigate({page:'settings',section:'workspace'})}>Back to workspace settings <ArrowRight size={16}/></Button>}/>:current==='account'?<AccountSettings/>:current==='people'?<PeopleSettings/>:current==='teams'?<TeamsSettings/>:current==='roles'?<RolesSettings/>:current==='data'?<DataSettings/>:current==='maintenance'?<MaintenanceSettings/>:<WorkspaceSettings/>}{allowed&&<InterruptedSaves/>}

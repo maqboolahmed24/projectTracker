@@ -1,0 +1,62 @@
+/* Settings follows the same rhythm regardless of the sidebar or content width. */
+.settings-content { gap: 24px; }
+.settings-content > .page-header { margin-bottom: 0; }
+.settings-panel { gap: 20px; }
+.settings-panel > .button { align-self: flex-start; }
+.settings-panel-head { flex-wrap: wrap; gap: 14px 20px; }
+.settings-panel-head > div:first-child { flex: 1 1 240px; min-width: 0; }
+.settings-panel-head h2, .settings-panel-head p { overflow-wrap: anywhere; }
+.settings-panel-head p { margin-top: 6px; }
+.settings-row > div:first-child { min-width: 0; }
+.settings-row strong, .settings-row p { overflow-wrap: anywhere; }
+.settings-row-actions { flex-shrink: 0; }
+.settings-profile { min-width: 0; }
+.settings-profile > div { min-width: 0; overflow-wrap: anywhere; }
+.settings-profile > .avatar { flex-shrink: 0; }
+.settings-check > span { min-width: 0; overflow-wrap: anywhere; }
+.settings-check > span > strong, .settings-check > span > .muted { display: block; }
+.settings-check > span > .muted { margin-top: 3px; }
+.settings-choice-list { scrollbar-gutter: stable; }
+.settings-role-grid, .settings-team-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+  align-items: stretch;
+  gap: 16px;
+}
+.settings-role-card, .settings-team-card { min-width: 0; gap: 16px; }
+.settings-role-card h3, .settings-team-card h3,
+.settings-role-card p, .settings-team-card p { overflow-wrap: anywhere; }
+.settings-role-card > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.settings-role-card > header h3 { min-width: 0; }
+.settings-role-card > header .badge { flex-shrink: 0; }
+.settings-role-card > footer, .settings-team-card > footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+.settings-permissions { grid-template-columns: 1fr; gap: 7px; font-size: 12px; color: var(--muted); }
+.settings-permissions li { display: flex; align-items: baseline; gap: 8px; overflow-wrap: anywhere; }
+.settings-permissions li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+.settings-team-people { flex-wrap: wrap; align-items: flex-start; gap: 8px; }
+.settings-team-people > .person-cell {
+  min-width: 0;
+  max-width: 100%;
+  gap: 7px;
+  padding: 4px 9px 4px 4px;
+  border-radius: 18px;
+  background: var(--surface-subtle);
+  font-size: 12px;
+}
+.settings-team-people > .person-cell > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.settings-history p { margin-top: 5px; overflow-wrap: anywhere; }
+@media (max-width: 700px) {
+  .settings-content { gap: 20px; }
+  .settings-panel { gap: 18px; }
+  .settings-panel-head > div:first-child { flex-basis: 100%; }
+  .settings-row-actions { gap: 8px; }
+  .settings-nav { scroll-padding-inline: 4px; }
+  .settings-nav button { min-height: 44px; }
+  .settings-profile { align-items: flex-start; gap: 14px; }
+}

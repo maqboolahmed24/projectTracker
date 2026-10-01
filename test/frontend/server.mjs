@@ -17,12 +17,21 @@ execFileSync('openssl', ['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-keyo
 const server = createServer({ key: await readFile(keyPath), cert: await readFile(certificatePath) }, (request, response) => {
   // Every request passes through the real Next product, including its same-origin
   // API proxy. The fixture API is never exposed directly to the browser.
+  let upstreamResponse;
   const upstream = proxyRequest({ hostname: '127.0.0.1', port: 3557,
     path: request.url, method: request.method, headers: request.headers }, incoming => {
+    upstreamResponse = incoming;
+    if (response.destroyed) { incoming.destroy(); return; }
     response.writeHead(incoming.statusCode ?? 503, incoming.headers); incoming.pipe(response);
   });
-  upstream.on('error', () => { if (!response.headersSent) response.writeHead(503); response.end(); });
-  request.on('aborted', () => upstream.destroy()); request.pipe(upstream);
+  upstream.on('error', () => { if (response.destroyed) return; if (!response.headersSent) response.writeHead(503); response.end(); });
+  const cancelUpstream = () => { upstreamResponse?.destroy(); upstream.destroy(); };
+  request.on('aborted', cancelUpstream);
+  // Streaming POST bodies finish before their responses. A browser leaving the
+  // view closes this response, not the already-complete request; propagate that
+  // cancellation through Next so the API releases its live connection slot.
+  response.on('close', () => { if (!response.writableEnded) cancelUpstream(); });
+  request.pipe(upstream);
 });
 await new Promise((resolve, reject) => { server.once('error', reject); server.listen(3555, '127.0.0.1', resolve); });
 let stopping = false;

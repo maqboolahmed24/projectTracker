@@ -1,14 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Download, Trash2, RefreshCw, ShieldCheck, Check } from 'lucide-react';
+import { Download, Trash2 } from 'lucide-react';
 import { useApp } from '../shared/context';
 import { FileStorage } from '../files';
-import { Badge, Button, EmptyState, Field, Input, PageHead, Select } from '../shared/ui';
+import { Badge, Button, Field, Input, PageHead, Select } from '../shared/ui';
 import type { ReportingSettingsPin } from '../../src/client/reporting-settings-crypto.js';
 import type { ReadableRestoration } from '../../src/client/restoration-crypto.js';
-import { contentSchemaRegistry } from '../../src/shared/content-schema.js';
-import { CheckOption, dateLabel, LoadState, Panel, PasswordRefresh, SecureConfirm, useSettingsLoad, workspaceEditable } from './common';
-const currentContentSchema = Math.max(...Object.keys(contentSchemaRegistry).map(Number));
+import { CheckOption, dateLabel, LoadState, Panel, SecureConfirm, useSettingsLoad, workspaceEditable } from './common';
 export function WorkspaceSettings() {
   const { client, directory, theme, setTheme } = useApp(); const data = useSettingsLoad(() => client.reporting.settings());
   const [review, setReview] = useState<{ pin: ReportingSettingsPin; before: string | null; after: string }>();
@@ -51,26 +49,4 @@ export function RestorePanel({ restoreId, onDone }: { restoreId: string; onDone?
     const pending = await client.restoration.pending(); if (pending.includes(operationId)) return client.restoration.resume(operationId);
     return client.restoration.verify(restoreId, true, operationId);
   }} {...(onDone ? {onDone} : {})}><CheckOption checked={acknowledged} onChange={setAcknowledged}>I have reviewed the recovery point and understand that later content may be missing.</CheckOption></SecureConfirm>}{resume&&<SecureConfirm open onClose={()=>setResume(undefined)} title="Continue recovery verification?" description="Check and finish the recovery review already saved on this browser." confirmLabel="Continue verification" perform={()=>client.restoration.resume(resume)} {...(onDone ? {onDone} : {})}/>}</Panel>;
-}
-export function MaintenanceSettings() {
-  const { client, directory, reloadDirectory, reloadProjects } = useApp();
-  // The verified directory records completion after the active update ID clears.
-  // A fresh update context is only valid for the prior content format.
-  const upToDate = directory?.writeSchema === currentContentSchema && !directory.activeUpgrade;
-  const data = useSettingsLoad(() => directory?.isOwner && !upToDate ? client.upgrades.progress(directory.activeUpgrade?.migrationId) : Promise.resolve(null), [directory?.writeSchema, directory?.activeUpgrade?.migrationId]);
-  const [action, setAction] = useState<'start'|'advance'|'finish'>();
-  if (!directory?.isOwner) return <EmptyState title="Workspace updates are managed by Owners" description="An Owner will help if your workspace needs an update." icon={<ShieldCheck/>}/>;
-  return <><PageHead title="Workspace updates" description="Keep encrypted workspace content compatible with the latest application." eyebrow="Settings"/><Panel title="Content update" description="Reads and security actions remain available while ordinary edits are paused." actions={<PasswordRefresh onDone={data.reload}/>}>
-    {upToDate ? <><Badge tone="success">Up to date</Badge><p className="person-cell"><Check size={18}/> Your workspace is up to date.</p></> : <LoadState loading={data.loading} error={data.error} retry={data.reload}>{data.value && <>
-    <Badge tone={data.value.state === 'completed' ? 'success' : data.value.state === 'paused' ? 'warning' : 'neutral'}>{data.value.state === 'available' ? 'Update available' : data.value.state === 'active' ? 'In progress' : data.value.state === 'completed' ? 'Up to date' : data.value.state === 'paused' ? 'Paused' : 'Stopped'}</Badge>
-    {data.value.state === 'available' && <><p>{data.value.total} records are ready for this update. Ordinary editing will pause until it finishes.</p><Button onClick={() => setAction('start')}>Start update</Button></>}
-    {data.value.state === 'active' && <><p>{data.value.completed} of {data.value.total} records updated.</p><progress max={Math.max(1,data.value.total)} value={data.value.completed} aria-label="Workspace update progress"/><p className="muted">You can return later or another Owner can continue.</p><Button onClick={() => setAction(data.value!.completed === data.value!.total ? 'finish' : 'advance')}><RefreshCw size={16}/>{data.value.completed === data.value.total ? 'Finish update' : 'Continue update'}</Button></>}
-    {data.value.state === 'paused' && <p>The update will remain paused while workspace restrictions apply. Your completed progress is saved.</p>}
-    {data.value.state === 'completed' && <p className="person-cell"><Check size={18}/> Your workspace is up to date.</p>}
-  </>}</LoadState>}</Panel>{directory.activeRestore && <RestorePanel restoreId={directory.activeRestore.restoreId} onDone={reloadDirectory}/>}
-    {action && data.value && <SecureConfirm open onClose={() => setAction(undefined)} title={action === 'start' ? 'Start workspace update?' : action === 'finish' ? 'Finish workspace update?' : 'Continue workspace update?'} description={action === 'start' ? 'Ordinary edits will pause. Your existing content and history are preserved.' : 'This device will verify and save the next part of the update.'} confirmLabel={action === 'start' ? 'Start update' : action === 'finish' ? 'Finish update' : 'Continue update'} perform={async operationId => {
-      const pending = await client.upgrades.pending();
-      const result = pending.includes(operationId) ? await client.upgrades.resume(operationId) : action === 'start' ? await client.upgrades.start(operationId) : action === 'finish' ? await client.upgrades.finish(data.value!.migrationId,operationId) : await client.upgrades.advance(data.value!.migrationId,operationId);
-      return result;
-    }} onDone={async () => { await reloadDirectory(); await reloadProjects(); }}/>}</>;
 }

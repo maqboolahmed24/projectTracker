@@ -52,3 +52,27 @@ html{scrollbar-gutter:stable}
   .modal-footer .file-footer-summary{flex:1 0 100%;margin-right:0}
   .modal.modal-expanded{width:calc(100vw - 12px);height:calc(100dvh - 12px);max-width:calc(100vw - 12px);max-height:calc(100dvh - 12px)}
 }
+
+/* Navigation remains reachable in short windows and behaves as a mobile drawer.
+   Inert and aria-hidden exclude the closed drawer. Keep CSS visibility stable so
+   WebKit can focus its active item while the transform animates into view. */
+.sidebar{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-bottom:env(safe-area-inset-bottom,0px)}
+.sidebar>*{flex-shrink:0}
+.sidebar-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:30px}
+.sidebar-header .wordmark{margin-bottom:0;min-width:0}
+.sidebar-close{display:none;flex-shrink:0}
+.sidebar-bottom{padding-top:clamp(20px,4dvh,40px)}
+@media(max-height:650px){
+  .sidebar{padding-top:20px}
+  .sidebar-header{margin-bottom:20px}
+  .workspace-switch{margin-bottom:20px}
+  .sidebar-profile{padding-top:14px;padding-bottom:14px}
+}
+@media(max-width:700px){
+  .sidebar{width:min(288px,calc(100vw - 44px));padding-top:max(22px,env(safe-area-inset-top));padding-left:14px;padding-right:14px;transition:transform .22s ease}
+  .sidebar-header{margin-bottom:24px}
+  .sidebar-header .wordmark{padding-left:8px}
+  .sidebar-close{display:inline-flex}
+  .workspace-switch strong{max-width:none}
+  .sidebar-scrim{touch-action:none}
+}

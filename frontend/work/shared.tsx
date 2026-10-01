@@ -14,7 +14,7 @@ export const text = (value: unknown, fallback = ''): string => typeof value === 
 export function content(project: Project, id: string): Record<string, unknown> { return project.records.find(row => row.id === id)?.content ?? {}; }
 export const projectName = (project: Project) => text(content(project, project.graph.project.id).name, 'Untitled project');
 export const taskName = (project: Project, id: string) => text(content(project, id).title, 'Untitled task');
-export const phaseName = (project: Project, id: string | null) => id ? text(content(project,id).name, 'Untitled wave') : 'Unscheduled work';
+export const phaseName = (project: Project, id: string | null) => id ? text(content(project,id).name, 'Untitled phase') : 'Unscheduled work';
 export const displayStatus = (state: string) => ({ planned:'Planned',active:'Active',complete:'Complete',cancelled:'Cancelled',todo:'To do',in_progress:'In progress',review:'In review',done:'Done',open:'Open',accepted:'Accepted',resolved:'Resolved' }[state] ?? state);
 export const statusTone = (state: string): BadgeTone => {
   if (['done','complete','accepted','resolved'].includes(state)) return 'success';
@@ -98,5 +98,5 @@ export function useReport(projectId:string|undefined) {
   useEffect(()=>{setReport(null);setFresh(false);setUnavailable(false);if(!projectId)return;const watcher=client.reporting.watch({kind:'project',projectId},state=>{setReport(state.value??state.lastCalculated);setFresh(state.status==='current');setUnavailable(state.status!=='current'&&state.reason==='disconnected');});watch.current=watcher;return()=>{watch.current=null;watcher.stop();};},[client,projectId]);
   return {report,fresh,unavailable,retry:()=>watch.current?.refocus(),result:report?.components[0]?.result};
 }
-export function Section({title,description,actions,children}:{title:string;description?:string;actions?:ReactNode;children:ReactNode}) { return <section className="card stack"><div className="section-heading"><div><h2>{title}</h2>{description&&<p className="muted">{description}</p>}</div>{actions}</div>{children}</section>; }
+export function Section({title,description,actions,children}:{title:string;description?:string;actions?:ReactNode;children:ReactNode}) { return <section className="card stack work-section"><div className="section-heading"><div><h2>{title}</h2>{description&&<p className="muted">{description}</p>}</div>{actions}</div>{children}</section>; }
 export function orderedPhases(project:Project):PlanningPhase[]{return [...project.graph.phases].sort((a,b)=>a.displayOrder-b.displayOrder||a.id.localeCompare(b.id));}

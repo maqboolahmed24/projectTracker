@@ -1,0 +1,84 @@
+/* Work pages use the same rhythm at overview, project and detail scale. */
+.project-page { min-width: 0; }
+.project-page > .page-header { margin-bottom: 0; }
+.project-page > .back-link { align-self: flex-start; margin-bottom: -8px; }
+.project-description-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.project-description-line > span:last-child { flex-basis: 100%; overflow-wrap: anywhere; }
+.project-description-line > span:last-child:empty { display: none; }
+.work-section { min-width: 0; gap: 20px; }
+.work-section > .section-heading { margin-bottom: 0; align-items: flex-start; }
+.work-section > .section-heading p { margin-top: 5px; font-size: 12px; line-height: 1.6; }
+.work-section > .section-heading > .button,
+.work-section > .section-heading > .button-row { flex-shrink: 0; }
+.work-section > .empty-state { min-height: 220px; padding: 28px 16px; }
+.work-section .home-task > .eyebrow { margin-bottom: 4px; }
+.work-section .home-task .task-row { padding-left: 0; padding-right: 0; }
+.work-section .home-task + .home-task { padding-top: 18px; }
+.work-group-actions { margin-bottom: 0; flex-wrap: wrap; gap: 12px; }
+.project-page .metric { min-width: 0; }
+.project-page .metric > .eyebrow { margin-bottom: 0; }
+.project-page .metric > p:last-child { margin-top: auto; line-height: 1.6; }
+.project-page .metric-health strong,
+.project-page .metric-target strong { font-size: 23px; letter-spacing: -.6px; line-height: 1.3; overflow-wrap: anywhere; }
+.project-page .metric .progress-track { margin: 0; }
+
+/* Long phase names and objectives retain a stable, readable row. */
+.wave-sequence > .wave-card { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 16px; align-items: start; width: 100%; border-radius: 8px; transition: background .16s; }
+.wave-sequence > .wave-card:hover { background: var(--surface-hover); }
+.wave-card .wave-number { margin-top: 1px; }
+.phase-summary { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.phase-summary > strong { font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.phase-objective { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; line-height: 1.6; }
+.phase-progress { margin-top: 3px; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.phase-badges { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; padding-top: 3px; }
+
+/* Dates, the track and status each have their own column. */
+.timeline-list,.milestone-list { display: flex; flex-direction: column; min-width: 0; }
+.timeline-list:empty,.milestone-list:empty { display: none; }
+.project-page .timeline-range { display: flex; justify-content: space-between; gap: 16px; margin: 0; padding-bottom: 4px; }
+.project-page .timeline-row { width: 100%; grid-template-columns: minmax(140px, 1fr) minmax(0, 2fr) auto; gap: 18px; background: transparent; border: 0; border-bottom: 1px solid var(--line); text-align: left; color: inherit; padding: 20px 0; }
+.project-page .timeline-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.project-page .timeline-row > span:first-child { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.project-page .timeline-row strong { font-size: 13px; overflow-wrap: anywhere; }
+.project-page .timeline-row small { font-size: 11px; color: var(--muted); }
+.project-page .timeline-row:hover strong { color: var(--primary); }
+.project-page .timeline-track { width: 100%; min-width: 0; }
+.project-page .timeline-track > .timeline-unscheduled { display: flex; align-items: center; position: static; padding: 0 10px; border: 0; background: transparent; color: var(--muted); font-size: 11px; }
+.milestone-row,.milestone-feature { width: 100%; background: transparent; border: 0; text-align: left; color: inherit; flex-wrap: wrap; }
+.milestone-row { border-bottom: 1px solid var(--line); }
+.milestone-row > strong,.milestone-feature > strong { flex: 1 1 160px; min-width: 0; overflow-wrap: anywhere; }
+.milestone-row > span,.milestone-feature > span { overflow-wrap: anywhere; }
+.milestone-row:hover > strong,.milestone-feature:hover > strong { color: var(--primary); }
+
+.people-picker .person-option { min-width: 0; cursor: pointer; }
+.people-picker .person-option > span[aria-hidden] { flex: 0 0 auto; }
+.people-picker .person-option > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.discussion > form:first-child { padding-top: 0; border-top: 0; }
+.discussion-time { display: block; margin-top: 3px; font-size: 11px; line-height: 1.5; color: var(--muted); }
+.discussion-entry .section-heading > div > strong { font-size: 13px; }
+.discussion-feed:empty { display: none; }
+.activity-entry > div { min-width: 0; overflow-wrap: anywhere; }
+.activity-entry details { margin-top: 10px; }
+.activity-entry summary { cursor: pointer; color: var(--muted); }
+.activity-entry details[open] summary { margin-bottom: 8px; }
+
+@media (max-width: 700px) {
+  .work-section > .section-heading { flex-wrap: wrap; gap: 12px; }
+  .work-section > .section-heading > .button-row { flex-shrink: 1; justify-content: flex-start; }
+  .work-group-actions > .button-row { justify-content: flex-start; }
+  .project-page .timeline-row { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+  .project-page .timeline-row > .timeline-track { grid-column: 1 / -1; grid-row: 2; }
+  .project-page .timeline-row > .badge { grid-column: 2; grid-row: 1; }
+  .wave-sequence > .wave-card { grid-template-columns: 28px minmax(0, 1fr); gap: 10px 12px; }
+  .wave-card .wave-number { width: 28px; height: 28px; }
+  .wave-card .phase-badges { grid-column: 2; padding: 0; justify-content: flex-start; }
+}
+@media (max-width: 520px) {
+  .project-page .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .project-page .metric-health { grid-column: 1 / -1; }
+  .project-page .metric-health strong { font-size: 23px; }
+  .project-page .metric-target strong { font-size: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wave-sequence > .wave-card { transition: none; }
+}

@@ -222,17 +222,17 @@ test('task tabs keep a stable frame, scroll inside it and return from nested edi
 
     await page.setViewportSize({ width: 1440, height: 1000 });
     const waveName = 'Pilot the welcome experience';
-    await page.getByRole('button', { name: 'Add wave', exact: true }).click();
-    const waveEditor = page.getByRole('dialog', { name: 'Add wave', exact: true });
+    await page.getByRole('button', { name: 'Add phase', exact: true }).click();
+    const waveEditor = page.getByRole('dialog', { name: 'Add phase', exact: true });
     await waveEditor.getByLabel('Name', { exact: true }).fill(waveName);
     await waveEditor.getByLabel('Objective', { exact: true }).fill(Array.from({ length: 14 }, (_, index) => `Learning ${index + 1}: Introduce the guide to a small group, listen carefully to their questions, and improve the examples before the next group joins.`).join('\n\n'));
     await waveEditor.getByLabel('Completion criteria', { exact: true }).fill('Everyone in the pilot can find the right next step and share feedback.');
-    await waveEditor.getByRole('button', { name: 'Add wave', exact: true }).click();
+    await waveEditor.getByRole('button', { name: 'Add phase', exact: true }).click();
     await expect(waveEditor).toHaveCount(0);
     await page.getByRole('button', { name: waveName, exact: true }).click();
     const wave = page.getByRole('dialog', { name: waveName, exact: true });
-    await wave.getByRole('button', { name: 'Start wave', exact: true }).click();
-    await expect(wave.getByRole('button', { name: 'Complete wave', exact: true })).toBeEnabled();
+    await wave.getByRole('button', { name: 'Start phase', exact: true }).click();
+    await expect(wave.getByRole('button', { name: 'Complete phase', exact: true })).toBeEnabled();
     await wave.getByRole('tab', { name: 'Updates', exact: true }).click();
     const updateDraft = 'Draft for the pilot team: we have one more example to discuss before sharing this update.';
     await wave.getByLabel('Share an update', { exact: true }).fill(updateDraft);

@@ -136,49 +136,40 @@ test('settings: private invitation revoke, plaintext export acknowledgement, int
   } finally { await page.close(); await fixture.close(); }
 });
 
-test('settings: completed update survives a failed refresh and finishes through bounded customer controls', async ({ page }) => {
+test('settings: one confirmation updates every batch and finishes automatically, even when the final view refresh fails', async ({ page }) => {
   const fixture = await authenticationFixture(), errors = trackBrowserErrors(page);
-  let starts = 0, committed = false, refreshFailed = false;
+  let starts = 0, batches = 0, finishes = 0, refreshFailed = false;
   try {
     await seedRememberedOwner(page, fixture); await signIn(page);
     await navigate(page, '/settings/maintenance');
     const content = panel(page, 'Content update');
     await expect(content.getByText('Update available', { exact: true })).toBeVisible();
     await page.route('**/v1/upgrades/start', async route => {
-      starts++; const response = await route.fetch(); expect(response.status()).toBe(200);
-      committed = true; await route.fulfill({ response });
+      starts++; await route.continue();
+    });
+    await page.route('**/v1/upgrades/batch', async route => {
+      batches++; await route.continue();
+    });
+    await page.route('**/v1/upgrades/finish', async route => {
+      const response = await route.fetch(); expect(response.status()).toBe(200);
+      finishes++; await route.fulfill({ response });
     });
     await page.route('**/v1/auth/access-change/delivery', async route => {
-      // Only the presentation directory read is interrupted. Controller receipt
-      // and history verification still run against the real service first.
       const body = route.request().postDataJSON() as { includeDirectory?: boolean };
-      if (committed && body.includeDirectory && !refreshFailed) { refreshFailed = true; await route.abort('failed'); }
+      if (finishes && body.includeDirectory && !refreshFailed) { refreshFailed = true; await route.abort('failed'); }
       else await route.continue();
     });
     await content.getByRole('button', { name: 'Start update', exact: true }).click();
     await confirmDialog(page, 'Start update');
     await expect(page.getByRole('dialog')).toHaveCount(0);
-    await expect(page.getByText('The action finished, but the latest view could not be loaded. Refresh to see the result.', { exact: true })).toBeVisible();
-    expect(committed).toBe(true); expect(refreshFailed).toBe(true); expect(starts).toBe(1);
-    await expect(content.getByText('In progress', { exact: true })).toBeVisible();
-    let previous = 0;
-    // This fresh fixture contains only its initial identity records. Every
-    // explicit step must advance verified progress; the loop is tightly bounded.
-    for (let step = 0; step < 8; step++) {
-      if (await content.getByRole('button', { name: 'Finish update', exact: true }).count()) break;
-      const progress = content.getByRole('progressbar', { name: 'Workspace update progress' });
-      previous = Number(await progress.getAttribute('value'));
-      await content.getByRole('button', { name: 'Continue update', exact: true }).click();
-      await confirmDialog(page, 'Continue update');
-      await expect(page.getByRole('dialog')).toHaveCount(0);
-      await expect.poll(async () => Number(await progress.getAttribute('value'))).toBeGreaterThan(previous);
-    }
-    await expect(content.getByRole('button', { name: 'Finish update', exact: true })).toBeVisible();
-    await content.getByRole('button', { name: 'Finish update', exact: true }).click();
-    await confirmDialog(page, 'Finish update');
-    await expect(page.getByRole('dialog')).toHaveCount(0);
-    await expect(content.getByText('Up to date', { exact: true })).toBeVisible();
-    expect(starts).toBe(1);
+    // No Continue/Finish confirmations are required: the verified controller
+    // handles each batch serially under the one explicit authorization.
+    await expect(content.getByText('Up to date', { exact: true })).toBeVisible({ timeout: 90_000 });
+    await expect(content.getByText('The update is complete. We couldn’t refresh the workspace view.', { exact: true })).toBeVisible();
+    expect(starts).toBe(1); expect(batches).toBeGreaterThan(0); expect(finishes).toBe(1); expect(refreshFailed).toBe(true);
+    await content.getByRole('button', {name:'Refresh workspace',exact:true}).click();
+    await expect(content.getByRole('button', {name:'Refresh workspace',exact:true})).toHaveCount(0);
+    expect(starts).toBe(1); expect(finishes).toBe(1);
     await page.reload(); await signIn(page); await navigate(page, '/settings/maintenance');
     await expect(panel(page, 'Content update').getByText('Up to date', { exact: true })).toBeVisible();
     expect(errors).toEqual([]);

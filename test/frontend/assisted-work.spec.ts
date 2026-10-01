@@ -35,16 +35,16 @@ test('assisted task steps explain real gates, start the right scope and keep rea
     // An empty project offers one clear start; no duplicate empty task group.
     await expect(page.getByRole('heading', { name: 'Every project starts with one task', exact: true })).toBeVisible();
     await expect(page.locator('.task-group')).toHaveCount(0);
-    await page.getByRole('button', { name: 'Add wave', exact: true }).click();
-    dialog = page.getByRole('dialog', { name: 'Add wave', exact: true });
+    await page.getByRole('button', { name: 'Add phase', exact: true }).click();
+    dialog = page.getByRole('dialog', { name: 'Add phase', exact: true });
     await dialog.getByLabel('Name', { exact: true }).fill(waveName);
-    await dialog.getByRole('button', { name: 'Add wave', exact: true }).click();
+    await dialog.getByRole('button', { name: 'Add phase', exact: true }).click();
     await expect(dialog).toHaveCount(0);
     await page.locator('.page-header').getByRole('button', { name: 'Add task', exact: true }).click();
     dialog = page.getByRole('dialog', { name: 'Add a task', exact: true });
     await dialog.getByLabel('Task name', { exact: true }).fill(taskName);
     await dialog.getByLabel('What does done look like?', { exact: true }).fill('The team can take its first step without guessing.');
-    await dialog.getByLabel('Wave', { exact: true }).selectOption({ label: waveName });
+    await dialog.getByLabel('Phase', { exact: true }).selectOption({ label: waveName });
     await dialog.getByRole('checkbox', { name: 'Browser owner', exact: true }).check();
     await dialog.getByLabel('Task lead', { exact: true }).selectOption({ label: 'Browser owner' });
     await dialog.getByRole('button', { name: 'Add task', exact: true }).click();
@@ -154,11 +154,11 @@ test('assisted task steps explain real gates, start the right scope and keep rea
     await expect(page.locator('.page-header').getByRole('button', { name: 'Start project', exact: true })).toHaveCount(0);
     await fresh(member);
     await expect(memberTask.locator('.work-guidance')).toContainText(`A project manager needs to start “${waveName}”`);
-    await expect(memberTask.getByRole('button', { name: 'Start wave', exact: true })).toHaveCount(0);
+    await expect(memberTask.getByRole('button', { name: 'Start phase', exact: true })).toHaveCount(0);
     await navigate(page, `/projects/${projectId}/work?task=${taskId}`);
     task = page.getByRole('dialog', { name: taskName, exact: true });
-    await expect(task.locator('.work-guidance')).toContainText('Start the wave to begin');
-    await task.getByRole('button', { name: 'Start wave', exact: true }).click();
+    await expect(task.locator('.work-guidance')).toContainText('Start the phase to begin');
+    await task.getByRole('button', { name: 'Start phase', exact: true }).click();
     await expect(task.getByRole('button', { name: 'Start task', exact: true })).toBeEnabled();
     await task.getByRole('button', { name: 'Start task', exact: true }).click();
     await expect(task.locator('.task-subtitle')).toContainText('In progress');

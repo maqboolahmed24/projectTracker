@@ -1,0 +1,24 @@
+.workspace-update{display:flex;flex-direction:column;gap:24px;min-width:0}
+.workspace-update-summary{display:flex;align-items:flex-start;gap:16px}
+.workspace-update-summary>div{min-width:0;flex:1}
+.workspace-update-icon{display:grid;place-items:center;flex-shrink:0;width:48px;height:48px;border:1px solid var(--line);border-radius:14px;background:var(--canvas);color:var(--primary)}
+.workspace-update-summary h3{margin-top:12px;font-size:18px;letter-spacing:-.35px;font-weight:550}
+.workspace-update-summary p{margin-top:6px;color:var(--muted);font-size:13px;max-width:560px}
+.workspace-update-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:18px 0;border-block:1px solid var(--line)}
+.workspace-update-steps li{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:11px;min-width:0}
+.workspace-update-steps li>span{display:grid;place-items:center;flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--canvas);border:1px solid var(--line);font-size:10px}
+.workspace-update-steps .is-current{color:var(--text);font-weight:600}
+.workspace-update-steps .is-current>span,.workspace-update-steps .is-done>span{color:var(--primary);background:var(--accent-soft);border-color:color-mix(in srgb,var(--primary),transparent 75%)}
+.workspace-update-progress{display:flex;flex-direction:column;gap:10px}
+.workspace-update-progress>div{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.workspace-update-progress strong{font-weight:550;color:var(--text)}
+.workspace-update-progress progress{appearance:none;width:100%;height:7px;border:0;border-radius:10px;overflow:hidden;background:var(--surface-subtle);accent-color:var(--primary)}
+.workspace-update-progress progress::-webkit-progress-bar{background:var(--surface-subtle);border-radius:10px}
+.workspace-update-progress progress::-webkit-progress-value{background:var(--primary);border-radius:10px;transition:width .3s ease}
+.workspace-update-progress progress::-moz-progress-bar{background:var(--primary);border-radius:10px}
+.workspace-update-footer{display:flex;align-items:center;justify-content:space-between;gap:22px}
+.workspace-update-footer>p{font-size:12px;color:var(--muted);max-width:430px}
+.workspace-update-footer>.button{flex-shrink:0}
+.workspace-update.is-complete .workspace-update-icon{background:var(--accent-soft);border-color:transparent}
+@media(max-width:1100px){.workspace-update-footer{align-items:flex-start;flex-direction:column;gap:16px}}
+@media(max-width:480px){.workspace-update-summary{gap:12px}.workspace-update-icon{width:38px;height:38px;border-radius:11px}.workspace-update-summary h3{font-size:17px}.workspace-update-steps{gap:8px}.workspace-update-steps li{flex-direction:column;align-items:flex-start;gap:8px}.workspace-update-footer>.button{width:100%}}

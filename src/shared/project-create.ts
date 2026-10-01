@@ -6,7 +6,10 @@ import { scopeProvisionBinding, scopeProvisionPlan, scopeProvisionPayload, scope
 import type { SecurityHistoryState } from './security-history.js';
 
 export const projectPrivateData = z.strictObject({ name: z.string().trim().min(1).max(240), description: z.string().max(20000).optional(),
-  startDate: z.iso.date().optional(), dueDate: z.iso.date().optional() }).refine((v) => !v.startDate || !v.dueDate || v.startDate <= v.dueDate);
+  startDate: z.iso.date().optional(), dueDate: z.iso.date().optional(),
+  // Optional for historical records; bounded by the planning task capacity.
+  taskOrder: z.array(identifier).max(2000).refine(ids => new Set(ids).size === ids.length).optional(),
+}).refine((v) => !v.startDate || !v.dueDate || v.startDate <= v.dueDate);
 export const projectCreateReference = z.strictObject({ workspaceId: identifier, operationId: identifier });
 export type ProjectCreateReference = z.infer<typeof projectCreateReference>;
 export const projectCreateRequest = projectCreateReference.extend({ projectId: identifier });

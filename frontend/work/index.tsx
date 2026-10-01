@@ -9,6 +9,7 @@ import { ProjectPage, TaskList } from './project';
 import { activeTasks, content, has, People, projectName, Section, shortDate, StateBadge, taskName, text, unfinished, useAction, usePlanningAction, workspaceWritable } from './shared';
 import type { Project } from './shared';
 import './dashboard.css';
+import './layout.css';
 
 type WorkAreaProps={page:'home'|'projects'|'my-work'|'project'|'inbox';projectId?:string;taskId?:string;phaseId?:string;tab?:string};
 export function WorkArea(props:WorkAreaProps){const app=useApp();if(app.directory&&!workspaceWritable(app.directory)){const view={...app,directory:{...app.directory,isOwner:false},projects:app.projects.map(project=>({...project,authority:{...project.authority,isOwner:false,permissions:project.authority.permissions.filter(permission=>permission==='read_project')}}))};return <AppContext.Provider value={view}><div className="stack"><p className="notice">This workspace is currently read-only. You can explore saved work. An Owner can manage the next step in Settings.</p><WorkContent {...props}/></div></AppContext.Provider>;}return <WorkContent {...props}/>;}
