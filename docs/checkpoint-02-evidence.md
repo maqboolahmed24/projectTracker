@@ -1,4 +1,4 @@
-# Checkpoint 2 — verified persistence and API conventions
+# Checkpoint 2 - verified persistence and API conventions
 
 Verified 2026-09-24T22:09:41.076022+00:00 in the local macOS arm64 workspace with PostgreSQL 18 in Docker, bundled Node 24.19.0 for tests and Node 24.20.0 for container builds.
 
@@ -16,10 +16,10 @@ Source-set SHA-256: `24f9a5e6031350bfb67df41abf6d6f3945500780aa00f10874ff4a3e822
 
 ## Executed verification
 
-1. `docker run --rm --platform linux/amd64 -v "$PWD:/work" -w /work node:24.20.0-bookworm-slim npm run build` — passed.
-2. `/Users/maqbool/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --env-file=.env --env-file=.env.admin dist/scripts/migrate.js` — both stores applied successfully; final replay reported **0 applied, 1 unchanged** for each store.
-3. `/Users/maqbool/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --env-file=.env --test --test-concurrency=1 dist/test/*.test.js` — **27 passed, 0 failed, 0 skipped**, final runtime 2.32 seconds. Includes the eight foundation checks, five API-contract checks, five migration checks, five application persistence checks and four control-store checks.
-4. `docker compose --profile app up -d --build --wait` — all four services healthy. API image manifest `sha256:b7adde8c0520725465b8a6055f004d28c58801e1f6c6d631760b359288515282`; worker `sha256:14716432b1ecfe623848490b7e7c43fb401cef3e45425f8d2cccf9d973e218fe`.
+1. `docker run --rm --platform linux/amd64 -v "$PWD:/work" -w /work node:24.20.0-bookworm-slim npm run build` - passed.
+2. `/Users/maqbool/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --env-file=.env --env-file=.env.admin dist/scripts/migrate.js` - both stores applied successfully; final replay reported **0 applied, 1 unchanged** for each store.
+3. `/Users/maqbool/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --env-file=.env --test --test-concurrency=1 dist/test/*.test.js` - **27 passed, 0 failed, 0 skipped**, final runtime 2.32 seconds. Includes the eight foundation checks, five API-contract checks, five migration checks, five application persistence checks and four control-store checks.
+4. `docker compose --profile app up -d --build --wait` - all four services healthy. API image manifest `sha256:b7adde8c0520725465b8a6055f004d28c58801e1f6c6d631760b359288515282`; worker `sha256:14716432b1ecfe623848490b7e7c43fb401cef3e45425f8d2cccf9d973e218fe`.
 5. Live container HTTP probes: API/worker readiness 200; valid protected route without a session 401 `AUTH_REQUIRED`; malformed workspace identifier 400 `INVALID_REQUEST`.
 
 ## Acceptance coverage

@@ -33,7 +33,7 @@ Automatic screenshots, videos and traces remain disabled. Selected visual captur
 
 A separate narrow-screen diagnosis is recorded in `test-results/frontend-modal-overflow-diagnosis.json`. In Chromium, a disposable People table using the actual stylesheet and local font reproduced a 378-pixel document at a 320-pixel viewport. Absolutely positioned `.sr-only` labels extended beyond the unpositioned table wrapper. Giving `.table-wrap` `position: relative` reduced the document width to 320 pixels while retaining the table's 391-pixel internal scroll width. This isolated geometry check did not use customer data, a fixture or a network route; it is diagnostic evidence, separate from the pending final browser suite.
 
-## Verification and release — 27 September 2026
+## Verification and release - 27 September 2026
 
 The final image passed **9 browser cases, with no failures, skips or retries**, in Chromium, Firefox and Playwright WebKit. Each browser ran the task/wave layout journey, the account/timezone/person popup journey, and the existing Settings save/retry workflow. These are browser-engine checks, not a claim of a new branded Safari release run. Results: `test-results/frontend-modal-final.json` and `test-results/frontend-modal-final.log`.
 

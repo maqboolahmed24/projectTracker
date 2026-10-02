@@ -1,11 +1,13 @@
 # Maqbool frontend design
 
-Archived Google Stitch project: `2504438657315916160` — **UKDA — Complete product · Light & Dark**.
-Archived shared design system: `assets/18248857475683212615` — **UKDA · Quiet clarity**.
+Archived Google Stitch project: `2504438657315916160` - **UKDA - Complete product · Light & Dark**.
+Archived shared design system: `assets/18248857475683212615` - **UKDA · Quiet clarity**.
 
-The titles above and the generated JSON/HTML under this directory are historical source records from before the Maqbool rename. They intentionally retain their original names and metadata; changing them would misrepresent the design provenance. Current product branding and launch assets use Maqbool. See [compatibility identifiers](../docs/compatibility-identifiers.md) for other retained technical names.
+The titles above and the generated JSON/HTML under this directory are historical source records from before the Maqbool rename. They retain historical names and capture metadata to preserve design provenance. Current product branding and launch assets use Maqbool. See [compatibility identifiers](../docs/compatibility-identifiers.md) for other retained technical names.
 
-All generation and corrective edits used **GEMINI_3_8_FLASH**, the highest model exposed by the installed Stitch connector at implementation time. Its other exposed option was GEMINI_3_5_FLASH_LITE. The saved screen metadata and original generated HTML in `stitch/` provide provenance; these references are not shipped as application pages.
+On 2 October 2026, punctuation in the editable Stitch reference copies was normalized to replace em dashes. Capture identifiers, recorded hashes and historical images were left untouched; these editable text copies are not byte-for-byte originals.
+
+All generation and corrective edits used **GEMINI_3_8_FLASH**, the highest model exposed by the installed Stitch connector at implementation time. Its other exposed option was GEMINI_3_5_FLASH_LITE. The saved screen metadata and editable generated HTML references in `stitch/` provide provenance; these references are not shipped as application pages.
 
 The reference set covers the light workspace, dark project work, first Owner setup, remembered sign-in, and dark People settings. A corrective pass removed technical labels that Stitch invented. The implemented screens share one React component library and one stylesheet, so unrelated generated details do not create inconsistent controls or navigation.
 

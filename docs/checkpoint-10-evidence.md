@@ -1,4 +1,4 @@
-# Checkpoint 10 — reporting, deadlines and live updates
+# Checkpoint 10 - reporting, deadlines and live updates
 
 Status: verified on 27 September 2026. Checkpoints 1–10 are complete; checkpoints
 11–13 remain required. Final evidence covers 479 backend and 102 browser checks,

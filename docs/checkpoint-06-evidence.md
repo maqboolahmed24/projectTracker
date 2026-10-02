@@ -1,4 +1,4 @@
-# Checkpoint 6 — profiles, Owners and permissions
+# Checkpoint 6 - profiles, Owners and permissions
 
 Status: verified on 26 September 2026, using the unchanged source and executed results from 25 September. The final acceptance record is below; earlier sections preserve the implementation history and their then-current limitations.
 

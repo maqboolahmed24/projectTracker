@@ -52,7 +52,7 @@ The final aggregate is `test-results/frontend-browser-evidence.json`. Every inde
 | Measured launch handoff, mobile appearance/reduced motion and invalid-link recovery | 3 | 3 | 3 | 9 |
 | Roles, teams, people, data controls and workspace updates | 3 | 3 | 3 | 9 |
 | Project/wave/task lifecycle, history, archive and progress retry | 1 | 1 | 1 | 3 |
-| Two assignees, independent review, Inbox, mute and persistence | 1 | — | — | 1 |
+| Two assignees, independent review, Inbox, mute and persistence | 1 | - | - | 1 |
 | **Total** | **14** | **13** | **13** | **40** |
 
 The three-person case intentionally runs only in Chromium; its Firefox and WebKit entries are two explicit skips, not passes. Core work and account journeys run in every engine. The two supplementary live-Origin diagnostic cases are excluded from the product total.

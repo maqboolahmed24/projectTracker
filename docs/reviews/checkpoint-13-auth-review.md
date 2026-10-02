@@ -8,7 +8,7 @@ Report ID: **CP13-AUTH-REVIEW-2026-09-27**. Reviewer: **Codex independent automa
 
 Two findings require disposition: the shared material-authentication issue **CP13-AUTHORITY-01 (High, conditional)** and **CP13-AUTH-01 (Medium/P2, interrupted-workflow availability)**. No additional material OPAQUE authentication bypass, password-to-approved-device bypass, reset-to-ownership escalation, phrase-to-device-signature substitution or cross-account credential mutation was identified by this static pass. This is bounded negative evidence, not a claim that no vulnerability exists. CP13-S4 and release readiness must not be marked complete on this report alone while findings or required integrated/browser evidence remain open.
 
-### CP13-AUTHORITY-01 — unanchored custody material can be re-encrypted as an approved delivery
+### CP13-AUTHORITY-01 - unanchored custody material can be re-encrypted as an approved delivery
 
 Status at initial review: **open; shared finding owned by `/root/independent_authority_review`**. See that review's report and regression evidence for the authoritative disposition. This reviewer first raised the source-anchoring concern and independently traced the pairing/recovery consumers; the other reviewer established an additional confidentiality sink and owns the repair.
 
@@ -20,7 +20,7 @@ The auth consumers are concrete: `preparePairingApproval()` (257–272) re-seals
 
 Required repair: select key envelopes and custody manifests only through exact references authenticated by the replayed history/current scope; retain legitimate historical keys without treating historical signer presence as permission to create a new authority object. Exercise forged extra material with a genuine expected source present, retired/ordinary signer cases, and legitimate activation/pairing/recovery deliveries.
 
-### CP13-AUTH-01 — confirmed logout removes security-operation resume drafts
+### CP13-AUTH-01 - confirmed logout removes security-operation resume drafts
 
 Status at initial review: **open; repair authorized after the independent review**. Severity: **Medium/P2 availability and recovery-contract failure**, not a confidentiality leak or destruction of every local key.
 

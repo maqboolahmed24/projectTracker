@@ -1,4 +1,4 @@
-# Checkpoint 8 — shared task execution, review and blockers
+# Checkpoint 8 - shared task execution, review and blockers
 
 Status: verified on 26 September 2026. Checkpoints 1–8 are complete. The final acceptance mapping and combined test evidence appear below; later collaboration, reporting and release gates remain required.
 

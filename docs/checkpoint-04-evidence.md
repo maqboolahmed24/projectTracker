@@ -1,4 +1,4 @@
-# Checkpoint 4 — authentication, sessions and device approval
+# Checkpoint 4 - authentication, sessions and device approval
 
 Status: verified on 25 September 2026 (Europe/London). This checkpoint supplies the backend and browser protocol library without frontend screens. It is not a production-release or independent security-audit claim.
 

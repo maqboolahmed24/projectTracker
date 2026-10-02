@@ -1,4 +1,4 @@
-# Checkpoint 1 — verified foundation
+# Checkpoint 1 - verified foundation
 
 Verified 2026-09-24T21:50:43.028188+00:00 in the local macOS arm64 workspace with Docker Desktop, PostgreSQL 18, and Node 24.19.0 (host tests) / 24.20.0 (container build).
 
@@ -13,11 +13,11 @@ Source-set SHA-256: `a0b745bbf4be3693be8cc49932c57823e9cc42ac256a080705d0eeb6ae4
 
 ## Executed evidence
 
-1. `docker run --rm --platform linux/amd64 -v "$PWD:/work" -w /work node:24.20.0-bookworm-slim npm run build` — passed.
-2. `/Users/maqbool/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --env-file=.env --test --test-concurrency=1 dist/test/*.test.js` — **8 passed, 0 failed, 0 skipped**. Tests cover both real database roles, dependency outages, unsafe configuration, malformed/oversized requests, secret-bearing synthetic errors/logs, real job deduplication/execution and a private worker TCP outage.
-3. `docker compose --profile app up -d --build --wait` — API, worker, application DB and control DB all healthy. Build uses `npm ci` with the lockfile. API image manifest: `sha256:b0e0f5124538f01f2e9f7e43aa5eea5aca59d69840b96868c84b2d3829d50767`; worker: `sha256:ad14bceb2c060959ef61ee8ef61859a42340ae77095afd7944cdc3b14a96e223`.
-4. Live container probes — API and worker readiness HTTP 200; both UID 1000; neither has admin connection settings. API contains no `.env`; attempted application-directory write rejected with `EROFS`.
-5. Read-only foundation review by the `review_product_flows` agent — no remaining checkpoint-1 blockers. This is development review, not the independent composed-security review required by checkpoint 13.
+1. `docker run --rm --platform linux/amd64 -v "$PWD:/work" -w /work node:24.20.0-bookworm-slim npm run build` - passed.
+2. `/Users/maqbool/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --env-file=.env --test --test-concurrency=1 dist/test/*.test.js` - **8 passed, 0 failed, 0 skipped**. Tests cover both real database roles, dependency outages, unsafe configuration, malformed/oversized requests, secret-bearing synthetic errors/logs, real job deduplication/execution and a private worker TCP outage.
+3. `docker compose --profile app up -d --build --wait` - API, worker, application DB and control DB all healthy. Build uses `npm ci` with the lockfile. API image manifest: `sha256:b0e0f5124538f01f2e9f7e43aa5eea5aca59d69840b96868c84b2d3829d50767`; worker: `sha256:ad14bceb2c060959ef61ee8ef61859a42340ae77095afd7944cdc3b14a96e223`.
+4. Live container probes - API and worker readiness HTTP 200; both UID 1000; neither has admin connection settings. API contains no `.env`; attempted application-directory write rejected with `EROFS`.
+5. Read-only foundation review by the `review_product_flows` agent - no remaining checkpoint-1 blockers. This is development review, not the independent composed-security review required by checkpoint 13.
 
 ## Boundaries
 

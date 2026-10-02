@@ -11,7 +11,7 @@ This is a fresh, independent automated source review by a separate agent from th
 
 **One material finding remains open at this review snapshot: CP13-R1.** No additional material security/privacy/retention defect was identified in the inspected paths. That statement is limited to this review; it is not evidence that uninspected paths or deployed infrastructure are secure.
 
-### CP13-R1 — Security decisions inherit a weaker connection commit setting
+### CP13-R1 - Security decisions inherit a weaker connection commit setting
 
 **Severity:** P1, acknowledged security-state durability.  
 **Status:** Open; communicated to the implementation lead during review.  
@@ -124,7 +124,7 @@ SHA-256 values identify the source bytes inspected, including uncommitted/untrac
 | `migrations/control/012_purge_child_dependencies.sql` | `2803abdf9f588c2a49d799fbb9f7bf66f49bea461a380efca360d02eaa3cd239` |
 | `src/modules/identity/access-projection.ts` | `d8f3a488ffdcf8afa611f67480580d75be33464fc2212018aaaa96612f27f4e8` |
 
-## Subsequent remediation — separate from the independent review snapshot
+## Subsequent remediation - separate from the independent review snapshot
 
 At the implementation lead's explicit request after this report was saved, the same agent implemented a proposed CP13-R1 repair. Each of the lifecycle, restoration and encrypted-upgrade service authority boundaries now sets transaction-local synchronous commit to `on`. Existing precommit test hooks receive the current transaction client so the new regression can measure the actual effective PostgreSQL setting rather than inspect source text.
 
