@@ -28,7 +28,7 @@ export function animateMark(svg, { reducedMotion } = {}) {
 
     if (!reduce) {
       // The original arrival sequence is unchanged. Explicit endpoints let
-      // each section reveal along its new triangular side; masks are temporary.
+      // each bar reveal along its own axis; masks are temporary.
       const box = bar.getBBox();
       const start = bar.dataset.revealStart.split(' ').map(Number);
       const end = bar.dataset.revealEnd.split(' ').map(Number);

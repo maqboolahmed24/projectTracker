@@ -23,7 +23,7 @@ Private configuration, operational keys, local credentials, backups and database
 
 Current product branding, package metadata and launch filenames use Maqbool. Versioned cryptographic and storage identifiers remain unchanged for [compatibility](compatibility-identifiers.md). Historical records retain their original provenance. No Git history was rewritten.
 
-Original project work is licensed under [AGPL-3.0-only](../LICENSE), with [third-party notices](../THIRD_PARTY_NOTICES.md). The new triangular logo replaces the earlier adapted artwork while retaining the startup animation's sequencing and handoff.
+Original project work is licensed under [AGPL-3.0-only](../LICENSE), with [third-party notices](../THIRD_PARTY_NOTICES.md). The new square line logo replaces the earlier adapted artwork while retaining the startup animation's sequencing and handoff.
 
 ## Account and deployment boundaries
 

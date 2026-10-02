@@ -1,8 +1,8 @@
 # Maqbool launch animation
 
-An original triangular Maqbool mark: fifteen adjacent coloured pieces, five
-on each side, form a flat ring around a transparent triangular opening. The
-three sides assemble at the centre with the established reveal sequence, then
+An original square Maqbool mark built from sixteen thin coloured bars, four
+on each side, with open corners and a transparent centre. The bars assemble
+at the centre with the established reveal sequence, then
 the completed symbol shrinks and travels into the app's visible corner logo
 while the background reveals the page. Without a visible destination, the launch
 uses a short fade. No wordmark, tagline, loading text, glow, shadow or spinner
@@ -110,7 +110,7 @@ assets and pass `stylesheetUrl: '/brand/maqbool-launch/maqbool-launch.css'`.
 
 ## Artwork provenance
 
-The current triangle is newly drawn for Maqbool. Its geometry and palette are
+The current square is newly drawn for Maqbool. Its geometry and palette are
 recorded in [assets/SOURCE.md](assets/SOURCE.md). The SVG and embedded mark used
 by the launch component share the same source. Earlier Git revisions retain the
 previous supplied artwork and its attribution as historical records; those

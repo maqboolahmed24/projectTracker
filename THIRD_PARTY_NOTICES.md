@@ -12,7 +12,7 @@ Inter is distributed through `@fontsource-variable/inter` under the SIL Open Fon
 
 ## Current logo and historical references
 
-The current triangular logo in `brand/maqbool-launch/assets/maqbool-symbol.svg` is original artwork created for Maqbool and covered by the project licence. Its source and geometry are recorded in [the artwork source note](brand/maqbool-launch/assets/SOURCE.md).
+The current square line logo in `brand/maqbool-launch/assets/maqbool-symbol.svg` is original artwork created for Maqbool and covered by the project licence. Its source and geometry are recorded in [the artwork source note](brand/maqbool-launch/assets/SOURCE.md).
 
 Earlier commits used an adaptation of UK Data Service artwork. That artwork has been replaced in current product assets. Historical commits, screenshots and archived design references may still show it; the project does not claim authorship of the original artwork or grant a licence to that third-party material. Third-party names and source references are retained where needed for truthful provenance. They do not indicate affiliation or endorsement.
 
