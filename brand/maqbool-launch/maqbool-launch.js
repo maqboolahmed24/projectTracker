@@ -9,15 +9,13 @@ export function animateMark(svg, { reducedMotion } = {}) {
   activeMarks.get(svg)?.cancel();
   const media = window.matchMedia('(prefers-reduced-motion: reduce)');
   const reduce = reducedMotion ?? media.matches;
-  const bars = [...svg.querySelectorAll('.ukds-bar')];
+  const bars = [...svg.querySelectorAll('.maqbool-segment')];
   const span = svg.viewBox.baseVal.width;
   const animations = [];
   const masks = [];
   const ns = 'http://www.w3.org/2000/svg';
   const definitions = document.createElementNS(ns, 'defs');
-  const runId = `ukds-motion-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-  const thickness = Math.min(...bars.filter((bar) => bar.dataset.arm === 'left')
-    .map((bar) => bar.getBBox().width));
+  const runId = `maqbool-motion-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
   const directions = { top: [-0.325, -0.50], left: [-0.50, 0.275], right: [0.50, 0.275] };
   const offsets = { top: 80, left: 340, right: 600 };
   if (!reduce) svg.prepend(definitions);
@@ -29,22 +27,13 @@ export function animateMark(svg, { reducedMotion } = {}) {
     const delay = (offsets[arm] || 0) + order * 60;
 
     if (!reduce) {
-      // Reveal each filled bar along its own axis. The settled artwork stays
-      // untouched; these slightly wider masks disappear after the arrival.
+      // The original arrival sequence is unchanged. Explicit endpoints let
+      // each bar reveal along its own axis; masks are temporary.
       const box = bar.getBBox();
-      const radius = thickness / 2;
-      const start = arm === 'left'
-        ? [box.x + box.width / 2, box.y + box.height - radius]
-        : arm === 'top'
-          ? [box.x + radius, box.y + radius]
-          : [box.x + box.width - radius, box.y + radius];
-      const end = arm === 'left'
-        ? [box.x + box.width / 2, box.y + radius]
-        : arm === 'top'
-          ? [box.x + box.width - radius, box.y + box.height - radius]
-          : [box.x + radius, box.y + box.height - radius];
+      const start = bar.dataset.revealStart.split(' ').map(Number);
+      const end = bar.dataset.revealEnd.split(' ').map(Number);
       const length = Math.hypot(end[0] - start[0], end[1] - start[1]);
-      const revealWidth = thickness * 1.65;
+      const revealWidth = Number(bar.dataset.revealWidth);
       const mask = document.createElementNS(ns, 'mask');
       mask.id = `${runId}-${index}`;
       mask.setAttribute('maskUnits', 'userSpaceOnUse');
@@ -118,13 +107,13 @@ export function animateMark(svg, { reducedMotion } = {}) {
  * theme?: 'light'|'dark'|'auto', minDuration?: number, maxDuration?: number,
  * stylesheetUrl?: string|URL, logoTarget?: string}} options
  */
-export function mountUKDALaunch(options = {}) {
+export function mountMaqboolLaunch(options = {}) {
   if (typeof document === 'undefined') throw new Error('Mount the launch screen in a browser.');
   if (!document.body) throw new Error('Mount the launch screen after <body> exists.');
 
   const {
     ready, appRoot, theme = 'light', minDuration = 2850,
-    maxDuration = 10000, stylesheetUrl = new URL('./ukda-launch.css', import.meta.url),
+    maxDuration = 10000, stylesheetUrl = new URL('./maqbool-launch.css', import.meta.url),
     logoTarget,
   } = options;
   if (!['light', 'dark', 'auto'].includes(theme)) throw new TypeError('Unknown launch theme.');
@@ -139,7 +128,7 @@ export function mountUKDALaunch(options = {}) {
 
   const host = document.createElement('div');
   host.hidden = true;
-  host.dataset.ukdaLaunch = '';
+  host.dataset.maqboolLaunch = '';
   host.dataset.theme = theme;
   host.dataset.phase = 'opening';
   const shadow = host.attachShadow({ mode: 'open' });
@@ -147,15 +136,15 @@ export function mountUKDALaunch(options = {}) {
   stylesheet.rel = 'stylesheet';
   stylesheet.href = String(stylesheetUrl);
   const backdrop = document.createElement('div');
-  backdrop.className = 'ukda-launch-backdrop';
+  backdrop.className = 'maqbool-launch-backdrop';
   const stage = document.createElement('div');
-  stage.className = 'ukda-launch-stage';
+  stage.className = 'maqbool-launch-stage';
   stage.innerHTML = markSVG;
   const svg = stage.querySelector('svg');
   svg.setAttribute('aria-hidden', 'true');
   svg.removeAttribute('role');
   const status = document.createElement('span');
-  status.className = 'ukda-launch-status';
+  status.className = 'maqbool-launch-status';
   status.setAttribute('role', 'status');
   status.textContent = 'Opening Maqbool';
   shadow.append(stylesheet, backdrop, stage, status);

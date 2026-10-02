@@ -1,13 +1,12 @@
 # Maqbool launch animation
 
-An **equal-size-bar adaptation** of the supplied UK Data Service symbol. Every bar
-has the same length and thickness, with a fresh shuffled palette and the
-three-sided arrangement retained. No wordmark,
-tagline, loading text, glow, shadow, or spinner appears in the launch screen.
-The vector bars draw along their own axes as three overlapping families glide
-into place. The pristine symbol holds at the centre, then shrinks and travels into
-the app's visible corner logo while the background reveals the page. Without a
-visible destination, it uses a short fade instead.
+An original square Maqbool mark built from sixteen thin coloured bars, four
+on each side, with open corners and a transparent centre. The bars assemble
+at the centre with the established reveal sequence, then
+the completed symbol shrinks and travels into the app's visible corner logo
+while the background reveals the page. Without a visible destination, the launch
+uses a short fade. No wordmark, tagline, loading text, glow, shadow or spinner
+appears in the launch screen.
 
 This directory is a standalone frontend component. It does not modify the API,
 authentication, database, or headless browser client in the developing Maqbool app.
@@ -19,29 +18,29 @@ entrance and leaves the finished mark visible. Preview app launch also shows the
 exit over the preview page. Light and dark backgrounds use the same logo colours.
 
 ```sh
-python3 -m http.server 4173 --bind 127.0.0.1 --directory brand/ukda-launch
+python3 -m http.server 4173 --bind 127.0.0.1 --directory brand/maqbool-launch
 ```
 
 ## Integrate
 
-Copy `ukda-launch.js`, `mark.js`, `ukda-launch.css`, and optionally
-`ukda-launch.d.ts` together into your frontend's static assets. The mark is included
+Copy `maqbool-launch.js`, `mark.js`, `maqbool-launch.css`, and optionally
+`maqbool-launch.d.ts` together into your frontend's static assets. The mark is included
 in `mark.js`; no external network calls, font, runtime dependency, or raster image
-is required. `assets/ukds-symbol.svg` is a standalone static logo for other uses.
+is required. `assets/maqbool-symbol.svg` is a standalone static logo for other uses.
 
 Add the stylesheet preload in the document head to make the launch appear promptly:
 
 ```html
-<link rel="preload" href="/brand/ukda-launch/ukda-launch.css" as="style">
+<link rel="preload" href="/brand/maqbool-launch/maqbool-launch.css" as="style">
 ```
 
 In your existing browser entry point, after the document body exists:
 
 ```js
-import { mountUKDALaunch } from '/brand/ukda-launch/ukda-launch.js';
+import { mountMaqboolLaunch } from '/brand/maqbool-launch/maqbool-launch.js';
 
 const ready = initializeApp(); // Your existing startup function.
-const launch = mountUKDALaunch({
+const launch = mountMaqboolLaunch({
   ready,
   appRoot: document.getElementById('app'),
   theme: 'light', // 'dark' or 'auto' also supported.
@@ -66,7 +65,7 @@ the travel at the real logo immediately. The 10-second hard deadline includes st
 a failed or never-settling initialization from trapping the user behind the logo.
 Adjust `minDuration` / `maxDuration` in milliseconds; maximum must exceed minimum.
 Reduced motion uses a 160 ms fade without drawing or travel and skips the longer
-minimum hold. Reveal masks are temporary; the assembled artwork is unmodified.
+minimum hold. The assembled artwork is restored when the entrance finishes or is cancelled.
 
 Mount once per app launch, not on every route change. Avoid overlapping instances.
 For a first-party static frontend, call this near the beginning of your existing
@@ -78,11 +77,11 @@ loads, so it cannot flash an unstyled logo or obscure your app if the CSS fails.
 ```jsx
 'use client';
 import { useEffect } from 'react';
-import { mountUKDALaunch } from './brand/ukda-launch/ukda-launch.js';
+import { mountMaqboolLaunch } from './brand/maqbool-launch/maqbool-launch.js';
 
 export function Launch({ ready }) {
   useEffect(() => {
-    const launch = mountUKDALaunch({ ready, theme: 'light' });
+    const launch = mountMaqboolLaunch({ ready, theme: 'light' });
     return () => launch.destroy();
   }, [ready]);
   return null;
@@ -91,8 +90,8 @@ export function Launch({ ready }) {
 
 Keep the `ready` promise stable (create it once in the app's startup layer). Imports
 are safe during server rendering; mounting requires a browser. If your bundler
-does not copy `new URL('./ukda-launch.css', import.meta.url)`, copy the CSS to public
-assets and pass `stylesheetUrl: '/brand/ukda-launch/ukda-launch.css'`.
+does not copy `new URL('./maqbool-launch.css', import.meta.url)`, copy the CSS to public
+assets and pass `stylesheetUrl: '/brand/maqbool-launch/maqbool-launch.css'`.
 
 ## Accessibility and isolation
 
@@ -111,10 +110,8 @@ assets and pass `stylesheetUrl: '/brand/ukda-launch/ukda-launch.css'`.
 
 ## Artwork provenance
 
-The three-sided arrangement follows the UK Data Service mark in the user's
-supplied image. At the user's request, all 15 bars have been rebuilt
-as identical rounded capsules: 26.24 units between cap centres, 2.544 units thick,
-and 28.784 units overall. A fresh set of 15 vibrant colours is assigned in a
-shuffled order that stays consistent on every launch.
-This is an edited variant, not unchanged official artwork.
-Source references and the edit are recorded in `assets/SOURCE.md`.
+The current square is newly drawn for Maqbool. Its geometry and palette are
+recorded in [assets/SOURCE.md](assets/SOURCE.md). The SVG and embedded mark used
+by the launch component share the same source. Earlier Git revisions retain the
+previous supplied artwork and its attribution as historical records; those
+references do not describe this replacement mark.

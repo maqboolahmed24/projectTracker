@@ -19,13 +19,13 @@
   :host([data-theme="auto"]) { --launch-background: #101113; color: #fff; }
 }
 
-.ukda-launch-backdrop {
+.maqbool-launch-backdrop {
   position: absolute;
   inset: 0;
   background: var(--launch-background);
 }
 
-.ukda-launch-stage {
+.maqbool-launch-stage {
   position: relative;
   display: grid;
   place-items: center;
@@ -33,10 +33,10 @@
   transform-origin: center;
 }
 
-.ukda-launch-stage svg { display: block; width: 100%; height: auto; overflow: visible; }
-.ukds-bar { transform-box: fill-box; transform-origin: center; }
+.maqbool-launch-stage svg { display: block; width: 100%; height: auto; overflow: visible; }
+.maqbool-segment { transform-box: fill-box; transform-origin: center; }
 
-.ukda-launch-status {
+.maqbool-launch-status {
   position: absolute;
   width: 1px;
   height: 1px;

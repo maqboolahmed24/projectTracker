@@ -1,4 +1,4 @@
-import { animateMark, markSVG, mountUKDALaunch } from './ukda-launch.js';
+import { animateMark, markSVG, mountMaqboolLaunch } from './maqbool-launch.js';
 
 const preview = document.querySelector('.preview');
 const mark = document.querySelector('#mark');
@@ -24,7 +24,7 @@ themeButton.addEventListener('click', () => {
 document.querySelector('#launch').addEventListener('click', () => {
   launch?.destroy();
   mark.hidden = true;
-  launch = mountUKDALaunch({
+  launch = mountMaqboolLaunch({
     appRoot: preview,
     theme: preview.dataset.theme,
     ready: new Promise((resolve) => setTimeout(resolve, 2850)),

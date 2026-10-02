@@ -6,7 +6,7 @@ body { background: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe 
 .preview-stage { min-height: 100svh; display: grid; place-items: center; padding: 90px 24px; }
 #mark { width: clamp(104px, 15vw, 144px); }
 #mark svg { display: block; width: 100%; height: auto; overflow: visible; }
-.ukds-bar { transform-box: fill-box; transform-origin: center; }
+.maqbool-segment { transform-box: fill-box; transform-origin: center; }
 .preview-controls { position: fixed; bottom: max(26px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 4px; width: max-content; max-width: calc(100% - 24px); flex-wrap: wrap; padding: 4px; border-radius: 14px; background: var(--surface); }
 button { color: inherit; background: transparent; border: 0; border-radius: 8px; padding: 11px 14px; font: 400 12px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; white-space: nowrap; cursor: pointer; }
 button:hover { background: var(--hover); }
