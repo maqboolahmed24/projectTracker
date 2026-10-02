@@ -38,7 +38,7 @@
   {
     "workflow": "03-bulk-work",
     "screen": "projects/2504438657315916160/screens/d523516fb79942c8a19377fac6f09827",
-    "title": "Maqbool \u00b7 Bulk Documents \u2014 Review Matches (Light)",
+    "title": "Maqbool \u00b7 Bulk Documents - Review Matches (Light)",
     "html": "03-bulk-work-light.html",
     "image": "03-bulk-work-light.png",
     "model": "GEMINI_3_8_FLASH",
@@ -47,7 +47,7 @@
   {
     "workflow": "03-bulk-work",
     "screen": "projects/2504438657315916160/screens/bc7b34695b3944d192649991c863e12d",
-    "title": "Maqbool \u00b7 Bulk Documents \u2014 Results & Outcomes (Dark)",
+    "title": "Maqbool \u00b7 Bulk Documents - Results & Outcomes (Dark)",
     "html": "03-bulk-work-dark.html",
     "image": "03-bulk-work-dark.png",
     "model": "GEMINI_3_8_FLASH",

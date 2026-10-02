@@ -29,19 +29,19 @@ A placeholder or an unexecuted test does not pass a check. Complete a checkpoint
 
 | Checkpoint | Architecture references | Review findings | Status |
 | --- | --- | --- | --- |
-| 01 Foundation | Sections 1, 3, 9, 10, 11 | F01; delivery gates | Verified — see CP01 report |
-| 02 Persistence and isolation | Sections 4, 8 tenant isolation, 9 transactions | F04, F10 | Verified — see CP02 report |
-| 03 Licence activation | Section 8 first-owner setup and licence policy | F01, F06 | Verified — see CP03 report |
-| 04 Authentication and devices | Section 8 login/sessions; section 9 device contract | F02, F03, F05 | Verified — see CP04 report |
-| 05 Encryption and recovery | Sections 8–9 security; section 10 security state | F03, F05, F11 | Verified — see CP05 report |
-| 06 Profiles and access | Section 8 Owners, invitations, roles, access | F03, F04, F05 | Verified — see CP06 report |
-| 07 Projects and closure | Sections 2 and 4 | F07, F08 | Verified — see CP07 report |
-| 08 Shared tasks and blockers | Section 4 task workflow; section 6 blockers | F07, F08, F09 | Verified — see CP08 report |
-| 09 Collaboration and audit | Section 2 interaction defaults; section 10 jobs/audit | F04, F10 | Verified — see CP09 report |
-| 10 Reporting and live updates | Sections 2 and 6 | F09 | Verified — see CP10 report |
-| 11 Concurrency and upgrades | Sections 9–10 transactions, editing, schemas | F10 | Verified — see CP11 report |
-| 12 Restore and data exit | Section 10 export, deletion, recovery | F11, F12 | Verified — see CP12 report |
-| 13 End-to-end and release | Section 9 release checks; review delivery gates | F01–F12 | Verified — see CP13 report; production not deployed |
+| 01 Foundation | Sections 1, 3, 9, 10, 11 | F01; delivery gates | Verified - see CP01 report |
+| 02 Persistence and isolation | Sections 4, 8 tenant isolation, 9 transactions | F04, F10 | Verified - see CP02 report |
+| 03 Licence activation | Section 8 first-owner setup and licence policy | F01, F06 | Verified - see CP03 report |
+| 04 Authentication and devices | Section 8 login/sessions; section 9 device contract | F02, F03, F05 | Verified - see CP04 report |
+| 05 Encryption and recovery | Sections 8–9 security; section 10 security state | F03, F05, F11 | Verified - see CP05 report |
+| 06 Profiles and access | Section 8 Owners, invitations, roles, access | F03, F04, F05 | Verified - see CP06 report |
+| 07 Projects and closure | Sections 2 and 4 | F07, F08 | Verified - see CP07 report |
+| 08 Shared tasks and blockers | Section 4 task workflow; section 6 blockers | F07, F08, F09 | Verified - see CP08 report |
+| 09 Collaboration and audit | Section 2 interaction defaults; section 10 jobs/audit | F04, F10 | Verified - see CP09 report |
+| 10 Reporting and live updates | Sections 2 and 6 | F09 | Verified - see CP10 report |
+| 11 Concurrency and upgrades | Sections 9–10 transactions, editing, schemas | F10 | Verified - see CP11 report |
+| 12 Restore and data exit | Section 10 export, deletion, recovery | F11, F12 | Verified - see CP12 report |
+| 13 End-to-end and release | Section 9 release checks; review delivery gates | F01–F12 | Verified - see CP13 report; production not deployed |
 
 ## 01. Backend foundation, environments, configuration, and deployment setup
 

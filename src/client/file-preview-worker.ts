@@ -14,7 +14,7 @@ export async function parseDocumentPreview(bytes:Uint8Array,filename:string):Pro
   if(ext==='docx'){
     const {default:mammoth}=await import('mammoth/mammoth.browser.js');
     const result=await mammoth.convertToHtml({arrayBuffer:bytes.slice().buffer},{externalFileAccess:false,includeEmbeddedStyleMap:false,
-      convertImage:mammoth.images.imgElement(async()=>({src:'',alt:'Image — open the original to view'}))});
+      convertImage:mammoth.images.imgElement(async()=>({src:'',alt:'Image: open the original to view'}))});
     if(result.value.length>2*1024*1024)throw new Error('PREVIEW_LIMIT');
     return {kind:'html',html:result.value,note:'Preview may differ from the original. Embedded pictures are omitted.'};
   }

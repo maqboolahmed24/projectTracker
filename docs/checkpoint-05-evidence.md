@@ -1,4 +1,4 @@
-# Checkpoint 5 — encryption and account recovery
+# Checkpoint 5 - encryption and account recovery
 
 Status: verified on 25 September 2026 (Europe/London). This checkpoint implements the security backend and browser protocol library without frontend screens. It does not establish production readiness or complete checkpoints 6–13.
 

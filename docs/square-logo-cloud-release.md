@@ -1,4 +1,4 @@
-# Square logo cloud release — 2 October 2026
+# Square logo cloud release - 2 October 2026
 
 The original square line logo is live in the workspace startup, identity screens, navigation and favicon, and on the public landing page. The startup drawing sequence and centre-to-corner transition are preserved.
 

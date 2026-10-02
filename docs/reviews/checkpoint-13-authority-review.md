@@ -123,7 +123,7 @@ Repaired-source digest snapshot at 2026-09-27T01:58:51.098358+00:00:
 | `src/shared/security-history.ts` | `9806df56959fce51e2ee45239fd73ad0014a06902506ed4fbd46dfb221a6504a` |
 | `test/pairing-material-authority.test.ts` | `99ed529c57be4fb7df0384e8edabeb1ac6a660a6735fbc1416e41abe88005dac` |
 
-## Independent durability repair follow-up — 2026-09-27
+## Independent durability repair follow-up - 2026-09-27
 
 Reviewer: automated Codex agent `/root/independent_authority_review`, independent of the agent that authored CP13-R1 and its repair. Review timestamp: **2026-09-27 02:09:09 UTC**. This read-only follow-up examined only the durability repair and committing authority branches in the three services below, with their transaction wrapper and retained focused-test evidence. It is not a human/external audit, a new test execution, or release approval.
 

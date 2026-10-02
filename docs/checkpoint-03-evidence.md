@@ -1,4 +1,4 @@
-# Checkpoint 3 — licence activation and entitlement handling
+# Checkpoint 3 - licence activation and entitlement handling
 
 Status: verified. Recorded 24 September 2026 in the local UKDA workspace. The original architecture remains the product authority; the evidence register assigns later authentication/recovery/Owner/deletion journeys to their implementing checkpoints without removing them from release acceptance.
 

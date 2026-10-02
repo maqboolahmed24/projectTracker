@@ -1,4 +1,4 @@
-# Checkpoint 12 — recovery, data exit and deletion
+# Checkpoint 12 - recovery, data exit and deletion
 
 Verified on 27 September 2026: **552 distinct Node cases and 120 browser cases pass**, together with the operational drills below. Matching local API, queue worker, both databases, synchronous replica and recovery operator are running; queue and recovery health pass. Checkpoint 13 remains required. This report does not claim production readiness.
 

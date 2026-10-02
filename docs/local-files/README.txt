@@ -1,4 +1,4 @@
-Maqbool Mac companion — initial release
+Maqbool Mac companion - initial release
 
 For Apple silicon Macs. Your cloud workspace works without this companion.
 Use it when publishing approved files into a selected shared folder or editing

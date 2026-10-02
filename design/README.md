@@ -1,7 +1,7 @@
 # UKDA frontend design
 
-Google Stitch project: `2504438657315916160` — **UKDA — Complete product · Light & Dark**.
-Shared design system: `assets/18248857475683212615` — **UKDA · Quiet clarity**.
+Google Stitch project: `2504438657315916160` - **UKDA - Complete product · Light & Dark**.
+Shared design system: `assets/18248857475683212615` - **UKDA · Quiet clarity**.
 
 All generation and corrective edits used **GEMINI_3_8_FLASH**, the highest model exposed by the installed Stitch connector at implementation time. Its other exposed option was GEMINI_3_5_FLASH_LITE. The saved screen metadata and original generated HTML in `stitch/` provide provenance; these references are not shipped as application pages.
 
@@ -19,3 +19,5 @@ The application follows the architecture's four main destinations: Home, Project
 - Private names, records and search results are loaded after sign-in and retained in browser memory. Public server rendering contains only the application shell.
 
 The functional application, rather than unreviewed generated HTML, is the final design deliverable. Illustrations come from the existing bundled avatar catalogue and brand; Lucide provides consistent interface icons.
+
+Editable design-reference text was normalized to the project punctuation style on 2 October 2026. Source IDs, recorded hashes, timestamps and captured images remain historical evidence; these text copies are no longer byte-for-byte original exports.

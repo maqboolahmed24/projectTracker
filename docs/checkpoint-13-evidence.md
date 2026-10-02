@@ -1,4 +1,4 @@
-# Checkpoint 13 — integrated starter release evidence
+# Checkpoint 13 - integrated starter release evidence
 
 **Status: verified.** All checkpoint 13 acceptance checks pass for the agreed local starter delivery. Core success/failure journeys, independent automated review repairs, all eight branded browser releases and final runtime verification have retained evidence. `architecture/checklist.md` marks all thirteen checkpoints complete. Production deployment has not been performed; frontend screens and future features remain excluded.
 

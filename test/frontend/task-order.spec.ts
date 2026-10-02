@@ -68,7 +68,7 @@ test('task order saves pointer, keyboard and touch moves, preserves groups, and 
     await dialog.getByLabel('Name', { exact: true }).fill(phaseName);
     await dialog.getByRole('button', { name: 'Add phase', exact: true }).click();
     await expect(dialog).toHaveCount(0);
-    for (const title of ['Queue — write the outline', 'Review the evidence', 'Queue — check the examples', 'Separate project task']) {
+    for (const title of ['Queue: write the outline', 'Review the evidence', 'Queue: check the examples', 'Separate project task']) {
       await page.locator('.page-header').getByRole('button', { name: 'Add task', exact: true }).click();
       dialog = page.getByRole('dialog', { name: 'Add a task', exact: true });
       await dialog.getByLabel('Task name', { exact: true }).fill(title);

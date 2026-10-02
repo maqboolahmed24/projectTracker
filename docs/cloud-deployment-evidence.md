@@ -1,4 +1,4 @@
-# Azure deployment evidence — 27 September 2026
+# Azure deployment evidence - 27 September 2026
 
 Public origin: **https://maqbool.denmarkeast.cloudapp.azure.com**. The frontend, API, worker and databases run on Azure. The GitHub source is [projectTracker](https://github.com/maqboolahmed24/projectTracker). This record distinguishes cloud checks from the earlier local/browser release evidence.
 

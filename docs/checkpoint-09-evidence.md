@@ -1,4 +1,4 @@
-# Checkpoint 9 — collaboration, Inbox and audit
+# Checkpoint 9 - collaboration, Inbox and audit
 
 Status: verified on 26 September 2026. Checkpoints 1–9 are complete; checkpoints 10–13 remain required.
 

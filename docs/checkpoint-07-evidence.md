@@ -1,4 +1,4 @@
-# Checkpoint 7 — projects and iterative planning
+# Checkpoint 7 - projects and iterative planning
 
 Status: verified on 26 September 2026. Root revalidated the exact tested source, matching service images and healthy runtime; a separate read-only CP07 source/test review found no remaining material checkpoint gap. See final verification and downstream dependency ownership below.
 

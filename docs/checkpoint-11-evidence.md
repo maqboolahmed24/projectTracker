@@ -1,4 +1,4 @@
-# Checkpoint 11 — reliable edits, jobs and encrypted upgrades
+# Checkpoint 11 - reliable edits, jobs and encrypted upgrades
 
 Verified on 27 September 2026: **507 distinct backend cases and 111 browser cases passed**, with no unresolved checkpoint failures. The matching local API, worker and both databases are healthy. Checkpoints 12–13 remain required.
 

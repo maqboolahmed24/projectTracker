@@ -2,7 +2,7 @@
 
 Checkpoint 11 is **complete**. The final acceptance record is [checkpoint-11-evidence.md](checkpoint-11-evidence.md). Checkpoints 12–13 remain open. This file retains the chronological verification and repair history; pending statements below describe the state at those earlier runs.
 
-## Queue and receipt slice — 27 September 2026
+## Queue and receipt slice - 27 September 2026
 
 Six distinct focused tests passed against local PostgreSQL, Node 24.19.0, and Graphile Worker 0.18.0. The listed new files were transpiled with esbuild and tested against the previously verified CP10 compiled dependencies. The full CP11 TypeScript build, browser journeys, encrypted upgrades, and composed regression checks remain pending.
 
@@ -25,7 +25,7 @@ No unresolved failure in this slice exceeded the three-repair limit. A prelimina
 
 Implementation: `src/jobs.ts`, `src/worker.ts`, `scripts/jobs.ts`, `src/shared/receipts.ts`, and `src/modules/work/{receipts,receipt-routes}.ts`. Operator instructions are in [job-operations.md](job-operations.md). Receipt acknowledgements do not advance security pins or install keys. Exact retained requests continue to use the original signed-payload verification paths.
 
-## Combined candidate — initial verification
+## Combined candidate - initial verification
 
 The combined TypeScript build passed (`checkpoint-11-build-repair-2.log`). Application migration 008 and control migration 009 applied successfully; replay applied zero migrations (`checkpoint-11-migrations.log`, `checkpoint-11-migration-replay.log`). Neither applied migration may be edited.
 

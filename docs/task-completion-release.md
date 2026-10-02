@@ -1,4 +1,4 @@
-# Task completion fix — 30 September 2026
+# Task completion fix - 30 September 2026
 
 Tasks with linked files previously sent “Mark complete” to Files and evidence without showing all the steps needed to finish. They now offer **Prepare file review**, with actionable review setup, output and reviewer requirements. Ordinary tasks retain the confirmation before completing.
 
