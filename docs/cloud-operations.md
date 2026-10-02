@@ -2,6 +2,8 @@
 
 The cloud product is served at **[https://maqbool.denmarkeast.cloudapp.azure.com](https://maqbool.denmarkeast.cloudapp.azure.com)**. Keep this origin unchanged: workspace identity is bound to it. This guide describes the deployed Azure topology and maintenance commands; it does not certify uncompleted recovery or application tests.
 
+**Current deployment, 2 October:** see the [punctuation cleanup release](punctuation-cleanup-release.md) for the current frontend image, static landing target, verification and guarded rollback commands. The square logo, startup animation and existing production features are preserved.
+
 ## Deployment and cost boundary
 
 | Host | Region / zone | Size | Purpose |
