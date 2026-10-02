@@ -1,5 +1,7 @@
 # Focused frontend security and completion review
 
+> Historical review: identifiers, temporary paths and file hashes below record the reviewed version. They are retained as evidence, not current product branding. Current launch integration lives in `brand/maqbool-launch/`; see [compatibility identifiers](../compatibility-identifiers.md).
+
 Review closed: 2026-09-27 12:29 UTC.
 
 Reviewer: Codex automated agent `/root/independent_recovery_review`. This is a focused source review within the same implementation team, not an external audit, human review, penetration test, or certification. The reviewer inspected root-owned application, proxy and directory changes independently, but also implemented the Settings UI, deployment integration and the budget fixes below. Review of those owned changes is self-review. The identity reviewer separately identified the missing new-device entry point.

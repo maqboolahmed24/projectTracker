@@ -13,7 +13,8 @@ RUN npm run build:frontend
 RUN test -f web/.next/standalone/web/server.js \
     && test -f web/public/client/client.js \
     && test -f web/public/client/auth-worker.js \
-    && test -f web/public/brand/ukda-launch.js \
+    && test -f web/public/brand/maqbool-launch.js \
+    && test -f web/public/brand/assets/maqbool-symbol.svg \
     && mv web/.next/standalone/web/server.js web/.next/standalone/web/server.cjs
 
 FROM node:24.20.0-bookworm-slim AS runtime

@@ -1,5 +1,7 @@
 # Checkpoint 13 authority review
 
+> Historical review: identifiers, temporary paths and file hashes below record the reviewed version. They are retained as evidence, not current product branding. Current launch integration lives in `brand/maqbool-launch/`; see [compatibility identifiers](../compatibility-identifiers.md).
+
 Report ID: **UKDA-CP13-AUTH-20260927-01**  
 Reviewer: **Codex automated reviewer, agent `/root/independent_authority_review`**  
 Review type: **Fresh, independent automated static review of the composed implementation.** This is not a human review, external audit, penetration test, or dependency audit. The reviewer did not implement the reviewed flows during this review.  

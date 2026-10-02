@@ -9,10 +9,10 @@ test('a new Owner activates a workspace, saves their avatar, and recovers using 
   try {
     const licence = await fixture.issueFrontendLicence();
     await page.goto('/');
-    await expect(page.locator('[data-ukda-launch]')).toBeVisible();
-    await expect(page.locator('[data-ukda-launch]')).toHaveCount(0, { timeout: 12_000 });
-    await expect(page.locator('.identity-brand')).toContainText('UKDA');
-    await expect(page.locator('.identity-brand img')).toHaveAttribute('src', '/brand/assets/ukds-symbol.svg');
+    await expect(page.locator('[data-maqbool-launch]')).toBeVisible();
+    await expect(page.locator('[data-maqbool-launch]')).toHaveCount(0, { timeout: 12_000 });
+    await expect(page.locator('.identity-brand')).toContainText('Maqbool');
+    await expect(page.locator('.identity-brand img')).toHaveAttribute('src', '/brand/assets/maqbool-symbol.svg');
     await page.getByRole('button', { name: 'Use dark appearance' }).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await page.getByRole('button', { name: 'Use light appearance' }).click();

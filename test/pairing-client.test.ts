@@ -72,11 +72,12 @@ async function fixture(t: TestContext) {
         assert.equal(csrf, session?.csrfToken); assert.ok(session);
         const device = deviceId === ownerDevice.id ? ownerDevice : receipt?.deviceId === deviceId ? view!.request.device : undefined;
         assert.ok(device, 'Pending device cannot authenticate before authoritative pairing commit');
+        const now = Date.now();
         challenge = { version: 1, purpose: 'ukda.device-challenge.v1', origin, workspaceId, accountId, sessionId: session.sessionId, deviceId,
           keyGeneration: '1', credentialGeneration: '1', sessionGeneration: '1', dataGeneration: '1', securityVersion: latestHead?.securityVersion ?? receipt?.securityVersion ?? '1',
           securityHead: latestHead?.securityHead ?? receipt?.securityHead ?? head, ownershipVersion: '1', custodyEpoch: '1', grantId: receipt?.grantId ?? randomUUID(), grantGeneration: '1',
           signingPublicKey: device.signingPublicKey, recipientPublicKey: device.recipientPublicKey, ceremonyId: randomUUID(), nonce: key(),
-          issuedAt: new Date().toISOString(), expiresAt: new Date(Date.now() + 120_000).toISOString() };
+          issuedAt: new Date(now).toISOString(), expiresAt: new Date(now + 120_000).toISOString() };
         return challenge;
       },
       async challengeFinish(csrf, proof) {

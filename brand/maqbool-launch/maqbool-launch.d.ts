@@ -21,7 +21,7 @@ export type LaunchResult = {
   error?: unknown;
 };
 
-export function mountUKDALaunch(options?: LaunchOptions): {
+export function mountMaqboolLaunch(options?: LaunchOptions): {
   /** Resolves after removal on every path; it does not report app readiness. */
   finished: Promise<LaunchResult>;
   /** Signal readiness early; minimum entrance time still applies. Idempotent. */

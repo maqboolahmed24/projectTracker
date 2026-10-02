@@ -1,8 +1,16 @@
 # Maqbool project workspace
 
-Implementation of the architecture in `architecture/archtecture.md`, with backend services, browser cryptography/controllers and a Next.js product frontend. Email and the deferred integrations remain outside this build. Progress is tracked in `architecture/checklist.md`, with acceptance evidence in `docs/implementation-evidence.md`.
+Maqbool is an open-source project workspace with backend services, browser cryptography and a Next.js product frontend. Email and the deferred integrations remain outside this build. Implementation and acceptance evidence are recorded in [the implementation guide](docs/implementation-evidence.md).
 
-The product is branded **Maqbool**. Existing `ukda` protocol, storage, package and deployment identifiers remain stable so the rename preserves existing workspaces, remembered profiles and integrations.
+The project, package and launch component use the **Maqbool** name. Versioned encryption, saved-account and deployment identifiers remain compatible with existing installations; see [compatibility identifiers](docs/compatibility-identifiers.md) before changing persisted formats.
+
+## Licence and security
+
+Original project code, documentation and the new Maqbool square line mark are licensed under **GNU AGPL-3.0-only**. You may use, modify and redistribute the software, including commercially, under [the licence](LICENSE). Modified versions offered over a network must offer their corresponding source to their users as required by section 13. Activation keys control access to a hosted workspace; they do not replace or restrict the open-source licence.
+
+Retain [copyright notices](NOTICE) and [third-party notices](THIRD_PARTY_NOTICES.md). [Brand guidelines](TRADEMARKS.md) explain how to identify independent forks without implying endorsement. The licence provides no warranty.
+
+Report security problems through [private vulnerability reporting](https://github.com/maqboolahmed24/projectTracker/security/advisories/new), following [SECURITY.md](SECURITY.md). Please read [the contribution guide](CONTRIBUTING.md) before submitting changes. Public access allows people to read and fork the project; repository changes still require maintainer access and the protected pull-request workflow.
 
 ## Local development
 

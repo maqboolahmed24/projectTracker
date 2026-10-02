@@ -13,7 +13,7 @@ Source-set SHA-256: `a0b745bbf4be3693be8cc49932c57823e9cc42ac256a080705d0eeb6ae4
 
 ## Executed evidence
 
-1. `docker run --rm --platform linux/amd64 -v /Users/maqbool/Documents/ChatGPT/UKDA:/work -w /work node:24.20.0-bookworm-slim npm run build` — passed.
+1. `docker run --rm --platform linux/amd64 -v "$PWD:/work" -w /work node:24.20.0-bookworm-slim npm run build` — passed.
 2. `/Users/maqbool/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --env-file=.env --test --test-concurrency=1 dist/test/*.test.js` — **8 passed, 0 failed, 0 skipped**. Tests cover both real database roles, dependency outages, unsafe configuration, malformed/oversized requests, secret-bearing synthetic errors/logs, real job deduplication/execution and a private worker TCP outage.
 3. `docker compose --profile app up -d --build --wait` — API, worker, application DB and control DB all healthy. Build uses `npm ci` with the lockfile. API image manifest: `sha256:b0e0f5124538f01f2e9f7e43aa5eea5aca59d69840b96868c84b2d3829d50767`; worker: `sha256:ad14bceb2c060959ef61ee8ef61859a42340ae77095afd7944cdc3b14a96e223`.
 4. Live container probes — API and worker readiness HTTP 200; both UID 1000; neither has admin connection settings. API contains no `.env`; attempted application-directory write rejected with `EROFS`.
@@ -22,3 +22,5 @@ Source-set SHA-256: `a0b745bbf4be3693be8cc49932c57823e9cc42ac256a080705d0eeb6ae4
 ## Boundaries
 
 This verifies deployment setup and foundation only. The CI workflow has not run remotely, and no staging/production deployment is claimed. Authentication, tenant-aware domain operations, security transitions, later metrics, backups and browser crypto are implemented and accepted in later checkpoints. No protected domain route is available yet. Email, AI and connector dependencies are absent.
+
+The repository mount in the recorded command is shown as `$PWD` for portability; run it from the repository root. The historical workstation path is omitted.
