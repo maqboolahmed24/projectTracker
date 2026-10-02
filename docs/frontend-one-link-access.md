@@ -1,6 +1,6 @@
 # One-link invitations and device approval
 
-Member and additional-Owner invitations now need one shared invitation link. Opening it makes the request available in **Access requests** inside the Owner's existing UKDA session. The Owner explicitly starts the security check, the recipient supplies their details, and both compare the complete code. Either person can compare first. After both confirmations, approval and entry continue automatically.
+Member and additional-Owner invitations now need one shared invitation link. Opening it makes the request available in **Access requests** inside the Owner's existing Maqbool session. The Owner explicitly starts the security check, the recipient supplies their details, and both compare the complete code. Either person can compare first. After both confirmations, approval and entry continue automatically.
 
 New browsers use the existing private sign-in link and password. Their request appears on an eligible approved device or with an eligible Owner. No return approval link or repeated progress button is required in the normal journey. A direct-link fallback remains under a collapsed help disclosure.
 

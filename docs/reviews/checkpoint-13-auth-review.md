@@ -1,5 +1,7 @@
 # Checkpoint 13 authentication, pairing and account-recovery review
 
+> Historical review: identifiers, temporary paths and file hashes below record the reviewed version. They are retained as evidence, not current product branding. Current launch integration lives in `brand/maqbool-launch/`; see [compatibility identifiers](../compatibility-identifiers.md).
+
 Report ID: **CP13-AUTH-REVIEW-2026-09-27**. Reviewer: **Codex independent automated review agent `/root/independent_auth_review`**. Review date: **27 September 2026**. This was a fresh source review delegated separately from the coordinating implementation agent. It is not a human audit, external certification, penetration test or proof of production readiness. Other automated reviewers were consulted on the shared custody-material finding; that collaboration is identified below. Subsequent implementation work by this same reviewer is recorded separately from the original independent findings.
 
 ## Result at initial review

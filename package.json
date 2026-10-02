@@ -1,7 +1,8 @@
 {
-  "name": "ukda",
+  "name": "maqbool",
   "version": "0.1.0",
   "private": true,
+  "license": "AGPL-3.0-only",
   "type": "module",
   "engines": {
     "node": ">=24.19.0 <25"

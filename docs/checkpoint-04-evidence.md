@@ -55,7 +55,7 @@ docker compose --profile app up -d --wait api worker
 - Migration replay: application `0 applied, 1 unchanged`; control `0 applied, 5 unchanged`.
 - Final API image manifest-list digest: `sha256:1582f45ea68dad37fcc4703205fba41b71e5c035ef58df9d983091e01c81d021`.
 - Final worker image manifest-list digest: `sha256:60a0b28aad3206090fe7a3d5018df7ea9bf9025b18f762b5b0a82a3fced48ab8`.
-- All four UKDA containers are healthy. API liveness/readiness and worker readiness return 200. Deployed session/history routes reject absent credentials with 401 `AUTH_REQUIRED`; a foreign origin receives 403. Worker runs as UID 1000, without admin credentials, identity secrets or an identity file.
+- All four Maqbool containers are healthy. API liveness/readiness and worker readiness return 200. Deployed session/history routes reject absent credentials with 401 `AUTH_REQUIRED`; a foreign origin receives 403. Worker runs as UID 1000, without admin credentials, identity secrets or an identity file.
 
 The reports above are the final evidence. An earlier full run overlapped a compiler writing `dist` and returned one worker `INTERNAL` error; it is retained as `checkpoint-04-preacceptance.log` and excluded from acceptance. The isolated affected test and a clean complete run then passed. No source changes were needed for that error. Browser evidence remains applicable: the final intervening edits only corrected two strict test-reference fixture inputs.
 

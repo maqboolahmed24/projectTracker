@@ -16,7 +16,7 @@ Source-set SHA-256: `24f9a5e6031350bfb67df41abf6d6f3945500780aa00f10874ff4a3e822
 
 ## Executed verification
 
-1. `docker run --rm --platform linux/amd64 -v /Users/maqbool/Documents/ChatGPT/UKDA:/work -w /work node:24.20.0-bookworm-slim npm run build` — passed.
+1. `docker run --rm --platform linux/amd64 -v "$PWD:/work" -w /work node:24.20.0-bookworm-slim npm run build` — passed.
 2. `/Users/maqbool/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --env-file=.env --env-file=.env.admin dist/scripts/migrate.js` — both stores applied successfully; final replay reported **0 applied, 1 unchanged** for each store.
 3. `/Users/maqbool/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --env-file=.env --test --test-concurrency=1 dist/test/*.test.js` — **27 passed, 0 failed, 0 skipped**, final runtime 2.32 seconds. Includes the eight foundation checks, five API-contract checks, five migration checks, five application persistence checks and four control-store checks.
 4. `docker compose --profile app up -d --build --wait` — all four services healthy. API image manifest `sha256:b7adde8c0520725465b8a6055f004d28c58801e1f6c6d631760b359288515282`; worker `sha256:14716432b1ecfe623848490b7e7c43fb401cef3e45425f8d2cccf9d973e218fe`.
@@ -42,3 +42,5 @@ The shared envelope and production crypto/authentication protocols remain checkp
 - Read-only API reviews found no remaining checkpoint-2 blockers. These development reviews do not replace the composed-system independent security gate in checkpoint 13.
 
 No production deployment, finished login, signature verification, Owner recovery, workflow completion, backup durability or pilot readiness is claimed at this checkpoint.
+
+The repository mount in the recorded command is shown as `$PWD` for portability; run it from the repository root. The historical workstation path is omitted.

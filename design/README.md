@@ -1,7 +1,9 @@
-# UKDA frontend design
+# Maqbool frontend design
 
-Google Stitch project: `2504438657315916160` — **UKDA — Complete product · Light & Dark**.
-Shared design system: `assets/18248857475683212615` — **UKDA · Quiet clarity**.
+Archived Google Stitch project: `2504438657315916160` — **UKDA — Complete product · Light & Dark**.
+Archived shared design system: `assets/18248857475683212615` — **UKDA · Quiet clarity**.
+
+The titles above and the generated JSON/HTML under this directory are historical source records from before the Maqbool rename. They intentionally retain their original names and metadata; changing them would misrepresent the design provenance. Current product branding and launch assets use Maqbool. See [compatibility identifiers](../docs/compatibility-identifiers.md) for other retained technical names.
 
 All generation and corrective edits used **GEMINI_3_8_FLASH**, the highest model exposed by the installed Stitch connector at implementation time. Its other exposed option was GEMINI_3_5_FLASH_LITE. The saved screen metadata and original generated HTML in `stitch/` provide provenance; these references are not shipped as application pages.
 
@@ -14,7 +16,7 @@ The application follows the architecture's four main destinations: Home, Project
 - Inter is bundled locally. No remote font, avatar or image requests are needed.
 - Light: warm grey canvas, white surfaces and restrained forest green. Dark: the startup animation's exact neutral background, `#101113`, with charcoal surfaces and soft mint action accents. This follows the user's refinement to remove the original dark-green surfaces.
 - Shared 8px control and 12px card corners; generous spacing, quiet borders and limited shadows.
-- Existing `brand/ukda-launch` animation opens the app, then its assembled symbol shrinks and travels into the page's measured corner logo as the background reveals the content. The 720ms handoff keeps the mark's proportions and temporarily hides the destination to avoid a duplicate. Reduced motion uses a short fade; errors, a missing destination, resized layouts and the hard deadline always release the page. Its symbol is reused throughout.
+- Existing `brand/maqbool-launch` animation opens the app, then its assembled symbol shrinks and travels into the page's measured corner logo as the background reveals the content. The 720ms handoff keeps the mark's proportions and temporarily hides the destination to avoid a duplicate. Reduced motion uses a short fade; errors, a missing destination, resized layouts and the hard deadline always release the page. Its symbol is reused throughout.
 - Native focus-trapped dialogs, visible keyboard focus, a skip link, responsive navigation and system/light/dark appearance are shared across journeys.
 - Private names, records and search results are loaded after sign-in and retained in browser memory. Public server rendering contains only the application shell.
 
