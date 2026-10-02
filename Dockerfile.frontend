@@ -1,0 +1,38 @@
+# syntax=docker/dockerfile:1
+# Build the browser crypto library and Next shell from the same source revision.
+FROM node:24.20.0-bookworm-slim AS dependencies
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+
+FROM dependencies AS build
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY . .
+RUN npm run build:frontend
+# outputFileTracingRoot is the repository root; Next keeps web/server.js.
+RUN test -f web/.next/standalone/web/server.js \
+    && test -f web/public/client/client.js \
+    && test -f web/public/client/auth-worker.js \
+    && test -f web/public/brand/maqbool-launch.js \
+    && test -f web/public/brand/assets/maqbool-symbol.svg \
+    && mv web/.next/standalone/web/server.js web/.next/standalone/web/server.cjs
+
+FROM node:24.20.0-bookworm-slim AS runtime
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    HOSTNAME=0.0.0.0 \
+    PORT=3000 \
+    UKDA_API_ORIGIN=http://api:3400
+WORKDIR /app
+# Standalone tracing supplies only the server's production dependency closure.
+# Public and static assets are deliberately copied to the generated server root.
+COPY --from=build --chown=node:node /app/web/.next/standalone ./
+COPY --from=build --chown=node:node /app/web/.next/static ./web/.next/static
+COPY --from=build --chown=node:node /app/web/public ./web/public
+USER node
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:' + (process.env.PORT || '3000') + '/v1/application').then(response => { if (!response.ok) process.exit(1); }).catch(() => process.exit(1))"
+# Next emits a CommonJS bootstrap for web/ (which has no package.json). The
+# repository root is ESM; .cjs keeps that inherited package type from changing it.
+CMD ["node", "web/server.cjs"]

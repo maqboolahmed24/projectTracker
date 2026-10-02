@@ -1,0 +1,91 @@
+#cloud-config
+# Fresh Azure Ubuntu 24.04 amd64 standby only; Azure supplies the SSH key/user.
+# Standby 10.42.0.5. Permit NFS TCP2049 only from primary 10.42.0.4 in Azure NSGs.
+ssh_pwauth: false
+disable_root: true
+package_update: true
+package_upgrade: false
+apt:
+  preserve_sources_list: true
+  sources:
+    maqbool-ubuntu-updates.list:
+      source: deb [arch=amd64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://archive.ubuntu.com/ubuntu noble-updates main universe
+packages:
+  - docker.io
+  - docker-compose-v2
+  - docker-buildx
+  - nfs-common
+  - nfs-kernel-server
+write_files:
+  - path: /etc/ssh/sshd_config.d/00-maqbool-key-only.conf
+    owner: root:root
+    permissions: '0644'
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+      PubkeyAuthentication yes
+      AuthenticationMethods publickey
+  - path: /etc/docker/daemon.json
+    owner: root:root
+    permissions: '0644'
+    content: |
+      {"log-driver":"local","log-opts":{"max-size":"10m","max-file":"3"}}
+  - path: /etc/nfs.conf.d/maqbool.conf
+    owner: root:root
+    permissions: '0644'
+    content: |
+      [nfsd]
+      host=10.42.0.5
+      port=2049
+      vers3=n
+      vers4=y
+      vers4.0=y
+      vers4.1=y
+      vers4.2=y
+      udp=n
+      tcp=y
+  - path: /etc/exports.d/maqbool.exports
+    # Install after package post-install startup; directories are prepared below
+    # before the explicit NFS restart/export refresh.
+    defer: true
+    owner: root:root
+    permissions: '0644'
+    content: |
+      /srv/maqbool-backups/app 10.42.0.4/32(rw,sync,secure,no_subtree_check,root_squash,anonuid=999,anongid=999)
+      /srv/maqbool-backups/control 10.42.0.4/32(rw,sync,secure,no_subtree_check,root_squash,anonuid=999,anongid=999)
+      # RecoveryRecords enforces process UID ownership. Root is preserved ONLY here.
+      /srv/maqbool-backups/records 10.42.0.4/32(rw,sync,secure,no_subtree_check,no_root_squash)
+  - path: /usr/local/sbin/maqbool-standby-bootstrap
+    owner: root:root
+    permissions: '0750'
+    content: |
+      #!/bin/bash
+      set -euo pipefail
+      . /etc/os-release
+      test "$ID" = ubuntu && test "$VERSION_ID" = 24.04
+      test "$(dpkg --print-architecture)" = amd64
+      compose=$(docker compose version --short)
+      dpkg --compare-versions "${compose#v}" ge 2.30.0
+      docker compose config --help | grep -q -- '--no-env-resolution'
+      install -d -o root -g root -m 0755 /opt/maqbool /srv /srv/maqbool-backups
+      install -d -o root -g root -m 0700 /opt/maqbool/secrets
+      # Fresh directories only: never recursively chown backup/database contents.
+      install -d -o 999 -g 999 -m 0700 /srv/maqbool-backups/app /srv/maqbool-backups/control
+      install -d -o root -g root -m 0700 /srv/maqbool-backups/records
+      # sshd may not have been socket-activated when cloud-init validates it.
+      install -d -o root -g root -m 0755 /run/sshd
+      /usr/sbin/sshd -t
+      systemctl reload-or-restart ssh.service
+      systemctl enable docker.service
+      systemctl restart docker.service
+      systemctl enable nfs-server.service
+      systemctl restart nfs-server.service
+      exportfs -ra
+      # Ubuntu's kernel disables NFSv2; fail if either legacy protocol is enabled.
+      ! grep -Eq '(^|[[:space:]])\+(2|3)([[:space:]]|$)' /proc/fs/nfsd/versions
+      grep -Eq '(^|[[:space:]])\+4([[:space:]]|$)' /proc/fs/nfsd/versions
+      # No database volumes, replication credentials or containers are created here.
+runcmd:
+  - [/usr/local/sbin/maqbool-standby-bootstrap]
+final_message: Standby host prepared. Verify cloud-init status, NFS exports, private firewall rules and UID mapping before primary mounts or replication setup.

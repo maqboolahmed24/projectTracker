@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UKDA Workspace - Website refresh - Work</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed": "#002114",
+            "tertiary-container": "#c0cec2",
+            "background": "#0f1412",
+            "on-tertiary-fixed-variant": "#3d4a41",
+            "on-secondary": "#003824",
+            "surface-variant": "#313632",
+            "primary-container": "#9cd7b9",
+            "on-error-container": "#ffdad6",
+            "error-container": "#93000a",
+            "surface-container-highest": "#313632",
+            "secondary": "#95d4b3",
+            "surface-bright": "#353a37",
+            "on-primary-container": "#265f47",
+            "on-surface-variant": "#c0c9c2",
+            "on-secondary-fixed-variant": "#0e5138",
+            "surface-container-lowest": "#0a0f0c",
+            "on-tertiary-container": "#4b584f",
+            "on-surface": "#dfe4de",
+            "secondary-fixed-dim": "#95d4b3",
+            "primary": "#b7f4d4",
+            "on-error": "#690005",
+            "surface-container-high": "#262b28",
+            "tertiary": "#dceade",
+            "surface-dim": "#0f1412",
+            "tertiary-fixed": "#d8e6da",
+            "on-primary-fixed-variant": "#14503a",
+            "on-tertiary": "#27332b",
+            "primary-fixed": "#b4f0d1",
+            "inverse-primary": "#306950",
+            "error": "#ffb4ab",
+            "inverse-surface": "#dfe4de",
+            "on-primary": "#003826",
+            "surface-tint": "#98d3b5",
+            "primary-fixed-dim": "#98d3b5",
+            "on-tertiary-fixed": "#121e17",
+            "on-primary-fixed": "#002114",
+            "surface-container-low": "#181d1a",
+            "tertiary-fixed-dim": "#bccabe",
+            "surface-container": "#1c211e",
+            "secondary-container": "#12533a",
+            "inverse-on-surface": "#2c322e",
+            "on-secondary-container": "#87c6a5",
+            "secondary-fixed": "#b1f0ce",
+            "outline": "#8a938c",
+            "on-background": "#dfe4de",
+            "surface": "#0f1412",
+            "outline-variant": "#404943"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-mobile": "1rem",
+            "space-xl": "2.5rem",
+            "gutter": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "2rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "gutter-mobile": "1rem",
+            "margin-tablet": "1.5rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "display": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "display-mobile": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "500" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600" }],
+            "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.005em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Custom Scrollbar for Tranquil Flow */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0f0c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #262b28;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #404943;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased h-screen w-screen overflow-hidden flex flex-row selection:bg-secondary-container selection:text-primary">
+<!-- ========================================== -->
+<!-- 1. SHARED COMPONENT: SideNavBar (Anchored) -->
+<!-- ========================================== -->
+<aside class="fixed inset-y-0 left-0 z-30 flex flex-col h-screen w-64 shrink-0 bg-surface-container-lowest dark:bg-surface-container-lowest border-r border-outline-variant dark:border-outline-variant justify-between select-none">
+<!-- Top Area: Workspace Header & Primary Nav -->
+<div class="flex flex-col">
+<!-- Workspace Brand Header -->
+<div class="flex items-center gap-3 px-5 py-4 border-b border-outline-variant">
+<div class="w-8 h-8 rounded-lg bg-secondary-container flex items-center justify-center text-primary font-bold text-label-lg border border-outline-variant/60 shadow-inner">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">layers</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-label-lg font-label-lg font-bold text-on-surface dark:text-on-surface tracking-tight truncate">UKDA Workspace</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant truncate">Analytical Operations</span>
+</div>
+</div>
+<!-- Quick Add Task CTA (from Shared Component JSON) -->
+<div class="px-4 pt-4 pb-2">
+<button class="w-full h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md flex items-center justify-center gap-2 border border-outline-variant/50 transition-colors duration-150 active:scale-[0.98]">
+<span class="material-symbols-outlined text-primary" style="font-size: 16px;">add</span>
+<span>+ Add task</span>
+</button>
+</div>
+<!-- Nav Section -->
+<nav class="px-2 py-3 flex flex-col space-y-1">
+<!-- 1. Home -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container hover:text-on-surface dark:hover:text-on-surface transition-colors duration-150 ease-in-out text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">home</span>
+<span class="truncate">Home</span>
+</a>
+<!-- 2. Projects (ACTIVE: style_active_navigation applied from JSON) -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-primary dark:text-primary bg-secondary-container dark:bg-secondary-container border-l-2 border-primary font-semibold transition-colors duration-150 ease-in-out text-label-md font-label-md" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-size: 18px;">folder_open</span>
+<span class="truncate">Projects</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+</a>
+<!-- 3. My work -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container hover:text-on-surface dark:hover:text-on-surface transition-colors duration-150 ease-in-out text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">task_alt</span>
+<span class="truncate">My work</span>
+</a>
+<!-- 4. Inbox -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container hover:text-on-surface dark:hover:text-on-surface transition-colors duration-150 ease-in-out text-label-md font-label-md" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" style="font-size: 18px;">inbox</span>
+<span class="truncate">Inbox</span>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 rounded-full bg-surface-container-high text-primary font-medium">3</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Footer Section: People, Preferences, User Profile Badge -->
+<div class="px-2 py-3 border-t border-outline-variant flex flex-col space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container hover:text-on-surface transition-colors duration-150 ease-in-out text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">group</span>
+<span>People</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container hover:text-on-surface transition-colors duration-150 ease-in-out text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">tune</span>
+<span>Preferences</span>
+</a>
+<!-- Geometric Creature Profile Badge -->
+<div class="mt-2 pt-2 px-3 py-2.5 rounded-lg bg-surface-container flex items-center justify-between border border-outline-variant/30">
+<div class="flex items-center gap-2.5">
+<!-- Geometric Creature Avatar: Alex Morgan -->
+<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-secondary-container to-surface-bright flex items-center justify-center p-1 border border-primary/20 shrink-0">
+<svg class="w-full h-full text-primary" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2L4 7v10l8 5 8-5V7L12 2zm0 3.8l5 3.12-5 3.13-5-3.13L12 5.8zm-6 4.38l5 3.12v6.25l-5-3.12V10.18zm12 6.25l-5 3.12v-6.25l5-3.12v6.25z"></path>
+</svg>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-label-md font-label-md text-on-surface font-semibold truncate">Alex Morgan</span>
+<span class="text-label-sm font-label-sm text-outline truncate">Senior Analyst</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline hover:text-on-surface cursor-pointer text-sm">unfold_more</span>
+</div>
+</div>
+</aside>
+<!-- ========================================== -->
+<!-- MAIN LAYOUT WRAPPER (Offset by Sidebar)    -->
+<!-- ========================================== -->
+<div class="flex-1 flex flex-col ml-64 h-screen min-w-0 bg-surface">
+<!-- ========================================== -->
+<!-- 2. SHARED COMPONENT: TopNavBar (Contextual)-->
+<!-- ========================================== -->
+<header class="flex justify-between items-center w-full px-6 h-14 bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline-variant shrink-0">
+<!-- Left: Breadcrumbs & Modest Title & Active Badge -->
+<div class="flex items-center gap-3 min-w-0">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md">
+<span>Projects</span>
+<span class="text-outline">/</span>
+<span class="text-on-surface font-semibold">Website refresh</span>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container/40 border border-secondary/30 text-primary text-label-sm font-label-sm tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+          Active
+        </span>
+</div>
+<!-- Center: 4 Tab Navigation Links -->
+<nav class="flex items-center gap-8 h-full">
+<!-- Overview -->
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors duration-150 ease-in-out text-label-md font-label-md h-full flex items-center pt-3 pb-3" href="#">
+          Overview
+        </a>
+<!-- Work (ACTIVE TAB per Intent & JSON styling) -->
+<a class="border-b-2 border-primary text-primary dark:text-primary font-semibold h-full flex items-center pt-3 pb-3 text-label-md font-label-md" href="#">
+          Work
+        </a>
+<!-- Timeline -->
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors duration-150 ease-in-out text-label-md font-label-md h-full flex items-center pt-3 pb-3" href="#">
+          Timeline
+        </a>
+<!-- Updates -->
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors duration-150 ease-in-out text-label-md font-label-md h-full flex items-center pt-3 pb-3" href="#">
+          Updates
+        </a>
+</nav>
+<!-- Right: Action Buttons (Trailing cluster) -->
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" title="Filter list">
+<span class="material-symbols-outlined" style="font-size: 18px;">filter_list</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" title="Sidebar toggle">
+<span class="material-symbols-outlined" style="font-size: 18px;">view_sidebar</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" title="More options">
+<span class="material-symbols-outlined" style="font-size: 18px;">more_horiz</span>
+</button>
+<div class="h-4 w-[1px] bg-outline-variant mx-1"></div>
+<button class="px-3 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high border border-outline-variant text-on-surface text-label-md font-label-md transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-outline" style="font-size: 16px;">share</span>
+<span>Share</span>
+</button>
+<button class="px-3 h-8 rounded-lg bg-primary hover:bg-primary-fixed-dim text-on-primary font-bold text-label-md font-label-md flex items-center gap-1 transition-all duration-150 active:scale-[0.98]">
+<span class="material-symbols-outlined" style="font-size: 16px;">add</span>
+<span>+ Add task</span>
+</button>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- WORK CANVAS & DRAWER SPLIT                 -->
+<!-- ========================================== -->
+<div class="flex-1 flex overflow-hidden">
+<!-- 3. MAIN WORK VIEW (Refined Task List) -->
+<main class="flex-1 flex flex-col overflow-y-auto px-8 py-6 space-y-6">
+<!-- Filter and View Control Toolbar -->
+<div class="flex items-center justify-between gap-4 shrink-0 bg-surface-container-lowest/80 p-2 rounded-lg border border-outline-variant/60">
+<div class="flex items-center gap-3 flex-1 max-w-md">
+<!-- Search tasks filter -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline" style="font-size: 16px;">search</span>
+<input class="w-full h-8 pl-8 pr-3 text-body-sm font-body-sm bg-surface-container border border-outline-variant rounded-lg text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" placeholder="Search tasks, tags, or assignees..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<!-- Grouping & Filters -->
+<button class="h-8 px-2.5 rounded-lg bg-surface-container border border-outline-variant text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 14px;">tune</span>
+<span>Filter: All</span>
+</button>
+<button class="h-8 px-2.5 rounded-lg bg-surface-container border border-outline-variant text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 14px;">view_agenda</span>
+<span>Group: Wave</span>
+</button>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<button class="h-8 px-2.5 rounded-lg bg-secondary-container/40 border border-secondary/30 text-primary text-label-sm font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">list_alt</span>
+<span>List</span>
+</button>
+</div>
+</div>
+<!-- COLLAPSIBLE WAVE 1: Discover (Completed) -->
+<section class="rounded-lg bg-surface-container-lowest border border-outline-variant/60 overflow-hidden transition-all duration-200">
+<!-- Wave Accordion Header -->
+<div class="px-5 py-3.5 bg-surface-container-low flex items-center justify-between border-b border-outline-variant/40 cursor-pointer hover:bg-surface-container">
+<div class="flex items-center gap-3">
+<button class="text-on-surface-variant hover:text-on-surface flex items-center">
+<span class="material-symbols-outlined" style="font-size: 18px;">expand_more</span>
+</button>
+<div class="flex items-center gap-2.5">
+<span class="font-headline-sm text-headline-sm text-on-surface">Wave 1 · Discover</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/50 border border-primary/30 text-primary text-label-sm font-label-sm">Completed</span>
+<span class="text-body-sm font-body-sm text-outline">24 Aug – 14 Sep</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-primary font-semibold">100%</span>
+<div class="w-20 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-full"></div>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">3 / 3 done</span>
+</div>
+</div>
+<!-- Wave 1 Body (Objective & Collapsed Summary) -->
+<div class="px-5 py-3 bg-surface-container-lowest border-b border-outline-variant/20 flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<p class="italic text-outline">Objective: "Establish stakeholder consensus, analytics baseline, and user empathy insights"</p>
+<div class="flex items-center gap-4 text-label-sm font-label-sm">
+<span class="flex items-center gap-1 text-primary"><span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span> Competitor benchmark</span>
+<span class="flex items-center gap-1 text-primary"><span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span> Analytics baseline review</span>
+<span class="flex items-center gap-1 text-primary"><span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span> User journey research</span>
+</div>
+</div>
+</section>
+<!-- COLLAPSIBLE WAVE 2: Create (Active & Detailed) -->
+<section class="rounded-lg bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<!-- Wave 2 Header -->
+<div class="px-5 py-3.5 bg-surface-container-low flex items-center justify-between border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<button class="text-on-surface-variant hover:text-on-surface flex items-center">
+<span class="material-symbols-outlined text-primary" style="font-size: 18px;">expand_less</span>
+</button>
+<div class="flex items-center gap-2.5">
+<span class="font-headline-sm text-headline-sm text-on-surface">Wave 2 · Create</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/40 border border-secondary/30 text-primary text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                  Active
+                </span>
+<span class="text-body-sm font-body-sm text-outline">18 Sep – 28 Oct</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-primary font-semibold">62%</span>
+<div class="w-24 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 62%;"></div>
+</div>
+</div>
+<button class="text-label-sm font-label-sm text-primary hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">add</span>
+<span>+ Add wave</span>
+</button>
+</div>
+</div>
+<!-- Wave 2 Objective -->
+<div class="px-5 py-2.5 bg-surface-container-lowest border-b border-outline-variant/40 text-body-sm font-body-sm text-on-surface-variant">
+<p><span class="text-outline font-medium">Objective:</span> Iterate high-fidelity wireframes, core interaction flows, and responsive design systems</p>
+</div>
+<!-- Tasks Data Table -->
+<div class="w-full">
+<!-- Table Header Row -->
+<div class="grid grid-cols-12 px-5 py-2.5 bg-surface-container-lowest text-outline font-label-sm text-label-sm tracking-wider uppercase border-b border-outline-variant/50">
+<div class="col-span-5 flex items-center gap-2">
+<span>Task title</span>
+</div>
+<div class="col-span-2">Status</div>
+<div class="col-span-2">Assignees</div>
+<div class="col-span-2">Due date</div>
+<div class="col-span-1 text-right">Reviewer</div>
+</div>
+<!-- Task Row 1 (SELECTED TASK) -->
+<div class="grid grid-cols-12 px-5 py-3 items-center bg-surface-container-high/60 border-l-2 border-primary border-b border-outline-variant/40 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="col-span-5 flex items-center gap-3">
+<button class="w-4 h-4 rounded border border-primary bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[12px] opacity-0 group-hover:opacity-100">check</span>
+</button>
+<span class="font-body-md text-body-md font-semibold text-primary truncate">Map the welcome journey</span>
+</div>
+<div class="col-span-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-container/50 border border-primary/30 text-primary text-label-sm font-label-sm">
+                  In progress
+                </span>
+</div>
+<div class="col-span-2 flex items-center -space-x-1.5 overflow-hidden">
+<!-- Avatar Maya -->
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center border border-surface text-[10px] font-bold" title="Maya Lin">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6l3 6H9z" fill="#0f1412"></path></svg>
+</div>
+<!-- Avatar Alex -->
+<div class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center border border-surface text-[10px] font-bold" title="Alex Morgan">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><rect height="16" rx="4" width="16" x="4" y="4"></rect><circle cx="12" cy="12" fill="#0f1412" r="4"></circle></svg>
+</div>
+</div>
+<div class="col-span-2 font-body-sm text-body-sm text-on-surface">
+                Friday, Oct 20
+              </div>
+<div class="col-span-1 text-right font-body-sm text-body-sm text-on-surface-variant truncate">
+                Elena Vance
+              </div>
+</div>
+<!-- Task Row 2 -->
+<div class="grid grid-cols-12 px-5 py-3 items-center bg-surface-container-lowest border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer">
+<div class="col-span-5 flex items-center gap-3">
+<div class="w-4 h-4 rounded border border-outline-variant bg-surface shrink-0"></div>
+<span class="font-body-md text-body-md text-on-surface truncate">Review accessibility</span>
+</div>
+<div class="col-span-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-bright border border-outline text-on-surface text-label-sm font-label-sm">
+                  In review
+                </span>
+</div>
+<div class="col-span-2 flex items-center -space-x-1.5 overflow-hidden">
+<div class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center border border-surface text-[10px] font-bold" title="Alex Morgan">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><rect height="16" rx="4" width="16" x="4" y="4"></rect><circle cx="12" cy="12" fill="#0f1412" r="4"></circle></svg>
+</div>
+<div class="w-6 h-6 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center border border-surface text-[10px] font-bold" title="David K">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><polygon fill="#0f1412" points="12,2 22,22 2,22"></polygon></svg>
+</div>
+</div>
+<div class="col-span-2 font-body-sm text-body-sm text-on-surface-variant">
+                Monday, Oct 23
+              </div>
+<div class="col-span-1 text-right font-body-sm text-body-sm text-on-surface-variant truncate">
+                Marcus Chen
+              </div>
+</div>
+<!-- Task Row 3 -->
+<div class="grid grid-cols-12 px-5 py-3 items-center bg-surface-container-low border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer">
+<div class="col-span-5 flex items-center gap-3">
+<div class="w-4 h-4 rounded border border-outline-variant bg-surface shrink-0"></div>
+<span class="font-body-md text-body-md text-on-surface truncate">Typography hierarchy &amp; tokens</span>
+</div>
+<div class="col-span-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#332612] border border-[#E5A93C]/40 text-[#E5A93C] text-label-sm font-label-sm">
+                  Waiting for feedback
+                </span>
+</div>
+<div class="col-span-2 flex items-center -space-x-1.5 overflow-hidden">
+<div class="w-6 h-6 rounded-full bg-primary-fixed-dim text-on-primary-fixed flex items-center justify-center border border-surface text-[10px] font-bold" title="Elena Vance">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a3 3 0 110 6 3 3 0 010-6z"></path></svg>
+</div>
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center border border-surface text-[10px] font-bold" title="Maya Lin">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle></svg>
+</div>
+</div>
+<div class="col-span-2 font-body-sm text-body-sm text-[#E5A93C] font-medium">
+                Tomorrow
+              </div>
+<div class="col-span-1 text-right font-body-sm text-body-sm text-on-surface-variant truncate">
+                Alex Morgan
+              </div>
+</div>
+<!-- Task Row 4 -->
+<div class="grid grid-cols-12 px-5 py-3 items-center bg-surface-container-lowest border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer">
+<div class="col-span-5 flex items-center gap-3">
+<div class="w-4 h-4 rounded border border-outline-variant bg-surface shrink-0"></div>
+<span class="font-body-md text-body-md text-on-surface truncate">Interactive component states</span>
+</div>
+<div class="col-span-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-container/50 border border-primary/30 text-primary text-label-sm font-label-sm">
+                  In progress
+                </span>
+</div>
+<div class="col-span-2 flex items-center -space-x-1.5 overflow-hidden">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center border border-surface text-[10px] font-bold">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle></svg>
+</div>
+<div class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center border border-surface text-[10px] font-bold">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><rect height="16" rx="4" width="16" x="4" y="4"></rect></svg>
+</div>
+<div class="w-6 h-6 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center border border-surface text-[10px] font-bold">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><polygon points="12,2 22,22 2,22"></polygon></svg>
+</div>
+</div>
+<div class="col-span-2 font-body-sm text-body-sm text-on-surface-variant">
+                25 Oct
+              </div>
+<div class="col-span-1 text-right font-body-sm text-body-sm text-on-surface-variant truncate">
+                Elena Vance
+              </div>
+</div>
+<!-- Task Row 5 -->
+<div class="grid grid-cols-12 px-5 py-3 items-center bg-surface-container-low border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer">
+<div class="col-span-5 flex items-center gap-3">
+<div class="w-4 h-4 rounded border border-outline-variant bg-surface shrink-0"></div>
+<span class="font-body-md text-body-md text-on-surface-variant truncate">Navigation motion specs</span>
+</div>
+<div class="col-span-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-highest border border-outline-variant text-outline text-label-sm font-label-sm">
+                  To do
+                </span>
+</div>
+<div class="col-span-2 flex items-center overflow-hidden">
+<div class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center border border-surface text-[10px] font-bold" title="Alex Morgan">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><rect height="16" rx="4" width="16" x="4" y="4"></rect></svg>
+</div>
+</div>
+<div class="col-span-2 font-body-sm text-body-sm text-on-surface-variant">
+                28 Oct
+              </div>
+<div class="col-span-1 text-right font-body-sm text-body-sm text-outline truncate">
+                None
+              </div>
+</div>
+</div>
+<!-- Bottom Action Row inside Wave 2 -->
+<div class="px-5 py-3 bg-surface-container-lowest border-t border-outline-variant/40 flex items-center">
+<button class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size: 16px;">add</span>
+<span>+ Add task to Wave 2</span>
+</button>
+</div>
+</section>
+</main>
+<!-- ========================================== -->
+<!-- 4. RIGHT-HAND TASK DETAIL DRAWER (400px)   -->
+<!-- ========================================== -->
+<aside class="w-[420px] h-full bg-surface-container-low border-l border-outline-variant flex flex-col justify-between shrink-0 select-none">
+<!-- Drawer Header & Scrollable Content -->
+<div class="flex-1 overflow-y-auto">
+<!-- Drawer Top Action Bar -->
+<div class="px-5 h-12 flex items-center justify-between border-b border-outline-variant/60 bg-surface-container-lowest">
+<div class="flex items-center gap-2 font-label-sm text-label-sm text-outline">
+<span>Wave 2</span>
+<span>/</span>
+<span class="text-on-surface font-semibold">TAS-104</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-7 h-7 rounded flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container">
+<span class="material-symbols-outlined" style="font-size: 16px;">open_in_full</span>
+</button>
+<button class="w-7 h-7 rounded flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container">
+<span class="material-symbols-outlined" style="font-size: 16px;">more_horiz</span>
+</button>
+<button class="w-7 h-7 rounded flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container ml-1">
+<span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+</button>
+</div>
+</div>
+<!-- Main Drawer Content -->
+<div class="p-6 space-y-6">
+<!-- Title & Status Selector Dropdown -->
+<div class="space-y-3">
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold leading-tight">
+                Map the welcome journey
+              </h2>
+<div class="flex items-center gap-2">
+<button class="h-8 px-3 rounded-lg bg-secondary-container/60 border border-primary/40 text-primary font-label-md text-label-md flex items-center gap-2 hover:bg-secondary-container transition-colors">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span>In progress</span>
+<span class="material-symbols-outlined text-primary text-[14px]">expand_more</span>
+</button>
+<span class="text-outline text-label-sm font-label-sm">Updated 30m ago</span>
+</div>
+</div>
+<!-- Properties Grid -->
+<div class="p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/50 space-y-3">
+<!-- Assignees -->
+<div class="grid grid-cols-3 items-center text-body-sm font-body-sm">
+<span class="text-outline">Assignees</span>
+<div class="col-span-2 flex items-center gap-2">
+<div class="flex items-center -space-x-1.5">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center border border-surface text-[10px]" title="Maya Lin">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle></svg>
+</div>
+<div class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center border border-surface text-[10px]" title="Alex Morgan">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><rect height="16" rx="4" width="16" x="4" y="4"></rect></svg>
+</div>
+</div>
+<span class="text-on-surface truncate">Maya Lin, Alex Morgan</span>
+<button class="w-5 h-5 rounded-full border border-dashed border-outline-variant flex items-center justify-center text-outline hover:text-primary hover:border-primary">
+<span class="material-symbols-outlined text-[12px]">add</span>
+</button>
+</div>
+</div>
+<!-- Reviewer -->
+<div class="grid grid-cols-3 items-center text-body-sm font-body-sm">
+<span class="text-outline">Reviewer</span>
+<div class="col-span-2 flex items-center gap-2">
+<div class="w-5 h-5 rounded-full bg-primary-fixed-dim text-on-primary-fixed flex items-center justify-center text-[9px] font-bold">
+<svg class="w-3 h-3" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a3 3 0 110 6 3 3 0 010-6z"></path></svg>
+</div>
+<span class="text-on-surface">Elena Vance</span>
+</div>
+</div>
+<!-- Due Date -->
+<div class="grid grid-cols-3 items-center text-body-sm font-body-sm">
+<span class="text-outline">Due date</span>
+<div class="col-span-2 flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-outline" style="font-size: 16px;">calendar_today</span>
+<span>Friday, 20 Oct 2024</span>
+</div>
+</div>
+<!-- Priority / Cycle -->
+<div class="grid grid-cols-3 items-center text-body-sm font-body-sm">
+<span class="text-outline">Priority</span>
+<div class="col-span-2 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary border border-outline-variant font-label-sm text-label-sm font-semibold">
+                    Wave 2 · High impact
+                  </span>
+</div>
+</div>
+</div>
+<!-- Description -->
+<div class="space-y-2">
+<label class="text-label-md font-label-md font-semibold text-on-surface uppercase tracking-wider">Description</label>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed bg-surface-container/40 p-3 rounded-lg border border-outline-variant/30">
+                Detail the five-stage onboarding sequence from initial vault creation to first team invite, ensuring zero telemetry prompts are crystal clear.
+              </p>
+</div>
+<!-- Acceptance Criteria (Clean Checklist) -->
+<div class="space-y-2.5">
+<div class="flex items-center justify-between">
+<label class="text-label-md font-label-md font-semibold text-on-surface uppercase tracking-wider">Acceptance Criteria</label>
+<span class="text-label-sm font-label-sm text-outline">2 of 4 resolved</span>
+</div>
+<div class="space-y-2 bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/40">
+<!-- Item 1 (Checked) -->
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input checked="" class="mt-0.5 rounded bg-primary text-on-primary focus:ring-0 border-primary h-4 w-4" type="checkbox"/>
+<span class="text-body-sm font-body-sm text-on-surface-variant line-through">Document initial unlock sequence</span>
+</label>
+<!-- Item 2 (Checked) -->
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input checked="" class="mt-0.5 rounded bg-primary text-on-primary focus:ring-0 border-primary h-4 w-4" type="checkbox"/>
+<span class="text-body-sm font-body-sm text-on-surface-variant line-through">Establish biometric fallback state</span>
+</label>
+<!-- Item 3 (Unchecked) -->
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input class="mt-0.5 rounded bg-surface-container border-outline-variant text-primary focus:ring-0 h-4 w-4" type="checkbox"/>
+<span class="text-body-sm font-body-sm text-on-surface">Validate offline recovery phrase visibility</span>
+</label>
+<!-- Item 4 (Unchecked) -->
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input class="mt-0.5 rounded bg-surface-container border-outline-variant text-primary focus:ring-0 h-4 w-4" type="checkbox"/>
+<span class="text-body-sm font-body-sm text-on-surface">Clarify workspace invitation dialog</span>
+</label>
+</div>
+</div>
+<!-- Discussion Thread -->
+<div class="space-y-3 pt-2">
+<label class="text-label-md font-label-md font-semibold text-on-surface uppercase tracking-wider">Activity &amp; Notes</label>
+<div class="space-y-3 text-body-sm font-body-sm">
+<!-- Comment 1 -->
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant/40 space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-semibold text-on-surface">Maya Lin</span>
+<span class="text-outline text-label-sm font-label-sm">2h ago</span>
+</div>
+<p class="text-on-surface-variant leading-normal">
+                    Updated the sequence diagram with the offline key validation step. Ready for review.
+                  </p>
+</div>
+<!-- Comment 2 -->
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant/40 space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-semibold text-on-surface">Alex Morgan</span>
+<span class="text-outline text-label-sm font-label-sm">30m ago</span>
+</div>
+<p class="text-on-surface-variant leading-normal">
+                    Looking crisp. Let's make sure the recovery prompt doesn't feel daunting on first launch.
+                  </p>
+</div>
+</div>
+<!-- Add Comment Input Area -->
+<div class="relative pt-1">
+<input class="w-full h-10 pl-3 pr-10 text-body-sm font-body-sm bg-surface-container border border-outline-variant rounded-lg text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" placeholder="Write a comment..." type="text"/>
+<button class="absolute right-2 top-3 text-primary hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer Footer Actions -->
+<div class="p-4 bg-surface-container-lowest border-t border-outline-variant/60 flex items-center justify-between gap-2 shrink-0">
+<div class="flex items-center gap-2">
+<button class="px-3 h-8 rounded-lg bg-primary hover:bg-primary-fixed-dim text-on-primary font-bold text-label-md font-label-md transition-all active:scale-[0.98]">
+              Save changes
+            </button>
+<button class="px-3 h-8 rounded-lg text-outline hover:text-on-surface text-label-md font-label-md transition-colors">
+              Cancel
+            </button>
+</div>
+<button class="px-3 h-8 rounded-lg bg-surface-container border border-outline-variant hover:border-secondary hover:text-primary text-on-surface-variant text-label-md font-label-md transition-colors">
+            Request review
+          </button>
+</div>
+</aside>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,41 @@
+# Local recovery profile: independent encrypted repositories and a synchronous
+# security replica. Use scripts/physical-backups.mjs setup before starting it.
+# These volumes share one host; production requires separate failure domains.
+services:
+  app-db:
+    image: ukda-postgres-recovery:18-2.59.1
+    build:
+      context: ./ops/postgres
+    command: [postgres, -c, wal_level=replica, -c, archive_mode=on, -c, 'archive_command=pgbackrest --stanza=app archive-push %p', -c, archive_timeout=60s]
+    volumes:
+      - app-backups:/backrest
+      - ./.local/recovery/app.conf:/run/secrets/pgbackrest.conf:ro
+  control-db:
+    image: ukda-postgres-recovery:18-2.59.1
+    build:
+      context: ./ops/postgres
+    command: [postgres, -c, wal_level=replica, -c, archive_mode=on, -c, 'archive_command=pgbackrest --stanza=control archive-push %p', -c, archive_timeout=60s]
+    volumes:
+      - control-backups:/backrest
+      - ./.local/recovery/control.conf:/run/secrets/pgbackrest.conf:ro
+  control-replica:
+    image: ukda-postgres-recovery:18-2.59.1
+    entrypoint: [ukda-standby]
+    environment:
+      PGDATA: /var/lib/postgresql/18/docker
+    volumes:
+      - control-replica-data:/var/lib/postgresql
+      - ./.local/recovery/replication.pgpass:/run/secrets/replication.pgpass:ro
+    depends_on:
+      control-db:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD-SHELL, 'gosu postgres psql -U ukda_control_admin -d ukda_control -Atc "SELECT pg_is_in_recovery()" | grep -qx t']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+volumes:
+  app-backups:
+  control-backups:
+  control-replica-data:

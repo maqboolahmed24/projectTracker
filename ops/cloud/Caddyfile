@@ -1,0 +1,16 @@
+{
+	admin off
+}
+
+{$UKDA_APP_ORIGIN} {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		Referrer-Policy "no-referrer"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+	# The frontend's same-origin proxy handles /v1. No public API/worker endpoint.
+	# Request access logging is deliberately disabled: links can carry private data.
+	reverse_proxy frontend:3000
+}

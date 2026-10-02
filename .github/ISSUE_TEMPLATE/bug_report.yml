@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a reproducible problem in Maqbool.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For security vulnerabilities, use [private reporting](https://github.com/maqboolahmed24/projectTracker/security/advisories/new).
+        Never attach passwords, recovery phrases, activation keys, database exports, or private workspace files.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Explain the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Use invented data and include the smallest set of steps that reproduces the problem.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Version and environment
+      description: Include the commit or release, browser, and operating system if known. Do not include private server addresses.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted screenshots or logs
+      description: Remove names, private project content, session identifiers, tokens, and other sensitive data before sharing.

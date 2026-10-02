@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Northstar Studio · Overview - UKDA</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "error-container": "#fe8983",
+            "tertiary": "#576343",
+            "outline": "#747c7c",
+            "primary-fixed": "#a4f3d0",
+            "on-tertiary": "#f0fed5",
+            "secondary-fixed-dim": "#cdd7d2",
+            "secondary": "#58615d",
+            "primary": "#176b50",
+            "error-dim": "#4e0309",
+            "surface-dim": "#d2dcdb",
+            "on-surface": "#2c3433",
+            "on-secondary-fixed-variant": "#555d5a",
+            "surface-container": "#eaefee",
+            "primary-fixed-dim": "#96e4c2",
+            "on-tertiary-fixed": "#424e30",
+            "on-secondary-container": "#4b5450",
+            "on-tertiary-container": "#546040",
+            "primary-dim": "#005e45",
+            "on-primary-fixed": "#004934",
+            "on-background": "#2c3433",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary": "#f2fbf6",
+            "on-primary-fixed-variant": "#12684d",
+            "surface-tint": "#176b50",
+            "on-primary": "#e0ffee",
+            "surface-container-high": "#e3e9e8",
+            "background": "#f9f9f8",
+            "surface-container-highest": "#dce4e3",
+            "surface-variant": "#dce4e3",
+            "surface-bright": "#f9f9f8",
+            "on-tertiary-fixed-variant": "#5e6a4a",
+            "tertiary-dim": "#4b5738",
+            "error": "#9f403d",
+            "on-secondary-fixed": "#39413e",
+            "tertiary-fixed": "#ebf9d0",
+            "secondary-dim": "#4c5551",
+            "inverse-on-surface": "#9b9d9d",
+            "surface": "#f9f9f8",
+            "secondary-container": "#dbe5e0",
+            "tertiary-fixed-dim": "#ddebc2",
+            "on-error-container": "#752121",
+            "outline-variant": "#abb4b3",
+            "on-primary-container": "#005e44",
+            "tertiary-container": "#ebf9d0",
+            "surface-container-low": "#f1f4f3",
+            "on-surface-variant": "#586160",
+            "on-error": "#fff7f6",
+            "primary-container": "#a4f3d0",
+            "secondary-fixed": "#dbe5e0",
+            "inverse-surface": "#0c0f0e",
+            "inverse-primary": "#affedb"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            headline: ["Inter", "sans-serif"],
+            display: ["Inter", "sans-serif"],
+            body: ["Inter", "sans-serif"],
+            label: ["Inter", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+      font-size: 1.15rem;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    /* Tabular numbers for clean numeric layout */
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased h-full flex flex-row overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- ========================================================================= -->
+<!-- SIDEBAR (Shared Component: SideNavBar)                                     -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-56 flex flex-col justify-between bg-surface-container-lowest border-r border-outline-variant/30 z-30 select-none">
+<!-- Top Brand & Header -->
+<div class="px-4 py-5 flex flex-col gap-6">
+<!-- Brand & Workspace Selector -->
+<div class="flex items-center gap-3 px-1.5 py-1 rounded-lg hover:bg-surface-container-low transition-colors duration-150 cursor-pointer">
+<!-- Static brand geometric triangular bars -->
+<div aria-label="Northstar Studio workspace icon with geometric colorful triangular bars" class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center shrink-0 border border-outline-variant/30" title="Northstar Studio workspace icon with geometric colorful triangular bars">
+<svg class="shrink-0" fill="none" height="20" viewbox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 15L10 4L16 15H4Z" fill="#176B50" fill-opacity="0.9"></path>
+<path d="M10 7L14.5 15H5.5L10 7Z" fill="#576343" fill-opacity="0.8"></path>
+<circle cx="10" cy="11.5" fill="#EBF9D0" r="1.5"></circle>
+</svg>
+</div>
+<div class="flex flex-col min-w-0 leading-tight">
+<div class="flex items-center gap-1">
+<span class="font-headline text-sm font-semibold tracking-tight text-on-surface truncate">Northstar Studio</span>
+<span class="material-symbols-outlined text-outline text-xs">unfold_more</span>
+</div>
+<span class="font-body text-xs text-secondary font-normal truncate">UKDA Workspace</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1 font-body text-sm font-medium tracking-tight">
+<!-- 1. Overview (ACTIVE) -->
+<a aria-current="page" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low text-primary font-medium transition-colors duration-150 ease-out" href="#overview">
+<span class="material-symbols-outlined text-primary" data-icon="dashboard">dashboard</span>
+<span>Overview</span>
+</a>
+<!-- 2. Projects -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-normal" href="#projects">
+<span class="material-symbols-outlined text-secondary" data-icon="folder">folder</span>
+<span>Projects</span>
+</a>
+<!-- 3. My tasks -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-normal" href="#tasks">
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle">check_circle</span>
+<span class="flex-1">My tasks</span>
+<span class="text-xs text-secondary font-mono tabular-nums">8</span>
+</a>
+<!-- 4. Inbox -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-normal" href="#inbox">
+<span class="material-symbols-outlined text-secondary" data-icon="inbox">inbox</span>
+<span class="flex-1">Inbox</span>
+<span class="w-4 h-4 rounded-full bg-primary-container text-on-primary-container text-[10px] font-semibold flex items-center justify-center tabular-nums leading-none">3</span>
+</a>
+<!-- 5. People -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-normal" href="#people">
+<span class="material-symbols-outlined text-secondary" data-icon="group">group</span>
+<span>People</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Section -->
+<div class="px-4 py-4 flex flex-col gap-3 border-t border-outline-variant/30">
+<!-- Settings -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-normal text-sm" href="#settings">
+<span class="material-symbols-outlined text-secondary" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<!-- Profile Card -->
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-low border border-outline-variant/20">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="relative w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center shrink-0 border border-outline-variant/40" title="Alex Morgan avatar badge">
+<!-- Illustrated geometric creature / creature avatar -->
+<svg class="shrink-0" fill="none" height="22" viewbox="0 0 24 24" width="22">
+<rect fill="#176B50" height="13" rx="4" width="14" x="5" y="6"></rect>
+<circle cx="9.5" cy="11.5" fill="#EBF9D0" r="1.5"></circle>
+<circle cx="14.5" cy="11.5" fill="#EBF9D0" r="1.5"></circle>
+<path d="M10 15H14" stroke="#A4F3D0" stroke-linecap="round" stroke-width="1.5"></path>
+<path d="M7 4L9 6" stroke="#176B50" stroke-linecap="round" stroke-width="2"></path>
+<path d="M17 4L15 6" stroke="#176B50" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+<!-- Quiet online status dot -->
+<span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-primary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline text-xs font-semibold text-on-surface truncate">Alex Morgan</span>
+<span class="font-body text-[11px] text-secondary truncate">Owner</span>
+</div>
+</div>
+<button aria-label="Switch appearance" class="text-secondary hover:text-on-surface p-1 rounded transition-colors" title="Switch appearance" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="dark_mode">dark_mode</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- MAIN VIEWPORT CANVAS (Offset by 224px for sidebar)                       -->
+<!-- ========================================================================= -->
+<div class="flex-1 ml-56 min-h-screen flex flex-col bg-background">
+<!-- Top Navigation Bar (Shared Component: TopNavBar) -->
+<header class="sticky top-0 h-16 w-full bg-surface/80 backdrop-blur-sm border-b border-outline-variant/30 z-20">
+<div class="flex justify-between items-center h-16 px-8 max-w-7xl mx-auto w-full">
+<!-- Breadcrumb / Location -->
+<div class="flex items-center gap-2 font-body text-xs text-secondary">
+<span class="text-secondary font-medium">Workspace</span>
+<span class="text-outline-variant">/</span>
+<span class="font-medium text-on-surface">Overview</span>
+</div>
+<!-- Center & Right Controls -->
+<div class="flex items-center gap-3">
+<!-- Discreet Search Input -->
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2.5 text-outline text-sm pointer-events-none" data-icon="search">search</span>
+<input class="w-64 pl-8 pr-12 py-1.5 bg-surface-container-lowest border border-outline-variant/40 rounded-lg text-xs font-body text-on-surface placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all duration-150 shadow-none" placeholder="Search or jump to..." type="text"/>
+<kbd class="absolute right-2 px-1.5 py-0.5 text-[10px] font-mono text-secondary bg-surface-container-low border border-outline-variant/30 rounded">⌘K</kbd>
+</div>
+<!-- Notification Bell Action -->
+<button aria-label="Notifications" class="p-2 text-secondary hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors duration-150 relative" type="button">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-primary"></span>
+</button>
+<!-- Primary CTA Button -->
+<button class="flex items-center gap-1.5 bg-primary text-on-primary px-3.5 py-1.5 rounded-lg text-xs font-headline font-medium hover:bg-primary-dim active:scale-[0.99] transition-all duration-150 ease-out shadow-none" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+<span>New project</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Page Content Container -->
+<main class="flex-1 px-8 py-8 max-w-7xl mx-auto w-full flex flex-col gap-8">
+<!-- Greeting & Header Header Area -->
+<section class="flex flex-col gap-1">
+<h1 class="font-headline text-[30px] font-semibold tracking-tight text-on-surface leading-snug">
+          A little clarity for your day.
+        </h1>
+<p class="font-body text-sm text-secondary font-normal">
+          Wednesday, 16 October · 3 waves actively moving forward in Northstar Studio
+        </p>
+</section>
+<!-- Horizontal Summary Band -->
+<section class="grid grid-cols-3 bg-surface-container-lowest rounded-xl border border-outline-variant/30 divide-x divide-outline-variant/20 p-1">
+<div class="px-6 py-4 flex flex-col gap-1">
+<span class="font-body text-xs text-secondary font-medium tracking-tight">Active projects</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-2xl font-semibold text-on-surface tabular-nums">4</span>
+<span class="text-xs text-secondary font-normal">on schedule</span>
+</div>
+</div>
+<div class="px-6 py-4 flex flex-col gap-1">
+<span class="font-body text-xs text-secondary font-medium tracking-tight">Tasks for you</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-2xl font-semibold text-on-surface tabular-nums">8</span>
+<span class="text-xs text-secondary font-normal">across 3 projects</span>
+</div>
+</div>
+<div class="px-6 py-4 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-body text-xs text-secondary font-medium tracking-tight">Needs attention</span>
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-2xl font-semibold text-on-surface tabular-nums">2</span>
+<span class="text-xs text-secondary font-normal">reviews requested</span>
+</div>
+</div>
+</section>
+<!-- Two-Column Workspace Layout (2/3 Left & 1/3 Right) -->
+<div class="grid grid-cols-12 gap-8 items-start">
+<!-- LEFT COLUMN (8 cols / ~66%) -->
+<div class="col-span-8 flex flex-col gap-8">
+<!-- Projects Section -->
+<section class="flex flex-col gap-3.5">
+<div class="flex items-center justify-between">
+<h2 class="font-headline text-sm font-semibold tracking-tight text-on-surface">Your projects</h2>
+<a class="font-body text-xs text-primary hover:text-primary-dim font-medium transition-colors" href="#projects">
+                View all (4)
+              </a>
+</div>
+<!-- Project Cards List -->
+<div class="flex flex-col gap-3">
+<!-- Project 1 -->
+<article class="p-4 bg-surface-container-lowest border border-outline-variant/30 rounded-xl hover:border-outline-variant/60 transition-all duration-150 group">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-center gap-3.5">
+<!-- Subtle Tinted Badge -->
+<div class="w-10 h-10 rounded-lg bg-primary-container/30 border border-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" data-icon="web">web</span>
+</div>
+<div>
+<h3 class="font-headline text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">Website refresh</h3>
+<p class="font-body text-xs text-secondary mt-0.5">Wave 2 · Create</p>
+</div>
+</div>
+<div class="flex items-center gap-4 text-xs text-secondary">
+<span class="tabular-nums font-medium text-on-surface">62%</span>
+<span class="text-outline-variant">·</span>
+<span>Due 18 Oct</span>
+</div>
+</div>
+<!-- Progress Bar & Assignees -->
+<div class="mt-4 pt-3 border-t border-outline-variant/15 flex items-center justify-between gap-6">
+<div class="flex-1 max-w-sm">
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-300" style="width: 62%"></div>
+</div>
+</div>
+<!-- Overlapping Creature Avatars -->
+<div class="flex -space-x-1.5 shrink-0 overflow-hidden">
+<div class="w-6 h-6 rounded-full bg-primary-container border-2 border-surface-container-lowest flex items-center justify-center text-[10px] font-medium text-on-primary-container" title="Elena Vance">EV</div>
+<div class="w-6 h-6 rounded-full bg-secondary-container border-2 border-surface-container-lowest flex items-center justify-center text-[10px] font-medium text-on-secondary-container" title="Alex Morgan">AM</div>
+<div class="w-6 h-6 rounded-full bg-tertiary-container border-2 border-surface-container-lowest flex items-center justify-center text-[10px] font-medium text-on-tertiary-container" title="Marcus Chen">MC</div>
+</div>
+</div>
+</article>
+<!-- Project 2 -->
+<article class="p-4 bg-surface-container-lowest border border-outline-variant/30 rounded-xl hover:border-outline-variant/60 transition-all duration-150 group">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-center gap-3.5">
+<!-- Subtle Warm Tinted Badge -->
+<div class="w-10 h-10 rounded-lg bg-tertiary-container/40 border border-tertiary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary" data-icon="auto_stories">auto_stories</span>
+</div>
+<div>
+<h3 class="font-headline text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">Autumn research</h3>
+<p class="font-body text-xs text-secondary mt-0.5">Wave 1 · Discover</p>
+</div>
+</div>
+<div class="flex items-center gap-4 text-xs text-secondary">
+<span class="tabular-nums font-medium text-on-surface">28%</span>
+<span class="text-outline-variant">·</span>
+<span>Due 24 Oct</span>
+</div>
+</div>
+<!-- Progress Bar & Assignees -->
+<div class="mt-4 pt-3 border-t border-outline-variant/15 flex items-center justify-between gap-6">
+<div class="flex-1 max-w-sm">
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-300" style="width: 28%"></div>
+</div>
+</div>
+<!-- Overlapping Avatars -->
+<div class="flex -space-x-1.5 shrink-0 overflow-hidden">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed border-2 border-surface-container-lowest flex items-center justify-center text-[10px] font-medium text-on-secondary-fixed" title="Marcus Chen">MC</div>
+<div class="w-6 h-6 rounded-full bg-primary-fixed border-2 border-surface-container-lowest flex items-center justify-center text-[10px] font-medium text-on-primary-fixed" title="Sara Lind">SL</div>
+</div>
+</div>
+</article>
+<!-- Project 3 -->
+<article class="p-4 bg-surface-container-lowest border border-outline-variant/30 rounded-xl hover:border-outline-variant/60 transition-all duration-150 group">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-center gap-3.5">
+<!-- Subtle Sage Tinted Badge -->
+<div class="w-10 h-10 rounded-lg bg-secondary-container/40 border border-secondary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary" data-icon="interests">interests</span>
+</div>
+<div>
+<h3 class="font-headline text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">Member experience</h3>
+<p class="font-body text-xs text-secondary mt-0.5">Wave 3 · Refine</p>
+</div>
+</div>
+<div class="flex items-center gap-4 text-xs text-secondary">
+<span class="tabular-nums font-medium text-on-surface">84%</span>
+<span class="text-outline-variant">·</span>
+<span>Due 3 Nov</span>
+</div>
+</div>
+<!-- Progress Bar & Assignees -->
+<div class="mt-4 pt-3 border-t border-outline-variant/15 flex items-center justify-between gap-6">
+<div class="flex-1 max-w-sm">
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-300" style="width: 84%"></div>
+</div>
+</div>
+<!-- Overlapping Avatars -->
+<div class="flex -space-x-1.5 shrink-0 overflow-hidden">
+<div class="w-6 h-6 rounded-full bg-primary-container border-2 border-surface-container-lowest flex items-center justify-center text-[10px] font-medium text-on-primary-container" title="Elena Vance">EV</div>
+<div class="w-6 h-6 rounded-full bg-secondary-container border-2 border-surface-container-lowest flex items-center justify-center text-[10px] font-medium text-on-secondary-container" title="Alex Morgan">AM</div>
+<div class="w-6 h-6 rounded-full bg-tertiary-container border-2 border-surface-container-lowest flex items-center justify-center text-[10px] font-medium text-on-tertiary-container" title="Tomi Keller">TK</div>
+<div class="w-6 h-6 rounded-full bg-surface-container-highest border-2 border-surface-container-lowest flex items-center justify-center text-[9px] font-medium text-secondary" title="+1 more">+1</div>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- Recent Activity Feed -->
+<section class="flex flex-col gap-3">
+<h2 class="font-headline text-sm font-semibold tracking-tight text-on-surface">Recent activity</h2>
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl divide-y divide-outline-variant/15">
+<!-- Feed Item 1 -->
+<div class="p-3.5 flex items-start gap-3 text-xs">
+<div class="w-7 h-7 rounded-full bg-primary-container/60 border border-primary/20 flex items-center justify-center shrink-0 font-medium text-[11px] text-on-primary-container mt-0.5">
+                  EV
+                </div>
+<div class="flex-1 leading-relaxed">
+<span class="font-medium text-on-surface">Elena Vance</span>
+<span class="text-secondary"> completed </span>
+<span class="font-medium text-on-surface">‘Finalize typography scale’</span>
+<span class="text-outline-variant text-[11px] block mt-0.5">24m ago</span>
+</div>
+</div>
+<!-- Feed Item 2 -->
+<div class="p-3.5 flex items-start gap-3 text-xs">
+<div class="w-7 h-7 rounded-full bg-secondary-container/60 border border-secondary/20 flex items-center justify-center shrink-0 font-medium text-[11px] text-on-secondary-container mt-0.5">
+                  AM
+                </div>
+<div class="flex-1 leading-relaxed">
+<span class="font-medium text-on-surface">Alex Morgan</span>
+<span class="text-secondary"> started </span>
+<span class="font-medium text-on-surface">‘User onboarding flow wireframes’</span>
+<span class="text-secondary"> in </span>
+<span class="text-primary font-medium">Website refresh</span>
+<span class="text-outline-variant text-[11px] block mt-0.5">2h ago</span>
+</div>
+</div>
+<!-- Feed Item 3 -->
+<div class="p-3.5 flex items-start gap-3 text-xs">
+<div class="w-7 h-7 rounded-full bg-tertiary-container/60 border border-tertiary/20 flex items-center justify-center shrink-0 font-medium text-[11px] text-on-tertiary-container mt-0.5">
+                  MC
+                </div>
+<div class="flex-1 leading-relaxed">
+<span class="font-medium text-on-surface">Marcus Chen</span>
+<span class="text-secondary"> shared 4 research summaries in </span>
+<span class="text-primary font-medium">Autumn research</span>
+<span class="text-outline-variant text-[11px] block mt-0.5">Yesterday</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- RIGHT COLUMN (4 cols / ~33%) -->
+<div class="col-span-4 flex flex-col gap-6">
+<!-- Up Next (Tasks) -->
+<section class="flex flex-col gap-3.5">
+<div class="flex items-center justify-between">
+<h2 class="font-headline text-sm font-semibold tracking-tight text-on-surface">Up next</h2>
+<span class="text-xs text-secondary font-mono tabular-nums">3 scheduled</span>
+</div>
+<div class="flex flex-col gap-2.5">
+<!-- Task 1 -->
+<div class="p-3.5 bg-surface-container-lowest border border-outline-variant/30 rounded-xl flex items-start gap-3 hover:border-outline-variant/60 transition-colors cursor-pointer group">
+<button aria-label="Mark task completed" class="mt-0.5 w-4 h-4 rounded-full border border-outline hover:border-primary flex items-center justify-center shrink-0 transition-colors" type="button">
+<span class="w-2 h-2 rounded-full bg-transparent group-hover:bg-primary-container transition-colors"></span>
+</button>
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-headline text-xs font-medium text-on-surface group-hover:text-primary transition-colors leading-snug">
+                    Review staging environment deployment
+                  </span>
+<div class="flex items-center gap-2 text-[11px] text-secondary">
+<span>Website refresh</span>
+<span class="text-outline-variant">·</span>
+<span class="text-primary font-medium">Due today</span>
+</div>
+</div>
+</div>
+<!-- Task 2 -->
+<div class="p-3.5 bg-surface-container-lowest border border-outline-variant/30 rounded-xl flex items-start gap-3 hover:border-outline-variant/60 transition-colors cursor-pointer group">
+<button aria-label="Mark task completed" class="mt-0.5 w-4 h-4 rounded-full border border-outline hover:border-primary flex items-center justify-center shrink-0 transition-colors" type="button">
+<span class="w-2 h-2 rounded-full bg-transparent group-hover:bg-primary-container transition-colors"></span>
+</button>
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-headline text-xs font-medium text-on-surface group-hover:text-primary transition-colors leading-snug">
+                    Sign off on interview guide questions
+                  </span>
+<div class="flex items-center gap-2 text-[11px] text-secondary">
+<span>Autumn research</span>
+<span class="text-outline-variant">·</span>
+<span>Tomorrow</span>
+</div>
+</div>
+</div>
+<!-- Task 3 -->
+<div class="p-3.5 bg-surface-container-lowest border border-outline-variant/30 rounded-xl flex items-start gap-3 hover:border-outline-variant/60 transition-colors cursor-pointer group">
+<button aria-label="Mark task completed" class="mt-0.5 w-4 h-4 rounded-full border border-outline hover:border-primary flex items-center justify-center shrink-0 transition-colors" type="button">
+<span class="w-2 h-2 rounded-full bg-transparent group-hover:bg-primary-container transition-colors"></span>
+</button>
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-headline text-xs font-medium text-on-surface group-hover:text-primary transition-colors leading-snug">
+                    Consolidate design tokens into spec
+                  </span>
+<div class="flex items-center gap-2 text-[11px] text-secondary">
+<span>Member experience</span>
+<span class="text-outline-variant">·</span>
+<span>Friday</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quiet Helper Note -->
+<aside class="p-4 bg-surface-container-low border border-outline-variant/25 rounded-xl flex flex-col gap-2">
+<div class="flex items-center gap-2 text-primary font-headline text-xs font-semibold">
+<span class="material-symbols-outlined text-sm" data-icon="lightbulb">lightbulb</span>
+<span>A shared place to move work forward</span>
+</div>
+<p class="font-body text-xs text-secondary leading-relaxed">
+              Every project wave keeps milestones and discussion directly tied to deliverables. No hidden threads or lost decisions.
+            </p>
+</aside>
+<!-- Discreet Future Features indicator (from Design System) -->
+<div class="px-3 py-2.5 rounded-lg border border-outline-variant/15 text-[11px] text-secondary flex items-center justify-between opacity-70">
+<span>Customer-hosted processing</span>
+<span class="text-[10px] text-outline font-medium">Not available in this build</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

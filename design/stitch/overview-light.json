@@ -1,0 +1,197 @@
+{
+  "outputComponents": [
+    {
+      "design": {
+        "screens": [
+          {
+            "designSystem": {
+              "designSystem": {
+                "displayName": "UKDA · Quiet clarity",
+                "theme": {
+                  "bodyFont": "INTER",
+                  "bodyFontFamily": "Inter",
+                  "colorMode": "LIGHT",
+                  "colorVariant": "NEUTRAL",
+                  "customColor": "#176B50",
+                  "designMd": "# UKDA - Quiet clarity\n\nA premium private project workspace, as thoughtful and calm as an Apple productivity app. Customer-facing language only. Spacious but useful, precise typography, thin lucide-style icons, restrained green actions, a small multicolour geometric triangular bar brand mark. No gradients, glass, glossy cards, tech dashboards, giant marketing headings, fake charts or decorative clutter. Light: off-white #F7F8F7 canvas, white surfaces, ink #202722, muted #69726E, subtle #E5E9E6 outlines, primary forest #176B50. Dark: #111613 canvas, #19201B surfaces, ink #ECF1ED, muted #9AA89D, outline #303A32, primary #9CD7B9 with dark ink. 12px cards, 8px controls, 44px touch targets. Inter with tabular numbers. Desktop 224px sidebar, 64px topbar, content max1280 with32px margins; mobile collapses sidebar and keeps clear Back actions. States accessible AA with strong focus and reduced-motion support. 160–220ms fades and tiny translate; never impede work.\n\nNavigation: Overview, Projects, My tasks, Inbox, People; Settings at bottom plus theme/profile menu. Customer workflows: licence activation, Owner recovery words, password confirmation, name and illustrated avatar choice; invited people join through private invitation; remembered profile name plus one password input; forgot-password recovery or ask an Owner; device approval; projects with phases called Waves, collaborative tasks with multiple assignees, milestones, blockers, reviews, discussion, progress; project archive/reopen; people/roles/invites/equal Owners; preferences/timezone/password/devices/recovery/export/deletion. Explain decisions plainly. Never show backend terms, IDs, API, keys/epochs/generations/ciphertext/OPAQUE/WASM/receipts/migrations. Invitation codes and recovery words are user-facing necessities, explain safely and briefly. Every form has Cancel/Back, validation, clear success and next action. Loading, empty, offline/retry, access-denied and unavailable destinations have useful recovery actions. No email login or photo uploads. Twenty illustrated geometric creature avatars with twelve independent colours. Add a discrete disabled Future features section under Settings: Email updates, Integrations, Customer-hosted processing, each greyed out with 'Not available in this build.' These have no fake action or broken link.\n\nA supplied local animated brand mark is used ONCE at startup, not a fabricated spinner; reuse its static multicolour bars in sidebar and entry pages. Generate actual product screens, not a marketing landing page. Use realistic but clearly design-only example content. UI must be translatable to semantic HTML and keyboard navigation.",
+                  "font": "INTER",
+                  "headlineFont": "INTER",
+                  "headlineFontFamily": "Inter",
+                  "labelFont": "INTER",
+                  "labelFontFamily": "Inter",
+                  "namedColors": {
+                    "background": "#f9f9f8",
+                    "error": "#9f403d",
+                    "error_container": "#fe8983",
+                    "error_dim": "#4e0309",
+                    "inverse_on_surface": "#9b9d9d",
+                    "inverse_primary": "#affedb",
+                    "inverse_surface": "#0c0f0e",
+                    "on_background": "#2c3433",
+                    "on_error": "#fff7f6",
+                    "on_error_container": "#752121",
+                    "on_primary": "#e0ffee",
+                    "on_primary_container": "#005e44",
+                    "on_primary_fixed": "#004934",
+                    "on_primary_fixed_variant": "#12684d",
+                    "on_secondary": "#f2fbf6",
+                    "on_secondary_container": "#4b5450",
+                    "on_secondary_fixed": "#39413e",
+                    "on_secondary_fixed_variant": "#555d5a",
+                    "on_surface": "#2c3433",
+                    "on_surface_variant": "#586160",
+                    "on_tertiary": "#f0fed5",
+                    "on_tertiary_container": "#546040",
+                    "on_tertiary_fixed": "#424e30",
+                    "on_tertiary_fixed_variant": "#5e6a4a",
+                    "outline": "#747c7c",
+                    "outline_variant": "#abb4b3",
+                    "primary": "#176b50",
+                    "primary_container": "#a4f3d0",
+                    "primary_dim": "#005e45",
+                    "primary_fixed": "#a4f3d0",
+                    "primary_fixed_dim": "#96e4c2",
+                    "secondary": "#58615d",
+                    "secondary_container": "#dbe5e0",
+                    "secondary_dim": "#4c5551",
+                    "secondary_fixed": "#dbe5e0",
+                    "secondary_fixed_dim": "#cdd7d2",
+                    "surface": "#f9f9f8",
+                    "surface_bright": "#f9f9f8",
+                    "surface_container": "#eaefee",
+                    "surface_container_high": "#e3e9e8",
+                    "surface_container_highest": "#dce4e3",
+                    "surface_container_low": "#f1f4f3",
+                    "surface_container_lowest": "#ffffff",
+                    "surface_dim": "#d2dcdb",
+                    "surface_tint": "#176b50",
+                    "surface_variant": "#dce4e3",
+                    "tertiary": "#576343",
+                    "tertiary_container": "#ebf9d0",
+                    "tertiary_dim": "#4b5738",
+                    "tertiary_fixed": "#ebf9d0",
+                    "tertiary_fixed_dim": "#ddebc2"
+                  },
+                  "overrideNeutralColor": "#F7F8F7",
+                  "overridePrimaryColor": "#176B50",
+                  "overrideSecondaryColor": "#69726E",
+                  "roundness": "ROUND_EIGHT",
+                  "spacingScale": 2
+                }
+              },
+              "name": "assets/18248857475683212615",
+              "version": "2"
+            },
+            "deviceType": "DESKTOP",
+            "generatedBy": "figaro_agent",
+            "height": "2048",
+            "htmlCode": {
+              "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzYxZDcxY2FjNWE2MjQ5NzhhMjc3ZWEzZjdlMTA5YTBkEgsSBxD71u-89xcYAZIBIwoKcHJvamVjdF9pZBIVQhMyNTA0NDM4NjU3MzE1OTE2MTYw&filename=&opi=96797242",
+              "mimeType": "text/html",
+              "name": "projects/2504438657315916160/files/f1b88efb5cee44aebe2a1064f0c15e7a"
+            },
+            "id": "8852aad7c9f64ce8b0470a0750527538",
+            "name": "projects/2504438657315916160/screens/8852aad7c9f64ce8b0470a0750527538",
+            "prompt": "Design the flagship UKDA workspace Overview screen in LIGHT mode at 1440px desktop according to the 'UKDA · Quiet clarity' design system.\n\nLayout and Structure:\n- Device: Desktop 1440px, crisp Inter typography, off-white background canvas (#F9F9FB or #F8F9FA), clean pure white cards (#FFFFFF) with subtle 1px border lines (#EAEAEF / border-outline-variant/30) and no loud drop shadows.\n- Primary accent color: Deep Forest Green (#176B50) used purposefully on primary buttons and active indicators.\n\n1. Sidebar (width: 224px, fixed left, full height, border-r):\n   - Brand header: UKDA wordmark with small colorful geometric triangular bars icon + workspace selector pill for 'Northstar Studio' with UKDA Workspace sublabel.\n   - Main Nav items:\n     * 'Overview' (Active state with subtle forest green highlight / soft tinted background)\n     * 'Projects' (with clean folder icon)\n     * 'My tasks' (with check-circle icon)\n     * 'Inbox' with discreet unread count badge ('3')\n     * 'People' (with team icon)\n   - Bottom sidebar area:\n     * 'Settings' link\n     * User profile card: 'Alex Morgan' with a small custom illustrated creature / friendly geometric avatar, subtle status dot, and a quiet theme switch toggle icon.\n\n2. Top Bar (sticky top, border-b, backdrop blur):\n   - Breadcrumb: 'Workspace / Overview' with muted separator\n   - Center/Right: Discreet search bar with keyboard shortcut hint ('⌘K'), quick notification bell, and primary forest green button: '+ New project' (#176B50, text-white, rounded-lg, crisp font-medium).\n\n3. Main Dashboard Body:\n   - Greeting & Date:\n     * Large restrained 30px heading: \"A little clarity for your day.\" (font-medium tracking-tight text-slate-900)\n     * Secondary date display: \"Wednesday, 16 October\" in calm muted secondary typography.\n   \n   - Horizontal Summary Strip (Quiet, elegant 3-column or horizontal inline stat band, no fake trends, subtle dividers):\n     * \"Active projects\" -> 4\n     * \"Tasks for you\" -> 8\n     * \"Needs attention\" -> 2\n\n   - Two-Column Workspace Layout (2/3 width left, 1/3 width right):\n     * Left Column (2/3):\n       - Section header: \"Your projects\" with discreet 'View all (4)' link.\n       - Three superbly spaced project rows/cards:\n         1. \"Website refresh\" - Subtext: \"Wave 2 · Create\", 62% progress bar (forest green fill), 3 small overlapping team member avatars, \"Due 18 Oct\". Understated geometric emerald/teal tinted thumbnail badge.\n         2. \"Autumn research\" - Subtext: \"Wave 1 · Discover\", 28% progress bar, 2 avatars, \"Due 24 Oct\". Understated geometric amber/warm tinted thumbnail badge.\n         3. \"Member experience\" - Subtext: \"Wave 3 · Refine\", 84% progress bar, 4 avatars, \"Due 3 Nov\". Understated geometric indigo/sage tinted thumbnail badge.\n       - Calm Recent Activity Feed below projects:\n         * Section title: \"Recent activity\"\n         * 3-4 calm chronological entries with user avatar, clear human description, and timestamp:\n           - \"Elena Vance completed 'Finalize typography scale' · 24m ago\"\n           - \"Alex Morgan started 'User onboarding flow wireframes' in Website refresh · 2h ago\"\n           - \"Marcus Chen shared 4 research summaries in Autumn research · Yesterday\"\n\n     * Right Column (1/3):\n       - Section header: \"Up next\"\n       - 3 assigned priority tasks with small clean circle checkboxes (hollow circular check toggles), due dates, and project tags:\n         * \"Review staging environment deployment\" - Website refresh · Due today\n         * \"Sign off on interview guide questions\" - Autumn research · Tomorrow\n         * \"Consolidate design tokens into spec\" - Member experience · Friday\n       - Quiet helper card below: \"A shared place to move work forward\" with gentle 1-sentence prompt and calm secondary text.\n\nVisual Craft:\n- Desktop efficient density, accessible contrasts, generous intentional whitespace, subtle hairline separators (border-slate-100 or border-slate-200/60).\n- Pure application interface ready to build, not a promotional marketing landing page.\n- No giant hero illustrations or distracting gradients. Quiet, deliberate clarity.",
+            "screenMetadata": {
+              "agentType": "PRO_AGENT",
+              "status": "COMPLETE"
+            },
+            "screenType": "DESIGN",
+            "screenshot": {
+              "downloadUrl": "https://lh3.googleusercontent.com/aida/AEtjO1Vtcy7q0MC6DMhSOWeORExGpPsa916TzN5CziSqwb-fsy_ZNjvuQN0cQut6n9swDlhCXpQNLZd-59Kv8dQjApr7-ijPTlA_paUd2vqKFy11Vw5SO1iAcHCkT22wZkGlbbJ2EsVFDlsuNEqJ00jAcIZzcJzz6TgqCe20lSa65AcjW6vQle6bbOEcpLuiH99nABoYuYzByXCRYvnbOk6DBR1FBSuAE2HKFIz7bYA9zrH5NJ1fAqy86J5DtZw",
+              "name": "projects/2504438657315916160/files/8c8d653af81043b7aa8f7275b50d0a01"
+            },
+            "theme": {
+              "bodyFont": "INTER",
+              "bodyFontFamily": "Inter",
+              "colorMode": "LIGHT",
+              "colorVariant": "NEUTRAL",
+              "customColor": "#176B50",
+              "font": "INTER",
+              "headlineFont": "INTER",
+              "headlineFontFamily": "Inter",
+              "labelFont": "INTER",
+              "labelFontFamily": "Inter",
+              "namedColors": {
+                "background": "#f9f9f8",
+                "error": "#9f403d",
+                "error_container": "#fe8983",
+                "error_dim": "#4e0309",
+                "inverse_on_surface": "#9b9d9d",
+                "inverse_primary": "#affedb",
+                "inverse_surface": "#0c0f0e",
+                "on_background": "#2c3433",
+                "on_error": "#fff7f6",
+                "on_error_container": "#752121",
+                "on_primary": "#e0ffee",
+                "on_primary_container": "#005e44",
+                "on_primary_fixed": "#004934",
+                "on_primary_fixed_variant": "#12684d",
+                "on_secondary": "#f2fbf6",
+                "on_secondary_container": "#4b5450",
+                "on_secondary_fixed": "#39413e",
+                "on_secondary_fixed_variant": "#555d5a",
+                "on_surface": "#2c3433",
+                "on_surface_variant": "#586160",
+                "on_tertiary": "#f0fed5",
+                "on_tertiary_container": "#546040",
+                "on_tertiary_fixed": "#424e30",
+                "on_tertiary_fixed_variant": "#5e6a4a",
+                "outline": "#747c7c",
+                "outline_variant": "#abb4b3",
+                "primary": "#176b50",
+                "primary_container": "#a4f3d0",
+                "primary_dim": "#005e45",
+                "primary_fixed": "#a4f3d0",
+                "primary_fixed_dim": "#96e4c2",
+                "secondary": "#58615d",
+                "secondary_container": "#dbe5e0",
+                "secondary_dim": "#4c5551",
+                "secondary_fixed": "#dbe5e0",
+                "secondary_fixed_dim": "#cdd7d2",
+                "surface": "#f9f9f8",
+                "surface_bright": "#f9f9f8",
+                "surface_container": "#eaefee",
+                "surface_container_high": "#e3e9e8",
+                "surface_container_highest": "#dce4e3",
+                "surface_container_low": "#f1f4f3",
+                "surface_container_lowest": "#ffffff",
+                "surface_dim": "#d2dcdb",
+                "surface_tint": "#176b50",
+                "surface_variant": "#dce4e3",
+                "tertiary": "#576343",
+                "tertiary_container": "#ebf9d0",
+                "tertiary_dim": "#4b5738",
+                "tertiary_fixed": "#ebf9d0",
+                "tertiary_fixed_dim": "#ddebc2"
+              },
+              "overrideNeutralColor": "#F7F8F7",
+              "overridePrimaryColor": "#176B50",
+              "overrideSecondaryColor": "#69726E",
+              "roundness": "ROUND_EIGHT",
+              "spacingScale": 2
+            },
+            "title": "UKDA · Workspace Overview",
+            "width": "2560"
+          }
+        ],
+        "theme": {}
+      }
+    },
+    {
+      "text": "Here is the flagship **UKDA Workspace Overview** desktop screen (`1440px`), designed according to the *Quiet clarity* design system.\n\n### Key Design Decisions & Hierarchy\n\n1. **Restrained Navigation & Identity (224px Sidebar)**:\n   - **Header**: Includes the UKDA colorful geometric triangular icon, the \"Northstar Studio\" workspace switcher with clean dropdown affordance, and clear workspace labelling.\n   - **Navigation**: \"Overview\" is active with a soft tinted state, followed by Projects, My tasks, an Inbox with a discreet unread counter badge (`3`), and People.\n   - **Footer**: Houses workspace Settings alongside Alex Morgan's account card featuring a friendly illustrated creature avatar and a quick theme toggle.\n\n2. **Top Bar & Breadcrumbs**:\n   - Muted `Workspace / Overview` path indicator, an integrated search bar with a discreet `⌘K` keyboard shortcut badge, notification trigger, and a purposeful forest green (`#176B50`) **+ New project** action.\n\n3. **Greeting & Quiet Metric Strip**:\n   - Restrained 30px editorial heading: *\"A little clarity for your day.\"* accompanied by the current date line.\n   - A single horizontal strip presenting three essential numbers without fake charts or distracting micro-trends: **Active projects (4)**, **Tasks for you (8)**, and **Needs attention (2)**.\n\n4. **Main 2/3 Content Column**:\n   - **Your projects**: Three high-craft project rows with geometric tinted thumbnails, wave tags (*Wave 2 · Create*, *Wave 1 · Discover*, *Wave 3 · Refine*), thin forest-green progress rules, due dates, and overlapping collaborator avatars.\n   - **Recent activity**: A calm, readable chronological audit trail detailing recent contributions, task completions, and deliverables with contributor badges and relative timestamps.\n\n5. **1/3 Right Column (Up Next & Context)**:\n   - **Up next**: Focused task queue with subtle hollow circular checkboxes, project context, and due dates (*Due today*, *Tomorrow*, *Friday*).\n   - **Context Helper**: A quiet card reinforcing UKDA's async philosophy (*\"A shared place to move work forward\"*).\n\nThe canvas is now live with the generated screen. Let me know if you would like to explore specific sub-views (such as the Project detail page or Task management view) or iterate on specific components."
+    },
+    {
+      "suggestion": "Design the 'Website refresh' project board/wave view"
+    },
+    {
+      "suggestion": "Show the 'My tasks' focused task view in the same style"
+    },
+    {
+      "suggestion": "Create the 'New project' modal or slide-over panel"
+    }
+  ],
+  "projectId": "2504438657315916160",
+  "sessionId": "11350414070729307338"
+}
